@@ -476,12 +476,12 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
       </div>
 
-      <!-- RENEWAL -->
-      <div class="renewal-card">
-        <div class="rc-label">Tu membresía renueva en</div>
-        <div class="rc-date">12 días — 31 mayo 2025</div>
-        <div class="rc-promo">Renueva ahora y bloquea tu precio actual. El plan Guerrera sube $50 MXN en junio.</div>
-        <button class="rc-btn">Renovar y ahorrar mi precio actual</button>
+      <!-- RENEWAL / UPGRADE -->
+      <div class="renewal-card" id="renewalCard">
+        <div class="rc-label" id="rcLabel">Mejora tu acceso</div>
+        <div class="rc-date" id="rcDate">Desbloquea todo el contenido de Yayika</div>
+        <div class="rc-promo" id="rcPromo">Con una membresía tienes acceso ilimitado a todos los productos, el portal interactivo, los círculos de mujeres y los nuevos lanzamientos.</div>
+        <button class="rc-btn" onclick="window.location.href='../index.html#membresia'">Ver planes de membresía</button>
       </div>
 
     </div>
@@ -654,6 +654,24 @@ async function loadDashboard() {
     const completions = await getModuleCompletions();
     if (completions && completions.length > 0) {
       document.getElementById('modulesCompleted').textContent = completions.length;
+    }
+  } catch (e) {}
+
+  // Check subscription status
+  try {
+    const sub = await getSubscription();
+    if (sub) {
+      const renewDate = new Date(sub.current_period_end);
+      const daysLeft = Math.ceil((renewDate - new Date()) / (1000 * 60 * 60 * 24));
+      const planName = sub.plan_id === 'semilla' ? 'Semilla' : sub.plan_id === 'guerrera' ? 'Guerrera' : 'Diamante';
+      const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      const dateStr = renewDate.getDate() + ' de ' + months[renewDate.getMonth()] + ' ' + renewDate.getFullYear();
+      document.getElementById('rcLabel').textContent = 'Tu membresía ' + planName + ' renueva en';
+      document.getElementById('rcDate').textContent = daysLeft + ' días — ' + dateStr;
+      document.getElementById('rcPromo').textContent = 'Renueva automáticamente. Puedes cancelar en cualquier momento desde tu portal.';
+      document.getElementById('rcDate').style.fontSize = '15px';
+      document.querySelector('.rc-btn').textContent = 'Gestionar membresía';
+      document.querySelector('.rc-btn').onclick = function() { alert('Gestión de membresía disponível próximamente.'); };
     }
   } catch (e) {}
 }
