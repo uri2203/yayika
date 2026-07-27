@@ -273,14 +273,22 @@ nav{background:#2C2240;padding:14px 24px;display:flex;align-items:center;justify
 <script src="../js/app.js"></script>
 <script>
 let xp=560,playing=false,progress=0,timer=null;
-function toggleScript(header){const body=header.nextElementSibling;const isOpen=body.classList.contains('open');document.querySelectorAll('.sc-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('.sc-toggle').forEach(t=>t.textContent='▼');if(!isOpen){body.classList.add('open');header.querySelector('.sc-toggle').textContent='▲';addXP(10,'📖 +10 XP — Script leído');}}
-function saveAgenda(){const inputs=document.querySelectorAll('.slot-input');const filled=Array.from(inputs).filter(i=>i.value.trim()).length;if(!filled){alert('Escribe al menos una acción 😊');return;}addXP(60,'📅 +60 XP — Agenda guardada');}
-function addXP(pts,msg){xp=Math.min(xp+pts,1000);document.getElementById('xpFill').style.width=(xp/10)+'%';document.getElementById('xpPts').textContent=xp+' / 1000 XP';showToast(msg);}
+
+window.addEventListener('load', async () => {
+  if (initSupabase()) {
+    const session = await getSession();
+    if (session) { currentUser = session.user; applyUserToModule(); }
+  }
+});
+
+function toggleScript(header){const body=header.nextElementSibling;const isOpen=body.classList.contains('open');document.querySelectorAll('.sc-body').forEach(b=>b.classList.remove('open'));document.querySelectorAll('.sc-toggle').forEach(t=>t.textContent='▼');if(!isOpen){body.classList.add('open');header.querySelector('.sc-toggle').textContent='▲';updateLocalXP(10,'📖 +10 XP — Script leído');moduleAddXP(10);}}
+function saveAgenda(){const inputs=document.querySelectorAll('.slot-input');const filled=Array.from(inputs).filter(i=>i.value.trim()).length;if(!filled){alert('Escribe al menos una acción 😊');return;}updateLocalXP(60,'📅 +60 XP — Agenda guardada');moduleAddXP(60);}
+function updateLocalXP(pts,msg){xp=Math.min(xp+pts,1000);document.getElementById('xpFill').style.width=(xp/10)+'%';document.getElementById('xpPts').textContent=xp+' / 1000 XP';showToast(msg);}
 function showToast(msg){const t=document.getElementById('xpToast');t.textContent=msg;t.style.display='block';clearTimeout(window._t);window._t=setTimeout(()=>t.style.display='none',2500);}
-function toggleAudio(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸':'▶';if(playing){timer=setInterval(()=>{progress=Math.min(progress+0.33,100);document.getElementById('audioProgress').style.width=progress+'%';if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';addXP(20,'🎙 +20 XP — Audio completado');}},1000);}else clearInterval(timer);}
+function toggleAudio(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸':'▶';if(playing){timer=setInterval(()=>{progress=Math.min(progress+0.33,100);document.getElementById('audioProgress').style.width=progress+'%';if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';updateLocalXP(20,'🎙 +20 XP — Audio completado');moduleAddXP(20);}},1000);}else clearInterval(timer);}
 function seekAudio(e){const rect=e.currentTarget.getBoundingClientRect();progress=((e.clientX-rect.left)/rect.width)*100;document.getElementById('audioProgress').style.width=progress+'%';}
-function completeModule(){addXP(150,'🌕 +150 XP — Módulo 4 completado!');}
-function nextModule(){completeModule();setTimeout(()=>window.location.href='modulo5.html',600);}
+function completeModule(){updateLocalXP(150,'🌕 +150 XP — Módulo 4 completado!');moduleAddXP(150);}
+function nextModule(){completeModule();moduleCompleteAndNavigate(4, 150, 'modulo5.html');}
 </script>
 </body>
 </html>

@@ -397,7 +397,7 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
     </div>
 
     <div class="nav-btns">
-      <button class="btn-prev" onclick="window.location.href='yayika_portal_modulo1.html'">← Módulo 1</button>
+      <button class="btn-prev" onclick="window.location.href='modulo1.html'">← Módulo 1</button>
       <button class="btn-complete" onclick="completeModule()">✓ Completar y ganar 150 XP</button>
       <button class="btn-next" onclick="nextModule()">Módulo 3 →</button>
     </div>
@@ -412,14 +412,22 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
 let playing=false,progress=0,timer=null;
 let xp=240;
 
+window.addEventListener('load', async () => {
+  if (initSupabase()) {
+    const session = await getSession();
+    if (session) { currentUser = session.user; applyUserToModule(); }
+  }
+});
+
 function toggleRitual(el){
   el.classList.toggle('done-ritual');
   if(el.classList.contains('done-ritual')){
-    addXP(15,'✅ +15 XP — Ritual completado');
+    updateLocalXP(15,'✅ +15 XP — Ritual completado');
+    moduleAddXP(15);
   }
 }
 
-function addXP(pts,msg){
+function updateLocalXP(pts,msg){
   xp=Math.min(xp+pts,1000);
   document.getElementById('xpFill').style.width=(xp/10)+'%';
   document.getElementById('xpPts').textContent=xp+' / 1000 XP';
@@ -438,11 +446,13 @@ function savePlanner(){
   let filled=0;
   inputs.forEach(i=>{if(i.value.trim())filled++;});
   if(!filled){alert('Escribe al menos una reflexión 😊');return;}
-  addXP(50,'📓 +50 XP — Planner guardado');
+  updateLocalXP(50,'📓 +50 XP — Planner guardado');
+  moduleAddXP(50);
 }
 
 function saveTracker(){
-  addXP(30,'📊 +30 XP — Tracker guardado');
+  updateLocalXP(30,'📊 +30 XP — Tracker guardado');
+  moduleAddXP(30);
 }
 
 function toggleAudio(){
@@ -452,7 +462,7 @@ function toggleAudio(){
     timer=setInterval(()=>{
       progress=Math.min(progress+0.33,100);
       document.getElementById('audioProgress').style.width=progress+'%';
-      if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';addXP(20,'🎙 +20 XP — Audio completado');}
+      if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';updateLocalXP(20,'🎙 +20 XP — Audio completado');moduleAddXP(20);}
     },1000);
   } else {
     clearInterval(timer);
@@ -466,12 +476,13 @@ function seekAudio(e){
 }
 
 function completeModule(){
-  addXP(150,'🌑 +150 XP — Módulo 2 completado!');
+  updateLocalXP(150,'🌑 +150 XP — Módulo 2 completado!');
+  moduleAddXP(150);
 }
 
 function nextModule(){
   completeModule();
-  setTimeout(()=>window.location.href='modulo3.html',600);
+  moduleCompleteAndNavigate(2, 150, 'modulo3.html');
 }
 </script>
 </body>

@@ -1,10 +1,16 @@
-const CACHE = 'yayika-v1';
+const CACHE = 'yayika-v2';
 const ASSETS = [
   '/',
   '/index.html',
-  '/portal/modulo1.html',
-  '/portal/modulo2.html',
-  'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap'
+  '/Portales/index.html',
+  '/modulo1.html',
+  '/modulo2.html',
+  '/modulo3.html',
+  '/modulo4.html',
+  '/modulo5.html',
+  '/css/shared.css',
+  '/js/app.js',
+  '/icon.svg'
 ];
 
 self.addEventListener('install', e => {

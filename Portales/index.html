@@ -334,14 +334,14 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       </div>
 
       <div class="xp-progress">
-        <span class="xp-level">⭐ Nivel 7 — Guerrera</span>
+        <span class="xp-level" id="xpLevel">⭐ Nivel 7 — Guerrera</span>
         <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:68%"></div></div>
         <span class="xp-val" id="xpVal">680 / 1000 XP</span>
       </div>
 
       <div class="stats-row">
         <div class="stat-card"><div class="sc-num lila" id="totalXP">680</div><div class="sc-label">Puntos XP totales</div></div>
-        <div class="stat-card"><div class="sc-num rosa">3</div><div class="sc-label">Productos activos</div></div>
+        <div class="stat-card"><div class="sc-num rosa" id="modulesCompleted">3</div><div class="sc-label">Productos activos</div></div>
         <div class="stat-card"><div class="sc-num oro" id="streakStat">14</div><div class="sc-label">Días de racha</div></div>
         <div class="stat-card"><div class="sc-num verde">8</div><div class="sc-label">Logros ganados</div></div>
       </div>
@@ -577,9 +577,12 @@ async function loadDashboard() {
     const progress = await getProgress();
     if (progress) {
       xp = progress.xp_total || 0;
+      const level = Math.floor(xp / 100) + 1;
+      const levelName = level <= 3 ? 'Semilla' : level <= 7 ? 'Guerrera' : 'Diamante';
       document.getElementById('totalXP').textContent = xp;
       document.getElementById('xpFill').style.width = (xp / 10) + '%';
       document.getElementById('xpVal').textContent = xp + ' / 1000 XP';
+      document.getElementById('xpLevel').textContent = '⭐ Nivel ' + level + ' — ' + levelName;
       document.getElementById('streakNum').textContent = progress.streak_days || 0;
       document.getElementById('streakStat').textContent = progress.streak_days || 0;
       buildStreak(progress.streak_days || 0);
@@ -588,6 +591,71 @@ async function loadDashboard() {
     console.warn('Progress load error:', e);
     buildStreak(0);
   }
+
+  // Load ranking from DB
+  try {
+    const ranking = await getRanking();
+    if (ranking && ranking.length > 0) {
+      const rankList = document.querySelector('.rank-list');
+      if (rankList) {
+        rankList.innerHTML = '';
+        const medals = ['🥇','🥈','🥉'];
+        ranking.slice(0, 5).forEach((r, i) => {
+          const profile = r.yayika_profiles || {};
+          const initials = profile.initials || '??';
+          const fullName = profile.full_name || 'Anónima';
+          const color = profile.avatar_color || '#7B5EA7';
+          const pts = r.xp_total || 0;
+          const isMe = r.user_id === currentUser?.id;
+          const posClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+          const posText = medals[i] || '#' + (i + 1);
+          const item = document.createElement('div');
+          item.className = 'rank-item' + (isMe ? ' me' : '');
+          item.innerHTML = '<span class="rank-pos ' + posClass + '">' + posText + '</span>' +
+            '<div class="rank-av" style="background:' + color + '">' + initials + '</div>' +
+            '<span class="rank-name' + (isMe ? ' me-name' : '') + '">' + (isMe ? 'Tú — ' : '') + fullName + '</span>' +
+            '<span class="rank-pts">' + pts.toLocaleString() + '</span>';
+          rankList.appendChild(item);
+        });
+      }
+    }
+  } catch (e) {
+    console.warn('Ranking load error:', e);
+  }
+
+  // Load recent activity feed
+  try {
+    const activities = await getRecentActivity(5);
+    if (activities && activities.length > 0) {
+      const feedList = document.querySelector('.feed-list');
+      if (feedList) {
+        feedList.innerHTML = '';
+        activities.forEach(a => {
+          const profile = a.yayika_profiles || {};
+          const initials = profile.initials || '??';
+          const fullName = profile.full_name || 'Anónima';
+          const color = profile.avatar_color || '#7B5EA7';
+          const detail = a.activity_detail || 'Actividad reciente';
+          const item = document.createElement('div');
+          item.className = 'feed-item';
+          item.innerHTML = '<div class="feed-av" style="background:' + color + '">' + initials + '</div>' +
+            '<div><div class="feed-text"><strong>' + fullName + '</strong> ' + detail + '</div>' +
+            '<div class="feed-time">' + timeAgo(a.created_at) + '</div></div>';
+          feedList.appendChild(item);
+        });
+      }
+    }
+  } catch (e) {
+    console.warn('Activity feed load error:', e);
+  }
+
+  // Load module completions for products
+  try {
+    const completions = await getModuleCompletions();
+    if (completions && completions.length > 0) {
+      document.getElementById('modulesCompleted').textContent = completions.length;
+    }
+  } catch (e) {}
 }
 
 // ===== DASHBOARD HELPERS =====

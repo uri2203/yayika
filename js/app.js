@@ -287,6 +287,43 @@ function timeAgo(dateStr) {
 }
 
 // ============================================================
+// MODULE HELPERS (used by modulo1-5.html)
+// ============================================================
+
+function getModuleUser() {
+  if (currentUser) {
+    const email = currentUser.email || '';
+    const name = currentUser.user_metadata?.full_name || email.split('@')[0];
+    const initials = email.substring(0, 2).toUpperCase();
+    return { name, initials, email };
+  }
+  return null;
+}
+
+function applyUserToModule() {
+  const user = getModuleUser();
+  if (!user) return;
+  document.querySelectorAll('.nav-avatar').forEach(el => el.textContent = user.initials);
+  document.querySelectorAll('.nav-name').forEach(el => el.textContent = user.name.split(' ')[0]);
+}
+
+async function moduleAddXP(pts, msg) {
+  if (currentUser) {
+    try { await addXP(pts); } catch(e) { console.warn('XP save error:', e); }
+  }
+  showToast(msg || '⭐ +' + pts + ' XP');
+}
+
+async function moduleCompleteAndNavigate(moduleNumber, xpEarned, nextPage) {
+  if (currentUser) {
+    try { await completeModule(moduleNumber, xpEarned); } catch(e) { console.warn('Module complete error:', e); }
+  }
+  if (nextPage) {
+    setTimeout(() => { window.location.href = nextPage; }, 600);
+  }
+}
+
+// ============================================================
 // INIT
 // ============================================================
 

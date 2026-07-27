@@ -239,15 +239,25 @@ nav{background:#2C2240;padding:14px 24px;display:flex;align-items:center;justify
 <script src="../js/app.js"></script>
 <script>
 let xp=720,playing=false,progress=0,timer=null;
-function checkItem(el){el.classList.toggle('done-check');if(el.classList.contains('done-check')){el.querySelector('.ci-box').textContent='✓';addXP(15,'✅ +15 XP — Tarea completada');}}
+
+window.addEventListener('load', async () => {
+  if (initSupabase()) {
+    const session = await getSession();
+    if (session) { currentUser = session.user; applyUserToModule(); }
+  }
+});
+
+function checkItem(el){el.classList.toggle('done-check');if(el.classList.contains('done-check')){el.querySelector('.ci-box').textContent='✓';updateLocalXP(15,'✅ +15 XP — Tarea completada');moduleAddXP(15);}}
 function rateStar(n){document.querySelectorAll('.rt-star').forEach((s,i)=>s.classList.toggle('active',i<n));}
-function saveReview(){addXP(80,'📝 +80 XP — Revisión de ciclo guardada');}
-function addXP(pts,msg){xp=Math.min(xp+pts,1000);document.getElementById('xpFill').style.width=(xp/10)+'%';document.getElementById('xpPts').textContent=xp+' / 1000 XP';showToast(msg);}
+function saveReview(){updateLocalXP(80,'📝 +80 XP — Revisión de ciclo guardada');moduleAddXP(80);}
+function updateLocalXP(pts,msg){xp=Math.min(xp+pts,1000);document.getElementById('xpFill').style.width=(xp/10)+'%';document.getElementById('xpPts').textContent=xp+' / 1000 XP';showToast(msg);}
 function showToast(msg){const t=document.getElementById('xpToast');t.textContent=msg;t.style.display='block';clearTimeout(window._t);window._t=setTimeout(()=>t.style.display='none',2500);}
-function toggleAudio(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸':'▶';if(playing){timer=setInterval(()=>{progress=Math.min(progress+0.33,100);document.getElementById('audioProgress').style.width=progress+'%';if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';addXP(20,'🎙 +20 XP — Audio completado');}},1000);}else clearInterval(timer);}
+function toggleAudio(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸':'▶';if(playing){timer=setInterval(()=>{progress=Math.min(progress+0.33,100);document.getElementById('audioProgress').style.width=progress+'%';if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';updateLocalXP(20,'🎙 +20 XP — Audio completado');moduleAddXP(20);}},1000);}else clearInterval(timer);}
 function seekAudio(e){const rect=e.currentTarget.getBoundingClientRect();progress=((e.clientX-rect.left)/rect.width)*100;document.getElementById('audioProgress').style.width=progress+'%';}
 function completeAll(){
-  addXP(200,'🎉 +200 XP — ¡Ciclo Productiva completado!');
+  updateLocalXP(200,'🎉 +200 XP — ¡Ciclo Productiva completado!');
+  moduleAddXP(200);
+  moduleCompleteAndNavigate(5, 200, null);
   document.getElementById('finalXP').textContent=xp;
   document.getElementById('completionCard').style.display='block';
   document.getElementById('navBtns').style.display='none';

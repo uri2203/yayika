@@ -369,6 +369,13 @@ const phases=[
   {title:'🌘 Fase Lútea — Detalle',desc:'Modo analítico. Perfecta para revisar, organizar y terminar lo que empezaste.'}
 ];
 
+window.addEventListener('load', async () => {
+  if (initSupabase()) {
+    const session = await getSession();
+    if (session) { currentUser = session.user; applyUserToModule(); }
+  }
+});
+
 function showPhase(i){
   document.querySelectorAll('.phase-box').forEach((b,j)=>{
     b.classList.toggle('active-phase',i===j);
@@ -392,18 +399,19 @@ function saveTracker(){
   const q2=document.getElementById('q2').value;
   if(!q1&&!q2){alert('Escribe algo primero 😊');return;}
   document.getElementById('savedMsg').style.display='block';
-  updateXP(20);
+  updateLocalXP(20);
+  moduleAddXP(20,'✅ +20 XP — Registro guardado');
   setTimeout(()=>document.getElementById('savedMsg').style.display='none',3000);
 }
 
 function saveEjercicio(){
   const v=document.getElementById('ejercicio1').value;
   if(!v){alert('Escribe tu reflexión primero 😊');return;}
-  showToast('⭐ +50 XP — ¡Ejercicio guardado!');
-  updateXP(50);
+  updateLocalXP(50);
+  moduleAddXP(50,'⭐ +50 XP — ¡Ejercicio guardado!');
 }
 
-function updateXP(pts){
+function updateLocalXP(pts){
   const fill=document.getElementById('xpFill');
   const label=document.getElementById('xpPts');
   const current=parseInt(label.textContent)||120;
@@ -412,25 +420,18 @@ function updateXP(pts){
   label.textContent=next+' / 1000 XP';
 }
 
-function showToast(msg){
-  const t=document.getElementById('xpToast');
-  t.textContent=msg;
-  t.style.display='block';
-  setTimeout(()=>t.style.display='none',3000);
-}
-
 function completeModule(){
-  showToast('⭐ +120 XP — ¡Módulo 1 completado!');
+  updateLocalXP(120);
+  moduleAddXP(120,'⭐ +120 XP — ¡Módulo 1 completado!');
   document.getElementById('pbFill').style.width='40%';
   document.getElementById('pbPct').textContent='Módulo 2 de 5';
-  updateXP(120);
   const sb=document.querySelector('.sb-check.active-check');
   if(sb){sb.classList.remove('active-check');sb.classList.add('done');sb.textContent='✓';}
 }
 
 function nextModule(){
   completeModule();
-  alert('¡Avanzas al Módulo 2 — Fase Menstrual! En tu portal encontrarás el contenido completo.');
+  moduleCompleteAndNavigate(1, 120, 'modulo2.html');
 }
 </script>
 </body>
