@@ -202,7 +202,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .pb-sep{width:1px;height:18px;background:rgba(255,255,255,0.2)}
 
 /* SECTIONS */
-.section{padding:72px 5vw}
+.section{padding:72px 5vw;position:relative}
+.section::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:0.03}
+.texture-dots{background-image:radial-gradient(circle, var(--lila) 1px, transparent 1px);background-size:24px 24px}
+.texture-waves{background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237B5EA7' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.texture-grid{background-image:linear-gradient(rgba(123,94,167,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(123,94,167,0.03) 1px, transparent 1px);background-size:40px 40px}
+.texture-diagonal{background-image:repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(26,158,143,0.02) 10px, rgba(26,158,143,0.02) 20px)}
+.hero{position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle, rgba(26,158,143,0.06) 0%, transparent 70%);pointer-events:none;border-radius:50%}
 .section-tag{font-size:11px;font-weight:500;letter-spacing:1.5px;color:var(--rosa);text-transform:uppercase;margin-bottom:8px}
 .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,46px);font-weight:700;color:var(--texto);line-height:1.2;margin-bottom:10px;letter-spacing:-0.5px}
 .section-title em{color:var(--lila);font-style:italic}
@@ -425,7 +432,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
   <div class="pb-item" data-i18n="proof_5"><strong>⭐ 4.9</strong> valoración</div>
 </div>
 
-<section class="section" id="productos">
+<section class="section texture-dots" id="productos">
   <div class="section-tag" data-i18n="cat_tag">Lo que encontrarás</div>
   <h2 class="section-title"><span data-i18n="cat_title">Todo lo que necesitas para</span> <em data-i18n="cat_title_2">crecer</em></h2>
   <p class="section-sub" data-i18n="cat_sub">Recursos que funcionan de verdad, creados con ciencia y corazón.</p>
@@ -469,7 +476,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
   </div>
 </section>
 
-<section class="products-section">
+<section class="products-section texture-waves">
   <div class="section-tag" data-i18n="prod_tag">Productos destacados</div>
   <h2 class="section-title"><span data-i18n="prod_title">Las que más están</span> <em data-i18n="prod_title_2">amando</em></h2>
   <div class="products-grid">
@@ -574,7 +581,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
   </div>
 </section>
 
-<section class="test-section">
+<section class="test-section texture-grid">
   <div class="section-tag" data-i18n="test_tag">Lo que dicen ellas</div>
   <h2 class="section-title"><span data-i18n="test_title">Mujeres reales,</span> <em data-i18n="test_title_2">resultados reales</em></h2>
   <div class="test-grid">
@@ -597,7 +604,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 </section>
 
 <!-- APP BANNER -->
-<section class="app-banner" id="app">
+<section class="app-banner texture-diagonal" id="app">
   <div>
     <div class="ab-tag" data-i18n="app_tag">Próximamente</div>
     <h2 class="ab-title"><span data-i18n="app_title">Yayika en tu</span> <em data-i18n="app_title_2">bolsillo</em></h2>
