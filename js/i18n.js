@@ -136,6 +136,75 @@ const I18N = {
     // Dark mode
     theme_light: 'Claro',
     theme_dark: 'Oscuro',
+    // Prices (MXN)
+    price_currency: 'MXN',
+    price_symbol: '$',
+    price_ciclo_original: '299',
+    price_ciclo: '149',
+    price_dinero_original: '249',
+    price_dinero: '129',
+    price_mujer: '179',
+    price_semilla: '99',
+    price_guerrera: '199',
+    price_diamante: '349',
+    price_per_month: '/mes',
+    // Dashboard
+    dash_greeting: 'Hola de nuevo',
+    dash_phase: 'Hoy estás en fase',
+    dash_phase_ovulatoria: 'Ovulatoria — tu momento de brillar',
+    dash_checkin_title: 'Buenos días',
+    dash_checkin_sub: 'Cuéntanos cómo amaneciste (2 min)',
+    dash_checkin_energy: '¿Cómo amaneciste?',
+    dash_checkin_mood: '¿Cómo te sientes?',
+    dash_checkin_intention: '¿Cuál es tu intención para hoy?',
+    dash_checkin_next: 'Siguiente',
+    dash_checkin_submit: 'Completar check-in',
+    dash_checkin_done: '¡Check-in completado!',
+    dash_checkin_reward: 'XP ganados',
+    dash_checkin_continue: 'Continuar',
+    dash_challenges_title: 'Retos de esta semana',
+    dash_register_cycle: 'Registrar ciclo',
+    dash_new_challenges: 'Nuevos retos',
+    dash_my_circles: 'Mis círculos',
+    dash_join_circle: 'Unirse a un círculo',
+    dash_generate_challenges: 'Generando retos personalizados...',
+    dash_no_circles: 'Aún no tienes círculos. ¡Únete a uno!',
+    dash_cycle_diary: 'Mi diario de ciclo',
+    dash_cycle_flow: 'Flujo hoy',
+    dash_cycle_symptoms: 'Síntomas (selecciona varios)',
+    dash_cycle_energy: 'Energía',
+    dash_cycle_notes: 'Notas (opcional)',
+    dash_cycle_save: 'Registrar',
+    dash_cycle_placeholder: 'Algo que quieras recordar...',
+    // Check-in moods
+    mood_fuerte: 'Fuerte',
+    mood_tranquila: 'Tranquila',
+    mood_energetica: 'Energética',
+    mood_reflexiva: 'Reflexiva',
+    mood_intensa: 'Intensa',
+    mood_sensible: 'Sensible',
+    // Check-in intentions
+    int_descansar: 'Descansar y cuidarme',
+    int_productiva: 'Ser productiva',
+    int_conectar: 'Conectar con alguien',
+    int_aprender: 'Aprender algo nuevo',
+    int_organizar: 'Organizarme',
+    // Cycle symptoms
+    sym_headache: 'Dolor de cabeza',
+    sym_cramps: 'Cólicos',
+    sym_bloating: 'Hinchazón',
+    sym_acne: 'Acné',
+    sym_backpain: 'Dolor de espalda',
+    sym_fatigue: 'Cansancio',
+    sym_insomnia: 'Insomnio',
+    sym_cravings: 'Antojos',
+    sym_sensitive: 'Sensibilidad',
+    sym_moodswings: 'Cambios de ánimo',
+    // Flow
+    flow_none: 'Sin flujo',
+    flow_light: 'Leve',
+    flow_medium: 'Medio',
+    flow_heavy: 'Intenso',
   },
 
   en: {
@@ -256,6 +325,71 @@ const I18N = {
     urgency: '🎁 Welcome: Subscribe today and get your first product free — limited time only',
     theme_light: 'Light',
     theme_dark: 'Dark',
+    // Prices (USD)
+    price_currency: 'USD',
+    price_symbol: 'US$',
+    price_ciclo_original: '17',
+    price_ciclo: '9',
+    price_dinero_original: '14',
+    price_dinero: '8',
+    price_mujer: '10',
+    price_semilla: '6',
+    price_guerrera: '12',
+    price_diamante: '20',
+    price_per_month: '/mo',
+    // Dashboard
+    dash_greeting: 'Welcome back',
+    dash_phase: 'Today you are in',
+    dash_phase_ovulatoria: 'Ovulatory phase — your time to shine',
+    dash_checkin_title: 'Good morning',
+    dash_checkin_sub: 'Tell us how you woke up (2 min)',
+    dash_checkin_energy: 'How did you wake up?',
+    dash_checkin_mood: 'How do you feel?',
+    dash_checkin_intention: 'What is your intention for today?',
+    dash_checkin_next: 'Next',
+    dash_checkin_submit: 'Complete check-in',
+    dash_checkin_done: 'Check-in completed!',
+    dash_checkin_reward: 'XP earned',
+    dash_checkin_continue: 'Continue',
+    dash_challenges_title: 'This week\'s challenges',
+    dash_register_cycle: 'Log cycle',
+    dash_new_challenges: 'New challenges',
+    dash_my_circles: 'My circles',
+    dash_join_circle: 'Join a circle',
+    dash_generate_challenges: 'Generating personalized challenges...',
+    dash_no_circles: 'You don\'t have circles yet. Join one!',
+    dash_cycle_diary: 'My cycle diary',
+    dash_cycle_flow: 'Flow today',
+    dash_cycle_symptoms: 'Symptoms (select multiple)',
+    dash_cycle_energy: 'Energy',
+    dash_cycle_notes: 'Notes (optional)',
+    dash_cycle_save: 'Save',
+    dash_cycle_placeholder: 'Something you want to remember...',
+    mood_fuerte: 'Strong',
+    mood_tranquila: 'Calm',
+    mood_energetica: 'Energetic',
+    mood_reflexiva: 'Reflective',
+    mood_intensa: 'Intense',
+    mood_sensible: 'Sensitive',
+    int_descansar: 'Rest and take care of myself',
+    int_productiva: 'Be productive',
+    int_conectar: 'Connect with someone',
+    int_aprender: 'Learn something new',
+    int_organizar: 'Get organized',
+    sym_headache: 'Headache',
+    sym_cramps: 'Cramps',
+    sym_bloating: 'Bloating',
+    sym_acne: 'Acne',
+    sym_backpain: 'Back pain',
+    sym_fatigue: 'Fatigue',
+    sym_insomnia: 'Insomnia',
+    sym_cravings: 'Cravings',
+    sym_sensitive: 'Sensitivity',
+    sym_moodswings: 'Mood swings',
+    flow_none: 'No flow',
+    flow_light: 'Light',
+    flow_medium: 'Medium',
+    flow_heavy: 'Heavy',
   },
 
   pt: {
@@ -376,6 +510,71 @@ const I18N = {
     urgency: '🎁 Boas-vindas: Inscreva-se hoje e receba seu primeiro produto grátis — por tempo limitado',
     theme_light: 'Claro',
     theme_dark: 'Escuro',
+    // Prices (BRL)
+    price_currency: 'BRL',
+    price_symbol: 'R$',
+    price_ciclo_original: '89',
+    price_ciclo: '49',
+    price_dinero_original: '79',
+    price_dinero: '45',
+    price_mujer: '59',
+    price_semilla: '35',
+    price_guerrera: '69',
+    price_diamante: '119',
+    price_per_month: '/mês',
+    // Dashboard
+    dash_greeting: 'Bem-vinda de volta',
+    dash_phase: 'Hoje você está na',
+    dash_phase_ovulatoria: 'Fase ovulatória — seu momento de brilhar',
+    dash_checkin_title: 'Bom dia',
+    dash_checkin_sub: 'Conte-nos como você acordou (2 min)',
+    dash_checkin_energy: 'Como você acordou?',
+    dash_checkin_mood: 'Como você se sente?',
+    dash_checkin_intention: 'Qual é sua intenção para hoje?',
+    dash_checkin_next: 'Próximo',
+    dash_checkin_submit: 'Completar check-in',
+    dash_checkin_done: 'Check-in completo!',
+    dash_checkin_reward: 'XP ganhos',
+    dash_checkin_continue: 'Continuar',
+    dash_challenges_title: 'Desafios desta semana',
+    dash_register_cycle: 'Registrar ciclo',
+    dash_new_challenges: 'Novos desafios',
+    dash_my_circles: 'Meus círculos',
+    dash_join_circle: 'Entrar em um círculo',
+    dash_generate_challenges: 'Gerando desafios personalizados...',
+    dash_no_circles: 'Você ainda não tem círculos. Entre em um!',
+    dash_cycle_diary: 'Meu diário de ciclo',
+    dash_cycle_flow: 'Fluxo hoje',
+    dash_cycle_symptoms: 'Sintomas (selecione vários)',
+    dash_cycle_energy: 'Energia',
+    dash_cycle_notes: 'Notas (opcional)',
+    dash_cycle_save: 'Salvar',
+    dash_cycle_placeholder: 'Algo que você quer lembrar...',
+    mood_fuerte: 'Forte',
+    mood_tranquila: 'Calma',
+    mood_energetica: 'Energética',
+    mood_reflexiva: 'Reflexiva',
+    mood_intensa: 'Intensa',
+    mood_sensible: 'Sensível',
+    int_descansar: 'Descansar e me cuidar',
+    int_productiva: 'Ser produtiva',
+    int_conectar: 'Me conectar com alguém',
+    int_aprender: 'Aprender algo novo',
+    int_organizar: 'Me organizar',
+    sym_headache: 'Dor de cabeça',
+    sym_cramps: 'Cólicas',
+    sym_bloating: 'Inchaço',
+    sym_acne: 'Acne',
+    sym_backpain: 'Dor nas costas',
+    sym_fatigue: 'Cansaço',
+    sym_insomnia: 'Insônia',
+    sym_cravings: 'Antojos',
+    sym_sensitive: 'Sensibilidade',
+    sym_moodswings: 'Mudanças de humor',
+    flow_none: 'Sem fluxo',
+    flow_light: 'Leve',
+    flow_medium: 'Médio',
+    flow_heavy: 'Intenso',
   },
 
   fr: {
@@ -496,6 +695,71 @@ const I18N = {
     urgency: '🎁 Bienvenue : Inscrivez-vous aujourd\'hui et recevez votre premier produit gratuit — offre limitée',
     theme_light: 'Clair',
     theme_dark: 'Sombre',
+    // Prices (EUR)
+    price_currency: 'EUR',
+    price_symbol: '€',
+    price_ciclo_original: '15',
+    price_ciclo: '8',
+    price_dinero_original: '12',
+    price_dinero: '7',
+    price_mujer: '9',
+    price_semilla: '5',
+    price_guerrera: '10',
+    price_diamante: '18',
+    price_per_month: '/mois',
+    // Dashboard
+    dash_greeting: 'Bon retour',
+    dash_phase: "Aujourd'hui vous êtes en",
+    dash_phase_ovulatoria: 'Phase ovulatoire — votre moment de briller',
+    dash_checkin_title: 'Bonjour',
+    dash_checkin_sub: 'Dites-nous comment vous vous êtes réveillée (2 min)',
+    dash_checkin_energy: 'Comment vous êtes-vous réveillée?',
+    dash_checkin_mood: 'Comment vous sentez-vous?',
+    dash_checkin_intention: 'Quelle est votre intention pour aujourd\'hui?',
+    dash_checkin_next: 'Suivant',
+    dash_checkin_submit: 'Terminer le check-in',
+    dash_checkin_done: 'Check-in terminé!',
+    dash_checkin_reward: 'XP gagnés',
+    dash_checkin_continue: 'Continuer',
+    dash_challenges_title: 'Défis de la semaine',
+    dash_register_cycle: 'Enregistrer le cycle',
+    dash_new_challenges: 'Nouveaux défis',
+    dash_my_circles: 'Mes cercles',
+    dash_join_circle: 'Rejoindre un cercle',
+    dash_generate_challenges: 'Génération de défis personnalisés...',
+    dash_no_circles: 'Vous n\'avez pas encore de cercles. Rejoignez-en un!',
+    dash_cycle_diary: 'Mon journal de cycle',
+    dash_cycle_flow: "Flux aujourd'hui",
+    dash_cycle_symptoms: 'Symptômes (sélectionnez plusieurs)',
+    dash_cycle_energy: 'Énergie',
+    dash_cycle_notes: 'Notes (optionnel)',
+    dash_cycle_save: 'Enregistrer',
+    dash_cycle_placeholder: 'Quelque chose à retenir...',
+    mood_fuerte: 'Forte',
+    mood_tranquila: 'Calme',
+    mood_energetica: 'Énergique',
+    mood_reflexiva: 'Réflexive',
+    mood_intensa: 'Intense',
+    mood_sensible: 'Sensible',
+    int_descansar: 'Me reposer et prendre soin de moi',
+    int_productiva: 'Être productive',
+    int_conectar: 'Me connecter avec quelqu\'un',
+    int_aprender: 'Apprendre quelque chose de nouveau',
+    int_organizar: 'M\'organiser',
+    sym_headache: 'Mal de tête',
+    sym_cramps: 'Crampes',
+    sym_bloating: 'Ballonnement',
+    sym_acne: 'Acné',
+    sym_backpain: 'Mal de dos',
+    sym_fatigue: 'Fatigue',
+    sym_insomnia: 'Insomnie',
+    sym_cravings: 'Envies',
+    sym_sensitive: 'Sensibilité',
+    sym_moodswings: 'Changements d\'humeur',
+    flow_none: 'Pas de flux',
+    flow_light: 'Léger',
+    flow_medium: 'Moyen',
+    flow_heavy: 'Abondant',
   },
 
   de: {
@@ -616,6 +880,71 @@ const I18N = {
     urgency: '🎁 Willkommen: Registriere dich heute und erhalte dein erstes Produkt gratis — für begrenzte Zeit',
     theme_light: 'Hell',
     theme_dark: 'Dunkel',
+    // Prices (EUR)
+    price_currency: 'EUR',
+    price_symbol: '€',
+    price_ciclo_original: '15',
+    price_ciclo: '8',
+    price_dinero_original: '12',
+    price_dinero: '7',
+    price_mujer: '9',
+    price_semilla: '5',
+    price_guerrera: '10',
+    price_diamante: '18',
+    price_per_month: '/Monat',
+    // Dashboard
+    dash_greeting: 'Willkommen zurück',
+    dash_phase: 'Heute bist du in der',
+    dash_phase_ovulatoria: 'Ovulationsphase — deine Zeit zu glänzen',
+    dash_checkin_title: 'Guten Morgen',
+    dash_checkin_sub: 'Erzähl uns wie du aufgewacht bist (2 Min)',
+    dash_checkin_energy: 'Wie bist du aufgewacht?',
+    dash_checkin_mood: 'Wie fühlst du dich?',
+    dash_checkin_intention: 'Was ist deine Absicht für heute?',
+    dash_checkin_next: 'Weiter',
+    dash_checkin_submit: 'Check-in abschließen',
+    dash_checkin_done: 'Check-in abgeschlossen!',
+    dash_checkin_reward: 'XP verdient',
+    dash_checkin_continue: 'Fortfahren',
+    dash_challenges_title: 'Herausforderungen dieser Woche',
+    dash_register_cycle: 'Zyklus eintragen',
+    dash_new_challenges: 'Neue Herausforderungen',
+    dash_my_circles: 'Meine Kreise',
+    dash_join_circle: 'Einem Kreis beitreten',
+    dash_generate_challenges: 'Personalisierte Herausforderungen werden generiert...',
+    dash_no_circles: 'Du hast noch keine Kreise. Tritt einem bei!',
+    dash_cycle_diary: 'Mein Zyklus-Tagebuch',
+    dash_cycle_flow: 'Fluss heute',
+    dash_cycle_symptoms: 'Symptome (mehrere auswählen)',
+    dash_cycle_energy: 'Energie',
+    dash_cycle_notes: 'Notizen (optional)',
+    dash_cycle_save: 'Speichern',
+    dash_cycle_placeholder: 'Etwas das du merken möchtest...',
+    mood_fuerte: 'Stark',
+    mood_tranquila: 'Ruhig',
+    mood_energetica: 'Energisch',
+    mood_reflexiva: 'Nachdenklich',
+    mood_intensa: 'Intensiv',
+    mood_sensible: 'Sensibel',
+    int_descansar: 'Ausruhen und mich pflegen',
+    int_productiva: 'Produktiv sein',
+    int_conectar: 'Mich mit jemandem verbinden',
+    int_aprender: 'Etwas Neues lernen',
+    int_organizar: 'Mich organisieren',
+    sym_headache: 'Kopfschmerzen',
+    sym_cramps: 'Krämpfe',
+    sym_bloating: 'Blähungen',
+    sym_acne: 'Akne',
+    sym_backpain: 'Rückenschmerzen',
+    sym_fatigue: 'Müdigkeit',
+    sym_insomnia: 'Schlaflosigkeit',
+    sym_cravings: 'Heißhunger',
+    sym_sensitive: 'Empfindlichkeit',
+    sym_moodswings: 'Stimmungsschwankungen',
+    flow_none: 'Kein Fluss',
+    flow_light: 'Leicht',
+    flow_medium: 'Mittel',
+    flow_heavy: 'Stark',
   }
 };
 
@@ -667,6 +996,59 @@ function applyTranslations() {
     try {
       const ld = JSON.parse(ldScript.textContent);
       ld.inLanguage = jsonLd[currentLang] || 'es-MX';
+      ldScript.textContent = JSON.stringify(ld, null, 2);
+    } catch(e) {}
+  }
+  // Update prices
+  updatePrices();
+}
+
+function updatePrices() {
+  const sym = t('price_symbol');
+  const perMonth = t('price_per_month');
+  // Products
+  document.querySelectorAll('[data-i18n-price]').forEach(el => {
+    const key = el.dataset.i18nPrice;
+    const val = t(key);
+    if (val && val !== key) el.textContent = sym + val;
+  });
+  document.querySelectorAll('[data-i18n-price-original]').forEach(el => {
+    const key = el.dataset.i18nPriceOriginal;
+    const val = t(key);
+    if (val && val !== key) el.textContent = sym + val;
+  });
+  // Per-month labels
+  document.querySelectorAll('[data-i18n-price-month]').forEach(el => {
+    el.textContent = perMonth;
+  });
+  // Full price strings (products with discount)
+  document.querySelectorAll('[data-i18n-price-full]').forEach(el => {
+    const originalKey = el.dataset.i18nPriceFull;
+    const newKey = el.dataset.i18nPriceNew;
+    const origVal = t(originalKey);
+    const newVal = t(newKey);
+    if (origVal && newVal) {
+      el.innerHTML = '<s>' + sym + origVal + '</s> ' + sym + newVal + ' ' + t('price_currency');
+    }
+  });
+  document.querySelectorAll('[data-i18n-price-simple]').forEach(el => {
+    const key = el.dataset.i18nPriceSimple;
+    const val = t(key);
+    if (val) el.innerHTML = sym + val + ' ' + t('price_currency');
+  });
+  // Membership full price strings
+  document.querySelectorAll('[data-i18n-plan-price]').forEach(el => {
+    const key = el.dataset.i18nPlanPrice;
+    const val = t(key);
+    if (val) el.textContent = sym + val;
+  });
+  // Update JSON-LD currency
+  const ldScript = document.querySelector('script[type="application/ld+json"]');
+  if (ldScript) {
+    try {
+      const ld = JSON.parse(ldScript.textContent);
+      ld.offers.priceCurrency = t('price_currency');
+      ld.offers.price = t('price_ciclo');
       ldScript.textContent = JSON.stringify(ld, null, 2);
     } catch(e) {}
   }

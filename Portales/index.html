@@ -344,8 +344,8 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
       <div class="dash-greeting">
         <div class="dg-sub" id="dgSub">Lunes 19 de mayo</div>
-        <div class="dg-title">Hola de nuevo, <span id="dgName">Sofía</span></div>
-        <div class="dg-phase">🌕 Hoy estás en fase Ovulatoria — tu momento de brillar</div>
+        <div class="dg-title"><span data-i18n="dash_greeting">Hola de nuevo</span>, <span id="dgName">Sofía</span></div>
+        <div class="dg-phase">🌕 <span data-i18n="dash_phase">Hoy estás en fase</span> <span data-i18n="dash_phase_ovulatoria">Ovulatoria — tu momento de brillar</span></div>
       </div>
 
       <div class="xp-progress">
@@ -382,13 +382,13 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
         <!-- RETOS SEMANALES -->
         <div class="dash-card">
-          <div class="dc-title">🎯 Retos de esta semana<span class="dc-see" id="challengeCount">0/4</span></div>
+          <div class="dc-title">🎯 <span data-i18n="dash_challenges_title">Retos de esta semana</span><span class="dc-see" id="challengeCount">0/4</span></div>
           <div class="reto-list" id="weeklyChallenges">
-            <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Generando retos personalizados...</div>
+            <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px" data-i18n="dash_generate_challenges">Generando retos personalizados...</div>
           </div>
           <div style="margin-top:8px;display:flex;gap:6px;justify-content:center">
-            <button onclick="openCycleDiary()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--rosa-l);color:var(--rosa);border:1.5px solid var(--rosa);cursor:pointer;font-weight:500">📝 Registrar ciclo</button>
-            <button onclick="loadWeeklyChallenges()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--lila-l);color:var(--lila);border:1.5px solid var(--lila);cursor:pointer;font-weight:500">🔄 Nuevos retos</button>
+            <button onclick="openCycleDiary()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--rosa-l);color:var(--rosa);border:1.5px solid var(--rosa);cursor:pointer;font-weight:500">📝 <span data-i18n="dash_register_cycle">Registrar ciclo</span></button>
+            <button onclick="loadWeeklyChallenges()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--lila-l);color:var(--lila);border:1.5px solid var(--lila);cursor:pointer;font-weight:500">🔄 <span data-i18n="dash_new_challenges">Nuevos retos</span></button>
           </div>
         </div>
 
@@ -444,14 +444,14 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
           <div class="dash-card">
             <div class="dc-title">
-              <span>👥 Mis círculos</span>
+              <span>👥 <span data-i18n="dash_my_circles">Mis círculos</span></span>
               <div class="live-pill"><div class="live-dot-g"></div><span id="circleOnlineCount">0</span> activas</div>
             </div>
             <div id="myCirclesList" style="margin-bottom:10px">
               <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Cargando círculos...</div>
             </div>
             <div style="margin-top:10px;text-align:center">
-              <button onclick="showAvailableCircles()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--verde-l);color:var(--verde);border:1.5px solid var(--verde);cursor:pointer;font-weight:500">+ Unirse a un círculo</button>
+              <button onclick="showAvailableCircles()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--verde-l);color:var(--verde);border:1.5px solid var(--verde);cursor:pointer;font-weight:500">+ <span data-i18n="dash_join_circle">Unirse a un círculo</span></button>
             </div>
           </div>
         </div>
@@ -478,13 +478,13 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
     <button onclick="closeCheckin()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--suave)">✕</button>
     <div style="text-align:center;margin-bottom:24px">
       <div style="font-size:40px;margin-bottom:8px">☀️</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:4px">Buenos días, <span id="checkinName">Sofía</span></h3>
-      <p style="font-size:13px;color:var(--suave)">Cuéntanos cómo amaneciste (2 min)</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:4px"><span data-i18n="dash_checkin_title">Buenos días</span>, <span id="checkinName">Sofía</span></h3>
+      <p style="font-size:13px;color:var(--suave)" data-i18n="dash_checkin_sub">Cuéntanos cómo amaneciste (2 min)</p>
     </div>
 
     <!-- Step 1: Energy -->
     <div id="checkinStep1">
-      <p style="font-size:13px;font-weight:500;color:var(--texto);margin-bottom:10px;text-align:center">¿Cómo amaneciste?</p>
+      <p style="font-size:13px;font-weight:500;color:var(--texto);margin-bottom:10px;text-align:center" data-i18n="dash_checkin_energy">¿Cómo amaneciste?</p>
       <div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px" id="energyPicker">
         <button class="energy-btn" onclick="selectEnergy(1,this)" style="font-size:28px;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:10px 14px;cursor:pointer;transition:all 0.15s">😴</button>
         <button class="energy-btn" onclick="selectEnergy(2,this)" style="font-size:28px;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:10px 14px;cursor:pointer;transition:all 0.15s">😐</button>
@@ -492,43 +492,43 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <button class="energy-btn" onclick="selectEnergy(4,this)" style="font-size:28px;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:10px 14px;cursor:pointer;transition:all 0.15s">😊</button>
         <button class="energy-btn" onclick="selectEnergy(5,this)" style="font-size:28px;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:10px 14px;cursor:pointer;transition:all 0.15s">🤩</button>
       </div>
-      <button id="checkinNext1" onclick="goCheckinStep(2)" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none">Siguiente</button>
+      <button id="checkinNext1" onclick="goCheckinStep(2)" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none" data-i18n="dash_checkin_next">Siguiente</button>
     </div>
 
     <!-- Step 2: Mood -->
     <div id="checkinStep2" style="display:none">
-      <p style="font-size:13px;font-weight:500;color:var(--texto);margin-bottom:10px;text-align:center">¿Cómo te sientes?</p>
+      <p style="font-size:13px;font-weight:500;color:var(--texto);margin-bottom:10px;text-align:center" data-i18n="dash_checkin_mood">¿Cómo te sientes?</p>
       <div style="display:flex;justify-content:center;gap:10px;margin-bottom:20px;flex-wrap:wrap" id="moodPicker">
-        <button class="mood-btn" onclick="selectMood('💪','Fuerte',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">💪 Fuerte</button>
-        <button class="mood-btn" onclick="selectMood('🌸','Tranquila',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">🌸 Tranquila</button>
-        <button class="mood-btn" onclick="selectMood('⚡','Energética',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">⚡ Energética</button>
-        <button class="mood-btn" onclick="selectMood('🤔','Reflexiva',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">🤔 Reflexiva</button>
-        <button class="mood-btn" onclick="selectMood('😤','Intensa',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">😤 Intensa</button>
-        <button class="mood-btn" onclick="selectMood('😔','Sensible',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">😔 Sensible</button>
+        <button class="mood-btn" onclick="selectMood('💪','mood_fuerte',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">💪 <span data-i18n="mood_fuerte">Fuerte</span></button>
+        <button class="mood-btn" onclick="selectMood('🌸','mood_tranquila',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">🌸 <span data-i18n="mood_tranquila">Tranquila</span></button>
+        <button class="mood-btn" onclick="selectMood('⚡','mood_energetica',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">⚡ <span data-i18n="mood_energetica">Energética</span></button>
+        <button class="mood-btn" onclick="selectMood('🤔','mood_reflexiva',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">🤔 <span data-i18n="mood_reflexiva">Reflexiva</span></button>
+        <button class="mood-btn" onclick="selectMood('😤','mood_intensa',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">😤 <span data-i18n="mood_intensa">Intensa</span></button>
+        <button class="mood-btn" onclick="selectMood('😔','mood_sensible',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">😔 <span data-i18n="mood_sensible">Sensible</span></button>
       </div>
-      <button id="checkinNext2" onclick="goCheckinStep(3)" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none">Siguiente</button>
+      <button id="checkinNext2" onclick="goCheckinStep(3)" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none" data-i18n="dash_checkin_next">Siguiente</button>
     </div>
 
     <!-- Step 3: Intention -->
     <div id="checkinStep3" style="display:none">
-      <p style="font-size:13px;font-weight:500;color:var(--texto);margin-bottom:10px;text-align:center">¿Cuál es tu intención para hoy?</p>
+      <p style="font-size:13px;font-weight:500;color:var(--texto);margin-bottom:10px;text-align:center" data-i18n="dash_checkin_intention">¿Cuál es tu intención para hoy?</p>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px" id="intentionPicker">
-        <button class="intention-btn" onclick="selectIntention('Descansar y cuidarme',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">🛋️ Descansar y cuidarme</button>
-        <button class="intention-btn" onclick="selectIntention('Ser productiva',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">📋 Ser productiva</button>
-        <button class="intention-btn" onclick="selectIntention('Conectar con alguien',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">💬 Conectar con alguien</button>
-        <button class="intention-btn" onclick="selectIntention('Aprender algo nuevo',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">📚 Aprender algo nuevo</button>
-        <button class="intention-btn" onclick="selectIntention('Organizarme',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">🗂️ Organizarme</button>
+        <button class="intention-btn" onclick="selectIntention('int_descansar',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">🛋️ <span data-i18n="int_descansar">Descansar y cuidarme</span></button>
+        <button class="intention-btn" onclick="selectIntention('int_productiva',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">📋 <span data-i18n="int_productiva">Ser productiva</span></button>
+        <button class="intention-btn" onclick="selectIntention('int_conectar',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">💬 <span data-i18n="int_conectar">Conectar con alguien</span></button>
+        <button class="intention-btn" onclick="selectIntention('int_aprender',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">📚 <span data-i18n="int_aprender">Aprender algo nuevo</span></button>
+        <button class="intention-btn" onclick="selectIntention('int_organizar',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">🗂️ <span data-i18n="int_organizar">Organizarme</span></button>
       </div>
-      <button id="checkinSubmit" onclick="submitCheckin()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none">✨ Completar check-in</button>
+      <button id="checkinSubmit" onclick="submitCheckin()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none">✨ <span data-i18n="dash_checkin_submit">Completar check-in</span></button>
     </div>
 
     <!-- Step 4: Done -->
     <div id="checkinDone" style="display:none;text-align:center">
       <div style="font-size:48px;margin-bottom:12px">🌟</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:6px">¡Check-in completado!</h3>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:6px" data-i18n="dash_checkin_done">¡Check-in completado!</h3>
       <p style="font-size:13px;color:var(--suave);margin-bottom:4px" id="checkinReward">+15 XP ganados</p>
       <p style="font-size:12px;color:var(--lila);margin-bottom:16px" id="checkinInsight"></p>
-      <button onclick="closeCheckin()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">Continuar</button>
+      <button onclick="closeCheckin()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer" data-i18n="dash_checkin_continue">Continuar</button>
     </div>
   </div>
 </div>
@@ -537,36 +537,36 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <div id="cycleModal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px">
   <div style="background:white;border-radius:20px;padding:28px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative;max-height:85vh;overflow-y:auto">
     <button onclick="closeCycleModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--suave)">✕</button>
-    <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:16px">📝 Mi diario de ciclo</h3>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:16px">📝 <span data-i18n="dash_cycle_diary">Mi diario de ciclo</span></h3>
 
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Flujo hoy</label>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="dash_cycle_flow">Flujo hoy</label>
       <div style="display:flex;gap:8px">
-        <button class="flow-btn" onclick="selectFlow(0,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer">Sin flujo</button>
-        <button class="flow-btn" onclick="selectFlow(1,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer">Leve</button>
-        <button class="flow-btn" onclick="selectFlow(2,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer">Medio</button>
-        <button class="flow-btn" onclick="selectFlow(3,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer">Intenso</button>
+        <button class="flow-btn" onclick="selectFlow(0,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer" data-i18n="flow_none">Sin flujo</button>
+        <button class="flow-btn" onclick="selectFlow(1,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer" data-i18n="flow_light">Leve</button>
+        <button class="flow-btn" onclick="selectFlow(2,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer" data-i18n="flow_medium">Medio</button>
+        <button class="flow-btn" onclick="selectFlow(3,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:12px;cursor:pointer" data-i18n="flow_heavy">Intenso</button>
       </div>
     </div>
 
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Síntomas (selecciona varios)</label>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="dash_cycle_symptoms">Síntomas (selecciona varios)</label>
       <div style="display:flex;flex-wrap:wrap;gap:6px" id="symptomsPicker">
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Dolor de cabeza</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Cólicos</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Hinchazón</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Acné</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Dolor de espalda</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Cansancio</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Insomnio</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Antojos</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Sensibilidad</button>
-        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer">Cambios de ánimo</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_headache">Dolor de cabeza</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_cramps">Cólicos</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_bloating">Hinchazón</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_acne">Acné</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_backpain">Dolor de espalda</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_fatigue">Cansancio</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_insomnia">Insomnio</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_cravings">Antojos</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_sensitive">Sensibilidad</button>
+        <button class="symptom-chip" onclick="toggleSymptom(this)" style="padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer" data-i18n="sym_moodswings">Cambios de ánimo</button>
       </div>
     </div>
 
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Energía</label>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="dash_cycle_energy">Energía</label>
       <div style="display:flex;gap:8px" id="cycleEnergyPicker">
         <button class="cycle-energy-btn" onclick="selectCycleEnergy(1,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:18px;cursor:pointer">😴</button>
         <button class="cycle-energy-btn" onclick="selectCycleEnergy(2,this)" style="flex:1;padding:8px;border:1.5px solid var(--borde);border-radius:10px;background:var(--bg);font-size:18px;cursor:pointer">😐</button>
@@ -577,11 +577,11 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
     </div>
 
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Notas (opcional)</label>
-      <textarea id="cycleNotes" class="form-input" rows="2" placeholder="Algo que quieras recordar..."></textarea>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="dash_cycle_notes">Notas (opcional)</label>
+      <textarea id="cycleNotes" class="form-input" rows="2" data-i18n-placeholder="dash_cycle_placeholder" placeholder="Algo que quieras recordar..."></textarea>
     </div>
 
-    <button onclick="submitCycleLog()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">📝 Registrar</button>
+    <button onclick="submitCycleLog()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">📝 <span data-i18n="dash_cycle_save">Registrar</span></button>
   </div>
 </div>
 
@@ -790,7 +790,7 @@ async function loadDashboard() {
         cList.appendChild(div);
       });
     } else {
-      cList.innerHTML = '<div style="text-align:center;padding:12px;color:var(--suave);font-size:12px">Aún no tienes círculos. ¡Únete a uno!</div>';
+      cList.innerHTML = '<div style="text-align:center;padding:12px;color:var(--suave);font-size:12px">' + t('dash_no_circles') + '</div>';
     }
   } catch (e) {
     console.warn('Circles load error:', e);
@@ -902,7 +902,7 @@ function goCheckinStep(step) {
 
 async function submitCheckin() {
   try {
-    const xp = await saveDailyMood(checkinEnergy, checkinMood + ' ' + checkinMoodText, null, checkinIntention);
+    const xp = await saveDailyMood(checkinEnergy, checkinMood + ' ' + t(checkinMoodText), null, t(checkinIntention));
     document.getElementById('checkinReward').textContent = '+' + xp + ' XP ganados';
     showCelebration('checkin');
     goCheckinStep(4);
@@ -1118,7 +1118,7 @@ async function loadMyCircles() {
         cList.appendChild(div);
       });
     } else {
-      cList.innerHTML = '<div style="text-align:center;padding:12px;color:var(--suave);font-size:12px">Aún no tienes círculos. ¡Únete a uno!</div>';
+      cList.innerHTML = '<div style="text-align:center;padding:12px;color:var(--suave);font-size:12px">' + t('dash_no_circles') + '</div>';
     }
   } catch (e) {}
 }
