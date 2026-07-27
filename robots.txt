@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /Portales/
+Disallow: /sql/
+Disallow: /.env
+
+Sitemap: https://yayika.com/sitemap.xml

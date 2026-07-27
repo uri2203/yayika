@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciclo Productiva — Módulo 1 | Yayika</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#4E3470">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lila:#7C5CBF;--lila-l:#EDE8F9;--lila-d:#5A3E9B;
+  --rosa:#D4788A;--rosa-l:#FAF0F2;
+  --oro:#C9A84C;--oro-l:#FBF5E6;--oro-d:#8B6B1E;
+  --verde:#3BAF7A;--verde-l:#E8F8F1;
+  --bg:#F8F5FF;--card:#FDFCFB;--texto:#2C2240;--suave:#6B5F7A;
+  --borde:rgba(124,92,191,0.15);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7}
+
+/* NAV */
+nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white}
+.nav-logo span{color:#D4B8F5}
+.nav-user{display:flex;align-items:center;gap:10px}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--lila);color:white;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.nav-name{font-size:13px;color:rgba(255,255,255,0.7)}
+.nav-back{font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;margin-right:16px}
+.nav-back:hover{color:white}
+
+/* PROGRESS BAR */
+.progress-bar{background:#1A1030;padding:10px 28px;display:flex;align-items:center;gap:12px}
+.pb-label{font-size:11px;color:rgba(255,255,255,0.4)}
+.pb-track{flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:50px;overflow:hidden}
+.pb-fill{height:100%;background:var(--lila);border-radius:50px;transition:width 0.5s}
+.pb-pct{font-size:11px;color:var(--lila);font-weight:500}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 100px)}
+
+/* SIDEBAR */
+.sidebar{background:white;border-right:0.5px solid var(--borde);padding:20px 0}
+.sb-module-title{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--suave);text-transform:uppercase;padding:0 18px;margin-bottom:8px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s}
+.sb-item:hover{background:var(--lila-l)}
+.sb-item.active{background:var(--lila-l);border-left-color:var(--lila)}
+.sb-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--borde);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.sb-check.done{background:var(--verde);border-color:var(--verde);color:white}
+.sb-check.active-check{border-color:var(--lila);background:var(--lila-l)}
+.sb-text{font-size:12px;color:var(--texto)}
+.sb-text.active{color:var(--lila-d);font-weight:500}
+.sb-divider{height:0.5px;background:var(--borde);margin:12px 18px}
+.sb-xp{margin:16px;background:var(--lila-l);border-radius:10px;padding:10px 12px}
+.sb-xp-label{font-size:10px;color:var(--suave);margin-bottom:4px}
+.sb-xp-track{height:5px;background:rgba(124,92,191,0.15);border-radius:50px;overflow:hidden;margin-bottom:4px}
+.sb-xp-fill{height:100%;background:var(--lila);border-radius:50px}
+.sb-xp-pts{font-size:11px;font-weight:500;color:var(--lila-d)}
+
+/* MAIN */
+.main{padding:32px 40px;max-width:780px}
+
+.module-badge{display:inline-flex;align-items:center;gap:6px;background:var(--lila-l);color:var(--lila-d);font-size:11px;font-weight:500;padding:5px 12px;border-radius:50px;margin-bottom:14px}
+.module-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--texto);margin-bottom:6px;line-height:1.2}
+.module-title em{color:var(--lila);font-style:italic}
+.module-subtitle{font-size:15px;color:var(--suave);margin-bottom:24px}
+
+.meta-row{display:flex;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.meta-pill{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--suave);background:white;border:0.5px solid var(--borde);border-radius:50px;padding:4px 12px}
+
+/* CONTENT BLOCKS */
+.section{margin-bottom:36px}
+.section h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--texto);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--lila-l)}
+.section h3{font-size:16px;font-weight:500;color:var(--lila-d);margin:18px 0 10px}
+.section p{color:#444;margin-bottom:12px;line-height:1.75}
+.section ul{padding-left:0;list-style:none;margin-bottom:14px}
+.section ul li{padding:6px 0 6px 24px;position:relative;color:#444;border-bottom:0.5px solid var(--borde);font-size:14px}
+.section ul li:last-child{border-bottom:none}
+.section ul li::before{content:'→';position:absolute;left:0;color:var(--lila);font-size:12px;top:8px}
+
+.callout{border-radius:12px;padding:16px 20px;margin:18px 0}
+.callout.lila{background:var(--lila-l);border-left:3px solid var(--lila)}
+.callout.rosa{background:var(--rosa-l);border-left:3px solid var(--rosa)}
+.callout.oro{background:var(--oro-l);border-left:3px solid var(--oro)}
+.callout.verde{background:var(--verde-l);border-left:3px solid var(--verde)}
+.callout-title{font-size:13px;font-weight:600;margin-bottom:6px}
+.callout.lila .callout-title{color:var(--lila-d)}
+.callout.rosa .callout-title{color:#A8485E}
+.callout.oro .callout-title{color:var(--oro-d)}
+.callout.verde .callout-title{color:#1F7A4E}
+.callout p{font-size:13px;margin:0;line-height:1.6}
+
+/* PHASE TABLE */
+.phase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+.phase-box{border-radius:12px;padding:14px;text-align:center;border:0.5px solid var(--borde);background:white}
+.phase-box.active-phase{border-color:var(--lila);background:var(--lila-l)}
+.phase-emoji{font-size:28px;display:block;margin-bottom:6px}
+.phase-name{font-size:13px;font-weight:500;color:var(--texto)}
+.phase-days{font-size:11px;color:var(--suave);margin-top:2px}
+.phase-energy{margin-top:8px;height:4px;background:rgba(124,92,191,0.1);border-radius:50px;overflow:hidden}
+.phase-energy-fill{height:100%;border-radius:50px;background:var(--lila)}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.col-card{background:white;border:0.5px solid var(--borde);border-radius:12px;padding:14px}
+.col-card.si{border-top:3px solid var(--verde)}
+.col-card.no{border-top:3px solid var(--rosa)}
+.col-card-title{font-size:12px;font-weight:600;margin-bottom:10px}
+.col-card.si .col-card-title{color:#1F7A4E}
+.col-card.no .col-card-title{color:#A8485E}
+.col-card ul{list-style:none;padding:0;margin:0}
+.col-card ul li{font-size:12px;color:#555;padding:5px 0;border-bottom:0.5px solid var(--borde);line-height:1.4}
+.col-card ul li:last-child{border-bottom:none}
+
+/* TRACKER INTERACTIVO */
+.tracker{background:white;border:0.5px solid var(--borde);border-radius:16px;padding:20px;margin:18px 0}
+.tracker-title{font-size:15px;font-weight:500;color:var(--texto);margin-bottom:4px}
+.tracker-sub{font-size:12px;color:var(--suave);margin-bottom:16px}
+.tracker-phases{display:flex;gap:0;margin-bottom:16px;border:0.5px solid var(--borde);border-radius:10px;overflow:hidden}
+.tp{flex:1;padding:10px 6px;text-align:center;cursor:pointer;font-size:11px;font-weight:500;border-right:0.5px solid var(--borde);background:white;color:var(--suave);transition:all 0.15s}
+.tp:last-child{border-right:none}
+.tp.active-tp{background:var(--lila);color:white}
+.tp-emoji{font-size:18px;display:block;margin-bottom:3px}
+.tracker-info{display:none;padding:14px;background:var(--lila-l);border-radius:10px;margin-bottom:14px}
+.tracker-info.visible{display:block}
+.tracker-info h4{font-size:13px;font-weight:500;color:var(--lila-d);margin-bottom:6px}
+.tracker-info p{font-size:12px;color:var(--texto);margin:0;line-height:1.5}
+.tracker-question{margin-bottom:10px}
+.tracker-question label{font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:5px}
+.tracker-question textarea{width:100%;border:0.5px solid var(--borde);border-radius:8px;padding:10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--texto);resize:vertical;min-height:70px;background:white}
+.tracker-question textarea:focus{outline:none;border-color:var(--lila)}
+.tracker-save-btn{background:var(--lila);color:white;border:none;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;width:100%}
+.tracker-save-btn:hover{background:var(--lila-d)}
+.saved-msg{display:none;text-align:center;color:var(--verde);font-size:12px;margin-top:8px;font-weight:500}
+
+/* EJERCICIO */
+.ejercicio{background:#2C2240;border-radius:16px;padding:24px;color:white;margin:18px 0}
+.ejercicio h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:8px}
+.ejercicio h3 em{color:#D4B8F5;font-style:italic}
+.ejercicio p{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:14px}
+.ejercicio textarea{width:100%;background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px;color:white;font-family:'Inter',sans-serif;font-size:13px;resize:vertical;min-height:90px}
+.ejercicio textarea::placeholder{color:rgba(255,255,255,0.3)}
+.ejercicio textarea:focus{outline:none;border-color:rgba(212,184,245,0.5)}
+
+/* NAVIGATION BTNS */
+.nav-btns{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-top:0.5px solid var(--borde);margin-top:20px}
+.btn-prev{background:white;color:var(--lila);border:1px solid var(--lila);padding:10px 22px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-next{background:var(--lila);color:white;border:none;padding:10px 28px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-next:hover{background:var(--lila-d)}
+.btn-complete{background:var(--verde);color:white;border:none;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px}
+
+.xp-toast{display:none;position:fixed;bottom:24px;right:24px;background:#2C2240;color:white;padding:12px 20px;border-radius:12px;font-size:13px;z-index:999;border-left:3px solid var(--oro)}
+
+@media(max-width:700px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{padding:20px}
+  .phase-grid{grid-template-columns:repeat(2,1fr)}
+  .two-col{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="Portales/index.html" class="nav-back">← Mi portal</a>
+    <div class="nav-logo">Yay<span>ika</span></div>
+  </div>
+  <div class="nav-user">
+    <div class="nav-avatar">SL</div>
+    <span class="nav-name">Sofía L.</span>
+  </div>
+</nav>
+
+<div class="progress-bar">
+  <span class="pb-label">Ciclo Productiva</span>
+  <div class="pb-track"><div class="pb-fill" id="pbFill" style="width:20%"></div></div>
+  <span class="pb-pct" id="pbPct">Módulo 1 de 5</span>
+</div>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <div class="sb-module-title">Ciclo Productiva</div>
+    <div class="sb-item active">
+      <div class="sb-check active-check">1</div>
+      <span class="sb-text active">Tu ciclo explicado</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">2</div>
+      <span class="sb-text">Fase Menstrual</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">3</div>
+      <span class="sb-text">Fase Folicular</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">4</div>
+      <span class="sb-text">Fase Ovulatoria</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">5</div>
+      <span class="sb-text">Fase Lútea</span>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-xp">
+      <div class="sb-xp-label">Tu progreso — XP acumulado</div>
+      <div class="sb-xp-track"><div class="sb-xp-fill" id="xpFill" style="width:12%"></div></div>
+      <div class="sb-xp-pts" id="xpPts">120 / 1000 XP</div>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="module-badge">📖 Módulo 1 · Introducción</div>
+    <h1 class="module-title">Tu ciclo explicado <em>sin tecnicismos</em></h1>
+    <p class="module-subtitle">Entiende qué pasa en tu cuerpo cada semana y por qué te sientes diferente — y cómo usarlo a tu favor.</p>
+
+    <div class="meta-row">
+      <div class="meta-pill">⏱ 15 min de lectura</div>
+      <div class="meta-pill">🎯 1 ejercicio práctico</div>
+      <div class="meta-pill">⭐ +120 XP al completar</div>
+    </div>
+
+    <div class="section">
+      <h2>La verdad que nadie te contó</h2>
+      <p>El mundo laboral, educativo y social está diseñado para un ciclo de 24 horas — el ciclo circadiano masculino. Pero tu cuerpo funciona en un ciclo de 21 a 35 días con cuatro fases completamente distintas.</p>
+      <p>No eres inconsistente. No te falta disciplina. <strong>Nadie te enseñó tu propio manual de usuario.</strong></p>
+      <div class="callout lila">
+        <div class="callout-title">🔬 Lo que la ciencia dice</div>
+        <p>Investigaciones de la Universidad de California encontraron que las mujeres en fase ovulatoria tienen hasta un 25% más de velocidad de procesamiento cognitivo. Eso no es aleatorio — es predecible. Y puedes usarlo.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Tus 4 fases — el mapa completo</h2>
+      <p>Cada mes, tu cuerpo pasa por estas 4 fases. Haz clic en cada una para conocerla:</p>
+
+      <div class="phase-grid">
+        <div class="phase-box active-phase" onclick="showPhase(0)">
+          <span class="phase-emoji">🌑</span>
+          <div class="phase-name">Menstrual</div>
+          <div class="phase-days">Días 1–5</div>
+          <div class="phase-energy"><div class="phase-energy-fill" style="width:20%"></div></div>
+        </div>
+        <div class="phase-box" onclick="showPhase(1)">
+          <span class="phase-emoji">🌒</span>
+          <div class="phase-name">Folicular</div>
+          <div class="phase-days">Días 6–13</div>
+          <div class="phase-energy"><div class="phase-energy-fill" style="width:65%"></div></div>
+        </div>
+        <div class="phase-box" onclick="showPhase(2)">
+          <span class="phase-emoji">🌕</span>
+          <div class="phase-name">Ovulatoria</div>
+          <div class="phase-days">Días 14–17</div>
+          <div class="phase-energy"><div class="phase-energy-fill" style="width:100%"></div></div>
+        </div>
+        <div class="phase-box" onclick="showPhase(3)">
+          <span class="phase-emoji">🌘</span>
+          <div class="phase-name">Lútea</div>
+          <div class="phase-days">Días 18–28</div>
+          <div class="phase-energy"><div class="phase-energy-fill" style="width:45%"></div></div>
+        </div>
+      </div>
+
+      <div id="phaseInfo0" class="callout lila" style="display:block">
+        <div class="callout-title">🌑 Fase Menstrual — Renovación</div>
+        <p><strong>Energía:</strong> Baja · <strong>Superpoder:</strong> Intuición y reflexión profunda<br>Es la semana de descansar e ir hacia adentro. Tu mente, aunque más lenta, tiene acceso a una claridad que no tienes en ninguna otra fase. Ideal para planear, reflexionar y soltar.</p>
+      </div>
+      <div id="phaseInfo1" class="callout rosa" style="display:none">
+        <div class="callout-title">🌒 Fase Folicular — Creatividad</div>
+        <p><strong>Energía:</strong> En aumento · <strong>Superpoder:</strong> Aprendizaje y nuevas ideas<br>El estrógeno sube y tu cerebro está en modo absorción. Es el mejor momento para estudiar, iniciar proyectos y tomar cursos. Tu creatividad está en su pico.</p>
+      </div>
+      <div id="phaseInfo2" class="callout oro" style="display:none">
+        <div class="callout-title">🌕 Fase Ovulatoria — Liderazgo</div>
+        <p><strong>Energía:</strong> Máxima · <strong>Superpoder:</strong> Comunicación y persuasión<br>Tu energía, carisma y capacidad de comunicación están en su punto más alto. Es la semana para negociar, presentar, vender y conectar. Pide ese aumento ahora.</p>
+      </div>
+      <div id="phaseInfo3" class="callout verde" style="display:none">
+        <div class="callout-title">🌘 Fase Lútea — Detalle</div>
+        <p><strong>Energía:</strong> Variable · <strong>Superpoder:</strong> Pensamiento crítico y detalle<br>Tu cerebro cambia a modo analítico. Perfecta para revisar, editar, organizar y terminar lo que empezaste. Tu radar para lo que no funciona está muy afinado.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Qué hacer en cada fase</h2>
+      <div class="two-col">
+        <div class="col-card si">
+          <div class="col-card-title">✅ Tareas que van con tu ciclo</div>
+          <ul>
+            <li>🌑 Menstrual → Planear, reflexionar, descansar</li>
+            <li>🌒 Folicular → Estudiar, crear, iniciar proyectos</li>
+            <li>🌕 Ovulatoria → Negociar, presentar, socializar</li>
+            <li>🌘 Lútea → Revisar, editar, organizar, terminar</li>
+          </ul>
+        </div>
+        <div class="col-card no">
+          <div class="col-card-title">❌ Errores más comunes</div>
+          <ul>
+            <li>Exigirte igual los 28 días del mes</li>
+            <li>Negociar en fase menstrual o lútea baja</li>
+            <li>Iniciar proyectos en fase lútea tardía</li>
+            <li>Comparar tu energía de hoy con la de la semana pasada</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Tu tracker interactivo</h2>
+      <div class="tracker">
+        <div class="tracker-title">¿En qué fase estás hoy?</div>
+        <div class="tracker-sub">Selecciona tu fase actual y responde las preguntas. Tus respuestas se guardan en tu perfil.</div>
+        <div class="tracker-phases">
+          <div class="tp" onclick="selectPhase(0)"><span class="tp-emoji">🌑</span>Menstrual</div>
+          <div class="tp" onclick="selectPhase(1)"><span class="tp-emoji">🌒</span>Folicular</div>
+          <div class="tp active-tp" onclick="selectPhase(2)"><span class="tp-emoji">🌕</span>Ovulatoria</div>
+          <div class="tp" onclick="selectPhase(3)"><span class="tp-emoji">🌘</span>Lútea</div>
+        </div>
+        <div id="trackerInfo" class="tracker-info visible">
+          <h4 id="trackerTitle">🌕 Fase Ovulatoria — tu momento de brillar</h4>
+          <p id="trackerDesc">Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes reuniones importantes esta semana? Es el momento perfecto.</p>
+        </div>
+        <div class="tracker-question">
+          <label>¿Cómo te sientes hoy en una palabra?</label>
+          <textarea id="q1" placeholder="Ej: energizada, cansada, creativa..."></textarea>
+        </div>
+        <div class="tracker-question">
+          <label>¿Qué tarea importante podrías hacer esta semana aprovechando tu fase?</label>
+          <textarea id="q2" placeholder="Escribe aquí..."></textarea>
+        </div>
+        <button class="tracker-save-btn" onclick="saveTracker()">Guardar mi registro de hoy</button>
+        <div class="saved-msg" id="savedMsg">✅ ¡Guardado! +20 XP sumados a tu cuenta</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Ejercicio — Tu mapa personal</h2>
+      <div class="ejercicio">
+        <h3>Mapea <em>tu</em> ciclo ahora</h3>
+        <p>Identifica el primer día de tu último período (ese es tu Día 1). Cuenta hacia adelante y escribe aquí en qué fase estás hoy y qué aprendes de eso.</p>
+        <div class="tracker-question" style="margin-bottom:10px">
+          <textarea id="ejercicio1" placeholder="Estoy en el día ___ de mi ciclo, lo que significa que estoy en la fase ___, y eso explica por qué esta semana me he sentido..." style="background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:12px;width:100%;font-family:Inter,sans-serif;font-size:13px;min-height:90px;resize:vertical"></textarea>
+        </div>
+        <button class="tracker-save-btn" onclick="saveEjercicio()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3)">Guardar mi reflexión +50 XP</button>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-prev" disabled>← Anterior</button>
+      <button class="btn-complete" onclick="completeModule()">
+        ✓ Completar módulo y ganar 120 XP
+      </button>
+      <button class="btn-next" onclick="nextModule()">Módulo 2 →</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="xp-toast" id="xpToast">⭐ +120 XP — ¡Módulo 1 completado!</div>
+
+<script src="../js/app.js"></script>
+<script>
+const phases=[
+  {title:'🌑 Fase Menstrual — Renovación',desc:'Energía baja pero intuición alta. Es tu semana de descansar, reflexionar y planear sin culpa.'},
+  {title:'🌒 Fase Folicular — Creatividad',desc:'Energía en aumento. Tu cerebro está en modo aprendizaje. Ideal para estudiar, crear e iniciar.'},
+  {title:'🌕 Fase Ovulatoria — Liderazgo',desc:'Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes reuniones importantes esta semana?'},
+  {title:'🌘 Fase Lútea — Detalle',desc:'Modo analítico. Perfecta para revisar, organizar y terminar lo que empezaste.'}
+];
+
+function showPhase(i){
+  document.querySelectorAll('.phase-box').forEach((b,j)=>{
+    b.classList.toggle('active-phase',i===j);
+  });
+  for(let k=0;k<4;k++){
+    const el=document.getElementById('phaseInfo'+k);
+    if(el) el.style.display=k===i?'block':'none';
+  }
+}
+
+function selectPhase(i){
+  document.querySelectorAll('.tp').forEach((t,j)=>t.classList.toggle('active-tp',j===i));
+  const info=document.getElementById('trackerInfo');
+  document.getElementById('trackerTitle').textContent=phases[i].title;
+  document.getElementById('trackerDesc').textContent=phases[i].desc;
+  info.classList.add('visible');
+}
+
+function saveTracker(){
+  const q1=document.getElementById('q1').value;
+  const q2=document.getElementById('q2').value;
+  if(!q1&&!q2){alert('Escribe algo primero 😊');return;}
+  document.getElementById('savedMsg').style.display='block';
+  updateXP(20);
+  setTimeout(()=>document.getElementById('savedMsg').style.display='none',3000);
+}
+
+function saveEjercicio(){
+  const v=document.getElementById('ejercicio1').value;
+  if(!v){alert('Escribe tu reflexión primero 😊');return;}
+  showToast('⭐ +50 XP — ¡Ejercicio guardado!');
+  updateXP(50);
+}
+
+function updateXP(pts){
+  const fill=document.getElementById('xpFill');
+  const label=document.getElementById('xpPts');
+  const current=parseInt(label.textContent)||120;
+  const next=Math.min(current+pts,1000);
+  fill.style.width=(next/10)+'%';
+  label.textContent=next+' / 1000 XP';
+}
+
+function showToast(msg){
+  const t=document.getElementById('xpToast');
+  t.textContent=msg;
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',3000);
+}
+
+function completeModule(){
+  showToast('⭐ +120 XP — ¡Módulo 1 completado!');
+  document.getElementById('pbFill').style.width='40%';
+  document.getElementById('pbPct').textContent='Módulo 2 de 5';
+  updateXP(120);
+  const sb=document.querySelector('.sb-check.active-check');
+  if(sb){sb.classList.remove('active-check');sb.classList.add('done');sb.textContent='✓';}
+}
+
+function nextModule(){
+  completeModule();
+  alert('¡Avanzas al Módulo 2 — Fase Menstrual! En tu portal encontrarás el contenido completo.');
+}
+</script>
+</body>
+</html>

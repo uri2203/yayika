@@ -1,0 +1,250 @@
+/* ============================================================
+   Yayika — CSS Compartido
+   ============================================================ */
+
+/* --- Variables de diseño --- */
+:root {
+  --lila: #7B5EA7;
+  --lila-l: #F0EBF8;
+  --lila-d: #4E3470;
+  --rosa: #C96B7A;
+  --rosa-l: #FDF0F2;
+  --rosa-d: #A8485E;
+  --oro: #B8943A;
+  --oro-l: #FBF6E8;
+  --oro-d: #8B6B1E;
+  --verde: #3BAF7A;
+  --verde-l: #E8F8F1;
+  --verde-d: #1F7A4E;
+  --teal: #2A8C7A;
+  --teal-l: #E6F5F2;
+  --bg: #F8F5FF;
+  --card: #FDFCFB;
+  --texto: #2C2240;
+  --suave: #6B5F7A;
+  --borde: rgba(123,94,167,0.13);
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--texto);
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* --- Tipografía --- */
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+em { color: var(--lila); font-style: italic; }
+
+/* --- Links --- */
+a { color: var(--lila); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* --- Botones --- */
+.btn-primary {
+  background: var(--lila-d);
+  color: white;
+  padding: 13px 26px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.btn-primary:hover { background: var(--lila); transform: translateY(-1px); text-decoration: none; }
+.btn-secondary {
+  background: transparent;
+  color: var(--lila-d);
+  padding: 13px 26px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1.5px solid var(--lila-d);
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* --- Nav --- */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 5vw;
+  background: rgba(250,247,242,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--borde);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--lila-d);
+  letter-spacing: -0.5px;
+}
+.logo span { color: var(--rosa); }
+
+/* --- Secciones --- */
+.section { padding: 72px 5vw; }
+.section-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: var(--rosa);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.section-title em { color: var(--lila); font-style: italic; }
+.section-sub {
+  font-size: 15px;
+  color: var(--suave);
+  max-width: 500px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* --- Cards --- */
+.card {
+  background: white;
+  border: 0.5px solid var(--borde);
+  border-radius: 18px;
+  padding: 22px;
+  transition: all 0.2s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(123,94,167,0.1);
+}
+
+/* --- Toast notifications --- */
+.xp-toast {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #2C2240;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 13px;
+  z-index: 999;
+  border-left: 3px solid var(--oro);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+
+/* --- Badges --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 100px;
+}
+.badge-lila { background: var(--lila-l); color: var(--lila-d); }
+.badge-rosa { background: var(--rosa-l); color: var(--rosa-d); }
+.badge-oro { background: var(--oro-l); color: var(--oro-d); }
+.badge-verde { background: var(--verde-l); color: var(--verde-d); }
+.badge-teal { background: var(--teal-l); color: var(--teal); }
+
+/* --- Formularios --- */
+.form-input {
+  width: 100%;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--texto);
+  transition: border-color 0.2s;
+  background: var(--bg);
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--lila);
+  background: white;
+}
+textarea.form-input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* --- Progress bar --- */
+.progress-bar {
+  background: #1A1030;
+  padding: 10px 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pb-label { font-size: 11px; color: rgba(255,255,255,0.4); }
+.pb-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50px;
+  overflow: hidden;
+}
+.pb-fill {
+  height: 100%;
+  background: var(--lila);
+  border-radius: 50px;
+  transition: width 0.5s;
+}
+.pb-pct { font-size: 11px; color: var(--lila); font-weight: 500; }
+
+/* --- Layout sidebar --- */
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100vh - 100px);
+}
+.sidebar {
+  background: white;
+  border-right: 0.5px solid var(--borde);
+  padding: 20px 0;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  nav { padding: 0 4vw; }
+}
+
+/* --- Utilidades --- */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+.hidden { display: none !important; }

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fase Lútea — Módulo 5 | Yayika</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#4E3470">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--lila:#7B5EA7;--lila-l:#F0EBF8;--lila-d:#4E3470;--rosa:#C96B7A;--rosa-l:#FDF0F2;--oro:#B8943A;--oro-l:#FBF6E8;--verde:#3BAF7A;--verde-l:#E8F8F1;--verde-d:#1F7A4E;--teal:#2A8C7A;--teal-l:#E6F5F2;--bg:#F2F9F7;--card:#FDFCFB;--texto:#2C2240;--suave:#6B5F7A;--borde:rgba(42,140,122,0.15)}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7}
+nav{background:#2C2240;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:white}.logo span{color:#A8E6D8}
+.nav-back{font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;margin-right:16px}.nav-back:hover{color:white}
+.nav-user{display:flex;align-items:center;gap:10px}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--teal);color:white;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.nav-name{font-size:13px;color:rgba(255,255,255,0.7)}
+.progress-bar{background:#1A1030;padding:10px 24px;display:flex;align-items:center;gap:12px}
+.pb-label{font-size:11px;color:rgba(255,255,255,0.4)}.pb-track{flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:50px;overflow:hidden}.pb-fill{height:100%;background:var(--teal);border-radius:50px}.pb-pct{font-size:11px;color:#A8E6D8;font-weight:500}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 100px)}
+.sidebar{background:white;border-right:0.5px solid var(--borde);padding:20px 0}
+.sb-title{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--suave);text-transform:uppercase;padding:0 16px;margin-bottom:8px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-left:2px solid transparent}
+.sb-item.done-item{opacity:0.7}.sb-item.active{background:var(--teal-l);border-left-color:var(--teal)}
+.sb-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--borde);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.sb-check.done{background:var(--verde);border-color:var(--verde);color:white}.sb-check.curr{border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:600}
+.sb-text{font-size:12px;color:var(--texto)}.sb-text.active{color:var(--teal);font-weight:500}
+.sb-divider{height:0.5px;background:var(--borde);margin:10px 16px}
+.sb-xp{margin:14px;background:var(--teal-l);border-radius:10px;padding:10px 12px}
+.sb-xp-label{font-size:10px;color:var(--suave);margin-bottom:4px}.sb-xp-track{height:5px;background:rgba(42,140,122,0.15);border-radius:50px;overflow:hidden;margin-bottom:4px}.sb-xp-fill{height:100%;background:var(--teal);border-radius:50px}.sb-xp-pts{font-size:11px;font-weight:500;color:var(--teal)}
+.main{padding:28px 36px;max-width:760px}
+.module-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal-l);color:var(--teal);font-size:11px;font-weight:500;padding:5px 12px;border-radius:100px;margin-bottom:12px}
+.module-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--texto);margin-bottom:6px;line-height:1.2}
+.module-title em{color:var(--teal);font-style:italic}
+.module-subtitle{font-size:14px;color:var(--suave);margin-bottom:22px}
+.meta-row{display:flex;gap:10px;margin-bottom:26px;flex-wrap:wrap}
+.meta-pill{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--suave);background:white;border:0.5px solid var(--borde);border-radius:100px;padding:4px 12px}
+.section{margin-bottom:32px}
+.section h2{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;color:var(--texto);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--teal-l)}
+.section p{color:#444;margin-bottom:10px;line-height:1.75;font-size:14px}
+.section ul{padding-left:0;list-style:none;margin-bottom:12px}
+.section ul li{padding:6px 0 6px 22px;position:relative;color:#444;border-bottom:0.5px solid var(--borde);font-size:13px;line-height:1.5}
+.section ul li:last-child{border-bottom:none}
+.section ul li::before{content:'→';position:absolute;left:0;color:var(--teal);font-size:11px;top:8px}
+.callout{border-radius:12px;padding:14px 18px;margin:14px 0}
+.callout.teal{background:var(--teal-l);border-left:3px solid var(--teal)}.callout.lila{background:var(--lila-l);border-left:3px solid var(--lila)}.callout.rosa{background:var(--rosa-l);border-left:3px solid var(--rosa)}.callout.oro{background:var(--oro-l);border-left:3px solid var(--oro)}
+.callout-title{font-size:13px;font-weight:600;margin-bottom:5px}
+.callout.teal .callout-title{color:var(--teal)}.callout.lila .callout-title{color:var(--lila-d)}.callout.rosa .callout-title{color:var(--rosa)}.callout.oro .callout-title{color:var(--oro)}
+.callout p{font-size:13px;margin:0;line-height:1.6;color:#444}
+/* CHECKLIST */
+.checklist{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.check-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:white;border:0.5px solid var(--borde);border-radius:10px;cursor:pointer;transition:all 0.15s}
+.check-item:hover{background:var(--teal-l)}.check-item.done-check{background:var(--verde-l);border-color:rgba(59,175,122,0.25)}
+.ci-box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--borde);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}
+.check-item.done-check .ci-box{background:var(--verde);border-color:var(--verde);color:white;font-size:12px}
+.ci-text{flex:1;font-size:13px;color:var(--texto)}.check-item.done-check .ci-text{text-decoration:line-through;color:var(--suave)}
+.ci-xp{font-size:10px;color:var(--teal);font-weight:500;flex-shrink:0}
+/* REVIEW TOOL */
+.review-tool{background:white;border:0.5px solid var(--borde);border-radius:14px;overflow:hidden;margin:14px 0}
+.rt-header{background:var(--teal);padding:14px 18px;color:white}
+.rt-header h3{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700}
+.rt-header p{font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px}
+.rt-body{padding:16px}
+.rt-question{margin-bottom:14px}
+.rt-label{font-size:12px;font-weight:500;color:var(--suave);margin-bottom:6px;display:block}
+.rt-input{width:100%;border:0.5px solid var(--borde);border-radius:8px;padding:10px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--texto);resize:vertical;min-height:70px}
+.rt-input:focus{outline:none;border-color:var(--teal)}
+.rt-stars{display:flex;gap:6px;margin-bottom:14px}
+.rt-star{font-size:24px;cursor:pointer;opacity:0.3;transition:opacity 0.1s}
+.rt-star.active{opacity:1}
+.save-btn{background:var(--teal);color:white;border:none;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;width:100%}
+/* COMPLETION */
+.completion-card{background:#2C2240;border-radius:16px;padding:28px;color:white;text-align:center;margin:18px 0}
+.cc-emoji{font-size:48px;display:block;margin-bottom:14px}
+.cc-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.cc-title em{color:#D4B8F5;font-style:italic}
+.cc-text{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:20px;max-width:460px;margin-left:auto;margin-right:auto}
+.cc-stats{display:flex;justify-content:center;gap:24px;margin-bottom:20px}
+.cc-stat{text-align:center}
+.cc-stat-num{font-size:28px;font-weight:600;color:#D4B8F5;display:block}
+.cc-stat-label{font-size:10px;color:rgba(255,255,255,0.4)}
+.cc-btn{background:var(--lila);color:white;border:none;padding:12px 28px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;margin:4px}
+.cc-btn.secondary{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2)}
+.nav-btns{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-top:0.5px solid var(--borde);margin-top:18px}
+.btn-prev{background:white;color:var(--lila);border:1px solid var(--lila);padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-complete{background:var(--teal);color:white;border:none;padding:12px 26px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
+.xp-toast{display:none;position:fixed;bottom:20px;right:20px;background:#2C2240;color:white;padding:12px 18px;border-radius:12px;font-size:13px;z-index:999;border-left:3px solid var(--oro)}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px}.cc-stats{gap:14px}}
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex;align-items:center;gap:14px">
+    <a href="modulo4.html" class="nav-back">← Módulo 4</a>
+    <div class="logo">Yay<span>ika</span></div>
+  </div>
+  <div class="nav-user"><div class="nav-avatar">SL</div><span class="nav-name">Sofía L.</span></div>
+</nav>
+<div class="progress-bar">
+  <span class="pb-label">Ciclo Productiva</span>
+  <div class="pb-track"><div class="pb-fill" style="width:95%"></div></div>
+  <span class="pb-pct">Módulo 5 de 5 — ¡Último!</span>
+</div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="sb-title">Ciclo Productiva</div>
+    <div class="sb-item done-item"><div class="sb-check done">✓</div><span class="sb-text">Tu ciclo explicado</span></div>
+    <div class="sb-item done-item"><div class="sb-check done">✓</div><span class="sb-text">Fase Menstrual</span></div>
+    <div class="sb-item done-item"><div class="sb-check done">✓</div><span class="sb-text">Fase Folicular</span></div>
+    <div class="sb-item done-item"><div class="sb-check done">✓</div><span class="sb-text">Fase Ovulatoria</span></div>
+    <div class="sb-item active"><div class="sb-check curr">5</div><span class="sb-text active">Fase Lútea</span></div>
+    <div class="sb-divider"></div>
+    <div class="sb-xp">
+      <div class="sb-xp-label">XP acumulado</div>
+      <div class="sb-xp-track"><div class="sb-xp-fill" id="xpFill" style="width:72%"></div></div>
+      <div class="sb-xp-pts" id="xpPts">720 / 1000 XP</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="module-badge">🌘 Módulo 5 · Fase Lútea — Último módulo</div>
+    <h1 class="module-title">La semana de <em>terminar y soltar</em></h1>
+    <p class="module-subtitle">Tu radar está afinado. Tu mente analítica está en su pico. Es hora de cerrar, ordenar y prepararte para el nuevo ciclo.</p>
+    <div class="meta-row">
+      <div class="meta-pill">⏱ 18 min</div>
+      <div class="meta-pill">✅ Lista de cierre</div>
+      <div class="meta-pill">🔍 Revisión del mes</div>
+      <div class="meta-pill">⭐ +200 XP al terminar</div>
+    </div>
+
+    <div class="section">
+      <h2>Lo que pasa en tu cuerpo</h2>
+      <p>La progesterona domina y tu cerebro cambia a modo analítico. Tu tolerancia a lo que no funciona baja — y eso no es malo. Es tu sistema de evaluación interno trabajando. Úsalo.</p>
+      <div class="callout teal">
+        <div class="callout-title">💡 El secreto de la fase lútea</div>
+        <p>Lo que sientes en esta fase — la irritabilidad, la hipersensibilidad, la intolerancia al caos — es tu cerebro identificando con claridad todo lo que no está funcionando. No estás "de malas". Estás viendo la realidad con más nitidez que nunca. Esa información es un regalo.</p>
+      </div>
+      <div class="callout rosa">
+        <div class="callout-title">⚠️ El SPM no es inevitable</div>
+        <p>La intensidad del SPM está directamente relacionada con el estrés, la falta de sueño, el exceso de azúcar y el déficit de magnesio. Las mujeres que aprenden a vivir en ciclo reportan una reducción significativa de síntomas en 2 a 3 meses de práctica.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Lista de cierre — toca para marcar</h2>
+      <p>Estas son las tareas perfectas para tu fase lútea. Cada una que completas suma puntos:</p>
+      <div class="checklist" id="checklist">
+        <div class="check-item" onclick="checkItem(this)"><div class="ci-box"></div><span class="ci-text">Revisar y editar documentos pendientes del mes</span><span class="ci-xp">+15 XP</span></div>
+        <div class="check-item" onclick="checkItem(this)"><div class="ci-box"></div><span class="ci-text">Organizar mi espacio de trabajo físico o digital</span><span class="ci-xp">+15 XP</span></div>
+        <div class="check-item" onclick="checkItem(this)"><div class="ci-box"></div><span class="ci-text">Revisar mis finanzas del mes — qué entró y qué salió</span><span class="ci-xp">+15 XP</span></div>
+        <div class="check-item" onclick="checkItem(this)"><div class="ci-box"></div><span class="ci-text">Completar proyectos que dejé a medias</span><span class="ci-xp">+15 XP</span></div>
+        <div class="check-item" onclick="checkItem(this)"><div class="ci-box"></div><span class="ci-text">Escribir lo que quiero soltar antes del próximo ciclo</span><span class="ci-xp">+20 XP</span></div>
+        <div class="check-item" onclick="checkItem(this)"><div class="ci-box"></div><span class="ci-text">Reducir compromisos sociales los últimos 3 días</span><span class="ci-xp">+10 XP</span></div>
+        <div class="check-item" onclick="checkItem(this)"><div class="ci-box"></div><span class="ci-text">Preparar mi planner para el nuevo ciclo</span><span class="ci-xp">+15 XP</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Revisión del mes completo</h2>
+      <p>Antes de cerrar el ciclo, tómate 10 minutos para reflexionar. Esta es la herramienta más poderosa del programa:</p>
+      <div class="review-tool">
+        <div class="rt-header">
+          <h3>Revisión de ciclo — mes completo</h3>
+          <p>Sin juicio. Solo observación honesta.</p>
+        </div>
+        <div class="rt-body">
+          <div class="rt-question">
+            <span class="rt-label">¿Qué logré este mes que me enorgullece?</span>
+            <textarea class="rt-input" placeholder="Escribe aquí..."></textarea>
+          </div>
+          <div class="rt-question">
+            <span class="rt-label">¿En qué fase me sentí más productiva? ¿Lo aproveché?</span>
+            <textarea class="rt-input" placeholder="Escribe aquí..."></textarea>
+          </div>
+          <div class="rt-question">
+            <span class="rt-label">¿Qué quiero hacer diferente el próximo ciclo?</span>
+            <textarea class="rt-input" placeholder="Escribe aquí..."></textarea>
+          </div>
+          <div class="rt-question">
+            <span class="rt-label">¿Cómo calificarías tu bienestar general este mes?</span>
+            <div class="rt-stars" id="stars">
+              <span class="rt-star" onclick="rateStar(1)">★</span>
+              <span class="rt-star" onclick="rateStar(2)">★</span>
+              <span class="rt-star" onclick="rateStar(3)">★</span>
+              <span class="rt-star" onclick="rateStar(4)">★</span>
+              <span class="rt-star" onclick="rateStar(5)">★</span>
+            </div>
+          </div>
+          <button class="save-btn" onclick="saveReview()">Guardar mi revisión de ciclo +80 XP</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Audio de cierre</h2>
+      <div style="background:#2C2240;border-radius:14px;padding:20px;color:white">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;margin-bottom:4px">Audio <em style="color:#A8E6D8;font-style:italic">Fase Lútea</em></div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:14px">5 min · Escúchalo los días 25-28, antes de dormir</div>
+        <div style="background:rgba(255,255,255,0.07);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <button id="playBtn" onclick="toggleAudio()" style="width:42px;height:42px;border-radius:50%;background:var(--teal);border:none;color:white;font-size:18px;cursor:pointer;flex-shrink:0">▶</button>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:500;color:white">Cierra con gratitud</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">5:00 min</div>
+            <div id="audioTrack" style="height:4px;background:rgba(255,255,255,0.12);border-radius:50px;margin-top:8px;cursor:pointer" onclick="seekAudio(event)">
+              <div id="audioProgress" style="height:100%;background:var(--teal);border-radius:50px;width:0%"></div>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:0.5px solid rgba(255,255,255,0.08);padding-top:12px">
+          <div style="font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">Texto del audio</div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;font-style:italic">Este ciclo está llegando a su fin. Y eso es perfecto.<br><br>Lo que hiciste bien este mes: reconócelo. Lo que no salió como querías: aprende de ello y suéltalo.<br><br>Tu cuerpo sabe lo que hace. Cada fase cumplió su propósito. Cada semana te dio exactamente lo que necesitabas.<br><br>Descansa esta noche. El próximo ciclo te espera con energía nueva, ideas nuevas, y una tú más sabia.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPLETION CARD -->
+    <div class="completion-card" id="completionCard" style="display:none">
+      <span class="cc-emoji">🎉</span>
+      <h2 class="cc-title">¡Completaste <em>Ciclo Productiva</em>!</h2>
+      <p class="cc-text">Ya tienes el mapa completo de tu cuerpo. Ahora eres una mujer que trabaja con su biología, no contra ella. Eso cambia todo.</p>
+      <div class="cc-stats">
+        <div class="cc-stat"><span class="cc-stat-num" id="finalXP">920</span><div class="cc-stat-label">XP ganados</div></div>
+        <div class="cc-stat"><span class="cc-stat-num">5</span><div class="cc-stat-label">Módulos completados</div></div>
+        <div class="cc-stat"><span class="cc-stat-num">4</span><div class="cc-stat-label">Fases dominadas</div></div>
+      </div>
+      <button class="cc-btn" onclick="window.location.href='../index.html'">Ver más productos</button>
+      <button class="cc-btn secondary" onclick="window.location.href='modulo1.html'">Repasar desde el inicio</button>
+    </div>
+
+    <div class="nav-btns" id="navBtns">
+      <button class="btn-prev" onclick="window.location.href='modulo4.html'">← Módulo 4</button>
+      <button class="btn-complete" onclick="completeAll()">✓ Completar Ciclo Productiva +200 XP</button>
+    </div>
+  </div>
+</div>
+<div class="xp-toast" id="xpToast"></div>
+<script src="../js/app.js"></script>
+<script>
+let xp=720,playing=false,progress=0,timer=null;
+function checkItem(el){el.classList.toggle('done-check');if(el.classList.contains('done-check')){el.querySelector('.ci-box').textContent='✓';addXP(15,'✅ +15 XP — Tarea completada');}}
+function rateStar(n){document.querySelectorAll('.rt-star').forEach((s,i)=>s.classList.toggle('active',i<n));}
+function saveReview(){addXP(80,'📝 +80 XP — Revisión de ciclo guardada');}
+function addXP(pts,msg){xp=Math.min(xp+pts,1000);document.getElementById('xpFill').style.width=(xp/10)+'%';document.getElementById('xpPts').textContent=xp+' / 1000 XP';showToast(msg);}
+function showToast(msg){const t=document.getElementById('xpToast');t.textContent=msg;t.style.display='block';clearTimeout(window._t);window._t=setTimeout(()=>t.style.display='none',2500);}
+function toggleAudio(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸':'▶';if(playing){timer=setInterval(()=>{progress=Math.min(progress+0.33,100);document.getElementById('audioProgress').style.width=progress+'%';if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';addXP(20,'🎙 +20 XP — Audio completado');}},1000);}else clearInterval(timer);}
+function seekAudio(e){const rect=e.currentTarget.getBoundingClientRect();progress=((e.clientX-rect.left)/rect.width)*100;document.getElementById('audioProgress').style.width=progress+'%';}
+function completeAll(){
+  addXP(200,'🎉 +200 XP — ¡Ciclo Productiva completado!');
+  document.getElementById('finalXP').textContent=xp;
+  document.getElementById('completionCard').style.display='block';
+  document.getElementById('navBtns').style.display='none';
+  document.getElementById('completionCard').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Portal | Yayika</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#4E3470">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/shared.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lila:#7B5EA7;--lila-l:#F0EBF8;--lila-d:#4E3470;
+  --rosa:#C96B7A;--rosa-l:#FDF0F2;
+  --oro:#B8943A;--oro-l:#FBF6E8;
+  --verde:#3BAF7A;--verde-l:#E8F8F1;--verde-d:#1F7A4E;
+  --bg:#F8F5FF;--card:#FDFCFB;--texto:#2C2240;--suave:#7A6E85;
+  --borde:rgba(123,94,167,0.13);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);min-height:100vh}
+
+/* ============ LOGIN ============ */
+.login-screen{display:flex;min-height:100vh}
+.login-left{width:420px;flex-shrink:0;background:#2C2240;padding:40px;display:flex;flex-direction:column;justify-content:space-between}
+.ll-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:white}
+.ll-logo span{color:#D4B8F5}
+.ll-tagline{font-size:13px;color:rgba(255,255,255,0.4);margin-top:4px}
+.ll-mid{flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 0}
+.ll-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:white;line-height:1.2;margin-bottom:10px}
+.ll-title em{color:#D4B8F5;font-style:italic}
+.ll-sub{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.6;margin-bottom:32px}
+.ll-testimonial{background:rgba(255,255,255,0.06);border-radius:14px;padding:16px}
+.ll-test-text{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;font-style:italic;margin-bottom:10px}
+.ll-test-author{display:flex;align-items:center;gap:10px}
+.ll-test-av{width:30px;height:30px;border-radius:50%;background:var(--rosa);color:white;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.ll-test-name{font-size:12px;color:rgba(255,255,255,0.5)}
+.ll-bottom{font-size:11px;color:rgba(255,255,255,0.25)}
+
+.login-right{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+.login-box{background:white;border-radius:20px;padding:36px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,0.06);border:0.5px solid var(--borde)}
+.lb-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--texto);margin-bottom:6px}
+.lb-sub{font-size:13px;color:var(--suave);margin-bottom:28px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px}
+.form-input{width:100%;border:1px solid var(--borde);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--texto);transition:border-color 0.2s;background:var(--bg)}
+.form-input:focus{outline:none;border-color:var(--lila);background:white}
+.forgot{font-size:12px;color:var(--lila);text-align:right;display:block;margin-top:6px;cursor:pointer;text-decoration:none}
+.btn-login{width:100%;background:var(--lila-d);color:white;border:none;padding:13px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;transition:background 0.2s;font-family:'DM Sans',sans-serif}
+.btn-login:hover{background:var(--lila)}
+.login-divider{text-align:center;font-size:12px;color:var(--suave);margin:20px 0;position:relative}
+.login-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:0.5px;background:var(--borde)}
+.login-divider span{background:white;padding:0 12px;position:relative}
+.btn-google{width:100%;background:white;color:var(--texto);border:1px solid var(--borde);padding:12px;border-radius:100px;font-size:14px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Sans',sans-serif}
+.btn-google:hover{background:var(--bg)}
+.login-register{text-align:center;margin-top:20px;font-size:13px;color:var(--suave)}
+.login-register a{color:var(--lila);text-decoration:none;font-weight:500}
+.login-error{background:#FEF2F2;border:0.5px solid #FECACA;border-radius:8px;padding:10px 14px;font-size:13px;color:#DC2626;margin-bottom:14px;display:none}
+
+/* ============ DASHBOARD ============ */
+.dashboard-screen{display:none}
+
+nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:white}
+.nav-logo span{color:#D4B8F5}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-notif{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.nav-notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--rosa);border-radius:50%;border:2px solid #2C2240}
+.nav-notif svg{width:16px;height:16px;stroke:rgba(255,255,255,0.7);fill:none}
+.nav-avatar-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
+.nav-av{width:34px;height:34px;border-radius:50%;background:var(--lila);color:white;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.nav-username{font-size:13px;color:rgba(255,255,255,0.7)}
+.nav-logout{font-size:12px;color:rgba(255,255,255,0.4);cursor:pointer;padding:6px 12px;border-radius:100px;border:0.5px solid rgba(255,255,255,0.15)}
+.nav-logout:hover{color:white;border-color:rgba(255,255,255,0.3)}
+
+.dash-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px)}
+
+/* SIDEBAR */
+.dash-sidebar{background:white;border-right:0.5px solid var(--borde);padding:20px 0;display:flex;flex-direction:column}
+.ds-section{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--suave);text-transform:uppercase;padding:0 16px;margin:14px 0 6px}
+.ds-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;text-decoration:none}
+.ds-item:hover{background:var(--lila-l)}.ds-item.active{background:var(--lila-l);border-left-color:var(--lila)}
+.ds-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ds-icon svg{width:16px;height:16px;stroke:var(--suave);fill:none}
+.ds-item.active .ds-icon svg{stroke:var(--lila-d)}
+.ds-text{font-size:13px;color:var(--suave)}.ds-item.active .ds-text{color:var(--lila-d);font-weight:500}
+.ds-badge{margin-left:auto;background:var(--rosa);color:white;font-size:9px;font-weight:600;padding:2px 7px;border-radius:100px}
+.ds-divider{height:0.5px;background:var(--borde);margin:10px 16px}
+
+.ds-streak{margin:12px;background:#2C2240;border-radius:12px;padding:12px}
+.ds-streak-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.ds-streak-num{font-size:22px;font-weight:600;color:#F5D878}
+.ds-streak-label{font-size:10px;color:rgba(255,255,255,0.4)}
+.ds-streak-fire{font-size:20px}
+.ds-streak-bar{display:flex;gap:3px}
+.ds-streak-day{flex:1;height:4px;border-radius:50px;background:rgba(255,255,255,0.1)}
+.ds-streak-day.done{background:#F5D878}
+
+/* MAIN */
+.dash-main{padding:24px 28px;overflow:auto}
+
+.dash-greeting{margin-bottom:22px}
+.dg-sub{font-size:12px;color:var(--suave);margin-bottom:3px}
+.dg-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--texto)}
+.dg-title span{color:var(--lila)}
+.dg-phase{display:inline-flex;align-items:center;gap:6px;background:var(--lila-l);color:var(--lila-d);font-size:11px;font-weight:500;padding:4px 12px;border-radius:100px;margin-top:6px}
+
+.xp-progress{background:white;border:0.5px solid var(--borde);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.xp-level{font-size:11px;font-weight:500;color:var(--suave);white-space:nowrap}
+.xp-track{flex:1;height:8px;background:var(--lila-l);border-radius:50px;overflow:hidden}
+.xp-fill{height:100%;border-radius:50px;background:var(--lila);transition:width 0.5s}
+.xp-val{font-size:11px;font-weight:500;color:var(--lila-d);white-space:nowrap}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat-card{background:white;border:0.5px solid var(--borde);border-radius:12px;padding:12px;text-align:center}
+.sc-num{font-size:22px;font-weight:600;line-height:1;margin-bottom:3px}
+.sc-num.lila{color:var(--lila)}.sc-num.rosa{color:var(--rosa)}.sc-num.oro{color:var(--oro)}.sc-num.verde{color:var(--verde)}
+.sc-label{font-size:10px;color:var(--suave);line-height:1.3}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+
+.dash-card{background:white;border:0.5px solid var(--borde);border-radius:14px;padding:16px}
+.dc-title{font-size:13px;font-weight:500;color:var(--texto);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.dc-see{font-size:11px;color:var(--lila);cursor:pointer}
+
+/* CYCLE WIDGET */
+.cycle-widget{text-align:center;padding:4px 0}
+.cw-phase-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--texto);margin-bottom:4px}
+.cw-phase-desc{font-size:12px;color:var(--suave);margin-bottom:14px;line-height:1.4}
+.cw-dots{display:flex;gap:4px;justify-content:center;margin-bottom:12px}
+.cw-dot{flex:1;height:5px;border-radius:50px;background:var(--lila-l)}
+.cw-dot.active{background:var(--lila)}.cw-dot.done{background:#AFA9EC}
+.cw-days{font-size:11px;color:var(--suave)}
+.cw-tip{font-size:12px;color:var(--texto);background:var(--lila-l);border-radius:8px;padding:8px 10px;line-height:1.5;margin-top:10px;text-align:left}
+
+/* PRODUCTS */
+.product-list{display:flex;flex-direction:column;gap:10px}
+.pl-item{display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:10px;cursor:pointer;text-decoration:none;transition:background 0.15s}
+.pl-item:hover{background:var(--lila-l)}
+.pl-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pl-icon.lila{background:var(--lila-l)}.pl-icon.rosa{background:var(--rosa-l)}.pl-icon.oro{background:var(--oro-l)}
+.pl-icon svg{width:18px;height:18px}
+.pl-info{flex:1}
+.pl-name{font-size:13px;font-weight:500;color:var(--texto);margin-bottom:2px}
+.pl-prog{font-size:11px;color:var(--suave)}
+.pl-bar-wrap{width:60px}
+.pl-bar-track{height:4px;background:var(--lila-l);border-radius:50px;overflow:hidden}
+.pl-bar-fill{height:100%;border-radius:50px;background:var(--lila)}
+.pl-pct{font-size:10px;color:var(--lila-d);text-align:right;margin-top:2px}
+
+/* RETOS */
+.reto-list{display:flex;flex-direction:column;gap:8px}
+.reto-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--borde)}
+.reto-item:last-child{border-bottom:none}
+.reto-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--borde);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s}
+.reto-check:hover{border-color:var(--verde)}
+.reto-check.done{background:var(--verde);border-color:var(--verde);color:white;font-size:11px}
+.reto-text{flex:1;font-size:12px;color:var(--texto);line-height:1.4}
+.reto-text.done-text{text-decoration:line-through;color:var(--suave)}
+.reto-xp{font-size:10px;font-weight:500;color:var(--oro)}
+
+/* LIVE FEED */
+.live-pill{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--verde-d);margin-bottom:10px}
+.live-dot-g{width:7px;height:7px;background:var(--verde);border-radius:50%;animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.feed-list{display:flex;flex-direction:column;gap:8px}
+.feed-item{display:flex;align-items:flex-start;gap:8px}
+.feed-av{width:28px;height:28px;border-radius:50%;color:white;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feed-text{font-size:12px;color:var(--suave);line-height:1.4}
+.feed-text strong{color:var(--texto);font-weight:500}
+.feed-time{font-size:10px;color:rgba(124,92,191,0.3);margin-top:2px}
+
+/* RANKING */
+.rank-list{display:flex;flex-direction:column;gap:6px}
+.rank-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px}
+.rank-item.me{background:var(--lila-l)}
+.rank-pos{font-size:13px;font-weight:600;min-width:22px;text-align:center;color:var(--suave)}
+.rank-pos.gold{color:#B8943A}.rank-pos.silver{color:#888}.rank-pos.bronze{color:#A0522D}
+.rank-av{width:28px;height:28px;border-radius:50%;color:white;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rank-name{flex:1;font-size:12px;font-weight:400;color:var(--texto)}
+.rank-name.me-name{color:var(--lila-d);font-weight:500}
+.rank-pts{font-size:12px;font-weight:500;color:var(--lila-d)}
+
+/* RENEWAL */
+.renewal-card{background:var(--lila-d);border-radius:14px;padding:16px;color:white;margin-bottom:14px}
+.rc-label{font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px}
+.rc-date{font-size:15px;font-weight:500;margin-bottom:6px}
+.rc-promo{font-size:11px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:12px}
+.rc-btn{width:100%;background:white;color:var(--lila-d);border:none;padding:9px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
+
+.xp-toast{display:none;position:fixed;bottom:20px;right:20px;background:#2C2240;color:white;padding:12px 18px;border-radius:12px;font-size:13px;z-index:999;border-left:3px solid var(--oro)}
+
+@media(max-width:768px){
+  .login-left{display:none}
+  .login-right{padding:24px}
+  .dash-layout{grid-template-columns:1fr}
+  .dash-sidebar{display:none}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+  .dash-main{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-left">
+    <div>
+      <div class="ll-logo">Yay<span>ika</span></div>
+      <div class="ll-tagline">Tu espacio de crecimiento</div>
+    </div>
+    <div class="ll-mid">
+      <h2 class="ll-title">Bienvenida de vuelta a tu <em>portal</em></h2>
+      <p class="ll-sub">Tus productos, tu progreso y tu comunidad te están esperando.</p>
+      <div class="ll-testimonial">
+        <div class="ll-test-text">"Entro al portal cada mañana antes de arrancar el día. Me recuerda en qué fase estoy y qué tipo de trabajo hacer hoy."</div>
+        <div class="ll-test-author">
+          <div class="ll-test-av">ML</div>
+          <div class="ll-test-name">Mariana L. · Miembra Guerrera</div>
+        </div>
+      </div>
+    </div>
+    <div class="ll-bottom">© 2025 Yayika · yayika.com</div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-box">
+      <h2 class="lb-title">Entrar a mi portal</h2>
+      <p class="lb-sub">Ingresa con tu cuenta de Yayika</p>
+
+      <div class="login-error" id="loginError">Correo o contraseña incorrectos. Intenta de nuevo.</div>
+
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input" type="email" id="emailInput" placeholder="tu@correo.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="passInput" placeholder="••••••••" autocomplete="current-password">
+        <a class="forgot" href="#">¿Olvidaste tu contraseña?</a>
+      </div>
+      <button class="btn-login" onclick="doLogin()">Entrar a mi portal</button>
+
+      <div class="login-divider"><span>o</span></div>
+
+      <button class="btn-google" onclick="doLogin()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continuar con Google
+      </button>
+
+      <div class="login-register">
+        ¿Aún no tienes cuenta? <a href="../index.html#membresia">Ver planes de membresía</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard-screen" id="dashboardScreen">
+
+  <nav>
+    <div class="nav-logo">Yay<span>ika</span></div>
+    <div class="nav-right">
+      <div class="nav-notif">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke-width="2" stroke-linecap="round"/></svg>
+        <div class="nav-notif-dot"></div>
+      </div>
+      <div class="nav-avatar-wrap">
+        <div class="nav-av" id="navAv">SL</div>
+        <span class="nav-username" id="navName">Sofía</span>
+      </div>
+      <div class="nav-logout" onclick="doLogout()">Salir</div>
+    </div>
+  </nav>
+
+  <div class="dash-layout">
+
+    <!-- SIDEBAR -->
+    <div class="dash-sidebar">
+      <div class="ds-section">Principal</div>
+      <a href="#" class="ds-item active" onclick="return false">
+        <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <span class="ds-text">Mi espacio</span>
+      </a>
+      <a href="modulo1.html" class="ds-item">
+        <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+        <span class="ds-text">Ciclo Productiva</span>
+      </a>
+      <a href="#" class="ds-item">
+        <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+        <span class="ds-text">Mis logros</span>
+        <span class="ds-badge">3</span>
+      </a>
+
+      <div class="ds-section">Comunidad</div>
+      <a href="#" class="ds-item">
+        <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <span class="ds-text">Mi círculo</span>
+      </a>
+      <a href="#" class="ds-item">
+        <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <span class="ds-text">Ranking</span>
+      </a>
+
+      <div class="ds-section">Cuenta</div>
+      <a href="#" class="ds-item">
+        <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <span class="ds-text">Configuración</span>
+      </a>
+
+      <div style="flex:1"></div>
+
+      <div class="ds-streak">
+        <div class="ds-streak-top">
+          <div>
+            <div class="ds-streak-num" id="streakNum">14</div>
+            <div class="ds-streak-label">días seguidos</div>
+          </div>
+          <div class="ds-streak-fire">🔥</div>
+        </div>
+        <div class="ds-streak-bar" id="streakBar"></div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="dash-main">
+
+      <div class="dash-greeting">
+        <div class="dg-sub" id="dgSub">Lunes 19 de mayo</div>
+        <div class="dg-title">Hola de nuevo, <span id="dgName">Sofía</span></div>
+        <div class="dg-phase">🌕 Hoy estás en fase Ovulatoria — tu momento de brillar</div>
+      </div>
+
+      <div class="xp-progress">
+        <span class="xp-level">⭐ Nivel 7 — Guerrera</span>
+        <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:68%"></div></div>
+        <span class="xp-val" id="xpVal">680 / 1000 XP</span>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="sc-num lila" id="totalXP">680</div><div class="sc-label">Puntos XP totales</div></div>
+        <div class="stat-card"><div class="sc-num rosa">3</div><div class="sc-label">Productos activos</div></div>
+        <div class="stat-card"><div class="sc-num oro" id="streakStat">14</div><div class="sc-label">Días de racha</div></div>
+        <div class="stat-card"><div class="sc-num verde">8</div><div class="sc-label">Logros ganados</div></div>
+      </div>
+
+      <div class="grid2">
+
+        <!-- CICLO -->
+        <div class="dash-card">
+          <div class="dc-title">🌕 Tu ciclo hoy<span class="dc-see">ver guía</span></div>
+          <div class="cycle-widget">
+            <div class="cw-phase-name">Fase Ovulatoria</div>
+            <div class="cw-phase-desc">Días 14–17 · Quedan 2 días en esta fase</div>
+            <div class="cw-dots">
+              <div class="cw-dot done"></div>
+              <div class="cw-dot done"></div>
+              <div class="cw-dot active"></div>
+              <div class="cw-dot"></div>
+            </div>
+            <div class="cw-days">Día 15 de tu ciclo</div>
+            <div class="cw-tip">💡 Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes una conversación importante pendiente?</div>
+          </div>
+        </div>
+
+        <!-- RETOS -->
+        <div class="dash-card">
+          <div class="dc-title">🎯 Retos de hoy<span class="dc-see">ver todos</span></div>
+          <div class="reto-list">
+            <div class="reto-item">
+              <div class="reto-check done" onclick="toggleReto(this)">✓</div>
+              <div class="reto-text done-text">Leer 10 min del portal</div>
+              <div class="reto-xp">+20 XP</div>
+            </div>
+            <div class="reto-item">
+              <div class="reto-check done" onclick="toggleReto(this)">✓</div>
+              <div class="reto-text done-text">Registrar mi ciclo de hoy</div>
+              <div class="reto-xp">+15 XP</div>
+            </div>
+            <div class="reto-item">
+              <div class="reto-check" onclick="toggleReto(this)"></div>
+              <div class="reto-text">Compartir un logro en el círculo</div>
+              <div class="reto-xp">+30 XP</div>
+            </div>
+            <div class="reto-item">
+              <div class="reto-check" onclick="toggleReto(this)"></div>
+              <div class="reto-text">Hacer la tarea del módulo activo</div>
+              <div class="reto-xp">+40 XP</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;text-align:center;font-size:11px;color:var(--suave)">2 de 4 completados hoy</div>
+        </div>
+
+      </div>
+
+      <div class="grid2">
+
+        <!-- MIS PRODUCTOS -->
+        <div class="dash-card">
+          <div class="dc-title">📚 Mis productos<span class="dc-see" onclick="window.location.href='modulo1.html'">ver todos</span></div>
+          <div class="product-list">
+            <a href="modulo1.html" class="pl-item">
+              <div class="pl-icon lila"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#7B5EA7" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#7B5EA7"/></svg></div>
+              <div class="pl-info">
+                <div class="pl-name">Ciclo Productiva</div>
+                <div class="pl-prog">Módulo 3 de 5 · En progreso</div>
+              </div>
+              <div class="pl-bar-wrap">
+                <div class="pl-bar-track"><div class="pl-bar-fill" style="width:60%"></div></div>
+                <div class="pl-pct">60%</div>
+              </div>
+            </a>
+            <div class="pl-item" style="opacity:0.6;cursor:default">
+              <div class="pl-icon rosa"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="7" width="14" height="12" rx="2" stroke="#C96B7A" stroke-width="2"/><path d="M9 11h6M9 14h4" stroke="#C96B7A" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div class="pl-info">
+                <div class="pl-name">Dinero Sin Pena</div>
+                <div class="pl-prog">Próximamente disponible</div>
+              </div>
+              <div style="font-size:10px;color:var(--suave);background:var(--bg);padding:3px 8px;border-radius:100px;flex-shrink:0">Pronto</div>
+            </div>
+            <div class="pl-item" style="opacity:0.6;cursor:default">
+              <div class="pl-icon oro"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 4.8 5.6.8-4 3.9.9 5.5L12 14.5l-4.9 2.5.9-5.5-4-3.9 5.6-.8z" stroke="#B8943A" stroke-width="2"/></svg></div>
+              <div class="pl-info">
+                <div class="pl-name">La Mujer Que Negocia</div>
+                <div class="pl-prog">Próximamente disponible</div>
+              </div>
+              <div style="font-size:10px;color:var(--suave);background:var(--bg);padding:3px 8px;border-radius:100px;flex-shrink:0">Pronto</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RANKING + FEED -->
+        <div>
+          <div class="dash-card" style="margin-bottom:14px">
+            <div class="dc-title">🏆 Ranking semanal<span class="dc-see">ver completo</span></div>
+            <div class="rank-list">
+              <div class="rank-item"><span class="rank-pos gold">🥇</span><div class="rank-av" style="background:#B8943A">VR</div><span class="rank-name">Valentina R.</span><span class="rank-pts">1,240</span></div>
+              <div class="rank-item"><span class="rank-pos silver">🥈</span><div class="rank-av" style="background:#C96B7A">ML</div><span class="rank-name">Mariana L.</span><span class="rank-pts">1,105</span></div>
+              <div class="rank-item me"><span class="rank-pos" style="color:var(--lila-d)">#7</span><div class="rank-av" style="background:#7B5EA7">SL</div><span class="rank-name me-name">Tú — Sofía L.</span><span class="rank-pts" style="color:var(--lila-d)">680</span></div>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--suave);text-align:center;padding:8px;background:var(--lila-l);border-radius:8px">Solo 40 XP para subir al puesto #6</div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dc-title">
+              <span>👥 Círculo</span>
+              <div class="live-pill"><div class="live-dot-g"></div>23 activas</div>
+            </div>
+            <div class="feed-list">
+              <div class="feed-item">
+                <div class="feed-av" style="background:#7B5EA7">ML</div>
+                <div>
+                  <div class="feed-text"><strong>Mariana L.</strong> completó el reto de negociación +50 XP</div>
+                  <div class="feed-time">hace 12 min</div>
+                </div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-av" style="background:#B8943A">VR</div>
+                <div>
+                  <div class="feed-text"><strong>Valentina R.</strong> subió a nivel Diamante 💎</div>
+                  <div class="feed-time">hace 34 min</div>
+                </div>
+              </div>
+              <div class="feed-item">
+                <div class="feed-av" style="background:#3BAF7A">SC</div>
+                <div>
+                  <div class="feed-text"><strong>Sofía C.</strong> ahorró $5,000 con Dinero Sin Pena 🎉</div>
+                  <div class="feed-time">hace 1 hora</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RENEWAL -->
+      <div class="renewal-card">
+        <div class="rc-label">Tu membresía renueva en</div>
+        <div class="rc-date">12 días — 31 mayo 2025</div>
+        <div class="rc-promo">Renueva ahora y bloquea tu precio actual. El plan Guerrera sube $50 MXN en junio.</div>
+        <button class="rc-btn">Renovar y ahorrar mi precio actual</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="xp-toast" id="xpToast"></div>
+
+<script src="../js/app.js"></script>
+<script>
+// ===== SUPABASE AUTH =====
+async function doLogin() {
+  const email = document.getElementById('emailInput').value.trim().toLowerCase();
+  const pass = document.getElementById('passInput').value;
+  const err = document.getElementById('loginError');
+
+  if (!email || !pass) { err.textContent = 'Por favor llena todos los campos.'; err.style.display = 'block'; return; }
+
+  try {
+    err.style.display = 'none';
+    const btn = document.querySelector('.btn-login');
+    btn.textContent = 'Entrando...';
+    btn.disabled = true;
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    if (error) throw error;
+
+    currentUser = data.user;
+    sessionStorage.setItem('yayika_user', JSON.stringify({ email: data.user.email }));
+    await loadDashboard();
+  } catch (e) {
+    err.textContent = e.message || 'Correo o contraseña incorrectos.';
+    err.style.display = 'block';
+    const btn = document.querySelector('.btn-login');
+    btn.textContent = 'Entrar a mi portal';
+    btn.disabled = false;
+  }
+}
+
+async function doRegister() {
+  const email = document.getElementById('emailInput').value.trim().toLowerCase();
+  const pass = document.getElementById('passInput').value;
+  const name = document.getElementById('nameInput')?.value.trim() || '';
+  const err = document.getElementById('loginError');
+
+  if (!email || !pass) { err.textContent = 'Por favor llena todos los campos.'; err.style.display = 'block'; return; }
+  if (pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres.'; err.style.display = 'block'; return; }
+
+  try {
+    err.style.display = 'none';
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: pass,
+      options: { data: { full_name: name } }
+    });
+    if (error) throw error;
+    err.textContent = 'Cuenta creada. Revisa tu correo para confirmar.';
+    err.style.display = 'block';
+    err.style.background = '#E8F8F1';
+    err.style.color = '#1F7A4E';
+    err.style.borderColor = '#9EE8B8';
+  } catch (e) {
+    err.textContent = e.message || 'Error al crear cuenta.';
+    err.style.display = 'block';
+    err.style.background = '#FEF2F2';
+    err.style.color = '#DC2626';
+    err.style.borderColor = '#FECACA';
+  }
+}
+
+async function doLogout() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  sessionStorage.removeItem('yayika_user');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('dashboardScreen').style.display = 'none';
+}
+
+async function loadDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboardScreen').style.display = 'block';
+
+  const email = currentUser?.email || '';
+  const initials = email.substring(0, 2).toUpperCase();
+  const name = currentUser?.user_metadata?.full_name || email.split('@')[0];
+
+  document.getElementById('navAv').textContent = initials;
+  document.getElementById('navName').textContent = name.split(' ')[0];
+  document.getElementById('dgName').textContent = name.split(' ')[0];
+  updateDate();
+
+  try {
+    const progress = await getProgress();
+    if (progress) {
+      xp = progress.xp_total || 0;
+      document.getElementById('totalXP').textContent = xp;
+      document.getElementById('xpFill').style.width = (xp / 10) + '%';
+      document.getElementById('xpVal').textContent = xp + ' / 1000 XP';
+      document.getElementById('streakNum').textContent = progress.streak_days || 0;
+      document.getElementById('streakStat').textContent = progress.streak_days || 0;
+      buildStreak(progress.streak_days || 0);
+    }
+  } catch (e) {
+    console.warn('Progress load error:', e);
+    buildStreak(0);
+  }
+}
+
+// ===== DASHBOARD HELPERS =====
+let xp = 0;
+
+function toggleReto(el) {
+  const isDone = el.classList.contains('done');
+  el.classList.toggle('done');
+  el.textContent = isDone ? '' : '✓';
+  const text = el.nextElementSibling;
+  if (text) text.classList.toggle('done-text');
+  if (!isDone) {
+    xp = Math.min(xp + 20, 1000);
+    document.getElementById('xpFill').style.width = (xp / 10) + '%';
+    document.getElementById('xpVal').textContent = xp + ' / 1000 XP';
+    document.getElementById('totalXP').textContent = xp;
+    showToast('✅ +20 XP — Reto completado');
+    addXP(20).catch(() => {});
+  }
+}
+
+function buildStreak(days) {
+  const bar = document.getElementById('streakBar');
+  bar.innerHTML = '';
+  for (let i = 0; i < 14; i++) {
+    const d = document.createElement('div');
+    d.className = 'ds-streak-day' + (i < days ? ' done' : '');
+    bar.appendChild(d);
+  }
+}
+
+function updateDate() {
+  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const now = new Date();
+  document.getElementById('dgSub').textContent = `${days[now.getDay()]} ${now.getDate()} de ${months[now.getMonth()]}`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('xpToast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(window._t);
+  window._t = setTimeout(() => t.style.display = 'none', 2500);
+}
+
+// ===== INIT =====
+window.addEventListener('load', async () => {
+  if (!initSupabase()) {
+    console.warn('Supabase no disponible. Modo offline.');
+    return;
+  }
+
+  document.getElementById('passInput').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+  document.getElementById('emailInput').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('passInput').focus(); });
+
+  const session = await getSession();
+  if (session) {
+    currentUser = session.user;
+    await loadDashboard();
+  }
+});
+</script>
+</body>
+</html>
