@@ -104,26 +104,43 @@
   --texto:#E8E0F5;--suave:#9B8FB5;
   --borde:rgba(123,94,167,0.25);
   --lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;
+  --turquesa-l:#0E2E2A;
+  --lila-text:#D4B8F5;--turquesa-text:#5ED4C5;
 }
 [data-theme="dark"] body{background:var(--crema);color:var(--texto)}
 [data-theme="dark"] nav{background:rgba(26,16,48,0.95)}
+[data-theme="dark"] .logo{color:var(--lila-text)}
+[data-theme="dark"] .hero-tag{background:var(--lila-l);color:var(--lila-text)}
+[data-theme="dark"] .btn-secondary{color:var(--lila-text);border-color:var(--lila-text)}
+[data-theme="dark"] .hcard-tag{background:var(--lila-l);color:var(--lila-text)}
+[data-theme="dark"] .hcard-price{color:var(--lila-text)}
+[data-theme="dark"] .hcard-back1,.hcard-back2{background:var(--blanco) !important}
+[data-theme="dark"] .floating-pill{background:var(--blanco);color:var(--texto);box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+[data-theme="dark"] .proof-bar{background:var(--turquesa);border-bottom-color:var(--turquesa)}
 [data-theme="dark"] .cat-card,.product-card,.test-card{background:var(--blanco);border-color:var(--borde)}
 [data-theme="dark"] .products-section{background:var(--blanco)}
+[data-theme="dark"] .pc-price{color:var(--lila-text)}
 [data-theme="dark"] .plan-card{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.12)}
-[data-theme="dark"] .plan-card.featured{background:var(--blanco);border-color:var(--blanco)}
+[data-theme="dark"] .plan-card.featured{background:var(--blanco);border-color:var(--turquesa)}
 [data-theme="dark"] .plan-card.featured .plan-name{color:var(--suave)}
+[data-theme="dark"] .plan-card.featured .plan-price{color:var(--turquesa-text)}
 [data-theme="dark"] .plan-card.featured .plan-features li{color:var(--texto);border-bottom-color:var(--borde)}
+[data-theme="dark"] .plan-card.featured .plan-features li::before{color:var(--turquesa-text)}
 [data-theme="dark"] .hcard{background:var(--blanco);border-color:var(--borde)}
-[data-theme="dark"] .hcard-back1,.hcard-back2{background:var(--blanco)}
 [data-theme="dark"] .app-banner{background:var(--crema);border-color:var(--borde)}
 [data-theme="dark"] .ab-phone{background:var(--blanco);border-color:var(--borde)}
+[data-theme="dark"] .app-btn{background:var(--lila-d);color:white}
 [data-theme="dark"] .cta-section{background:var(--crema)}
-[data-theme="dark"] footer{background:#0D0820}
+[data-theme="dark"] .about-section{background:var(--blanco)}
+[data-theme="dark"] .about-avatar{box-shadow:0 8px 32px rgba(26,158,143,0.05)}
+[data-theme="dark"] .about-badge{background:var(--turquesa-l);color:var(--turquesa-text)}
+[data-theme="dark"] .about-mission{background:var(--turquesa-l)}
+[data-theme="dark"] .about-mission-label{color:var(--turquesa-text)}
 [data-theme="dark"] .trust-section{background:var(--blanco);border-color:var(--borde)}
 [data-theme="dark"] .test-section{background:var(--crema)}
-[data-theme="dark"] .about-section{background:var(--card)}
-[data-theme="dark"] .about-avatar{box-shadow:0 8px 32px rgba(26,158,143,0.05)}
-[data-theme="dark"] .about-mission{background:var(--turquesa-l)}
+[data-theme="dark"] footer{background:#0D0820}
+[data-theme="dark"] footer .logo{color:var(--lila-text)}
+[data-theme="dark"] .urgency-bar{background:var(--turquesa-d)}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--crema);color:var(--texto);overflow-x:hidden}
 
@@ -181,8 +198,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .hero-card-stack{position:relative;height:480px}
 .hcard{position:absolute;background:white;border-radius:20px;padding:22px;box-shadow:0 8px 40px rgba(0,0,0,0.08);border:0.5px solid var(--borde)}
 .hcard-main{width:300px;top:40px;left:10px;z-index:3}
-.hcard-back1{width:270px;top:20px;left:40px;z-index:2;opacity:0.6;transform:rotate(3deg)}
-.hcard-back2{width:250px;top:4px;left:64px;z-index:1;opacity:0.35;transform:rotate(6deg)}
+.hcard-back1{width:270px;top:20px;left:40px;z-index:2;opacity:0.6;transform:rotate(3deg);background:#FBF8FF}
+.hcard-back2{width:250px;top:4px;left:64px;z-index:1;opacity:0.35;transform:rotate(6deg);background:#F7F4FD}
 .hcard-tag{font-size:10px;font-weight:500;color:var(--lila-d);background:var(--lila-l);padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:10px}
 .hcard-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:6px;margin-top:10px}
 .hcard-desc{font-size:12px;color:var(--suave);line-height:1.5;margin-bottom:14px}
@@ -421,8 +438,8 @@ footer{background:var(--texto);padding:44px 5vw 24px}
   </div>
   <div class="hero-right">
     <div class="hero-card-stack">
-      <div class="hcard hcard-back2" style="background:#F7F4FD"></div>
-      <div class="hcard hcard-back1" style="background:#FBF8FF"></div>
+      <div class="hcard hcard-back2"></div>
+      <div class="hcard hcard-back1"></div>
       <div class="hcard hcard-main">
         <svg class="icon" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#EDE8F9"/><path d="M24 8C15.16 8 8 15.16 8 24s7.16 16 16 16 16-7.16 16-16S32.84 8 24 8zm0 4c6.63 0 12 5.37 12 12S30.63 36 24 36 12 30.63 12 24 17.37 12 24 12zm-1 4v9l7.5 4.5-1.5 2.5-9-5.5V16h3z" fill="#7B5EA7"/></svg>
         <span class="hcard-tag">Más popular</span>

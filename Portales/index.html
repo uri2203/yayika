@@ -16,13 +16,15 @@
   --rosa:#C96B7A;--rosa-l:#FDF0F2;
   --oro:#B8943A;--oro-l:#FBF6E8;
   --verde:#3BAF7A;--verde-l:#E8F8F1;--verde-d:#1F7A4E;
+  --turquesa:#1A9E8F;--turquesa-l:#E6F7F5;--turquesa-d:#0E7A6D;
   --bg:#F8F5FF;--card:#FDFCFB;--texto:#2C2240;--suave:#7A6E85;
   --borde:rgba(123,94,167,0.13);
 }
 [data-theme="dark"]{
   --bg:#1A1030;--card:#231845;--texto:#E8E0F5;--suave:#9B8FB5;
   --borde:rgba(123,94,167,0.25);--lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;
-  --verde-l:#1A3028;--verde-d:#5DD9A0;
+  --verde-l:#1A3028;--verde-d:#5DD9A0;--turquesa-l:#0E2E2A;
+  --lila-text:#D4B8F5;--turquesa-text:#5ED4C5;
 }
 [data-theme="dark"] body{background:var(--bg);color:var(--texto)}
 [data-theme="dark"] .login-box{background:var(--card);border-color:var(--borde)}
@@ -34,6 +36,38 @@
 [data-theme="dark"] .pl-item{background:var(--bg)}.pl-item:hover{background:var(--lila-l)}
 [data-theme="dark"] .form-input{background:var(--card);color:var(--texto);border-color:var(--borde)}
 [data-theme="dark"] .btn-google{background:var(--card);color:var(--texto);border-color:var(--borde)}
+[data-theme="dark"] .dash-header{background:var(--bg)}
+[data-theme="dark"] .stat-card h3{color:var(--suave)}
+[data-theme="dark"] .stat-card .stat-val{color:var(--turquesa-text)}
+[data-theme="dark"] .dash-card h2{color:var(--turquesa-text)}
+[data-theme="dark"] .greeting{color:var(--turquesa-text)}
+[data-theme="dark"] .cycle-card{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .cycle-phase{color:var(--turquesa-text)}
+[data-theme="dark"] .cycle-day{color:var(--lila-text)}
+[data-theme="dark"] .cycle-bar{background:var(--card)}
+[data-theme="dark"] .cycle-bar-fill{background:var(--turquesa)}
+[data-theme="dark"] .streak-badge{background:var(--lila-l);color:var(--turquesa-text)}
+[data-theme="dark"] .dash-card .btn-next{background:var(--turquesa);color:white}
+[data-theme="dark"] .dash-card .cc-btn{background:var(--turquesa);color:white}
+[data-theme="dark"] .ranking-list{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .ranking-item{border-bottom-color:var(--borde)}
+[data-theme="dark"] .activity-list{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .activity-item{border-bottom-color:var(--borde)}
+[data-theme="dark"] .membership-card{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .membership-badge{background:var(--turquesa-l);color:var(--turquesa-text)}
+[data-theme="dark"] .membership-plan-name{color:var(--turquesa-text)}
+[data-theme="dark"] .membership-status{color:var(--turquesa-text)}
+[data-theme="dark"] .membership-renewal{color:var(--suave)}
+[data-theme="dark"] .membership-btn{background:var(--turquesa);color:white}
+[data-theme="dark"] .challenge-card{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .challenge-title{color:var(--turquesa-text)}
+[data-theme="dark"] .circle-card{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .circle-name{color:var(--turquesa-text)}
+[data-theme="dark"] .circle-members{color:var(--suave)}
+[data-theme="dark"] .checkin-step .label{color:var(--suave)}
+[data-theme="dark"] .mood-btn{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .mood-btn.active{border-color:var(--turquesa);background:var(--turquesa-l)}
+[data-theme="dark"] .diary-input{background:var(--card);color:var(--texto);border-color:var(--borde)}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);min-height:100vh}
 
 /* ============ LOGIN ============ */
