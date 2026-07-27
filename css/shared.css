@@ -16,8 +16,11 @@
   --verde: #3BAF7A;
   --verde-l: #E8F8F1;
   --verde-d: #1F7A4E;
-  --teal: #2A8C7A;
-  --teal-l: #E6F5F2;
+  --turquesa: #1A9E8F;
+  --turquesa-l: #E0F7F4;
+  --turquesa-d: #0E7A6D;
+  --teal: #1A9E8F;
+  --teal-l: #E0F7F4;
   --bg: #F8F5FF;
   --card: #FDFCFB;
   --texto: #2C2240;
@@ -36,7 +39,8 @@
   --rosa-l: #3D1F2A;
   --oro-l: #3D3018;
   --verde-l: #1A3028;
-  --teal-l: #1A3028;
+  --turquesa-l: #0E2E2A;
+  --teal-l: #0E2E2A;
   background: var(--bg);
   color: var(--texto);
 }
@@ -311,3 +315,50 @@ textarea.form-input {
   border-color: var(--borde);
   color: var(--texto);
 }
+
+/* --- Turquesa Accent --- */
+.accent-turquesa { color: var(--turquesa); }
+.bg-turquesa { background: var(--turquesa); color: white; }
+.bg-turquesa-l { background: var(--turquesa-l); color: var(--turquesa-d); }
+.border-turquesa { border-color: var(--turquesa) !important; }
+.btn-turquesa {
+  background: var(--turquesa);
+  color: white;
+  border: none;
+  transition: all 0.2s;
+}
+.btn-turquesa:hover {
+  background: var(--turquesa-d);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(26,158,143,0.3);
+}
+.btn-turquesa-outline {
+  background: transparent;
+  color: var(--turquesa);
+  border: 2px solid var(--turquesa);
+  transition: all 0.2s;
+}
+.btn-turquesa-outline:hover {
+  background: var(--turquesa);
+  color: white;
+}
+.badge-turquesa {
+  background: var(--turquesa-l);
+  color: var(--turquesa-d);
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.glow-turquesa {
+  box-shadow: 0 0 20px rgba(26,158,143,0.15);
+}
+/* Turquesa accent on specific landing elements */
+.proof-bar { border-bottom: 2px solid var(--turquesa-l); }
+.cta-section { background: linear-gradient(135deg, var(--turquesa-l) 0%, var(--lila-l) 100%); }
+.plan-card.featured { border: 2px solid var(--turquesa); }
+.plan-card.featured .plan-btn { background: var(--turquesa); }
+.plan-card.featured .plan-btn:hover { background: var(--turquesa-d); }
+.btn-buy { background: var(--turquesa); }
+.btn-buy:hover { background: var(--turquesa-d); }
+.urgency-bar { background: var(--turquesa); }

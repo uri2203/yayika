@@ -94,6 +94,7 @@
   --lila:#7B5EA7;--lila-l:#F0EBF8;--lila-d:#4E3470;
   --rosa:#C96B7A;--rosa-l:#FDF0F2;
   --oro:#B8943A;--oro-l:#FBF6E8;
+  --turquesa:#1A9E8F;--turquesa-l:#E0F7F4;--turquesa-d:#0E7A6D;
   --crema:#FAF7F2;--blanco:#FDFCFB;
   --texto:#1E1528;--suave:#7A6E85;
   --borde:rgba(123,94,167,0.12);
@@ -152,7 +153,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 [data-theme="dark"] .theme-toggle{border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
 
 /* URGENCY */
-.urgency-bar{background:var(--rosa);color:white;text-align:center;padding:10px;font-size:13px;font-weight:400}
+.urgency-bar{background:var(--turquesa);color:white;text-align:center;padding:10px;font-size:13px;font-weight:400}
 .urgency-bar strong{font-weight:600}
 
 /* HERO */
@@ -186,7 +187,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .hcard-footer{display:flex;align-items:center;justify-content:space-between}
 .hcard-price{font-size:16px;font-weight:500;color:var(--lila-d)}
 .hcard-price s{font-size:12px;color:var(--suave);margin-right:4px;font-weight:400}
-.hcard-btn{background:var(--lila-d);color:white;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;border:none;cursor:pointer}
+.hcard-btn{background:var(--turquesa);color:white;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;border:none;cursor:pointer}
 .floating-pill{position:absolute;background:white;border-radius:100px;padding:7px 14px;box-shadow:0 4px 20px rgba(0,0,0,0.1);display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--texto);animation:float 3s ease-in-out infinite}
 .fp1{bottom:100px;right:0;animation-delay:0s}
 .fp2{top:20px;right:0;animation-delay:1.5s}
@@ -195,7 +196,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
 /* PROOF BAR */
-.proof-bar{background:var(--lila-d);padding:14px 5vw;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.proof-bar{background:var(--turquesa-d);padding:14px 5vw;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
 .pb-item{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-size:13px}
 .pb-item strong{color:white;font-weight:500}
 .pb-sep{width:1px;height:18px;background:rgba(255,255,255,0.2)}
@@ -234,7 +235,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .pc-footer{display:flex;align-items:center;justify-content:space-between}
 .pc-price{font-size:16px;font-weight:500;color:var(--lila-d)}
 .pc-price s{font-size:11px;color:var(--suave);margin-right:3px}
-.btn-buy{background:var(--lila-d);color:white;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;border:none;cursor:pointer}
+.btn-buy{background:var(--turquesa);color:white;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;border:none;cursor:pointer}
 
 /* MEMBERSHIP */
 .membership-section{padding:72px 5vw;background:var(--lila-d);position:relative;overflow:hidden}
@@ -244,7 +245,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .ms-sub{font-size:15px;color:rgba(255,255,255,0.5);max-width:480px;line-height:1.7;margin-bottom:44px;font-weight:300}
 .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .plan-card{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.12);border-radius:18px;padding:22px}
-.plan-card.featured{background:white;border-color:white}
+.plan-card.featured{background:white;border-color:var(--turquesa)}
 .plan-name{font-size:12px;font-weight:500;color:rgba(255,255,255,0.55);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.8px}
 .plan-card.featured .plan-name{color:var(--suave)}
 .plan-price{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:white;line-height:1;margin-bottom:3px}
@@ -257,8 +258,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .plan-features li::before{content:'✓';color:#9EE8B8;font-size:10px;font-weight:700;flex-shrink:0}
 .plan-card.featured .plan-features li::before{color:var(--lila-d)}
 .plan-btn{width:100%;padding:10px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white}
-.plan-card.featured .plan-btn{background:var(--lila-d);border-color:var(--lila-d);color:white}
-.plan-badge{background:var(--rosa);color:white;font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:14px}
+.plan-card.featured .plan-btn{background:var(--turquesa);border-color:var(--turquesa);color:white}
+.plan-badge{background:var(--turquesa);color:white;font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:14px}
 
 /* TESTIMONIALS */
 .test-section{padding:72px 5vw;background:var(--crema)}
@@ -280,7 +281,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .trust-text-sub{font-size:11px;color:var(--suave)}
 
 /* CTA */
-.cta-section{padding:90px 5vw;text-align:center;background:var(--crema)}
+.cta-section{padding:90px 5vw;text-align:center;background:linear-gradient(135deg, var(--turquesa-l) 0%, var(--lila-l) 100%)}
 .cta-section h2{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,56px);font-weight:700;color:var(--texto);margin-bottom:14px;letter-spacing:-0.5px}
 .cta-section h2 em{color:var(--lila);font-style:italic}
 .cta-section p{font-size:16px;color:var(--suave);max-width:460px;margin:0 auto 32px;line-height:1.7;font-weight:300}
@@ -378,7 +379,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
     <h1><span data-i18n="hero_title_1">Transforma tu vida con herramientas hechas</span> <em data-i18n="hero_title_2">para ti</em></h1>
     <p class="hero-sub" data-i18n="hero_sub">Guías, planners y programas digitales diseñados para acompañarte en cada etapa. Sin salir de casa. Sin perder tiempo.</p>
     <div class="hero-btns">
-      <a href="#productos" class="btn-primary" data-i18n="hero_btn_products">Ver productos</a>
+      <a href="#productos" class="btn-primary" style="background:var(--turquesa)" data-i18n="hero_btn_products">Ver productos</a>
       <a href="#membresia" class="btn-secondary" data-i18n="hero_btn_membership">Conocer membresía</a>
     </div>
     <div class="hero-proof">
@@ -632,7 +633,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 <section class="cta-section">
   <h2><span data-i18n="cta_title">¿Lista para invertir</span> <em data-i18n="cta_title_2">en ti</em>?</h2>
   <p data-i18n="cta_sub">No necesitas más tiempo ni más dinero. Solo el recurso correcto en el momento correcto.</p>
-  <a href="#membresia" class="btn-primary" style="font-size:15px;padding:14px 36px" data-i18n="cta_btn">Quiero empezar ahora</a>
+  <a href="#membresia" class="btn-primary" style="font-size:15px;padding:14px 36px;background:var(--turquesa)" data-i18n="cta_btn">Quiero empezar ahora</a>
 </section>
 
 <footer>

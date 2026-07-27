@@ -62,8 +62,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);mi
 .form-input{width:100%;border:1px solid var(--borde);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--texto);transition:border-color 0.2s;background:var(--bg)}
 .form-input:focus{outline:none;border-color:var(--lila);background:white}
 .forgot{font-size:12px;color:var(--lila);text-align:right;display:block;margin-top:6px;cursor:pointer;text-decoration:none}
-.btn-login{width:100%;background:var(--lila-d);color:white;border:none;padding:13px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;transition:background 0.2s;font-family:'DM Sans',sans-serif}
-.btn-login:hover{background:var(--lila)}
+.btn-login{width:100%;background:var(--turquesa);color:white;border:none;padding:13px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;margin-top:8px;transition:background 0.2s;font-family:'DM Sans',sans-serif}
+.btn-login:hover{background:var(--turquesa-d)}
 .login-divider{text-align:center;font-size:12px;color:var(--suave);margin:20px 0;position:relative}
 .login-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:0.5px;background:var(--borde)}
 .login-divider span{background:white;padding:0 12px;position:relative}
@@ -95,15 +95,15 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 .dash-sidebar{background:white;border-right:0.5px solid var(--borde);padding:20px 0;display:flex;flex-direction:column}
 .ds-section{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--suave);text-transform:uppercase;padding:0 16px;margin:14px 0 6px}
 .ds-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;text-decoration:none}
-.ds-item:hover{background:var(--lila-l)}.ds-item.active{background:var(--lila-l);border-left-color:var(--lila)}
+.ds-item:hover{background:var(--turquesa-l)}.ds-item.active{background:var(--turquesa-l);border-left-color:var(--turquesa)}
 .ds-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ds-icon svg{width:16px;height:16px;stroke:var(--suave);fill:none}
-.ds-item.active .ds-icon svg{stroke:var(--lila-d)}
-.ds-text{font-size:13px;color:var(--suave)}.ds-item.active .ds-text{color:var(--lila-d);font-weight:500}
+.ds-item.active .ds-icon svg{stroke:var(--turquesa-d)}
+.ds-text{font-size:13px;color:var(--suave)}.ds-item.active .ds-text{color:var(--turquesa-d);font-weight:500}
 .ds-badge{margin-left:auto;background:var(--rosa);color:white;font-size:9px;font-weight:600;padding:2px 7px;border-radius:100px}
 .ds-divider{height:0.5px;background:var(--borde);margin:10px 16px}
 
-.ds-streak{margin:12px;background:#2C2240;border-radius:12px;padding:12px}
+.ds-streak{margin:12px;background:var(--turquesa-d);border-radius:12px;padding:12px}
 .ds-streak-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .ds-streak-num{font-size:22px;font-weight:600;color:#F5D878}
 .ds-streak-label{font-size:10px;color:rgba(255,255,255,0.4)}
@@ -119,18 +119,18 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 .dg-sub{font-size:12px;color:var(--suave);margin-bottom:3px}
 .dg-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--texto)}
 .dg-title span{color:var(--lila)}
-.dg-phase{display:inline-flex;align-items:center;gap:6px;background:var(--lila-l);color:var(--lila-d);font-size:11px;font-weight:500;padding:4px 12px;border-radius:100px;margin-top:6px}
+.dg-phase{display:inline-flex;align-items:center;gap:6px;background:var(--turquesa-l);color:var(--turquesa-d);font-size:11px;font-weight:500;padding:4px 12px;border-radius:100px;margin-top:6px}
 
 .xp-progress{background:white;border:0.5px solid var(--borde);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
 .xp-level{font-size:11px;font-weight:500;color:var(--suave);white-space:nowrap}
 .xp-track{flex:1;height:8px;background:var(--lila-l);border-radius:50px;overflow:hidden}
-.xp-fill{height:100%;border-radius:50px;background:var(--lila);transition:width 0.5s}
+.xp-fill{height:100%;border-radius:50px;background:var(--turquesa);transition:width 0.5s}
 .xp-val{font-size:11px;font-weight:500;color:var(--lila-d);white-space:nowrap}
 
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .stat-card{background:white;border:0.5px solid var(--borde);border-radius:12px;padding:12px;text-align:center}
 .sc-num{font-size:22px;font-weight:600;line-height:1;margin-bottom:3px}
-.sc-num.lila{color:var(--lila)}.sc-num.rosa{color:var(--rosa)}.sc-num.oro{color:var(--oro)}.sc-num.verde{color:var(--verde)}
+.sc-num.lila{color:var(--lila)}.sc-num.rosa{color:var(--rosa)}.sc-num.oro{color:var(--oro)}.sc-num.verde{color:var(--verde)}.sc-num.turquesa{color:var(--turquesa)}
 .sc-label{font-size:10px;color:var(--suave);line-height:1.3}
 
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
@@ -202,7 +202,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 .rc-label{font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px}
 .rc-date{font-size:15px;font-weight:500;margin-bottom:6px}
 .rc-promo{font-size:11px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:12px}
-.rc-btn{width:100%;background:white;color:var(--lila-d);border:none;padding:9px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
+.rc-btn{width:100%;background:var(--turquesa);color:white;border:none;padding:9px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
 
 .xp-toast{display:none;position:fixed;bottom:20px;right:20px;background:#2C2240;color:white;padding:12px 18px;border-radius:12px;font-size:13px;z-index:999;border-left:3px solid var(--oro)}
 
@@ -355,7 +355,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       </div>
 
       <div class="stats-row">
-        <div class="stat-card"><div class="sc-num lila" id="totalXP">680</div><div class="sc-label" data-i18n="stat_xp">Puntos XP totales</div></div>
+        <div class="stat-card"><div class="sc-num turquesa" id="totalXP">680</div><div class="sc-label" data-i18n="stat_xp">Puntos XP totales</div></div>
         <div class="stat-card"><div class="sc-num rosa" id="modulesCompleted">3</div><div class="sc-label" data-i18n="stat_productos">Productos activos</div></div>
         <div class="stat-card"><div class="sc-num oro" id="streakStat">14</div><div class="sc-label" data-i18n="stat_racha">Días de racha</div></div>
         <div class="stat-card"><div class="sc-num verde">8</div><div class="sc-label" data-i18n="stat_logros">Logros ganados</div></div>
@@ -492,7 +492,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <button class="energy-btn" onclick="selectEnergy(4,this)" style="font-size:28px;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:10px 14px;cursor:pointer;transition:all 0.15s">😊</button>
         <button class="energy-btn" onclick="selectEnergy(5,this)" style="font-size:28px;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:10px 14px;cursor:pointer;transition:all 0.15s">🤩</button>
       </div>
-      <button id="checkinNext1" onclick="goCheckinStep(2)" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none" data-i18n="dash_checkin_next">Siguiente</button>
+      <button id="checkinNext1" onclick="goCheckinStep(2)" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none" data-i18n="dash_checkin_next">Siguiente</button>
     </div>
 
     <!-- Step 2: Mood -->
@@ -506,7 +506,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <button class="mood-btn" onclick="selectMood('😤','mood_intensa',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">😤 <span data-i18n="mood_intensa">Intensa</span></button>
         <button class="mood-btn" onclick="selectMood('😔','mood_sensible',this)" style="font-size:22px;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:8px 12px;cursor:pointer;transition:all 0.15s">😔 <span data-i18n="mood_sensible">Sensible</span></button>
       </div>
-      <button id="checkinNext2" onclick="goCheckinStep(3)" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none" data-i18n="dash_checkin_next">Siguiente</button>
+      <button id="checkinNext2" onclick="goCheckinStep(3)" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none" data-i18n="dash_checkin_next">Siguiente</button>
     </div>
 
     <!-- Step 3: Intention -->
@@ -519,7 +519,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <button class="intention-btn" onclick="selectIntention('int_aprender',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">📚 <span data-i18n="int_aprender">Aprender algo nuevo</span></button>
         <button class="intention-btn" onclick="selectIntention('int_organizar',this)" style="text-align:left;background:var(--bg);border:2px solid transparent;border-radius:12px;padding:12px 16px;font-size:13px;cursor:pointer;transition:all 0.15s">🗂️ <span data-i18n="int_organizar">Organizarme</span></button>
       </div>
-      <button id="checkinSubmit" onclick="submitCheckin()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none">✨ <span data-i18n="dash_checkin_submit">Completar check-in</span></button>
+      <button id="checkinSubmit" onclick="submitCheckin()" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer;opacity:0.5;pointer-events:none">✨ <span data-i18n="dash_checkin_submit">Completar check-in</span></button>
     </div>
 
     <!-- Step 4: Done -->
@@ -528,7 +528,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--texto);margin-bottom:6px" data-i18n="dash_checkin_done">¡Check-in completado!</h3>
       <p style="font-size:13px;color:var(--suave);margin-bottom:4px" id="checkinReward">+15 XP ganados</p>
       <p style="font-size:12px;color:var(--lila);margin-bottom:16px" id="checkinInsight"></p>
-      <button onclick="closeCheckin()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer" data-i18n="dash_checkin_continue">Continuar</button>
+      <button onclick="closeCheckin()" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer" data-i18n="dash_checkin_continue">Continuar</button>
     </div>
   </div>
 </div>
@@ -581,7 +581,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <textarea id="cycleNotes" class="form-input" rows="2" data-i18n-placeholder="dash_cycle_placeholder" placeholder="Algo que quieras recordar..."></textarea>
     </div>
 
-    <button onclick="submitCycleLog()" style="width:100%;background:var(--lila-d);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">📝 <span data-i18n="dash_cycle_save">Registrar</span></button>
+    <button onclick="submitCycleLog()" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">📝 <span data-i18n="dash_cycle_save">Registrar</span></button>
   </div>
 </div>
 
