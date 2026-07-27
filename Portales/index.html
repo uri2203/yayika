@@ -224,16 +224,16 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
   <div class="login-left">
     <div>
       <div class="ll-logo">Yay<span>ika</span></div>
-      <div class="ll-tagline">Tu espacio de crecimiento</div>
+      <div class="ll-tagline" data-i18n="portal_tagline">Tu espacio de crecimiento</div>
     </div>
     <div class="ll-mid">
-      <h2 class="ll-title">Bienvenida de vuelta a tu <em>portal</em></h2>
-      <p class="ll-sub">Tus productos, tu progreso y tu comunidad te están esperando.</p>
+      <h2 class="ll-title"><span data-i18n="portal_welcome_back">Bienvenida de vuelta a tu</span> <em>portal</em></h2>
+      <p class="ll-sub" data-i18n="portal_hero_sub">Tus productos, tu progreso y tu comunidad te están esperando.</p>
       <div class="ll-testimonial">
-        <div class="ll-test-text">"Entro al portal cada mañana antes de arrancar el día. Me recuerda en qué fase estoy y qué tipo de trabajo hacer hoy."</div>
+        <div class="ll-test-text">"<span data-i18n="portal_testimonial">Entro al portal cada mañana antes de arrancar el día. Me recuerda en qué fase estoy y qué tipo de trabajo hacer hoy.</span>"</div>
         <div class="ll-test-author">
           <div class="ll-test-av">ML</div>
-          <div class="ll-test-name">Mariana L. · Miembra Guerrera</div>
+          <div class="ll-test-name" data-i18n="portal_testimonial_name">Mariana L. · Miembra Guerrera</div>
         </div>
       </div>
     </div>
@@ -242,31 +242,31 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
   <div class="login-right">
     <div class="login-box">
-      <h2 class="lb-title">Entrar a mi portal</h2>
-      <p class="lb-sub">Ingresa con tu cuenta de Yayika</p>
+      <h2 class="lb-title" data-i18n="portal_login_title">Entrar a mi portal</h2>
+      <p class="lb-sub" data-i18n="portal_login_sub">Ingresa con tu cuenta de Yayika</p>
 
-      <div class="login-error" id="loginError">Correo o contraseña incorrectos. Intenta de nuevo.</div>
+      <div class="login-error" id="loginError" data-i18n="portal_login_error">Correo o contraseña incorrectos. Intenta de nuevo.</div>
 
       <div class="form-group">
-        <label class="form-label">Correo electrónico</label>
+        <label class="form-label" data-i18n="portal_email_label">Correo electrónico</label>
         <input class="form-input" type="email" id="emailInput" placeholder="tu@correo.com" autocomplete="email">
       </div>
       <div class="form-group">
-        <label class="form-label">Contraseña</label>
+        <label class="form-label" data-i18n="portal_pass_label">Contraseña</label>
         <input class="form-input" type="password" id="passInput" placeholder="••••••••" autocomplete="current-password">
-        <a class="forgot" href="#">¿Olvidaste tu contraseña?</a>
+        <a class="forgot" href="#" data-i18n="portal_forgot_pass">¿Olvidaste tu contraseña?</a>
       </div>
-      <button class="btn-login" onclick="doLogin()">Entrar a mi portal</button>
+      <button class="btn-login" onclick="doLogin()" data-i18n="portal_login_btn">Entrar a mi portal</button>
 
       <div class="login-divider"><span>o</span></div>
 
       <button class="btn-google" onclick="doLogin()">
         <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Continuar con Google
+        <span data-i18n="portal_google_btn">Continuar con Google</span>
       </button>
 
       <div class="login-register">
-        ¿Aún no tienes cuenta? <a href="../index.html#membresia">Ver planes de membresía</a>
+        <span data-i18n="portal_register">¿Aún no tienes cuenta?</span> <a href="../index.html#membresia" data-i18n="portal_register_link">Ver planes de membresía</a>
       </div>
     </div>
   </div>
@@ -286,7 +286,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <div class="nav-av" id="navAv">SL</div>
         <span class="nav-username" id="navName">Sofía</span>
       </div>
-      <div class="nav-logout" onclick="doLogout()">Salir</div>
+      <div class="nav-logout" onclick="doLogout()" data-i18n="portal_logout">Salir</div>
     </div>
   </nav>
 
@@ -294,35 +294,35 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
     <!-- SIDEBAR -->
     <div class="dash-sidebar">
-      <div class="ds-section">Principal</div>
+      <div class="ds-section" data-i18n="sidebar_principal">Principal</div>
       <a href="#" class="ds-item active" onclick="return false">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-        <span class="ds-text">Mi espacio</span>
+        <span class="ds-text" data-i18n="sidebar_mi_espacio">Mi espacio</span>
       </a>
       <a href="modulo1.html" class="ds-item">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
-        <span class="ds-text">Ciclo Productiva</span>
+        <span class="ds-text" data-i18n="sidebar_ciclo">Ciclo Productiva</span>
       </a>
       <a href="#" class="ds-item">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-        <span class="ds-text">Mis logros</span>
+        <span class="ds-text" data-i18n="sidebar_logros">Mis logros</span>
         <span class="ds-badge">3</span>
       </a>
 
-      <div class="ds-section">Comunidad</div>
+      <div class="ds-section" data-i18n="sidebar_comunidad">Comunidad</div>
       <a href="#" class="ds-item">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <span class="ds-text">Mi círculo</span>
+        <span class="ds-text" data-i18n="sidebar_circulo">Mi círculo</span>
       </a>
       <a href="#" class="ds-item">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <span class="ds-text">Ranking</span>
       </a>
 
-      <div class="ds-section">Cuenta</div>
+      <div class="ds-section" data-i18n="sidebar_cuenta">Cuenta</div>
       <a href="#" class="ds-item">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
-        <span class="ds-text">Configuración</span>
+        <span class="ds-text" data-i18n="sidebar_config">Configuración</span>
       </a>
 
       <div style="flex:1"></div>
@@ -331,7 +331,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <div class="ds-streak-top">
           <div>
             <div class="ds-streak-num" id="streakNum">14</div>
-            <div class="ds-streak-label">días seguidos</div>
+            <div class="ds-streak-label" data-i18n="sidebar_dias">días seguidos</div>
           </div>
           <div class="ds-streak-fire">🔥</div>
         </div>
@@ -355,28 +355,28 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       </div>
 
       <div class="stats-row">
-        <div class="stat-card"><div class="sc-num lila" id="totalXP">680</div><div class="sc-label">Puntos XP totales</div></div>
-        <div class="stat-card"><div class="sc-num rosa" id="modulesCompleted">3</div><div class="sc-label">Productos activos</div></div>
-        <div class="stat-card"><div class="sc-num oro" id="streakStat">14</div><div class="sc-label">Días de racha</div></div>
-        <div class="stat-card"><div class="sc-num verde">8</div><div class="sc-label">Logros ganados</div></div>
+        <div class="stat-card"><div class="sc-num lila" id="totalXP">680</div><div class="sc-label" data-i18n="stat_xp">Puntos XP totales</div></div>
+        <div class="stat-card"><div class="sc-num rosa" id="modulesCompleted">3</div><div class="sc-label" data-i18n="stat_productos">Productos activos</div></div>
+        <div class="stat-card"><div class="sc-num oro" id="streakStat">14</div><div class="sc-label" data-i18n="stat_racha">Días de racha</div></div>
+        <div class="stat-card"><div class="sc-num verde">8</div><div class="sc-label" data-i18n="stat_logros">Logros ganados</div></div>
       </div>
 
       <div class="grid2">
 
         <!-- CICLO -->
         <div class="dash-card">
-          <div class="dc-title">🌕 Tu ciclo hoy<span class="dc-see">ver guía</span></div>
+          <div class="dc-title">🌕 <span data-i18n="cycle_title">Tu ciclo hoy</span><span class="dc-see" data-i18n="cycle_ver_guia">ver guía</span></div>
           <div class="cycle-widget">
-            <div class="cw-phase-name">Fase Ovulatoria</div>
-            <div class="cw-phase-desc">Días 14–17 · Quedan 2 días en esta fase</div>
+            <div class="cw-phase-name" data-i18n="cycle_phase">Fase Ovulatoria</div>
+            <div class="cw-phase-desc" data-i18n="cycle_dias_restantes">Días 14–17 · Quedan 2 días en esta fase</div>
             <div class="cw-dots">
               <div class="cw-dot done"></div>
               <div class="cw-dot done"></div>
               <div class="cw-dot active"></div>
               <div class="cw-dot"></div>
             </div>
-            <div class="cw-days">Día 15 de tu ciclo</div>
-            <div class="cw-tip">💡 Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes una conversación importante pendiente?</div>
+            <div class="cw-days" data-i18n="cycle_dia">Día 15 de tu ciclo</div>
+            <div class="cw-tip" data-i18n="cycle_tip">💡 Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes una conversación importante pendiente?</div>
           </div>
         </div>
 
@@ -398,7 +398,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
         <!-- MIS PRODUCTOS -->
         <div class="dash-card">
-          <div class="dc-title">📚 Mis productos<span class="dc-see" onclick="window.location.href='modulo1.html'">ver todos</span></div>
+          <div class="dc-title">📚 <span data-i18n="products_title">Mis productos</span><span class="dc-see" onclick="window.location.href='modulo1.html'" data-i18n="products_ver">ver todos</span></div>
           <div class="product-list">
             <a href="modulo1.html" class="pl-item">
               <div class="pl-icon lila"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#7B5EA7" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#7B5EA7"/></svg></div>
@@ -433,7 +433,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <!-- RANKING + FEED -->
         <div>
           <div class="dash-card" style="margin-bottom:14px">
-            <div class="dc-title">🏆 Ranking semanal<span class="dc-see">ver completo</span></div>
+            <div class="dc-title">🏆 <span data-i18n="ranking_title">Ranking semanal</span><span class="dc-see" data-i18n="ranking_ver">ver completo</span></div>
             <div class="rank-list">
               <div class="rank-item"><span class="rank-pos gold">🥇</span><div class="rank-av" style="background:#B8943A">VR</div><span class="rank-name">Valentina R.</span><span class="rank-pts">1,240</span></div>
               <div class="rank-item"><span class="rank-pos silver">🥈</span><div class="rank-av" style="background:#C96B7A">ML</div><span class="rank-name">Mariana L.</span><span class="rank-pts">1,105</span></div>
@@ -448,7 +448,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
               <div class="live-pill"><div class="live-dot-g"></div><span id="circleOnlineCount">0</span> activas</div>
             </div>
             <div id="myCirclesList" style="margin-bottom:10px">
-              <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Cargando círculos...</div>
+              <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px" data-i18n="circle_cargando">Cargando círculos...</div>
             </div>
             <div style="margin-top:10px;text-align:center">
               <button onclick="showAvailableCircles()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--verde-l);color:var(--verde);border:1.5px solid var(--verde);cursor:pointer;font-weight:500">+ <span data-i18n="dash_join_circle">Unirse a un círculo</span></button>
@@ -460,10 +460,10 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
       <!-- RENEWAL / UPGRADE -->
       <div class="renewal-card" id="renewalCard">
-        <div class="rc-label" id="rcLabel">Mejora tu acceso</div>
-        <div class="rc-date" id="rcDate">Desbloquea todo el contenido de Yayika</div>
-        <div class="rc-promo" id="rcPromo">Con una membresía tienes acceso ilimitado a todos los productos, el portal interactivo, los círculos de mujeres y los nuevos lanzamientos.</div>
-        <button class="rc-btn" onclick="window.location.href='../index.html#membresia'">Ver planes de membresía</button>
+        <div class="rc-label" id="rcLabel" data-i18n="membership_mejora">Mejora tu acceso</div>
+        <div class="rc-date" id="rcDate" data-i18n="membership_desbloquea">Desbloquea todo el contenido de Yayika</div>
+        <div class="rc-promo" id="rcPromo" data-i18n="membership_access_desc">Con una membresía tienes acceso ilimitado a todos los productos, el portal interactivo, los círculos de mujeres y los nuevos lanzamientos.</div>
+        <button class="rc-btn" onclick="window.location.href='../index.html#membresia'" data-i18n="membership_ver_planes">Ver planes de membresía</button>
       </div>
 
     </div>
