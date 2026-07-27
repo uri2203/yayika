@@ -98,6 +98,28 @@
   --texto:#1E1528;--suave:#7A6E85;
   --borde:rgba(123,94,167,0.12);
 }
+[data-theme="dark"]{
+  --crema:#1A1030;--blanco:#231845;
+  --texto:#E8E0F5;--suave:#9B8FB5;
+  --borde:rgba(123,94,167,0.25);
+  --lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;
+}
+[data-theme="dark"] body{background:var(--crema);color:var(--texto)}
+[data-theme="dark"] nav{background:rgba(26,16,48,0.95)}
+[data-theme="dark"] .cat-card,.product-card,.test-card{background:var(--blanco);border-color:var(--borde)}
+[data-theme="dark"] .products-section{background:var(--blanco)}
+[data-theme="dark"] .plan-card{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.12)}
+[data-theme="dark"] .plan-card.featured{background:var(--blanco);border-color:var(--blanco)}
+[data-theme="dark"] .plan-card.featured .plan-name{color:var(--suave)}
+[data-theme="dark"] .plan-card.featured .plan-features li{color:var(--texto);border-bottom-color:var(--borde)}
+[data-theme="dark"] .hcard{background:var(--blanco);border-color:var(--borde)}
+[data-theme="dark"] .hcard-back1,.hcard-back2{background:var(--blanco)}
+[data-theme="dark"] .app-banner{background:var(--crema);border-color:var(--borde)}
+[data-theme="dark"] .ab-phone{background:var(--blanco);border-color:var(--borde)}
+[data-theme="dark"] .cta-section{background:var(--crema)}
+[data-theme="dark"] footer{background:#0D0820}
+[data-theme="dark"] .trust-section{background:var(--blanco);border-color:var(--borde)}
+[data-theme="dark"] .test-section{background:var(--crema)}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--crema);color:var(--texto);overflow-x:hidden}
 
@@ -112,6 +134,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .nav-links{display:flex;align-items:center;gap:24px}
 .nav-links a{font-size:14px;color:var(--suave);text-decoration:none;font-weight:400}
 .nav-cta{background:var(--lila-d);color:white!important;padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500!important}
+
+/* LANG SELECTOR */
+.lang-selector{position:relative}
+.lang-btn{background:transparent;border:1px solid var(--borde);color:var(--suave);padding:6px 12px;border-radius:100px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px}
+.lang-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;background:white;border:0.5px solid var(--borde);border-radius:12px;padding:6px;box-shadow:0 8px 32px rgba(0,0,0,0.1);z-index:200;min-width:140px}
+.lang-menu.open{display:block}
+.lang-opt{display:block;width:100%;text-align:left;background:transparent;border:none;padding:8px 12px;border-radius:8px;font-size:13px;color:var(--texto);cursor:pointer;font-family:'DM Sans',sans-serif}
+.lang-opt:hover{background:var(--lila-l)}
+.lang-opt.active{background:var(--lila-l);color:var(--lila-d);font-weight:500}
+
+/* THEME TOGGLE */
+.theme-toggle{background:transparent;border:1px solid var(--borde);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.theme-toggle:hover{background:var(--lila-l);border-color:var(--lila)}
+[data-theme="dark"] .lang-btn{border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .lang-menu{background:var(--blanco);border-color:var(--borde)}
+[data-theme="dark"] .theme-toggle{border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)}
 
 /* URGENCY */
 .urgency-bar{background:var(--rosa);color:white;text-align:center;padding:10px;font-size:13px;font-weight:400}
@@ -301,36 +339,47 @@ footer{background:var(--texto);padding:44px 5vw 24px}
   <div style="display:flex;align-items:center;gap:12px">
     <div style="width:40px;height:40px;background:#C96B7A;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:20px;font-weight:700;color:white;flex-shrink:0">Y</div>
     <div>
-      <div style="font-size:13px;font-weight:500">Instala Yayika en tu celular</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.6)">Funciona como app, sin ocupar espacio</div>
+      <div style="font-size:13px;font-weight:500" data-i18n="install_title">Instala Yayika en tu celular</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.6)" data-i18n="install_sub">Funciona como app, sin ocupar espacio</div>
     </div>
   </div>
   <div style="display:flex;gap:8px;flex-shrink:0">
-    <button onclick="document.getElementById('installBanner').style.display='none'" style="background:transparent;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.7);padding:7px 14px;border-radius:100px;font-size:12px;cursor:pointer">Ahora no</button>
-    <button onclick="installApp()" style="background:#C96B7A;border:none;color:white;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer">Instalar</button>
+    <button onclick="document.getElementById('installBanner').style.display='none'" style="background:transparent;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.7);padding:7px 14px;border-radius:100px;font-size:12px;cursor:pointer" data-i18n="install_no">Ahora no</button>
+    <button onclick="installApp()" style="background:#C96B7A;border:none;color:white;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;cursor:pointer" data-i18n="install_yes">Instalar</button>
   </div>
 </div>
 <div class="urgency-bar">
-  🎁 <strong>Bienvenida:</strong> Suscríbete hoy y recibe tu primer producto gratis — solo por tiempo limitado
+  🎁 <strong data-i18n="urgency">Bienvenida: Suscríbete hoy y recibe tu primer producto gratis — solo por tiempo limitado</strong>
 </div>
 
 <nav>
   <div class="logo">Yay<span>ika</span></div>
   <div class="nav-links">
-    <a href="#productos">Productos</a>
-    <a href="#membresia">Membresía</a>
-    <a href="Portales/index.html" class="nav-cta">Entrar al portal</a>
+    <a href="#productos" data-i18n="nav_products">Productos</a>
+    <a href="#membresia" data-i18n="nav_membership">Membresía</a>
+    <div class="lang-selector" id="langSelector">
+      <button class="lang-btn" id="langBtn" onclick="toggleLangMenu()">🌐 ES</button>
+      <div class="lang-menu" id="langMenu">
+        <button class="lang-opt active" data-lang="es" onclick="setLanguage('es')">🇪🇸 Español</button>
+        <button class="lang-opt" data-lang="en" onclick="setLanguage('en')">🇺🇸 English</button>
+        <button class="lang-opt" data-lang="pt" onclick="setLanguage('pt')">🇧🇷 Português</button>
+        <button class="lang-opt" data-lang="fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
+        <button class="lang-opt" data-lang="de" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+    <a href="Portales/index.html" class="nav-cta" data-i18n="nav_portal">Entrar al portal</a>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-tag">✦ Productos digitales para mujeres</div>
-    <h1>Transforma tu vida con herramientas hechas <em>para ti</em></h1>
-    <p class="hero-sub">Guías, planners y programas digitales diseñados para acompañarte en cada etapa. Sin salir de casa. Sin perder tiempo.</p>
+    <div class="hero-tag" data-i18n="hero_tag">✦ Productos digitales para mujeres</div>
+    <h1><span data-i18n="hero_title_1">Transforma tu vida con herramientas hechas</span> <em data-i18n="hero_title_2">para ti</em></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Guías, planners y programas digitales diseñados para acompañarte en cada etapa. Sin salir de casa. Sin perder tiempo.</p>
     <div class="hero-btns">
-      <a href="#productos" class="btn-primary">Ver productos</a>
-      <a href="#membresia" class="btn-secondary">Conocer membresía</a>
+      <a href="#productos" class="btn-primary" data-i18n="hero_btn_products">Ver productos</a>
+      <a href="#membresia" class="btn-secondary" data-i18n="hero_btn_membership">Conocer membresía</a>
     </div>
     <div class="hero-proof">
       <div class="proof-avatars">
@@ -339,7 +388,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
         <div class="proof-av" style="background:#B8943A">SC</div>
         <div class="proof-av" style="background:#4E3470">PC</div>
       </div>
-      <div class="proof-text"><strong>+2,400 mujeres</strong> ya transformaron su vida</div>
+      <div class="proof-text"><strong data-i18n="hero_proof">+2,400 mujeres</strong> ya transformaron su vida</div>
     </div>
   </div>
   <div class="hero-right">
@@ -364,64 +413,64 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 </section>
 
 <div class="proof-bar">
-  <div class="pb-item"><strong>+2,400</strong> mujeres confían en Yayika</div>
+  <div class="pb-item"><strong data-i18n="proof_1">+2,400 mujeres confían en Yayika</strong></div>
   <div class="pb-sep"></div>
-  <div class="pb-item">Acceso <strong>instantáneo</strong></div>
+  <div class="pb-item" data-i18n="proof_2">Acceso <strong>instantáneo</strong></div>
   <div class="pb-sep"></div>
-  <div class="pb-item">Garantía <strong>30 días</strong></div>
+  <div class="pb-item" data-i18n="proof_3">Garantía <strong>30 días</strong></div>
   <div class="pb-sep"></div>
-  <div class="pb-item">Pago <strong>100% seguro</strong></div>
+  <div class="pb-item" data-i18n="proof_4">Pago <strong>100% seguro</strong></div>
   <div class="pb-sep"></div>
-  <div class="pb-item"><strong>⭐ 4.9</strong> valoración</div>
+  <div class="pb-item" data-i18n="proof_5"><strong>⭐ 4.9</strong> valoración</div>
 </div>
 
 <section class="section" id="productos">
-  <div class="section-tag">Lo que encontrarás</div>
-  <h2 class="section-title">Todo lo que necesitas para <em>crecer</em></h2>
-  <p class="section-sub">Recursos que funcionan de verdad, creados con ciencia y corazón.</p>
+  <div class="section-tag" data-i18n="cat_tag">Lo que encontrarás</div>
+  <h2 class="section-title"><span data-i18n="cat_title">Todo lo que necesitas para</span> <em data-i18n="cat_title_2">crecer</em></h2>
+  <p class="section-sub" data-i18n="cat_sub">Recursos que funcionan de verdad, creados con ciencia y corazón.</p>
   <div class="cat-grid">
     <a href="#productos" class="cat-card">
       <svg class="cc-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#FDF0F2"/><path d="M22 10c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 3a9 9 0 110 18 9 9 0 010-18zm0 2a7 7 0 100 14 7 7 0 000-14z" fill="#C96B7A"/><circle cx="22" cy="22" r="3" fill="#C96B7A"/></svg>
-      <div class="cc-name">Bienestar y ciclo</div>
-      <div class="cc-desc">Herramientas para vivir en armonía con tu cuerpo y tus hormonas</div>
+      <div class="cc-name" data-i18n="cat_1_name">Bienestar y ciclo</div>
+      <div class="cc-desc" data-i18n="cat_1_desc">Herramientas para vivir en armonía con tu cuerpo y tus hormonas</div>
       <span class="cc-arrow">→</span>
     </a>
     <a href="#productos" class="cat-card">
       <svg class="cc-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#FBF6E8"/><rect x="13" y="14" width="18" height="16" rx="2" stroke="#B8943A" stroke-width="2"/><path d="M17 20h10M17 24h6" stroke="#B8943A" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="16" r="4" fill="#FBF6E8" stroke="#B8943A" stroke-width="1.5"/><path d="M27 16h2M28 15v2" stroke="#B8943A" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <div class="cc-name">Finanzas personales</div>
-      <div class="cc-desc">Controla tu dinero y construye seguridad económica sin estrés</div>
+      <div class="cc-name" data-i18n="cat_2_name">Finanzas personales</div>
+      <div class="cc-desc" data-i18n="cat_2_desc">Controla tu dinero y construye seguridad económica sin estrés</div>
       <span class="cc-arrow">→</span>
     </a>
     <a href="#productos" class="cat-card">
       <svg class="cc-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#F0EBF8"/><rect x="14" y="13" width="16" height="18" rx="2" stroke="#7B5EA7" stroke-width="2"/><path d="M18 18h8M18 22h8M18 26h5" stroke="#7B5EA7" stroke-width="2" stroke-linecap="round"/></svg>
-      <div class="cc-name">Productividad</div>
-      <div class="cc-desc">Planners y sistemas para que tu tiempo valga más</div>
+      <div class="cc-name" data-i18n="cat_3_name">Productividad</div>
+      <div class="cc-desc" data-i18n="cat_3_desc">Planners y sistemas para que tu tiempo valga más</div>
       <span class="cc-arrow">→</span>
     </a>
     <a href="#productos" class="cat-card">
       <svg class="cc-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#FBF6E8"/><path d="M22 13l2.5 5 5.5.8-4 3.9.9 5.5L22 25.5l-4.9 2.7.9-5.5-4-3.9 5.5-.8z" stroke="#B8943A" stroke-width="2" stroke-linejoin="round"/></svg>
-      <div class="cc-name">Negociación</div>
-      <div class="cc-desc">Scripts y estrategias para pedir más sin sentirte "difícil"</div>
+      <div class="cc-name" data-i18n="cat_4_name">Negociación</div>
+      <div class="cc-desc" data-i18n="cat_4_desc">Scripts y estrategias para pedir más sin sentirte "difícil"</div>
       <span class="cc-arrow">→</span>
     </a>
     <a href="#productos" class="cat-card">
       <svg class="cc-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#F0EBF8"/><path d="M22 13c-2.8 0-5 2.2-5 5 0 1.8 1 3.4 2.4 4.3C16.4 23.5 14 26.5 14 30h16c0-3.5-2.4-6.5-5.4-7.7C26 21.4 27 19.8 27 18c0-2.8-2.2-5-5-5z" stroke="#7B5EA7" stroke-width="2" stroke-linejoin="round"/></svg>
-      <div class="cc-name">Salud emocional</div>
-      <div class="cc-desc">Neurociencia práctica para regular emociones sin terapia</div>
+      <div class="cc-name" data-i18n="cat_5_name">Salud emocional</div>
+      <div class="cc-desc" data-i18n="cat_5_desc">Neurociencia práctica para regular emociones sin terapia</div>
       <span class="cc-arrow">→</span>
     </a>
     <a href="#productos" class="cat-card">
       <svg class="cc-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#FDF0F2"/><path d="M22 12c-2 4-7 6-7 11a7 7 0 0014 0c0-5-5-7-7-11z" stroke="#C96B7A" stroke-width="2" stroke-linejoin="round"/><path d="M22 25v-5M19 22l3-2 3 2" stroke="#C96B7A" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <div class="cc-name">Reinvención personal</div>
-      <div class="cc-desc">Para mujeres que están comenzando una nueva etapa de vida</div>
+      <div class="cc-name" data-i18n="cat_6_name">Reinvención personal</div>
+      <div class="cc-desc" data-i18n="cat_6_desc">Para mujeres que están comenzando una nueva etapa de vida</div>
       <span class="cc-arrow">→</span>
     </a>
   </div>
 </section>
 
 <section class="products-section">
-  <div class="section-tag">Productos destacados</div>
-  <h2 class="section-title">Las que más están <em>amando</em></h2>
+  <div class="section-tag" data-i18n="prod_tag">Productos destacados</div>
+  <h2 class="section-title"><span data-i18n="prod_title">Las que más están</span> <em data-i18n="prod_title_2">amando</em></h2>
   <div class="products-grid">
     <div class="product-card">
       <div class="pc-thumb lila">
@@ -429,9 +478,9 @@ footer{background:var(--texto);padding:44px 5vw 24px}
         <span class="pc-badge badge-new">NUEVO</span>
       </div>
       <div class="pc-body">
-        <div class="pc-name">Ciclo Productiva</div>
-        <div class="pc-desc">Sistema de productividad adaptado a tus 4 fases hormonales.</div>
-        <div class="pc-footer"><div class="pc-price"><s>$299</s> $149 MXN</div><button class="btn-buy" onclick="buyProduct('ciclo-productiva')">Obtener</button></div>
+        <div class="pc-name" data-i18n="prod_1_name">Ciclo Productiva</div>
+        <div class="pc-desc" data-i18n="prod_1_desc">Sistema de productividad adaptado a tus 4 fases hormonales.</div>
+        <div class="pc-footer"><div class="pc-price"><s>$299</s> $149 MXN</div><button class="btn-buy" onclick="buyProduct('ciclo-productiva')" data-i18n="prod_1_btn">Obtener</button></div>
       </div>
     </div>
     <div class="product-card">
@@ -440,9 +489,9 @@ footer{background:var(--texto);padding:44px 5vw 24px}
         <span class="pc-badge badge-hot">🔥 TOP</span>
       </div>
       <div class="pc-body">
-        <div class="pc-name">Dinero Sin Pena</div>
-        <div class="pc-desc">Finanzas con psicología emocional femenina. Sana tu relación con el dinero.</div>
-        <div class="pc-footer"><div class="pc-price"><s>$249</s> $129 MXN</div><button class="btn-buy" onclick="buyProduct('dinero-sin-pena')">Obtener</button></div>
+        <div class="pc-name" data-i18n="prod_2_name">Dinero Sin Pena</div>
+        <div class="pc-desc" data-i18n="prod_2_desc">Finanzas con psicología emocional femenina. Sana tu relación con el dinero.</div>
+        <div class="pc-footer"><div class="pc-price"><s>$249</s> $129 MXN</div><button class="btn-buy" onclick="buyProduct('dinero-sin-pena')" data-i18n="prod_2_btn">Obtener</button></div>
       </div>
     </div>
     <div class="product-card">
@@ -450,9 +499,9 @@ footer{background:var(--texto);padding:44px 5vw 24px}
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><path d="M32 18l3.5 7 7.5 1-5.5 5.5 1.5 7.5L32 36l-7 3.5 1.5-7.5L21 27l7.5-1z" stroke="#B8943A" stroke-width="2.5" stroke-linejoin="round"/></svg>
       </div>
       <div class="pc-body">
-        <div class="pc-name">La Mujer Que Negocia</div>
-        <div class="pc-desc">Scripts reales para pedir aumentos y cobrar más sin sentirte agresiva.</div>
-        <div class="pc-footer"><div class="pc-price">$179 MXN</div><button class="btn-buy" onclick="buyProduct('mujer-que-negocia')">Obtener</button></div>
+        <div class="pc-name" data-i18n="prod_3_name">La Mujer Que Negocia</div>
+        <div class="pc-desc" data-i18n="prod_3_desc">Scripts reales para pedir aumentos y cobrar más sin sentirte agresiva.</div>
+        <div class="pc-footer"><div class="pc-price">$179 MXN</div><button class="btn-buy" onclick="buyProduct('mujer-que-negocia')" data-i18n="prod_3_btn">Obtener</button></div>
       </div>
     </div>
   </div>
@@ -461,86 +510,86 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 <div class="trust-section">
   <div class="trust-item">
     <div class="trust-icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#7B5EA7" stroke-width="2" stroke-linejoin="round"/></svg></div>
-    <div><div class="trust-text-title">Acceso instantáneo</div><div class="trust-text-sub">Paga y entra de inmediato</div></div>
+    <div><div class="trust-text-title" data-i18n="trust_1">Acceso instantáneo</div><div class="trust-text-sub" data-i18n="trust_1_sub">Paga y entra de inmediato</div></div>
   </div>
   <div class="trust-item">
     <div class="trust-icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L4 7v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V7l-8-4z" stroke="#7B5EA7" stroke-width="2" stroke-linejoin="round"/></svg></div>
-    <div><div class="trust-text-title">Garantía 30 días</div><div class="trust-text-sub">O te devolvemos tu dinero</div></div>
+    <div><div class="trust-text-title" data-i18n="trust_2">Garantía 30 días</div><div class="trust-text-sub" data-i18n="trust_2_sub">O te devolvemos tu dinero</div></div>
   </div>
   <div class="trust-item">
     <div class="trust-icon-wrap"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="#7B5EA7" stroke-width="2"/><path d="M8 11V7a4 4 0 018 0v4" stroke="#7B5EA7" stroke-width="2" stroke-linecap="round"/></svg></div>
-    <div><div class="trust-text-title">Pago 100% seguro</div><div class="trust-text-sub">Procesado por Stripe</div></div>
+    <div><div class="trust-text-title" data-i18n="trust_3">Pago 100% seguro</div><div class="trust-text-sub" data-i18n="trust_3_sub">Procesado por Stripe</div></div>
   </div>
   <div class="trust-item">
     <div class="trust-icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="#7B5EA7" stroke-width="2" stroke-linejoin="round"/></svg></div>
-    <div><div class="trust-text-title">Soporte real</div><div class="trust-text-sub">Respuesta en menos de 24h</div></div>
+    <div><div class="trust-text-title" data-i18n="trust_4">Soporte real</div><div class="trust-text-sub" data-i18n="trust_4_sub">Respuesta en menos de 24h</div></div>
   </div>
 </div>
 
 <section class="membership-section" id="membresia">
-  <div class="ms-tag">Membresía Yayika</div>
-  <h2 class="ms-title">Acceso ilimitado a todo<br><em>por una sola cuota</em></h2>
-  <p class="ms-sub">Todos los productos, el portal interactivo, los círculos de mujeres y los nuevos lanzamientos incluidos.</p>
+  <div class="ms-tag" data-i18n="mem_tag">Membresía Yayika</div>
+  <h2 class="ms-title"><span data-i18n="mem_title">Acceso ilimitado a todo</span><br><em data-i18n="mem_title_2">por una sola cuota</em></h2>
+  <p class="ms-sub" data-i18n="mem_sub">Todos los productos, el portal interactivo, los círculos de mujeres y los nuevos lanzamientos incluidos.</p>
   <div class="plans-grid">
     <div class="plan-card">
-      <div class="plan-name">Semilla</div>
+      <div class="plan-name" data-i18n="mem_semilla">Semilla</div>
       <div class="plan-price">$99</div>
       <div class="plan-period">MXN / mes</div>
       <ul class="plan-features">
-        <li>3 productos incluidos</li>
-        <li>Portal interactivo</li>
-        <li>Sistema de puntos XP</li>
-        <li>Círculo de amigas</li>
+        <li data-i18n="mem_semilla_1">3 productos incluidos</li>
+        <li data-i18n="mem_semilla_2">Portal interactivo</li>
+        <li data-i18n="mem_semilla_3">Sistema de puntos XP</li>
+        <li data-i18n="mem_semilla_4">Círculo de amigas</li>
       </ul>
-      <button class="plan-btn" onclick="startCheckout('semilla')">Empezar</button>
+      <button class="plan-btn" onclick="startCheckout('semilla')" data-i18n="mem_semilla_btn">Empezar</button>
     </div>
     <div class="plan-card featured">
-      <div class="plan-badge">MÁS POPULAR</div>
-      <div class="plan-name">Guerrera</div>
+      <div class="plan-badge" data-i18n="mem_guerrera_badge">MÁS POPULAR</div>
+      <div class="plan-name" data-i18n="mem_guerrera">Guerrera</div>
       <div class="plan-price">$199</div>
       <div class="plan-period">MXN / mes</div>
       <ul class="plan-features">
-        <li>Todos los productos</li>
-        <li>Portal + dashboard</li>
-        <li>Ciclo Productiva completo</li>
-        <li>Círculos ilimitados</li>
-        <li>Acceso anticipado</li>
+        <li data-i18n="mem_guerrera_1">Todos los productos</li>
+        <li data-i18n="mem_guerrera_2">Portal + dashboard</li>
+        <li data-i18n="mem_guerrera_3">Ciclo Productiva completo</li>
+        <li data-i18n="mem_guerrera_4">Círculos ilimitados</li>
+        <li data-i18n="mem_guerrera_5">Acceso anticipado</li>
       </ul>
-      <button class="plan-btn" onclick="startCheckout('guerrera')">Elegir Guerrera</button>
+      <button class="plan-btn" onclick="startCheckout('guerrera')" data-i18n="mem_guerrera_btn">Elegir Guerrera</button>
     </div>
     <div class="plan-card">
-      <div class="plan-name">Diamante</div>
+      <div class="plan-name" data-i18n="mem_diamante">Diamante</div>
       <div class="plan-price">$349</div>
       <div class="plan-period">MXN / mes</div>
       <ul class="plan-features">
-        <li>Todo lo de Guerrera</li>
-        <li>Sesión mensual grupal</li>
-        <li>Comisión afiliada 20%</li>
-        <li>Badge Diamante visible</li>
-        <li>Soporte prioritario</li>
+        <li data-i18n="mem_diamante_1">Todo lo de Guerrera</li>
+        <li data-i18n="mem_diamante_2">Sesión mensual grupal</li>
+        <li data-i18n="mem_diamante_3">Comisión afiliada 20%</li>
+        <li data-i18n="mem_diamante_4">Badge Diamante visible</li>
+        <li data-i18n="mem_diamante_5">Soporte prioritario</li>
       </ul>
-      <button class="plan-btn" onclick="startCheckout('diamante')">Elegir Diamante</button>
+      <button class="plan-btn" onclick="startCheckout('diamante')" data-i18n="mem_diamante_btn">Elegir Diamante</button>
     </div>
   </div>
 </section>
 
 <section class="test-section">
-  <div class="section-tag">Lo que dicen ellas</div>
-  <h2 class="section-title">Mujeres reales, <em>resultados reales</em></h2>
+  <div class="section-tag" data-i18n="test_tag">Lo que dicen ellas</div>
+  <h2 class="section-title"><span data-i18n="test_title">Mujeres reales,</span> <em data-i18n="test_title_2">resultados reales</em></h2>
   <div class="test-grid">
     <div class="test-card">
       <div class="test-stars">★★★★★</div>
-      <div class="test-text">"El planner de ciclo cambió completamente mi forma de trabajar. Por fin entiendo por qué hay semanas que puedo con todo."</div>
+      <div class="test-text" data-i18n="test_1_text">"El planner de ciclo cambió completamente mi forma de trabajar. Por fin entiendo por qué hay semanas que puedo con todo."</div>
       <div class="test-author"><div class="test-av" style="background:#7B5EA7">ML</div><div><div class="test-name">Mariana L.</div><div class="test-city">Emprendedora · CDMX</div></div></div>
     </div>
     <div class="test-card">
       <div class="test-stars">★★★★★</div>
-      <div class="test-text">"Dinero Sin Pena me ayudó a ahorrar mis primeros $8,000 en 6 semanas. Nunca pensé que era posible."</div>
+      <div class="test-text" data-i18n="test_2_text">"Dinero Sin Pena me ayudó a ahorrar mis primeros $8,000 en 6 semanas. Nunca pensé que era posible."</div>
       <div class="test-author"><div class="test-av" style="background:#C96B7A">SC</div><div><div class="test-name">Sofía C.</div><div class="test-city">Maestra · Guadalajara</div></div></div>
     </div>
     <div class="test-card">
       <div class="test-stars">★★★★★</div>
-      <div class="test-text">"Usé los scripts de negociación y pedí mi primer aumento. Me dijeron que sí. Literalmente cambió mi vida."</div>
+      <div class="test-text" data-i18n="test_3_text">"Usé los scripts de negociación y pedí mi primer aumento. Me dijeron que sí. Literalmente cambió mi vida."</div>
       <div class="test-author"><div class="test-av" style="background:#B8943A">VR</div><div><div class="test-name">Valentina R.</div><div class="test-city">Diseñadora · Monterrey</div></div></div>
     </div>
   </div>
@@ -549,9 +598,9 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 <!-- APP BANNER -->
 <section class="app-banner" id="app">
   <div>
-    <div class="ab-tag">Próximamente</div>
-    <h2 class="ab-title">Yayika en tu <em>bolsillo</em></h2>
-    <p class="ab-sub">La app de Yayika está en desarrollo. Por ahora el portal funciona perfecto desde tu celular — solo ábrelo en Chrome y agrégalo a tu pantalla de inicio como si fuera una app.</p>
+    <div class="ab-tag" data-i18n="app_tag">Próximamente</div>
+    <h2 class="ab-title"><span data-i18n="app_title">Yayika en tu</span> <em data-i18n="app_title_2">bolsillo</em></h2>
+    <p class="ab-sub" data-i18n="app_sub">La app de Yayika está en desarrollo. Por ahora el portal funciona perfecto desde tu celular — solo ábrelo en Chrome y agrégalo a tu pantalla de inicio como si fuera una app.</p>
     <div class="app-btns">
       <a href="#" class="app-btn">
         <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
@@ -581,37 +630,52 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 </section>
 
 <section class="cta-section">
-  <h2>¿Lista para invertir <em>en ti</em>?</h2>
-  <p>No necesitas más tiempo ni más dinero. Solo el recurso correcto en el momento correcto.</p>
-  <a href="#membresia" class="btn-primary" style="font-size:15px;padding:14px 36px">Quiero empezar ahora</a>
+  <h2><span data-i18n="cta_title">¿Lista para invertir</span> <em data-i18n="cta_title_2">en ti</em>?</h2>
+  <p data-i18n="cta_sub">No necesitas más tiempo ni más dinero. Solo el recurso correcto en el momento correcto.</p>
+  <a href="#membresia" class="btn-primary" style="font-size:15px;padding:14px 36px" data-i18n="cta_btn">Quiero empezar ahora</a>
 </section>
 
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
       <div class="logo">Yay<span>ika</span></div>
-      <p>Productos digitales para mujeres que quieren más. Acceso instantáneo desde cualquier dispositivo.</p>
+      <p data-i18n="footer_products">Productos digitales para mujeres que quieren más. Acceso instantáneo desde cualquier dispositivo.</p>
     </div>
     <div class="footer-col">
-      <h4>Productos</h4>
+      <h4 data-i18n="footer_products">Productos</h4>
       <a href="https://buy.stripe.com/eVq4gz16ueoOcIM3mtgA800">Ciclo Productiva</a>
       <a href="https://buy.stripe.com/eVq7sL6qO3Ka1043mtgA801">Dinero Sin Pena</a>
       <a href="https://buy.stripe.com/dRmbJ1bL80xYcIM0ahgA802">La Mujer Que Negocia</a>
-      <a href="#membresia">Membresía Yayika</a>
+      <a href="#membresia" data-i18n="footer_membership">Membresía Yayika</a>
     </div>
     <div class="footer-col">
-      <h4>Legal</h4>
-      <a href="privacidad.html">Privacidad</a>
-      <a href="terminos.html">Términos de uso</a>
-      <a href="mailto:hola@yayika.com">Contacto</a>
-      <a href="#membresia">Afiliadas</a>
+      <h4 data-i18n="footer_legal">Legal</h4>
+      <a href="privacidad.html" data-i18n="footer_privacy">Privacidad</a>
+      <a href="terminos.html" data-i18n="footer_terms">Términos de uso</a>
+      <a href="mailto:hola@yayika.com" data-i18n="footer_contact">Contacto</a>
+      <a href="#membresia" data-i18n="footer_affiliates">Afiliadas</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Yayika · Todos los derechos reservados</span>
-    <span>Pagos por Stripe · yayika.com</span>
+    <span data-i18n="footer_rights">© 2026 Yayika · Todos los derechos reservados</span>
+    <span data-i18n="footer_payments">Pagos por Stripe · yayika.com</span>
   </div>
 </footer>
+<script src="/js/i18n.js"></script>
+<script src="/js/theme.js"></script>
+<script>
+// Language selector toggle
+function toggleLangMenu() {
+  const menu = document.getElementById('langMenu');
+  menu.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const sel = document.getElementById('langSelector');
+  if (sel && !sel.contains(e.target)) {
+    document.getElementById('langMenu').classList.remove('open');
+  }
+});
+</script>
 <script>
 // ===== STRIPE CHECKOUT =====
 const PRODUCT_LINKS = {
@@ -663,6 +727,11 @@ function installApp(){
     });
   }
 }
+</script>
+<script>
+  // Init theme + i18n on load
+  setTheme(currentTheme);
+  applyTranslations();
 </script>
 </body>
 </html>

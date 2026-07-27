@@ -11,6 +11,10 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--lila:#7B5EA7;--lila-l:#F0EBF8;--lila-d:#4E3470;--rosa:#C96B7A;--rosa-l:#FDF0F2;--oro:#B8943A;--oro-l:#FBF6E8;--oro-d:#8B6B1E;--verde:#3BAF7A;--verde-l:#E8F8F1;--verde-d:#1F7A4E;--bg:#FFFBF2;--card:#FDFCFB;--texto:#2C2240;--suave:#6B5F7A;--borde:rgba(184,148,58,0.15)}
+[data-theme="dark"]{--bg:#1A1030;--card:#231845;--texto:#E8E0F5;--suave:#9B8FB5;--borde:rgba(184,148,58,0.25);--lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;--verde-l:#1A3028}
+[data-theme="dark"] body{background:var(--bg);color:var(--texto)}
+[data-theme="dark"] nav{background:#0D0820}
+[data-theme="dark"] .sidebar{background:var(--card);border-color:var(--borde)}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7}
 nav{background:#2C2240;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:white}.logo span{color:#F5D878}
@@ -270,6 +274,8 @@ nav{background:#2C2240;padding:14px 24px;display:flex;align-items:center;justify
   </div>
 </div>
 <div class="xp-toast" id="xpToast"></div>
+<script src="../js/i18n.js"></script>
+<script src="../js/theme.js"></script>
 <script src="../js/app.js"></script>
 <script>
 let xp=560,playing=false,progress=0,timer=null;
@@ -290,5 +296,6 @@ function seekAudio(e){const rect=e.currentTarget.getBoundingClientRect();progres
 function completeModule(){updateLocalXP(150,'🌕 +150 XP — Módulo 4 completado!');moduleAddXP(150);}
 function nextModule(){completeModule();moduleCompleteAndNavigate(4, 150, 'modulo5.html');}
 </script>
+<script>setTheme(currentTheme);applyTranslations();</script>
 </body>
 </html>

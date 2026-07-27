@@ -18,6 +18,10 @@
   --bg:#F8F5FF;--card:#FDFCFB;--texto:#2C2240;--suave:#6B5F7A;
   --borde:rgba(124,92,191,0.15);
 }
+[data-theme="dark"]{--bg:#1A1030;--card:#231845;--texto:#E8E0F5;--suave:#9B8FB5;--borde:rgba(124,92,191,0.25);--lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;--verde-l:#1A3028}
+[data-theme="dark"] body{background:var(--bg);color:var(--texto)}
+[data-theme="dark"] nav{background:#0D0820}
+[data-theme="dark"] .sidebar{background:var(--card);border-color:var(--borde)}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7}
 
 nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
@@ -407,6 +411,8 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
 
 <div class="xp-toast" id="xpToast"></div>
 
+<script src="../js/i18n.js"></script>
+<script src="../js/theme.js"></script>
 <script src="../js/app.js"></script>
 <script>
 let playing=false,progress=0,timer=null;
@@ -485,5 +491,6 @@ function nextModule(){
   moduleCompleteAndNavigate(2, 150, 'modulo3.html');
 }
 </script>
+<script>setTheme(currentTheme);applyTranslations();</script>
 </body>
 </html>

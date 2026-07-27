@@ -25,6 +25,28 @@
   --borde: rgba(123,94,167,0.13);
 }
 
+/* --- Dark mode --- */
+[data-theme="dark"] {
+  --bg: #1A1030;
+  --card: #231845;
+  --texto: #E8E0F5;
+  --suave: #9B8FB5;
+  --borde: rgba(123,94,167,0.25);
+  --lila-l: #2D2055;
+  --rosa-l: #3D1F2A;
+  --oro-l: #3D3018;
+  --verde-l: #1A3028;
+  --teal-l: #1A3028;
+  background: var(--bg);
+  color: var(--texto);
+}
+[data-theme="dark"] .card { background: var(--card); border-color: var(--borde); }
+[data-theme="dark"] nav { background: rgba(26,16,48,0.95); }
+[data-theme="dark"] .sidebar { background: var(--card); border-color: var(--borde); }
+[data-theme="dark"] a { color: var(--lila); }
+[data-theme="dark"] .form-input { background: var(--card); color: var(--texto); border-color: var(--borde); }
+[data-theme="dark"] .form-input:focus { background: #2D2055; }
+
 /* --- Reset --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
