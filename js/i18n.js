@@ -271,6 +271,13 @@ const I18N = {
     landing_mujeres_activas: 'mujeres activas ahora',
     landing_ventas_hoy: 'ventas hoy',
     landing_nuevo: 'NUEVO',
+    // Misc
+    circle_members: 'miembros',
+    circle_of: 'de',
+    time_just_now: 'ahora mismo',
+    time_min: 'hace {n} min',
+    time_hour: 'hace {n} hora(s)',
+    time_day: 'hace {n} día(s)',
   },
 
   en: {
@@ -522,6 +529,13 @@ const I18N = {
     landing_mujeres_activas: 'women active now',
     landing_ventas_hoy: 'sales today',
     landing_nuevo: 'NEW',
+    // Misc
+    circle_members: 'members',
+    circle_of: 'of',
+    time_just_now: 'just now',
+    time_min: '{n} min ago',
+    time_hour: '{n} hour(s) ago',
+    time_day: '{n} day(s) ago',
   },
 
   pt: {
@@ -773,6 +787,13 @@ const I18N = {
     landing_mujeres_activas: 'mulheres ativas agora',
     landing_ventas_hoy: 'vendas hoje',
     landing_nuevo: 'NOVO',
+    // Misc
+    circle_members: 'membros',
+    circle_of: 'de',
+    time_just_now: 'agora mesmo',
+    time_min: 'há {n} min',
+    time_hour: 'há {n} hora(s)',
+    time_day: 'há {n} dia(s)',
   },
 
   fr: {
@@ -1024,6 +1045,13 @@ const I18N = {
     landing_mujeres_activas: 'femmes actives maintenant',
     landing_ventas_hoy: 'ventes aujourd\'hui',
     landing_nuevo: 'NOUVEAU',
+    // Misc
+    circle_members: 'membres',
+    circle_of: 'sur',
+    time_just_now: "à l'instant",
+    time_min: 'il y a {n} min',
+    time_hour: 'il y a {n} heure(s)',
+    time_day: 'il y a {n} jour(s)',
   },
 
   de: {
@@ -1275,6 +1303,13 @@ const I18N = {
     landing_mujeres_activas: 'Frauen jetzt aktiv',
     landing_ventas_hoy: 'Verkäufe heute',
     landing_nuevo: 'NEU',
+    // Misc
+    circle_members: 'Mitglieder',
+    circle_of: 'von',
+    time_just_now: 'gerade eben',
+    time_min: 'vor {n} Min',
+    time_hour: 'vor {n} Stunde(n)',
+    time_day: 'vor {n} Tag(en)',
   }
 };
 
@@ -1290,6 +1325,8 @@ function setLanguage(lang) {
   localStorage.setItem('yayika_lang', lang);
   document.documentElement.lang = lang;
   applyTranslations();
+  // Update dynamic elements
+  if (typeof updateDate === 'function') updateDate();
   // Update lang selector active state
   document.querySelectorAll('.lang-opt').forEach(el => {
     el.classList.toggle('active', el.dataset.lang === lang);

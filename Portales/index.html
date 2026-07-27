@@ -786,7 +786,7 @@ async function loadDashboard() {
         div.style.cssText = 'padding:10px;background:var(--bg);border-radius:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid var(--borde)';
         div.onclick = () => openCircleChat(c);
         div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + (c.name || 'Círculo') + '</div>' +
-          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' miembros · ' + (c.circle_type || 'general') + '</div>';
+          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' ' + t('circle_members') + ' · ' + (c.circle_type || 'general') + '</div>';
         cList.appendChild(div);
       });
     } else {
@@ -845,10 +845,11 @@ function buildStreak(days) {
 }
 
 function updateDate() {
-  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const localeMap = { es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' };
+  const locale = localeMap[currentLang] || 'es-MX';
   const now = new Date();
-  document.getElementById('dgSub').textContent = `${days[now.getDay()]} ${now.getDate()} de ${months[now.getMonth()]}`;
+  const formatted = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(now);
+  document.getElementById('dgSub').textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
 function showToast(msg) {
@@ -1077,7 +1078,7 @@ async function showAvailableCircles() {
         div.style.cssText = 'padding:10px;background:var(--bg);border-radius:12px;margin-bottom:8px;border:1.5px solid var(--borde)';
         div.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center">' +
           '<div><div style="font-weight:500;font-size:13px;color:var(--texto)">' + (c.name || 'Círculo') + '</div>' +
-          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + '/' + (c.max_members || 10) + ' miembros</div></div>' +
+          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + '/' + (c.max_members || 10) + ' ' + t('circle_members') + '</div></div>' +
           '<button onclick="joinCircleAction(' + c.id + ', this)" style="padding:6px 12px;border-radius:100px;background:var(--verde);color:white;border:none;font-size:11px;cursor:pointer;font-weight:500">Unirse</button></div>';
         cList.appendChild(div);
       });
@@ -1114,7 +1115,7 @@ async function loadMyCircles() {
         div.style.cssText = 'padding:10px;background:var(--bg);border-radius:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid var(--borde)';
         div.onclick = () => openCircleChat(c);
         div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + (c.name || 'Círculo') + '</div>' +
-          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' miembros</div>';
+          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' ' + t('circle_members') + '</div>';
         cList.appendChild(div);
       });
     } else {

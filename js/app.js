@@ -280,10 +280,10 @@ function timeAgo(dateStr) {
   const now = new Date();
   const then = new Date(dateStr);
   const diff = Math.floor((now - then) / 1000);
-  if (diff < 60) return 'ahora mismo';
-  if (diff < 3600) return `hace ${Math.floor(diff/60)} min`;
-  if (diff < 86400) return `hace ${Math.floor(diff/3600)} hora(s)`;
-  return `hace ${Math.floor(diff/86400)} día(s)`;
+  if (diff < 60) return t('time_just_now');
+  if (diff < 3600) return t('time_min').replace('{n}', Math.floor(diff/60));
+  if (diff < 86400) return t('time_hour').replace('{n}', Math.floor(diff/3600));
+  return t('time_day').replace('{n}', Math.floor(diff/86400));
 }
 
 // ============================================================
