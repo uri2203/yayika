@@ -121,6 +121,9 @@
 [data-theme="dark"] footer{background:#0D0820}
 [data-theme="dark"] .trust-section{background:var(--blanco);border-color:var(--borde)}
 [data-theme="dark"] .test-section{background:var(--crema)}
+[data-theme="dark"] .about-section{background:var(--card)}
+[data-theme="dark"] .about-avatar{box-shadow:0 8px 32px rgba(26,158,143,0.05)}
+[data-theme="dark"] .about-mission{background:var(--turquesa-l)}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--crema);color:var(--texto);overflow-x:hidden}
 
@@ -300,6 +303,23 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 .footer-col h4{font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px}
 .footer-col a{display:block;font-size:13px;color:rgba(255,255,255,0.35);text-decoration:none;margin-bottom:7px}
 .footer-bottom{border-top:0.5px solid rgba(255,255,255,0.07);padding-top:18px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.25)}
+
+/* ABOUT SECTION */
+.about-section{padding:80px 5vw;background:var(--crema);position:relative}
+.about-layout{max-width:900px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:center}
+.about-image{display:flex;flex-direction:column;align-items:center;gap:16px}
+.about-avatar{width:180px;height:180px;border-radius:50%;background:linear-gradient(135deg,var(--turquesa-l),var(--lila-l));display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 8px 32px rgba(26,158,143,0.15)}
+.about-avatar::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--turquesa);opacity:0.3}
+.about-avatar-inner{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,var(--turquesa),var(--lila));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:700;color:white}
+.about-badge{background:var(--turquesa-l);color:var(--turquesa-d);padding:6px 16px;border-radius:100px;font-size:12px;font-weight:500}
+.about-content{text-align:left}
+.about-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,48px);font-weight:700;color:var(--texto);margin-bottom:20px;letter-spacing:-0.5px}
+.about-title em{color:var(--turquesa);font-style:italic}
+.about-text{font-size:15px;color:var(--suave);line-height:1.8;margin-bottom:14px;font-weight:300}
+.about-mission{margin-top:28px;padding:20px;background:var(--turquesa-l);border-radius:14px;border-left:4px solid var(--turquesa)}
+.about-mission-label{font-size:11px;font-weight:600;color:var(--turquesa-d);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.about-mission-text{font-size:15px;color:var(--texto);line-height:1.7;font-weight:400;font-style:italic}
+@media(max-width:768px){.about-layout{grid-template-columns:1fr;text-align:center}.about-content{text-align:center}}
 
 /* APP BANNER */
 .app-banner{background:var(--crema);border-top:0.5px solid var(--borde);padding:52px 5vw;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
@@ -599,6 +619,29 @@ footer{background:var(--texto);padding:44px 5vw 24px}
       <div class="test-stars">★★★★★</div>
       <div class="test-text" data-i18n="test_3_text">"Usé los scripts de negociación y pedí mi primer aumento. Me dijeron que sí. Literalmente cambió mi vida."</div>
       <div class="test-author"><div class="test-av" style="background:#B8943A">VR</div><div><div class="test-name">Valentina R.</div><div class="test-city">Diseñadora · Monterrey</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE MÍ -->
+<section class="about-section texture-dots" id="sobremi">
+  <div class="about-layout">
+    <div class="about-image">
+      <div class="about-avatar">
+        <div class="about-avatar-inner">L</div>
+      </div>
+      <div class="about-badge" data-i18n="about_role">Fundadora de Yayika</div>
+    </div>
+    <div class="about-content">
+      <div class="section-tag" data-i18n="about_tag">Sobre Laura</div>
+      <h2 class="about-title"><span data-i18n="about_title_1">Hola, soy</span> <em data-i18n="about_title_2">Laura</em></h2>
+      <p class="about-text" data-i18n="about_p1">Creé Yayika porque estaba cansada de ver a mujeres brillantes quedarse atrás por no tener las herramientas correctas.</p>
+      <p class="about-text" data-i18n="about_p2">Después de investigar sobre productividad femenina, el ciclo hormonal y psicología emocional, supe que podía crear algo diferente.</p>
+      <p class="about-text" data-i18n="about_p3">Hoy Yayika acompaña a más de 2,400 mujeres en 5 países a organizar su vida, mejorar sus finanzas y negociar con confianza.</p>
+      <div class="about-mission">
+        <div class="about-mission-label" data-i18n="about_mission">Nuestra misión</div>
+        <p class="about-mission-text" data-i18n="about_mission_text">Que ninguna mujer se quede atrás por no tener las herramientas correctas en el momento correcto.</p>
+      </div>
     </div>
   </div>
 </section>
