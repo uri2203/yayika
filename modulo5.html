@@ -11,10 +11,55 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--lila:#7B5EA7;--lila-l:#F0EBF8;--lila-d:#4E3470;--rosa:#C96B7A;--rosa-l:#FDF0F2;--oro:#B8943A;--oro-l:#FBF6E8;--verde:#3BAF7A;--verde-l:#E8F8F1;--verde-d:#1F7A4E;--turquesa:#1A9E8F;--turquesa-l:#E0F7F4;--turquesa-d:#0E7A6D;--teal:#1A9E8F;--teal-l:#E0F7F4;--bg:#F2F9F7;--card:#FDFCFB;--texto:#2C2240;--suave:#6B5F7A;--borde:rgba(42,140,122,0.15)}
-[data-theme="dark"]{--bg:#1A1030;--card:#231845;--texto:#E8E0F5;--suave:#9B8FB5;--borde:rgba(42,140,122,0.25);--lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;--verde-l:#1A3028;--teal-l:#1A3028}
+[data-theme="dark"]{--bg:#1A1030;--card:#231845;--texto:#E8E0F5;--suave:#9B8FB5;--borde:rgba(42,140,122,0.25);--lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;--verde-l:#1A3028;--teal-l:#1A3028;--turquesa-l:#0E2E2A;--lila-text:#D4B8F5;--turquesa-text:#5ED4C5}
 [data-theme="dark"] body{background:var(--bg);color:var(--texto)}
 [data-theme="dark"] nav{background:#0D0820}
 [data-theme="dark"] .sidebar{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .sb-title{color:var(--suave)}
+[data-theme="dark"] .sb-item{border-left-color:transparent}
+[data-theme="dark"] .sb-item:hover{background:var(--teal-l)}
+[data-theme="dark"] .sb-item.active{background:var(--teal-l);border-left-color:var(--teal)}
+[data-theme="dark"] .sb-text{color:var(--suave)}
+[data-theme="dark"] .sb-text.active{color:var(--turquesa-text);font-weight:500}
+[data-theme="dark"] .sb-divider{background:var(--borde)}
+[data-theme="dark"] .sb-xp{background:var(--teal-l)}
+[data-theme="dark"] .sb-xp-label{color:var(--suave)}
+[data-theme="dark"] .sb-xp-pts{color:var(--turquesa-text)}
+[data-theme="dark"] .module-badge{background:var(--teal-l);color:var(--turquesa-text)}
+[data-theme="dark"] .module-title{color:var(--texto)}
+[data-theme="dark"] .module-title em{color:var(--turquesa-text)}
+[data-theme="dark"] .module-subtitle{color:var(--suave)}
+[data-theme="dark"] .meta-pill{background:var(--card);border-color:var(--borde);color:var(--suave)}
+[data-theme="dark"] .section h2{color:var(--texto);border-bottom-color:var(--teal-l)}
+[data-theme="dark"] .section h3{color:var(--turquesa-text)}
+[data-theme="dark"] .section p{color:var(--suave)}
+[data-theme="dark"] .section ul li{color:var(--suave);border-color:var(--borde)}
+[data-theme="dark"] .callout.lila{background:var(--lila-l);border-color:var(--lila)}
+[data-theme="dark"] .callout.rosa{background:var(--rosa-l);border-color:var(--rosa)}
+[data-theme="dark"] .callout.oro{background:var(--oro-l);border-color:var(--oro)}
+[data-theme="dark"] .callout-title{color:var(--texto)}
+[data-theme="dark"] .phase-box{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .phase-box.active-phase{background:var(--teal-l);border-color:var(--teal)}
+[data-theme="dark"] .phase-name{color:var(--texto)}
+[data-theme="dark"] .phase-days{color:var(--suave)}
+[data-theme="dark"] .col-card{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .tracker{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .tracker-title{color:var(--texto)}
+[data-theme="dark"] .tracker-sub{color:var(--suave)}
+[data-theme="dark"] .tp{background:var(--card);color:var(--suave);border-color:var(--borde)}
+[data-theme="dark"] .tp.active-tp{background:var(--teal);color:white}
+[data-theme="dark"] .tracker-info{background:var(--teal-l)}
+[data-theme="dark"] .tracker-info h4{color:var(--turquesa-text)}
+[data-theme="dark"] .tracker-question label{color:var(--suave)}
+[data-theme="dark"] .tracker-question textarea{background:var(--card);color:var(--texto);border-color:var(--borde)}
+[data-theme="dark"] .btn-next{background:var(--teal);color:white}
+[data-theme="dark"] .btn-prev{background:var(--card);color:var(--turquesa-text);border-color:var(--turquesa-text)}
+[data-theme="dark"] .section p{color:var(--suave)}
+[data-theme="dark"] .section ul li{color:var(--suave);border-color:var(--borde)}
+[data-theme="dark"] .callout p{color:var(--suave)}
+[data-theme="dark"] .check-item{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .review-tool{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .meta-pill{background:var(--card)}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7}
 nav{background:#2C2240;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:white}.logo span{color:#A8E6D8}

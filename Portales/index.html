@@ -27,47 +27,140 @@
   --lila-text:#D4B8F5;--turquesa-text:#5ED4C5;
 }
 [data-theme="dark"] body{background:var(--bg);color:var(--texto)}
+
+/* LOGIN */
 [data-theme="dark"] .login-box{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .login-box .lb-title{color:var(--texto)}
+[data-theme="dark"] .login-box .lb-sub{color:var(--suave)}
+[data-theme="dark"] .login-box .form-label{color:var(--suave)}
+[data-theme="dark"] .login-box .form-input{background:var(--bg);color:var(--texto);border-color:var(--borde)}
+[data-theme="dark"] .login-box .form-input:focus{background:var(--card)}
+[data-theme="dark"] .login-box .forgot{color:var(--lila-text)}
+[data-theme="dark"] .login-divider{color:var(--suave)}
+[data-theme="dark"] .login-divider::before{background:var(--borde)}
 [data-theme="dark"] .login-divider span{background:var(--card)}
-[data-theme="dark"] nav{background:#0D0820}
-[data-theme="dark"] .dash-sidebar{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .dash-card,.stat-card{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .xp-progress{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .pl-item{background:var(--bg)}.pl-item:hover{background:var(--lila-l)}
-[data-theme="dark"] .form-input{background:var(--card);color:var(--texto);border-color:var(--borde)}
 [data-theme="dark"] .btn-google{background:var(--card);color:var(--texto);border-color:var(--borde)}
-[data-theme="dark"] .dash-header{background:var(--bg)}
-[data-theme="dark"] .stat-card h3{color:var(--suave)}
-[data-theme="dark"] .stat-card .stat-val{color:var(--turquesa-text)}
-[data-theme="dark"] .dash-card h2{color:var(--turquesa-text)}
-[data-theme="dark"] .greeting{color:var(--turquesa-text)}
-[data-theme="dark"] .cycle-card{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .cycle-phase{color:var(--turquesa-text)}
-[data-theme="dark"] .cycle-day{color:var(--lila-text)}
-[data-theme="dark"] .cycle-bar{background:var(--card)}
-[data-theme="dark"] .cycle-bar-fill{background:var(--turquesa)}
-[data-theme="dark"] .streak-badge{background:var(--lila-l);color:var(--turquesa-text)}
-[data-theme="dark"] .dash-card .btn-next{background:var(--turquesa);color:white}
-[data-theme="dark"] .dash-card .cc-btn{background:var(--turquesa);color:white}
-[data-theme="dark"] .ranking-list{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .ranking-item{border-bottom-color:var(--borde)}
-[data-theme="dark"] .activity-list{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .activity-item{border-bottom-color:var(--borde)}
+[data-theme="dark"] .btn-google:hover{background:var(--lila-l)}
+[data-theme="dark"] .login-register{color:var(--suave)}
+[data-theme="dark"] .login-register a{color:var(--lila-text)}
+[data-theme="dark"] .login-error{background:#3D1F2A;border-color:#5A2D3D;color:#FF8A8A}
+
+/* NAV */
+[data-theme="dark"] nav{background:#0D0820}
+[data-theme="dark"] .nav-username{color:rgba(255,255,255,0.7)}
+[data-theme="dark"] .nav-logout{color:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.15)}
+[data-theme="dark"] .nav-logout:hover{color:white;border-color:rgba(255,255,255,0.3)}
+[data-theme="dark"] .nav-notif{background:rgba(255,255,255,0.08)}
+[data-theme="dark"] .nav-notif-dot{border-color:#0D0820}
+
+/* SIDEBAR */
+[data-theme="dark"] .dash-sidebar{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .ds-section{color:var(--suave)}
+[data-theme="dark"] .ds-item{border-left-color:transparent}
+[data-theme="dark"] .ds-item:hover{background:var(--lila-l)}
+[data-theme="dark"] .ds-item.active{background:var(--turquesa-l);border-left-color:var(--turquesa)}
+[data-theme="dark"] .ds-item .ds-icon svg{stroke:var(--suave)}
+[data-theme="dark"] .ds-item.active .ds-icon svg{stroke:var(--turquesa-text)}
+[data-theme="dark"] .ds-item .ds-text{color:var(--suave)}
+[data-theme="dark"] .ds-item.active .ds-text{color:var(--turquesa-text);font-weight:500}
+[data-theme="dark"] .ds-badge{background:var(--rosa);color:white}
+[data-theme="dark"] .ds-divider{background:var(--borde)}
+[data-theme="dark"] .ds-streak{background:var(--turquesa-d)}
+
+/* DASHBOARD MAIN */
+[data-theme="dark"] .dash-main{background-image:radial-gradient(circle, rgba(26,158,143,0.02) 1px, transparent 1px);background-size:40px 40px}
+[data-theme="dark"] .dash-greeting{background:linear-gradient(135deg, var(--turquesa-l) 0%, transparent 60%)}
+[data-theme="dark"] .dg-sub{color:var(--suave)}
+[data-theme="dark"] .dg-title{color:var(--texto)}
+[data-theme="dark"] .dg-title span{color:var(--lila-text)}
+[data-theme="dark"] .dg-phase{background:var(--turquesa-l);color:var(--turquesa-text)}
+
+/* XP PROGRESS */
+[data-theme="dark"] .xp-progress{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .xp-level{color:var(--suave)}
+[data-theme="dark"] .xp-track{background:var(--lila-l)}
+[data-theme="dark"] .xp-val{color:var(--lila-text)}
+
+/* STAT CARDS */
+[data-theme="dark"] .stat-card{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .stat-card .sc-label{color:var(--suave)}
+
+/* DASH CARDS */
+[data-theme="dark"] .dash-card{background:var(--card);border-color:var(--borde)}
+[data-theme="dark"] .dc-title{color:var(--texto)}
+[data-theme="dark"] .dc-see{color:var(--lila-text)}
+
+/* CYCLE WIDGET */
+[data-theme="dark"] .cw-phase-name{color:var(--texto)}
+[data-theme="dark"] .cw-phase-desc{color:var(--suave)}
+[data-theme="dark"] .cw-dot{background:var(--lila-l)}
+[data-theme="dark"] .cw-dot.active{background:var(--lila-text)}
+[data-theme="dark"] .cw-dot.done{background:var(--suave)}
+[data-theme="dark"] .cw-days{color:var(--suave)}
+[data-theme="dark"] .cw-tip{background:var(--lila-l);color:var(--texto)}
+
+/* PRODUCTS LIST */
+[data-theme="dark"] .pl-item{background:var(--bg);color:var(--texto)}
+[data-theme="dark"] .pl-item:hover{background:var(--lila-l)}
+[data-theme="dark"] .pl-name{color:var(--texto)}
+[data-theme="dark"] .pl-prog{color:var(--suave)}
+[data-theme="dark"] .pl-bar-track{background:var(--lila-l)}
+[data-theme="dark"] .pl-pct{color:var(--lila-text)}
+
+/* RETOS */
+[data-theme="dark"] .reto-item{border-color:var(--borde)}
+[data-theme="dark"] .reto-check{border-color:var(--borde)}
+[data-theme="dark"] .reto-check:hover{border-color:var(--verde)}
+[data-theme="dark"] .reto-text{color:var(--texto)}
+[data-theme="dark"] .reto-text.done-text{color:var(--suave)}
+[data-theme="dark"] .reto-xp{color:var(--oro)}
+
+/* LIVE FEED */
+[data-theme="dark"] .live-pill{color:var(--verde)}
+[data-theme="dark"] .feed-text{color:var(--suave)}
+[data-theme="dark"] .feed-text strong{color:var(--texto)}
+[data-theme="dark"] .feed-time{color:rgba(123,94,167,0.4)}
+
+/* RANKING */
+[data-theme="dark"] .rank-item{border-color:var(--borde)}
+[data-theme="dark"] .rank-item.me{background:var(--lila-l)}
+[data-theme="dark"] .rank-pos{color:var(--suave)}
+[data-theme="dark"] .rank-name{color:var(--texto)}
+[data-theme="dark"] .rank-name.me-name{color:var(--lila-text);font-weight:500}
+[data-theme="dark"] .rank-pts{color:var(--lila-text)}
+
+/* RENEWAL */
+[data-theme="dark"] .renewal-card{background:var(--lila-d)}
+[data-theme="dark"] .rc-label{color:rgba(255,255,255,0.5)}
+[data-theme="dark"] .rc-date{color:white}
+[data-theme="dark"] .rc-promo{color:rgba(255,255,255,0.6)}
+[data-theme="dark"] .rc-btn{background:var(--turquesa);color:white}
+
+/* MEMBERSHIP CARD */
 [data-theme="dark"] .membership-card{background:var(--card);border-color:var(--borde)}
 [data-theme="dark"] .membership-badge{background:var(--turquesa-l);color:var(--turquesa-text)}
 [data-theme="dark"] .membership-plan-name{color:var(--turquesa-text)}
 [data-theme="dark"] .membership-status{color:var(--turquesa-text)}
 [data-theme="dark"] .membership-renewal{color:var(--suave)}
 [data-theme="dark"] .membership-btn{background:var(--turquesa);color:white}
+
+/* CHALLENGES */
 [data-theme="dark"] .challenge-card{background:var(--card);border-color:var(--borde)}
 [data-theme="dark"] .challenge-title{color:var(--turquesa-text)}
+
+/* CIRCLES */
 [data-theme="dark"] .circle-card{background:var(--card);border-color:var(--borde)}
 [data-theme="dark"] .circle-name{color:var(--turquesa-text)}
 [data-theme="dark"] .circle-members{color:var(--suave)}
+
+/* CHECK-IN MODAL */
 [data-theme="dark"] .checkin-step .label{color:var(--suave)}
 [data-theme="dark"] .mood-btn{background:var(--card);border-color:var(--borde)}
 [data-theme="dark"] .mood-btn.active{border-color:var(--turquesa);background:var(--turquesa-l)}
 [data-theme="dark"] .diary-input{background:var(--card);color:var(--texto);border-color:var(--borde)}
+
+/* XP TOAST */
+[data-theme="dark"] .xp-toast{background:var(--card);border-left-color:var(--oro)}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);min-height:100vh}
 
 /* ============ LOGIN ============ */
