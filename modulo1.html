@@ -254,24 +254,24 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
     <div class="nav-logo">Yay<span>ika</span></div>
   </div>
   <div class="nav-user">
-    <div class="nav-avatar">SL</div>
-    <span class="nav-name">Sofía L.</span>
+    <div class="nav-avatar" id="userAvatar">Y</div>
+    <span class="nav-name" id="userName">Yayika</span>
   </div>
 </nav>
 
 <div class="progress-bar">
-  <span class="pb-label">Ciclo Productiva</span>
-  <div class="pb-track"><div class="pb-fill" id="pbFill" style="width:20%"></div></div>
-  <span class="pb-pct" id="pbPct">Módulo 1 de 5</span>
+  <span class="pb-label">Ciclo Productivo</span>
+  <div class="pb-track"><div class="pb-fill" id="pbFill" style="width:5%"></div></div>
+  <span class="pb-pct" id="pbPct">Lección 1 de 10 — Módulo 1</span>
 </div>
 
 <div class="layout">
 
   <div class="sidebar">
-    <div class="sb-module-title">Ciclo Productiva</div>
+    <div class="sb-module-title">Módulo 1 · Ciclo Productivo</div>
     <div class="sb-item active">
       <div class="sb-check active-check">1</div>
-      <span class="sb-text active">Tu ciclo explicado</span>
+      <span class="sb-text active">Bienvenida</span>
     </div>
     <div class="sb-item">
       <div class="sb-check">2</div>
@@ -289,34 +289,63 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
       <div class="sb-check">5</div>
       <span class="sb-text">Fase Lútea</span>
     </div>
+    <div class="sb-item">
+      <div class="sb-check">6</div>
+      <span class="sb-text">Calendario personalizado</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">7</div>
+      <span class="sb-text">Planificación semanal</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">8</div>
+      <span class="sb-text">Energía vs Tiempo</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">9</div>
+      <span class="sb-text">Obstáculos</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">10</div>
+      <span class="sb-text">Plan de acción</span>
+    </div>
     <div class="sb-divider"></div>
     <div class="sb-xp">
       <div class="sb-xp-label">Tu progreso — XP acumulado</div>
-      <div class="sb-xp-track"><div class="sb-xp-fill" id="xpFill" style="width:12%"></div></div>
-      <div class="sb-xp-pts" id="xpPts">120 / 1000 XP</div>
+      <div class="sb-xp-track"><div class="sb-xp-fill" id="xpFill" style="width:5%"></div></div>
+      <div class="sb-xp-pts" id="xpPts">50 / 1000 XP</div>
     </div>
   </div>
 
   <div class="main">
 
     <div id="lessonContainer">
-    <div class="module-badge">📖 Módulo 1 · Introducción</div>
-    <h1 class="module-title">Tu ciclo explicado <em>sin tecnicismos</em></h1>
-    <p class="module-subtitle">Entiende qué pasa en tu cuerpo cada semana y por qué te sientes diferente — y cómo usarlo a tu favor.</p>
+    <div class="module-badge">📖 Módulo 1 · Lección 1</div>
+    <h1 class="module-title">Bienvenida: <em>Tu cuerpo tiene un ritmo</em></h1>
+    <p class="module-subtitle">Descubre el ritmo natural de tu cuerpo y cómo usarlo para ser más productiva.</p>
 
     <div class="meta-row">
-      <div class="meta-pill">⏱ 15 min de lectura</div>
-      <div class="meta-pill">🎯 1 ejercicio práctico</div>
-      <div class="meta-pill">⭐ +120 XP al completar</div>
+      <div class="meta-pill">⏱ 8 min</div>
+      <div class="meta-pill">🎬 Video + lectura</div>
+      <div class="meta-pill">⭐ +50 XP al completar</div>
+    </div>
+
+    <!-- VIDEO -->
+    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:24px;background:#000">
+      <video controls style="position:absolute;top:0;left:0;width:100%;height:100%" preload="metadata">
+        <source src="videos/modulo1/01-bienvenida.mp4" type="video/mp4">
+        Tu navegador no soporta video.
+      </video>
     </div>
 
     <div class="section">
       <h2>La verdad que nadie te contó</h2>
-      <p>El mundo laboral, educativo y social está diseñado para un ciclo de 24 horas — el ciclo circadiano masculino. Pero tu cuerpo funciona en un ciclo de 21 a 35 días con cuatro fases completamente distintas.</p>
-      <p>No eres inconsistente. No te falta disciplina. <strong>Nadie te enseñó tu propio manual de usuario.</strong></p>
+      <p>Tu cuerpo tiene un ritmo natural que afecta directamente tu energía, tu concentración y tu capacidad de trabajo. No es algo místico ni abstracto — es biología pura.</p>
+      <p>Durante cada mes, tu cuerpo pasa por cuatro fases distintas, y cada una trae consigo un nivel diferente de energía mental y física.</p>
+      <p>Las mujeres que aprenden a reconocer estas fases pueden planificar su trabajo de manera más inteligente: <strong>no se trata de trabajar más, sino de trabajar en el momento correcto.</strong></p>
       <div class="callout lila">
-        <div class="callout-title">🔬 Lo que la ciencia dice</div>
-        <p>Investigaciones de la Universidad de California encontraron que las mujeres en fase ovulatoria tienen hasta un 25% más de velocidad de procesamiento cognitivo. Eso no es aleatorio — es predecible. Y puedes usarlo.</p>
+        <div class="callout-title">🔬 Lo que aprenderás en este módulo</div>
+        <p>Identificar cada fase de tu ciclo, saber qué tipo de trabajo es ideal para cada momento, y crear un sistema de planificación que se adapte a tu cuerpo, no al revés.</p>
       </div>
     </div>
 
@@ -352,93 +381,39 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
       </div>
 
       <div id="phaseInfo0" class="callout lila" style="display:block">
-        <div class="callout-title">🌑 Fase Menstrual — Renovación</div>
-        <p><strong>Energía:</strong> Baja · <strong>Superpoder:</strong> Intuición y reflexión profunda<br>Es la semana de descansar e ir hacia adentro. Tu mente, aunque más lenta, tiene acceso a una claridad que no tienes en ninguna otra fase. Ideal para planear, reflexionar y soltar.</p>
+        <div class="callout-title">🌑 Fase Menstrual — Tu tiempo de descanso</div>
+        <p><strong>Energía:</strong> Baja · <strong>Superpoder:</strong> Claridad mental y reflexión<br>Tu cuerpo está eliminando el revestimiento uterino, pero tu cerebro entra en un estado de claridad sorprendente. Ideal para reflexión profunda, análisis de resultados y toma de decisiones importantes.</p>
       </div>
       <div id="phaseInfo1" class="callout rosa" style="display:none">
-        <div class="callout-title">🌒 Fase Folicular — Creatividad</div>
-        <p><strong>Energía:</strong> En aumento · <strong>Superpoder:</strong> Aprendizaje y nuevas ideas<br>El estrógeno sube y tu cerebro está en modo absorción. Es el mejor momento para estudiar, iniciar proyectos y tomar cursos. Tu creatividad está en su pico.</p>
+        <div class="callout-title">🌒 Fase Folicular — Tu energía creciente</div>
+        <p><strong>Energía:</strong> En aumento · <strong>Superpoder:</strong> Creatividad y aprendizaje<br>El estrógeno sube y tu cerebro está en modo absorción. Es el mejor momento para iniciar proyectos nuevos, aprender habilidades y hacer brainstorming.</p>
       </div>
       <div id="phaseInfo2" class="callout oro" style="display:none">
-        <div class="callout-title">🌕 Fase Ovulatoria — Liderazgo</div>
-        <p><strong>Energía:</strong> Máxima · <strong>Superpoder:</strong> Comunicación y persuasión<br>Tu energía, carisma y capacidad de comunicación están en su punto más alto. Es la semana para negociar, presentar, vender y conectar. Pide ese aumento ahora.</p>
+        <div class="callout-title">🌕 Fase Ovulatoria — Tu momento cumbre</div>
+        <p><strong>Energía:</strong> Máxima · <strong>Superpoder:</strong> Liderazgo y persuasión<br>Tu energía, carisma y capacidad de comunicación están en su punto más alto. Es el momento para reuniones importantes, presentaciones, negociaciones y ventas.</p>
       </div>
       <div id="phaseInfo3" class="callout verde" style="display:none">
-        <div class="callout-title">🌘 Fase Lútea — Detalle</div>
-        <p><strong>Energía:</strong> Variable · <strong>Superpoder:</strong> Pensamiento crítico y detalle<br>Tu cerebro cambia a modo analítico. Perfecta para revisar, editar, organizar y terminar lo que empezaste. Tu radar para lo que no funciona está muy afinado.</p>
+        <div class="callout-title">🌘 Fase Lútea — Tu modo organizador</div>
+        <p><strong>Energía:</strong> Variable · <strong>Superpoder:</strong> Detalle y cierre<br>Tu cerebro entra en modo "detalles y cierre". Perfecta para cerrar tareas, organizar archivos, revisar documentos y preparar reportes.</p>
       </div>
     </div>
 
     <div class="section">
-      <h2>Qué hacer en cada fase</h2>
-      <div class="two-col">
-        <div class="col-card si">
-          <div class="col-card-title">✅ Tareas que van con tu ciclo</div>
-          <ul>
-            <li>🌑 Menstrual → Planear, reflexionar, descansar</li>
-            <li>🌒 Folicular → Estudiar, crear, iniciar proyectos</li>
-            <li>🌕 Ovulatoria → Negociar, presentar, socializar</li>
-            <li>🌘 Lútea → Revisar, editar, organizar, terminar</li>
-          </ul>
-        </div>
-        <div class="col-card no">
-          <div class="col-card-title">❌ Errores más comunes</div>
-          <ul>
-            <li>Exigirte igual los 28 días del mes</li>
-            <li>Negociar en fase menstrual o lútea baja</li>
-            <li>Iniciar proyectos en fase lútea tardía</li>
-            <li>Comparar tu energía de hoy con la de la semana pasada</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Tu tracker interactivo</h2>
-      <div class="tracker">
-        <div class="tracker-title">¿En qué fase estás hoy?</div>
-        <div class="tracker-sub">Selecciona tu fase actual y responde las preguntas. Tus respuestas se guardan en tu perfil.</div>
-        <div class="tracker-phases">
-          <div class="tp" onclick="selectPhase(0)"><span class="tp-emoji">🌑</span>Menstrual</div>
-          <div class="tp" onclick="selectPhase(1)"><span class="tp-emoji">🌒</span>Folicular</div>
-          <div class="tp active-tp" onclick="selectPhase(2)"><span class="tp-emoji">🌕</span>Ovulatoria</div>
-          <div class="tp" onclick="selectPhase(3)"><span class="tp-emoji">🌘</span>Lútea</div>
-        </div>
-        <div id="trackerInfo" class="tracker-info visible">
-          <h4 id="trackerTitle">🌕 Fase Ovulatoria — tu momento de brillar</h4>
-          <p id="trackerDesc">Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes reuniones importantes esta semana? Es el momento perfecto.</p>
-        </div>
-        <div class="tracker-question">
-          <label>¿Cómo te sientes hoy en una palabra?</label>
-          <textarea id="q1" placeholder="Ej: energizada, cansada, creativa..."></textarea>
-        </div>
-        <div class="tracker-question">
-          <label>¿Qué tarea importante podrías hacer esta semana aprovechando tu fase?</label>
-          <textarea id="q2" placeholder="Escribe aquí..."></textarea>
-        </div>
-        <button class="tracker-save-btn" onclick="saveTracker()">Guardar mi registro de hoy</button>
-        <div class="saved-msg" id="savedMsg">✅ ¡Guardado! +20 XP sumados a tu cuenta</div>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Ejercicio — Tu mapa personal</h2>
+      <h2>Reflexión de esta lección</h2>
       <div class="ejercicio">
-        <h3>Mapea <em>tu</em> ciclo ahora</h3>
-        <p>Identifica el primer día de tu último período (ese es tu Día 1). Cuenta hacia adelante y escribe aquí en qué fase estás hoy y qué aprendes de eso.</p>
-        <div class="tracker-question" style="margin-bottom:10px">
-          <textarea id="ejercicio1" placeholder="Estoy en el día ___ de mi ciclo, lo que significa que estoy en la fase ___, y eso explica por qué esta semana me he sentido..." style="background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:12px;width:100%;font-family:Inter,sans-serif;font-size:13px;min-height:90px;resize:vertical"></textarea>
-        </div>
-        <button class="tracker-save-btn" onclick="saveEjercicio()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3)">Guardar mi reflexión +50 XP</button>
+        <h3>Escribe tu <em>reflexión</em></h3>
+        <p>¿Qué has aprendido sobre tu cuerpo que no sabías antes? ¿Cómo crees que podría mejorar tu productividad si planificas según tu fase?</p>
+        <textarea id="ejercicio1" placeholder="Escribe aquí tu reflexión..." style="background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:12px;width:100%;font-family:Inter,sans-serif;font-size:13px;min-height:90px;resize:vertical"></textarea>
+        <button class="tracker-save-btn" onclick="saveEjercicio()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);margin-top:12px">Guardar mi reflexión +50 XP</button>
       </div>
     </div>
 
     <div class="nav-btns">
       <button class="btn-prev" disabled>← Anterior</button>
-      <button class="btn-complete" onclick="completeModule()">
-        ✓ Completar módulo y ganar 120 XP
+      <button class="btn-complete" onclick="completeLesson()">
+        ✓ Completar lección +50 XP
       </button>
-      <button class="btn-next" onclick="nextModule()">Módulo 2 →</button>
+      <button class="btn-next" onclick="nextLesson()">Siguiente lección →</button>
     </div>
     </div><!-- /lessonContainer -->
   </div>
@@ -450,17 +425,16 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
 <script src="../js/theme.js"></script>
 <script src="../js/app.js"></script>
 <script>
-const phases=[
-  {title:'🌑 Fase Menstrual — Renovación',desc:'Energía baja pero intuición alta. Es tu semana de descansar, reflexionar y planear sin culpa.'},
-  {title:'🌒 Fase Folicular — Creatividad',desc:'Energía en aumento. Tu cerebro está en modo aprendizaje. Ideal para estudiar, crear e iniciar.'},
-  {title:'🌕 Fase Ovulatoria — Liderazgo',desc:'Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes reuniones importantes esta semana?'},
-  {title:'🌘 Fase Lútea — Detalle',desc:'Modo analítico. Perfecta para revisar, organizar y terminar lo que empezaste.'}
-];
-
 window.addEventListener('load', async () => {
   if (initSupabase()) {
     const session = await getSession();
-    if (session) { currentUser = session.user; applyUserToModule(); }
+    if (session) { 
+      currentUser = session.user; 
+      applyUserToModule();
+      const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Yayika';
+      document.getElementById('userName').textContent = name;
+      document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+    }
   }
 });
 
@@ -472,24 +446,6 @@ function showPhase(i){
     const el=document.getElementById('phaseInfo'+k);
     if(el) el.style.display=k===i?'block':'none';
   }
-}
-
-function selectPhase(i){
-  document.querySelectorAll('.tp').forEach((t,j)=>t.classList.toggle('active-tp',j===i));
-  const info=document.getElementById('trackerInfo');
-  document.getElementById('trackerTitle').textContent=phases[i].title;
-  document.getElementById('trackerDesc').textContent=phases[i].desc;
-  info.classList.add('visible');
-}
-
-function saveTracker(){
-  const q1=document.getElementById('q1').value;
-  const q2=document.getElementById('q2').value;
-  if(!q1&&!q2){alert('Escribe algo primero 😊');return;}
-  document.getElementById('savedMsg').style.display='block';
-  updateLocalXP(20);
-  moduleAddXP(20,'✅ +20 XP — Registro guardado');
-  setTimeout(()=>document.getElementById('savedMsg').style.display='none',3000);
 }
 
 function saveEjercicio(){
@@ -508,18 +464,21 @@ function updateLocalXP(pts){
   label.textContent=next+' / 1000 XP';
 }
 
-function completeModule(){
-  updateLocalXP(120);
-  moduleAddXP(120,'⭐ +120 XP — ¡Módulo 1 completado!');
-  document.getElementById('pbFill').style.width='40%';
-  document.getElementById('pbPct').textContent='Módulo 2 de 5';
+function completeLesson(){
+  updateLocalXP(50);
+  moduleAddXP(50,'⭐ +50 XP — ¡Lección completada!');
   const sb=document.querySelector('.sb-check.active-check');
   if(sb){sb.classList.remove('active-check');sb.classList.add('done');sb.textContent='✓';}
 }
 
-function nextModule(){
-  completeModule();
-  moduleCompleteAndNavigate(1, 120, 'modulo2.html');
+function nextLesson(){
+  completeLesson();
+  // Save progress to localStorage
+  const progress = JSON.parse(localStorage.getItem('yayika-course-progress') || '{}');
+  progress['ciclo-productiva-module1-lesson1'] = true;
+  localStorage.setItem('yayika-course-progress', JSON.stringify(progress));
+  // Navigate to next lesson (for now, stay on same page)
+  window.location.href = 'modulo1.html#lesson2';
 }
 </script>
 <script src="/js/courses.js"></script>

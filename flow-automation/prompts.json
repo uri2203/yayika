@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "bienvenida",
+    "prompt": "Cinematic close-up of a young professional woman sitting at a minimalist desk with a warm cup of coffee, morning golden light streaming through a window. She looks directly at the camera with a confident, welcoming smile. Soft bokeh background with plants and a planner. Warm, inviting color palette with purple and teal tones. 4K, smooth camera movement, shallow depth of field.",
+    "duration": "8s"
+  },
+  {
+    "id": 2,
+    "name": "mujer-trabajando",
+    "prompt": "Medium shot of a focused woman writing in a beautiful planner at a modern office desk, surrounded by organized sticky notes and a laptop. Natural daylight, productive atmosphere. Clean, aesthetic workspace with feminine touches. Warm color grading, slight camera dolly forward. Cinematic quality, 4K.",
+    "duration": "8s"
+  },
+  {
+    "id": 3,
+    "name": "calendario-ciclo",
+    "prompt": "Elegant animated calendar visualization showing a 28-day cycle with four distinct colored phases: deep purple for menstruation, soft pink for follicular phase, golden yellow for ovulation, and muted green for luteal phase. Clean minimalist design on white background. Smooth animated transitions between phases. Modern infographic style, soft shadows. 4K motion graphics.",
+    "duration": "10s"
+  },
+  {
+    "id": 4,
+    "name": "fase-menstrual",
+    "prompt": "Soft, calming scene of a woman resting on a cozy sofa with a warm blanket, holding a journal and pen. Warm ambient lighting, candles in the background, rainy window. Peaceful, introspective mood. Purple and deep blue color palette. Gentle camera movement. Cinematic, intimate atmosphere. 4K.",
+    "duration": "8s"
+  },
+  {
+    "id": 5,
+    "name": "fase-folicular",
+    "prompt": "Dynamic scene of a creative woman brainstorming at a whiteboard covered with colorful sticky notes and sketches. She is energized, smiling, writing ideas quickly. Bright, airy office with natural light. Pink and coral color accents. Upbeat, creative energy. Smooth tracking shot. 4K cinematic quality.",
+    "duration": "8s"
+  },
+  {
+    "id": 6,
+    "name": "fase-ovulatoria",
+    "prompt": "Confident woman leading a meeting at a modern conference table, presenting to colleagues with passion and authority. She gestures expressively, everyone is engaged. Professional setting with golden hour light from large windows. Warm, powerful color grading with gold and amber tones. Dynamic camera movement. 4K cinematic.",
+    "duration": "8s"
+  },
+  {
+    "id": 7,
+    "name": "fase-lutea",
+    "prompt": "Thoughtful woman at her desk reviewing documents and checking items off a to-do list. Organized workspace with completed projects stacked neatly. Evening light, warm lamp glow. Muted green and earth tones. Calm, focused, detail-oriented mood. Gentle camera push-in. 4K cinematic quality.",
+    "duration": "8s"
+  },
+  {
+    "id": 8,
+    "name": "mujeres-exitosas",
+    "prompt": "Montage-style sequence of diverse professional women succeeding in different fields: a doctor reviewing charts, an entrepreneur presenting to investors, a designer creating on a tablet, a teacher inspiring students. Each scene transitions smoothly. Empowering, aspirational mood. Warm golden and purple color grading. Cinematic quality, 4K.",
+    "duration": "8s"
+  },
+  {
+    "id": 9,
+    "name": "transformacion",
+    "prompt": "Before-and-after visual metaphor: split screen showing a stressed woman overwhelmed by chaos on the left with cold blue tones transforming into the same woman calmly organizing her week with confidence on the right with warm golden tones. Smooth transition from left to right. Cinematic quality, 4K. Empowering mood.",
+    "duration": "8s"
+  },
+  {
+    "id": 10,
+    "name": "cierre",
+    "prompt": "Young professional woman standing confidently looking out a window at a city skyline during golden hour. She turns to camera with a knowing smile. Warm, empowering light. Purple and gold color palette. Slow, cinematic dolly shot. Inspirational, hopeful mood. 4K quality.",
+    "duration": "8s"
+  }
+]
