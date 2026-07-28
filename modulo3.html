@@ -3,358 +3,361 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fase Folicular — Módulo 3 | Yayika</title>
+<title>La Mujer Que Negocia — Módulo 3 | Yayika</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
 <script defer data-domain="yayika.com" src="https://plausible.io/js/script.js"></script>
-<meta name="theme-color" content="#4E3470">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#C9A84C">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--lila:#7B5EA7;--lila-l:#F0EBF8;--lila-d:#4E3470;--rosa:#C96B7A;--rosa-l:#FDF0F2;--rosa-d:#A8485E;--oro:#B8943A;--oro-l:#FBF6E8;--verde:#3BAF7A;--verde-l:#E8F8F1;--verde-d:#1F7A4E;--turquesa:#1A9E8F;--turquesa-l:#E0F7F4;--turquesa-d:#0E7A6D;--bg:#F8F5FF;--card:#FDFCFB;--texto:#2C2240;--suave:#6B5F7A;--borde:rgba(123,94,167,0.13)}
-[data-theme="dark"]{--bg:#1A1030;--card:#231845;--texto:#E8E0F5;--suave:#9B8FB5;--borde:rgba(123,94,167,0.25);--lila-l:#2D2055;--rosa-l:#3D1F2A;--oro-l:#3D3018;--verde-l:#1A3028;--turquesa-l:#0E2E2A;--lila-text:#D4B8F5;--turquesa-text:#5ED4C5}
+:root{
+  --oro:#C9A84C;--oro-l:#FBF5E6;--oro-d:#8B6B1E;
+  --turquesa:#1A9E8F;--turquesa-l:#E0F7F4;--turquesa-d:#0E7A6D;
+  --rosa:#D4788A;--rosa-l:#FAF0F2;
+  --verde:#3BAF7A;--verde-l:#E8F8F1;
+  --lila:#7C5CBF;--lila-l:#EDE8F9;--lila-d:#5A3E9B;
+  --bg:#FDF8F0;--card:#FDFCFB;--texto:#3A2F1A;--suave:#7A6B4A;--borde:rgba(201,168,76,0.13)
+}
+[data-theme="dark"]{--bg:#1A1510;--card:#2A2218;--texto:#F0E8D8;--suave:#A89870;--borde:rgba(201,168,76,0.25);--oro-l:#3D3018;--turquesa-l:#0E2E2A;--rosa-l:#3D1F2A;--verde-l:#1A3028;--lila-l:#2D2055}
 [data-theme="dark"] body{background:var(--bg);color:var(--texto)}
-[data-theme="dark"] nav{background:#0D0820}
+[data-theme="dark"] nav{background:#151008}
 [data-theme="dark"] .sidebar{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .sb-title{color:var(--suave)}
+[data-theme="dark"] .sb-module-title{color:var(--suave)}
 [data-theme="dark"] .sb-item{border-left-color:transparent}
-[data-theme="dark"] .sb-item:hover{background:var(--rosa-l)}
-[data-theme="dark"] .sb-item.active{background:var(--rosa-l);border-left-color:var(--rosa)}
+[data-theme="dark"] .sb-item:hover{background:var(--oro-l)}
+[data-theme="dark"] .sb-item.active{background:var(--oro-l);border-left-color:var(--oro)}
 [data-theme="dark"] .sb-text{color:var(--suave)}
-[data-theme="dark"] .sb-text.active{color:var(--rosa);font-weight:500}
+[data-theme="dark"] .sb-text.active{color:var(--oro);font-weight:500}
 [data-theme="dark"] .sb-divider{background:var(--borde)}
-[data-theme="dark"] .sb-xp{background:var(--rosa-l)}
+[data-theme="dark"] .sb-xp{background:var(--oro-l)}
 [data-theme="dark"] .sb-xp-label{color:var(--suave)}
-[data-theme="dark"] .sb-xp-pts{color:var(--rosa)}
-[data-theme="dark"] .module-badge{background:var(--rosa-l);color:var(--rosa)}
+[data-theme="dark"] .sb-xp-pts{color:var(--oro)}
+[data-theme="dark"] .module-badge{background:var(--oro-l);color:var(--oro)}
 [data-theme="dark"] .module-title{color:var(--texto)}
-[data-theme="dark"] .module-title em{color:var(--rosa)}
+[data-theme="dark"] .module-title em{color:var(--oro)}
 [data-theme="dark"] .module-subtitle{color:var(--suave)}
 [data-theme="dark"] .meta-pill{background:var(--card);border-color:var(--borde);color:var(--suave)}
-[data-theme="dark"] .section h2{color:var(--texto);border-bottom-color:var(--rosa-l)}
-[data-theme="dark"] .section h3{color:var(--rosa)}
+[data-theme="dark"] .section h2{color:var(--texto);border-bottom-color:var(--oro-l)}
+[data-theme="dark"] .section h3{color:var(--oro)}
 [data-theme="dark"] .section p{color:var(--suave)}
 [data-theme="dark"] .section ul li{color:var(--suave);border-color:var(--borde)}
-[data-theme="dark"] .callout.lila{background:var(--lila-l);border-color:var(--lila)}
-[data-theme="dark"] .callout.rosa{background:var(--rosa-l);border-color:var(--rosa)}
+[data-theme="dark"] .section ul li::before{color:var(--oro)}
 [data-theme="dark"] .callout.oro{background:var(--oro-l);border-color:var(--oro)}
+[data-theme="dark"] .callout.turquesa{background:var(--turquesa-l);border-color:var(--turquesa)}
+[data-theme="dark"] .callout.rosa{background:var(--rosa-l);border-color:var(--rosa)}
+[data-theme="dark"] .callout.verde{background:var(--verde-l);border-color:var(--verde)}
 [data-theme="dark"] .callout-title{color:var(--texto)}
-[data-theme="dark"] .phase-box{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .phase-box.active-phase{background:var(--rosa-l);border-color:var(--rosa)}
-[data-theme="dark"] .phase-name{color:var(--texto)}
-[data-theme="dark"] .phase-days{color:var(--suave)}
-[data-theme="dark"] .col-card{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .tracker{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .tracker-title{color:var(--texto)}
-[data-theme="dark"] .tracker-sub{color:var(--suave)}
-[data-theme="dark"] .tp{background:var(--card);color:var(--suave);border-color:var(--borde)}
-[data-theme="dark"] .tp.active-tp{background:var(--rosa);color:white}
-[data-theme="dark"] .tracker-info{background:var(--rosa-l)}
-[data-theme="dark"] .tracker-info h4{color:var(--rosa)}
-[data-theme="dark"] .tracker-question label{color:var(--suave)}
-[data-theme="dark"] .tracker-question textarea{background:var(--card);color:var(--texto);border-color:var(--borde)}
-[data-theme="dark"] .btn-next{background:var(--rosa);color:white}
-[data-theme="dark"] .btn-prev{background:var(--card);color:var(--rosa);border-color:var(--rosa)}
-[data-theme="dark"] .section p{color:var(--suave)}
-[data-theme="dark"] .section ul li{color:var(--suave);border-color:var(--borde)}
 [data-theme="dark"] .callout p{color:var(--suave)}
-[data-theme="dark"] .col-card{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .col-card ul li{color:var(--suave);border-color:var(--borde)}
-[data-theme="dark"] .idea-card{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .brainstorm-area{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .ew-item{background:var(--card);border-color:var(--borde)}
-[data-theme="dark"] .meta-pill{background:var(--card)}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7}
-nav{background:#2C2240;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:white}.logo span{color:#D4B8F5}
-.nav-back{font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;margin-right:16px}.nav-back:hover{color:white}
+[data-theme="dark"] .btn-next{background:var(--oro);color:white}
+[data-theme="dark"] .btn-prev{background:var(--card);color:var(--oro);border-color:var(--oro)}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--texto);font-size:15px;line-height:1.7}
+nav{background:#3A2F1A;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white}
+.nav-logo span{color:#F0D88A}
 .nav-user{display:flex;align-items:center;gap:10px}
-.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--lila);color:white;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--oro);color:white;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
 .nav-name{font-size:13px;color:rgba(255,255,255,0.7)}
-.progress-bar{background:#1A1030;padding:10px 24px;display:flex;align-items:center;gap:12px}
-.pb-label{font-size:11px;color:rgba(255,255,255,0.4)}.pb-track{flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:50px;overflow:hidden}.pb-fill{height:100%;background:var(--rosa);border-radius:50px}.pb-pct{font-size:11px;color:var(--rosa);font-weight:500}
-.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 100px)}
+.nav-back{font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;margin-right:16px}
+.nav-back:hover{color:white}
+.progress-bar{background:#1A1510;padding:10px 28px;display:flex;align-items:center;gap:12px}
+.pb-label{font-size:11px;color:rgba(255,255,255,0.4)}
+.pb-track{flex:1;height:5px;background:rgba(255,255,255,0.1);border-radius:50px;overflow:hidden}
+.pb-fill{height:100%;background:var(--oro);border-radius:50px;transition:width 0.5s}
+.pb-pct{font-size:11px;color:var(--oro);font-weight:500}
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 100px)}
 .sidebar{background:white;border-right:0.5px solid var(--borde);padding:20px 0}
-.sb-title{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--suave);text-transform:uppercase;padding:0 16px;margin-bottom:8px}
-.sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s}
-.sb-item:hover{background:var(--lila-l)}.sb-item.done-item{opacity:0.7}.sb-item.active{background:var(--rosa-l);border-left-color:var(--rosa)}
+.sb-module-title{font-size:10px;font-weight:600;letter-spacing:1.2px;color:var(--suave);text-transform:uppercase;padding:0 18px;margin-bottom:8px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s}
+.sb-item:hover{background:var(--oro-l)}
+.sb-item.active{background:var(--oro-l);border-left-color:var(--oro)}
 .sb-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--borde);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
-.sb-check.done{background:var(--verde);border-color:var(--verde);color:white}.sb-check.curr{border-color:var(--rosa);background:var(--rosa-l);color:var(--rosa-d);font-weight:600}
-.sb-text{font-size:12px;color:var(--texto)}.sb-text.active{color:var(--rosa-d);font-weight:500}
-.sb-divider{height:0.5px;background:var(--borde);margin:10px 16px}
-.sb-xp{margin:14px;background:var(--rosa-l);border-radius:10px;padding:10px 12px}
-.sb-xp-label{font-size:10px;color:var(--suave);margin-bottom:4px}.sb-xp-track{height:5px;background:rgba(201,107,122,0.15);border-radius:50px;overflow:hidden;margin-bottom:4px}.sb-xp-fill{height:100%;background:var(--rosa);border-radius:50px}.sb-xp-pts{font-size:11px;font-weight:500;color:var(--rosa-d)}
-.main{padding:28px 36px;max-width:760px}
-.module-badge{display:inline-flex;align-items:center;gap:6px;background:var(--rosa-l);color:var(--rosa-d);font-size:11px;font-weight:500;padding:5px 12px;border-radius:100px;margin-bottom:12px}
-.module-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--texto);margin-bottom:6px;line-height:1.2}
-.module-title em{color:var(--rosa);font-style:italic}
-.module-subtitle{font-size:14px;color:var(--suave);margin-bottom:22px}
-.meta-row{display:flex;gap:10px;margin-bottom:26px;flex-wrap:wrap}
-.meta-pill{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--suave);background:white;border:0.5px solid var(--borde);border-radius:100px;padding:4px 12px}
-.section{margin-bottom:32px}
-.section h2{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;color:var(--texto);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--rosa-l)}
-.section h3{font-size:15px;font-weight:500;color:var(--rosa-d);margin:16px 0 8px}
-.section p{color:#444;margin-bottom:10px;line-height:1.75;font-size:14px}
-.section ul{padding-left:0;list-style:none;margin-bottom:12px}
-.section ul li{padding:6px 0 6px 22px;position:relative;color:#444;border-bottom:0.5px solid var(--borde);font-size:13px;line-height:1.5}
+.sb-check.done{background:var(--verde);border-color:var(--verde);color:white}
+.sb-check.active-check{border-color:var(--oro);background:var(--oro-l)}
+.sb-text{font-size:12px;color:var(--texto)}
+.sb-text.active{color:var(--oro-d);font-weight:500}
+.sb-divider{height:0.5px;background:var(--borde);margin:12px 18px}
+.sb-xp{margin:16px;background:var(--oro-l);border-radius:10px;padding:10px 12px}
+.sb-xp-label{font-size:10px;color:var(--suave);margin-bottom:4px}
+.sb-xp-track{height:5px;background:rgba(201,168,76,0.15);border-radius:50px;overflow:hidden;margin-bottom:4px}
+.sb-xp-fill{height:100%;background:var(--oro);border-radius:50px}
+.sb-xp-pts{font-size:11px;font-weight:500;color:var(--oro-d)}
+.main{padding:32px 40px;max-width:780px}
+.module-badge{display:inline-flex;align-items:center;gap:6px;background:var(--oro-l);color:var(--oro-d);font-size:11px;font-weight:500;padding:5px 12px;border-radius:50px;margin-bottom:14px}
+.module-title{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--texto);margin-bottom:6px;line-height:1.2}
+.module-title em{color:var(--oro);font-style:italic}
+.module-subtitle{font-size:15px;color:var(--suave);margin-bottom:24px}
+.meta-row{display:flex;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.meta-pill{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--suave);background:white;border:0.5px solid var(--borde);border-radius:50px;padding:4px 12px}
+.section{margin-bottom:36px}
+.section h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--texto);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--oro-l)}
+.section h3{font-size:16px;font-weight:500;color:var(--oro-d);margin:18px 0 10px}
+.section p{color:#444;margin-bottom:12px;line-height:1.75}
+.section ul{padding-left:0;list-style:none;margin-bottom:14px}
+.section ul li{padding:6px 0 6px 24px;position:relative;color:#444;border-bottom:0.5px solid var(--borde);font-size:14px}
 .section ul li:last-child{border-bottom:none}
-.section ul li::before{content:'→';position:absolute;left:0;color:var(--rosa);font-size:11px;top:8px}
-.callout{border-radius:12px;padding:14px 18px;margin:14px 0}
-.callout.rosa{background:var(--rosa-l);border-left:3px solid var(--rosa)}.callout.lila{background:var(--lila-l);border-left:3px solid var(--lila)}.callout.oro{background:var(--oro-l);border-left:3px solid var(--oro)}.callout.verde{background:var(--verde-l);border-left:3px solid var(--verde)}
-.callout-title{font-size:13px;font-weight:600;margin-bottom:5px}
-.callout.rosa .callout-title{color:var(--rosa-d)}.callout.lila .callout-title{color:var(--lila-d)}.callout.oro .callout-title{color:var(--oro)}.callout.verde .callout-title{color:var(--verde-d)}
-.callout p{font-size:13px;margin:0;line-height:1.6;color:#444}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.section ul li::before{content:'→';position:absolute;left:0;color:var(--oro);font-size:12px;top:8px}
+.callout{border-radius:12px;padding:16px 20px;margin:18px 0}
+.callout.oro{background:var(--oro-l);border-left:3px solid var(--oro)}
+.callout.turquesa{background:var(--turquesa-l);border-left:3px solid var(--turquesa)}
+.callout.rosa{background:var(--rosa-l);border-left:3px solid var(--rosa)}
+.callout.verde{background:var(--verde-l);border-left:3px solid var(--verde)}
+.callout-title{font-size:13px;font-weight:600;margin-bottom:6px}
+.callout.oro .callout-title{color:var(--oro-d)}
+.callout.turquesa .callout-title{color:var(--turquesa-d)}
+.callout.rosa .callout-title{color:#A8485E}
+.callout.verde .callout-title{color:#1F7A4E}
+.callout p{font-size:13px;margin:0;line-height:1.6}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
 .col-card{background:white;border:0.5px solid var(--borde);border-radius:12px;padding:14px}
-.col-card.si{border-top:3px solid var(--verde)}.col-card.no{border-top:3px solid var(--rosa)}
-.col-card-title{font-size:12px;font-weight:600;margin-bottom:8px}
-.col-card.si .col-card-title{color:var(--verde-d)}.col-card.no .col-card-title{color:var(--rosa-d)}
+.col-card.si{border-top:3px solid var(--verde)}
+.col-card.no{border-top:3px solid var(--rosa)}
+.col-card-title{font-size:12px;font-weight:600;margin-bottom:10px}
+.col-card.si .col-card-title{color:#1F7A4E}
+.col-card.no .col-card-title{color:#A8485E}
 .col-card ul{list-style:none;padding:0;margin:0}
-.col-card ul li{font-size:12px;color:#555;padding:4px 0;border-bottom:0.5px solid var(--borde);line-height:1.4}
+.col-card ul li{font-size:12px;color:#555;padding:5px 0;border-bottom:0.5px solid var(--borde);line-height:1.4}
 .col-card ul li:last-child{border-bottom:none}
-/* IDEAS BOARD */
-.ideas-board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
-.idea-card{background:white;border:0.5px solid var(--borde);border-radius:12px;padding:14px;cursor:pointer;transition:all 0.15s}
-.idea-card:hover{border-color:var(--rosa);background:var(--rosa-l)}
-.idea-card.saved{border-color:var(--verde);background:var(--verde-l)}
-.ic-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
-.ic-icon.rosa{background:var(--rosa-l)}.ic-icon.lila{background:var(--lila-l)}.ic-icon.oro{background:var(--oro-l)}
-.ic-icon svg{width:18px;height:18px}
-.ic-name{font-size:12px;font-weight:500;color:var(--texto);margin-bottom:3px}
-.ic-desc{font-size:11px;color:var(--suave);line-height:1.4}
-.ic-action{font-size:10px;color:var(--verde-d);margin-top:6px;display:none;font-weight:500}
-.idea-card.saved .ic-action{display:block}
-/* BRAINSTORM */
-.brainstorm-area{background:white;border:0.5px solid var(--borde);border-radius:14px;padding:18px;margin:14px 0}
-.ba-title{font-size:14px;font-weight:500;color:var(--texto);margin-bottom:4px}
-.ba-sub{font-size:12px;color:var(--suave);margin-bottom:14px}
-.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.ba-input{border:0.5px solid var(--borde);border-radius:8px;padding:10px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--texto);resize:none;min-height:70px;width:100%}
-.ba-input:focus{outline:none;border-color:var(--rosa)}
-.ba-prompt{font-size:11px;color:var(--suave);margin-bottom:4px;font-style:italic}
-.save-btn{background:var(--rosa);color:white;border:none;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer;width:100%}
-/* ENERGY WHEEL */
-.energy-wheel{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
-.ew-item{background:white;border:0.5px solid var(--borde);border-radius:10px;padding:10px;text-align:center}
-.ew-item.highlight{background:var(--rosa-l);border-color:rgba(201,107,122,0.3)}
-.ew-val{font-size:22px;font-weight:600;color:var(--rosa-d);display:block}
-.ew-label{font-size:10px;color:var(--suave);margin-top:2px;line-height:1.3}
-.ew-bar{height:4px;background:var(--rosa-l);border-radius:50px;overflow:hidden;margin-top:6px}
-.ew-fill{height:100%;border-radius:50px;background:var(--rosa)}
-/* NAV BTNS */
-.nav-btns{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-top:0.5px solid var(--borde);margin-top:18px}
-.btn-prev{background:white;color:var(--lila);border:1px solid var(--lila);padding:10px 20px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
-.btn-next{background:var(--turquesa);color:white;border:none;padding:10px 26px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
-.btn-complete{background:var(--verde);color:white;border:none;padding:10px 22px;border-radius:100px;font-size:13px;font-weight:500;cursor:pointer}
-.xp-toast{display:none;position:fixed;bottom:20px;right:20px;background:#2C2240;color:white;padding:12px 18px;border-radius:12px;font-size:13px;z-index:999;border-left:3px solid var(--oro)}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px}.two-col,.ba-grid,.ideas-board{grid-template-columns:1fr}.energy-wheel{grid-template-columns:repeat(2,1fr)}}
+.ejercicio{background:#3A2F1A;border-radius:16px;padding:24px;color:white;margin:18px 0}
+.ejercicio h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:8px}
+.ejercicio h3 em{color:#F0D88A;font-style:italic}
+.ejercicio p{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:14px}
+.ejercicio textarea{width:100%;background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px;color:white;font-family:'Inter',sans-serif;font-size:13px;resize:vertical;min-height:90px}
+.ejercicio textarea::placeholder{color:rgba(255,255,255,0.3)}
+.ejercicio textarea:focus{outline:none;border-color:rgba(240,216,138,0.5)}
+.nav-btns{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-top:0.5px solid var(--borde);margin-top:20px}
+.btn-prev{background:white;color:var(--oro);border:1px solid var(--oro);padding:10px 22px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-next{background:var(--oro);color:white;border:none;padding:10px 28px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-next:hover{background:var(--oro-d)}
+.btn-complete{background:var(--verde);color:white;border:none;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px}
+.xp-toast{display:none;position:fixed;bottom:24px;right:24px;background:#3A2F1A;color:white;padding:12px 20px;border-radius:12px;font-size:13px;z-index:999;border-left:3px solid var(--oro)}
+@media(max-width:700px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{padding:20px}
+  .two-col{grid-template-columns:1fr}
+}
+.lesson-header{margin-bottom:24px}
+.lesson-badge{display:inline-block;background:var(--oro-l);color:var(--oro-text);font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:12px}
+.lesson-header h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--texto)}
+.video-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:20px}
+.video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%}
+.lesson-content{background:white;border:1px solid var(--borde);border-radius:16px;padding:28px;line-height:1.8}
+.exercise-box{background:linear-gradient(135deg,#C9A84C,#A88A2C);border-radius:16px;padding:28px;color:white}
+.exercise-box p{font-size:15px;margin-bottom:16px;line-height:1.6}
+.exercise-box textarea{width:100%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:12px;padding:14px;color:white;font-family:'Inter',sans-serif;font-size:14px;resize:vertical;min-height:120px}
+.exercise-box textarea::placeholder{color:rgba(255,255,255,0.4)}
+.btn-save{margin-top:12px;background:white;color:var(--oro);border:none;padding:10px 24px;border-radius:50px;font-weight:600;cursor:pointer;font-size:13px}
+.quiz-box{background:white;border:1px solid var(--borde);border-radius:16px;padding:28px}
+.quiz-question{font-size:17px;font-weight:600;color:var(--texto);margin-bottom:16px}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-opt{background:var(--oro-l);border:2px solid transparent;border-radius:12px;padding:14px 18px;text-align:left;font-size:14px;color:var(--texto);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.quiz-opt:hover{border-color:var(--oro)}
+.quiz-opt.correct{background:#D4EDDA;border-color:#1A9E8F;color:#155724}
+.quiz-opt.incorrect{background:#F8D7DA;border-color:#E74C3C;color:#721C24}
+.quiz-feedback{margin-top:14px;font-size:14px;line-height:1.6}
+.loading-text{color:var(--suave);font-style:italic}
 </style>
 </head>
 <body>
+
 <nav>
-  <div style="display:flex;align-items:center;gap:14px">
-    <a href="modulo2.html" class="nav-back">← Módulo 2</a>
-    <div class="logo">Yay<span>ika</span></div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="Portales/index.html" class="nav-back">← Mi portal</a>
+    <div class="nav-logo">Yay<span>ika</span></div>
   </div>
-  <div class="nav-user"><div class="nav-avatar">SL</div><span class="nav-name">Sofía L.</span></div>
+  <div class="nav-user">
+    <div class="nav-avatar" id="userAvatar">Y</div>
+    <span class="nav-name" id="userName">Yayika</span>
+  </div>
 </nav>
+
 <div class="progress-bar">
-  <span class="pb-label">Ciclo Productiva</span>
-  <div class="pb-track"><div class="pb-fill" style="width:60%"></div></div>
-  <span class="pb-pct">Módulo 3 de 5</span>
+  <span class="pb-label">La Mujer Que Negocia</span>
+  <div class="pb-track"><div class="pb-fill" id="pbFill" style="width:5%"></div></div>
+  <span class="pb-pct" id="pbPct">Lección 1 de 10 — Módulo 3</span>
 </div>
+
 <div class="layout">
+
   <div class="sidebar">
-    <div class="sb-title">Ciclo Productiva</div>
-    <div class="sb-item done-item"><div class="sb-check done">✓</div><span class="sb-text">Tu ciclo explicado</span></div>
-    <div class="sb-item done-item"><div class="sb-check done">✓</div><span class="sb-text">Fase Menstrual</span></div>
-    <div class="sb-item active"><div class="sb-check curr">3</div><span class="sb-text active">Fase Folicular</span></div>
-    <div class="sb-item"><div class="sb-check">4</div><span class="sb-text">Fase Ovulatoria</span></div>
-    <div class="sb-item"><div class="sb-check">5</div><span class="sb-text">Fase Lútea</span></div>
+    <div class="sb-module-title">Módulo 3 · La Mujer Que Negocia</div>
+    <div class="sb-item active">
+      <div class="sb-check active-check">1</div>
+      <span class="sb-text active">Bienvenida</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">2</div>
+      <span class="sb-text">Confianza</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">3</div>
+      <span class="sb-text">Negociación salarial</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">4</div>
+      <span class="sb-text">Vida cotidiana</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">5</div>
+      <span class="sb-text">Comunicación asertiva</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">6</div>
+      <span class="sb-text">Poder femenino</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">7</div>
+      <span class="sb-text">Errores comunes</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">8</div>
+      <span class="sb-text">Networking</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">9</div>
+      <span class="sb-text">Negociación en pareja</span>
+    </div>
+    <div class="sb-item">
+      <div class="sb-check">10</div>
+      <span class="sb-text">Plan de acción</span>
+    </div>
     <div class="sb-divider"></div>
     <div class="sb-xp">
-      <div class="sb-xp-label">XP acumulado</div>
-      <div class="sb-xp-track"><div class="sb-xp-fill" id="xpFill" style="width:39%"></div></div>
-      <div class="sb-xp-pts" id="xpPts">390 / 1000 XP</div>
+      <div class="sb-xp-label">Tu progreso — XP acumulado</div>
+      <div class="sb-xp-track"><div class="sb-xp-fill" id="xpFill" style="width:5%"></div></div>
+      <div class="sb-xp-pts" id="xpPts">50 / 1000 XP</div>
     </div>
   </div>
+
   <div class="main">
-    <div class="module-badge">🌒 Módulo 3 · Fase Folicular</div>
-    <h1 class="module-title">La semana de <em>crear y aprender</em></h1>
-    <p class="module-subtitle">Tu energía está en ascenso. Tu mente, más abierta que nunca. Es hora de empezar.</p>
+
+    <div id="lessonContainer">
+    <div class="module-badge">📖 Módulo 3 · Lección 1</div>
+    <h1 class="module-title">Bienvenida: <em>El poder de negociar</em></h1>
+    <p class="module-subtitle">Desarrolla la confianza y las habilidades para negociar tu valor en cualquier situación.</p>
+
     <div class="meta-row">
-      <div class="meta-pill">⏱ 18 min</div>
-      <div class="meta-pill">🧠 Tablero de ideas</div>
-      <div class="meta-pill">✍️ Brainstorm guiado</div>
-      <div class="meta-pill">⭐ +150 XP</div>
+      <div class="meta-pill">⏱ 8 min</div>
+      <div class="meta-pill">🎬 Video + lectura</div>
+      <div class="meta-pill">⭐ +50 XP al completar</div>
+    </div>
+
+    <!-- VIDEO -->
+    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:24px;background:#000">
+      <video controls style="position:absolute;top:0;left:0;width:100%;height:100%" preload="metadata">
+        <source src="videos/modulo3/01-bienvenida.mp4" type="video/mp4">
+        Tu navegador no soporta video.
+      </video>
     </div>
 
     <div class="section">
-      <h2>Lo que pasa en tu cuerpo</h2>
-      <p>El estrógeno sube de forma progresiva y con él tu energía, tu creatividad y tu apertura a lo nuevo. Es la fase de renacimiento — tu cerebro literalmente forma nuevas conexiones neuronales más fácilmente.</p>
-      <div class="energy-wheel">
-        <div class="ew-item highlight"><span class="ew-val">↑↑</span><div class="ew-label">Estrógeno subiendo</div><div class="ew-bar"><div class="ew-fill" style="width:65%"></div></div></div>
-        <div class="ew-item highlight"><span class="ew-val">Alta</span><div class="ew-label">Creatividad</div><div class="ew-bar"><div class="ew-fill" style="width:80%"></div></div></div>
-        <div class="ew-item highlight"><span class="ew-val">Alta</span><div class="ew-label">Memoria</div><div class="ew-bar"><div class="ew-fill" style="width:75%"></div></div></div>
-        <div class="ew-item highlight"><span class="ew-val">Alta</span><div class="ew-label">Motivación</div><div class="ew-bar"><div class="ew-fill" style="width:70%"></div></div></div>
-      </div>
-      <div class="callout rosa">
-        <div class="callout-title">🔬 La neurociencia lo confirma</div>
-        <p>El estrógeno potencia la dopamina — el neurotransmisor del placer y la motivación. Tu cerebro en fase folicular está literalmente más dispuesto a explorar, aprender y arriesgarse. No es entusiasmo aleatorio: es biología.</p>
+      <h2>Negociar es comunicar tu valor</h2>
+      <p>Negociar no es confrontar — es comunicar tu valor de manera clara y confiada. Las mujeres negocian menos que los hombres, y cuando lo hacen, piden menos.</p>
+      <p>Esto cuesta miles de dólares al año. Pero tiene solución.</p>
+      <p>En este módulo aprenderás a negociar tu salario, tus tarifas, tus condiciones de trabajo, y cualquier situación donde necesites defender tu valor.</p>
+      <div class="callout oro">
+        <div class="callout-title">💰 Lo que aprenderás en este módulo</div>
+        <p>Construir confianza para negociar, técnicas de negociación salarial, comunicación asertiva, networking estratégico y negociación en pareja.</p>
       </div>
     </div>
 
     <div class="section">
-      <h2>Tu superpoder esta semana</h2>
-      <p>La fase folicular es tu ventana de aprendizaje óptimo. Si alguna vez has sentido que hay semanas en que estudiar se te hace fácil y otras que es un martirio — ahora ya sabes por qué.</p>
+      <h2>¿Por qué las mujeres negocian menos?</h2>
       <div class="two-col">
-        <div class="col-card si">
-          <div class="col-card-title">✅ Perfecto para esta fase</div>
-          <ul>
-            <li>Estudiar habilidades nuevas</li>
-            <li>Iniciar proyectos desde cero</li>
-            <li>Tomar cursos y talleres</li>
-            <li>Brainstorming y lluvia de ideas</li>
-            <li>Proponer ideas en el trabajo</li>
-            <li>Establecer nuevos hábitos</li>
-            <li>Escribir y crear contenido</li>
-          </ul>
-        </div>
         <div class="col-card no">
-          <div class="col-card-title">⚠️ Cuidado con esto</div>
+          <div class="col-card-title">❌ Las barreras</div>
           <ul>
-            <li>Comprometerte con demasiados proyectos — la energía alta puede hacerte sobreestimar</li>
-            <li>Guardar las grandes negociaciones para la fase siguiente (Ovulatoria)</li>
-            <li>Esperar que esta energía dure todo el mes</li>
+            <li>Miedo al rechazo</li>
+            <li>Sentir que no mereces</li>
+            <li>Evitar el conflicto</li>
+            <li>Falta de preparación</li>
+          </ul>
+        </div>
+        <div class="col-card si">
+          <div class="col-card-title">✅ Las oportunidades</div>
+          <ul>
+            <li>Empatía y escucha</li>
+            <li>Construcción de relaciones</li>
+            <li>Soluciones colaborativas</li>
+            <li>Pensamiento a largo plazo</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="section">
-      <h2>Tablero de ideas — toca para guardar</h2>
-      <p>Estas son las actividades que más potencian tu cerebro en fase folicular. Toca las que quieres hacer esta semana:</p>
-      <div class="ideas-board" id="ideasBoard">
-        <div class="idea-card" onclick="saveIdea(this)">
-          <div class="ic-icon rosa"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l9 4.5v5c0 4.5-3.9 8.7-9 10-5.1-1.3-9-5.5-9-10v-5L12 3z" stroke="#C96B7A" stroke-width="2"/></svg></div>
-          <div class="ic-name">Estudiar algo nuevo</div>
-          <div class="ic-desc">Curso, libro, podcast educativo</div>
-          <div class="ic-action">✓ En tu lista</div>
-        </div>
-        <div class="idea-card" onclick="saveIdea(this)">
-          <div class="ic-icon rosa"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="#C96B7A" stroke-width="2"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="#C96B7A" stroke-width="2"/></svg></div>
-          <div class="ic-name">Escribir o crear</div>
-          <div class="ic-desc">Blog, contenido, ideas para redes</div>
-          <div class="ic-action">✓ En tu lista</div>
-        </div>
-        <div class="idea-card" onclick="saveIdea(this)">
-          <div class="ic-icon lila"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#7B5EA7" stroke-width="2"/><path d="M12 8v4l3 3" stroke="#7B5EA7" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div class="ic-name">Planear proyectos</div>
-          <div class="ic-desc">Estructura tu próximo gran proyecto</div>
-          <div class="ic-action">✓ En tu lista</div>
-        </div>
-        <div class="idea-card" onclick="saveIdea(this)">
-          <div class="ic-icon oro"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#B8943A" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div class="ic-name">Conectar personas</div>
-          <div class="ic-desc">Tu carisma social está en ascenso</div>
-          <div class="ic-action">✓ En tu lista</div>
-        </div>
-        <div class="idea-card" onclick="saveIdea(this)">
-          <div class="ic-icon rosa"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#C96B7A" stroke-width="2" stroke-linejoin="round"/></svg></div>
-          <div class="ic-name">Establecer hábitos</div>
-          <div class="ic-desc">Es la mejor fase para crear rutinas nuevas</div>
-          <div class="ic-action">✓ En tu lista</div>
-        </div>
-        <div class="idea-card" onclick="saveIdea(this)">
-          <div class="ic-icon lila"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#7B5EA7" stroke-width="2"/><path d="M9 9h6M9 12h6M9 15h4" stroke="#7B5EA7" stroke-width="2" stroke-linecap="round"/></svg></div>
-          <div class="ic-name">Proponer ideas</div>
-          <div class="ic-desc">En el trabajo, negocio o comunidad</div>
-          <div class="ic-action">✓ En tu lista</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Brainstorm guiado</h2>
-      <p>Tu mente está más activa que nunca. Aprovecha respondiendo estas preguntas de forma rápida y sin filtro:</p>
-      <div class="brainstorm-area">
-        <div class="ba-title">Sesión de ideas — escribe sin juzgarte</div>
-        <div class="ba-sub">No hay respuestas correctas. La velocidad importa más que la perfección.</div>
-        <div class="ba-grid">
-          <div>
-            <div class="ba-prompt">¿Qué proyecto llevas tiempo queriendo iniciar?</div>
-            <textarea class="ba-input" id="b1" placeholder="Escribe aquí sin pensar demasiado..."></textarea>
-          </div>
-          <div>
-            <div class="ba-prompt">¿Qué habilidad nueva cambiaría tu vida o trabajo?</div>
-            <textarea class="ba-input" id="b2" placeholder="Escribe aquí sin pensar demasiado..."></textarea>
-          </div>
-          <div>
-            <div class="ba-prompt">¿Qué has querido aprender pero siempre pospones?</div>
-            <textarea class="ba-input" id="b3" placeholder="Escribe aquí sin pensar demasiado..."></textarea>
-          </div>
-          <div>
-            <div class="ba-prompt">Si tuvieras 3 horas libres esta semana, ¿qué crearías?</div>
-            <textarea class="ba-input" id="b4" placeholder="Escribe aquí sin pensar demasiado..."></textarea>
-          </div>
-        </div>
-        <button class="save-btn" onclick="saveBrainstorm()">Guardar mis ideas +60 XP</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Audio de activación</h2>
-      <div style="background:#2C2240;border-radius:14px;padding:20px;color:white">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;margin-bottom:4px">Audio <em style="color:#D4B8F5;font-style:italic">Fase Folicular</em></div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:14px">5 min · Escúchalo al inicio de esta fase, por la mañana</div>
-        <div style="background:rgba(255,255,255,0.07);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;margin-bottom:14px">
-          <button id="playBtn" onclick="toggleAudio()" style="width:42px;height:42px;border-radius:50%;background:var(--rosa);border:none;color:white;font-size:18px;cursor:pointer;flex-shrink:0">▶</button>
-          <div style="flex:1">
-            <div style="font-size:13px;font-weight:500;color:white">Bienvenida a tu semana de crear</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">5:00 min</div>
-            <div id="audioTrack" style="height:4px;background:rgba(255,255,255,0.12);border-radius:50px;margin-top:8px;cursor:pointer" onclick="seekAudio(event)">
-              <div id="audioProgress" style="height:100%;background:var(--rosa);border-radius:50px;width:0%;transition:width 0.1s"></div>
-            </div>
-          </div>
-        </div>
-        <div style="border-top:0.5px solid rgba(255,255,255,0.08);padding-top:12px">
-          <div style="font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">Texto del audio</div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;font-style:italic">Respira. Siente cómo tu energía empieza a despertar.<br><br>Esta semana tu mente está más receptiva que nunca. Cada idea que tienes vale la pena. Cada curiosidad que sientes es una invitación.<br><br>No te censures. No esperes el momento perfecto. El momento es ahora y tú tienes todo lo que necesitas para empezar.<br><br>Esta semana crea, aprende, propone. Tu cerebro está listo. Tu energía está lista. Tú estás lista.</p>
-        </div>
+      <h2>Reflexión de esta lección</h2>
+      <div class="ejercicio">
+        <h3>Escribe tu <em>reflexión</em></h3>
+        <p>¿Cuál es la situación de negociación que más te da miedo? ¿Qué crees que pasaría si la enfrentas?</p>
+        <textarea id="ejercicio1" placeholder="Escribe aquí tu reflexión..." style="background:rgba(255,255,255,0.08);border:0.5px solid rgba(255,255,255,0.15);color:white;border-radius:10px;padding:12px;width:100%;font-family:Inter,sans-serif;font-size:13px;min-height:90px;resize:vertical"></textarea>
+        <button class="tracker-save-btn" onclick="saveEjercicio()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);margin-top:12px">Guardar mi reflexión +50 XP</button>
       </div>
     </div>
 
     <div class="nav-btns">
-      <button class="btn-prev" onclick="window.location.href='modulo2.html'">← Módulo 2</button>
-      <button class="btn-complete" onclick="completeModule()">✓ Completar +150 XP</button>
-      <button class="btn-next" onclick="nextModule()">Módulo 4 →</button>
+      <button class="btn-prev" disabled>← Anterior</button>
+      <button class="btn-complete" onclick="completeLesson()">
+        ✓ Completar lección +50 XP
+      </button>
+      <button class="btn-next" onclick="nextLesson()">Siguiente lección →</button>
+    </div>
     </div>
   </div>
 </div>
-<div class="xp-toast" id="xpToast"></div>
+
+<div class="xp-toast" id="xpToast">⭐ +120 XP — ¡Módulo 3 completado!</div>
+
 <script src="../js/i18n.js"></script>
 <script src="../js/theme.js"></script>
 <script src="../js/app.js"></script>
 <script>
-let xp=390,playing=false,progress=0,timer=null;
-
 window.addEventListener('load', async () => {
   if (initSupabase()) {
     const session = await getSession();
-    if (session) { currentUser = session.user; applyUserToModule(); }
+    if (session) { 
+      currentUser = session.user; 
+      applyUserToModule();
+      const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Yayika';
+      document.getElementById('userName').textContent = name;
+      document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+    }
   }
 });
 
-function saveIdea(el){el.classList.toggle('saved');if(el.classList.contains('saved')){updateLocalXP(20,'💡 +20 XP — Idea guardada');moduleAddXP(20);}}
-function saveBrainstorm(){const vals=[document.getElementById('b1'),document.getElementById('b2'),document.getElementById('b3'),document.getElementById('b4')];const filled=vals.filter(v=>v.value.trim()).length;if(!filled){alert('Escribe al menos una respuesta 😊');return;}updateLocalXP(60,'✍️ +60 XP — Brainstorm guardado');moduleAddXP(60);}
-function updateLocalXP(pts,msg){xp=Math.min(xp+pts,1000);document.getElementById('xpFill').style.width=(xp/10)+'%';document.getElementById('xpPts').textContent=xp+' / 1000 XP';showToast(msg);}
-function showToast(msg){const t=document.getElementById('xpToast');t.textContent=msg;t.style.display='block';clearTimeout(window._t);window._t=setTimeout(()=>t.style.display='none',2500);}
-function toggleAudio(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸':'▶';if(playing){timer=setInterval(()=>{progress=Math.min(progress+0.33,100);document.getElementById('audioProgress').style.width=progress+'%';if(progress>=100){clearInterval(timer);playing=false;document.getElementById('playBtn').textContent='▶';updateLocalXP(20,'🎙 +20 XP — Audio completado');moduleAddXP(20);}},1000);}else clearInterval(timer);}
-function seekAudio(e){const rect=e.currentTarget.getBoundingClientRect();progress=((e.clientX-rect.left)/rect.width)*100;document.getElementById('audioProgress').style.width=progress+'%';}
-function completeModule(){updateLocalXP(150,'🌒 +150 XP — Módulo 3 completado!');moduleAddXP(150);}
-function nextModule(){completeModule();moduleCompleteAndNavigate(3, 150, 'modulo4.html');}
+function saveEjercicio(){
+  const v=document.getElementById('ejercicio1').value;
+  if(!v){alert('Escribe tu reflexión primero 😊');return;}
+  updateLocalXP(50);
+  moduleAddXP(50,'⭐ +50 XP — ¡Ejercicio guardado!');
+}
+
+function updateLocalXP(pts){
+  const fill=document.getElementById('xpFill');
+  const label=document.getElementById('xpPts');
+  const current=parseInt(label.textContent)||120;
+  const next=Math.min(current+pts,1000);
+  fill.style.width=(next/10)+'%';
+  label.textContent=next+' / 1000 XP';
+}
+
+function completeLesson(){
+  updateLocalXP(50);
+  moduleAddXP(50,'⭐ +50 XP — ¡Lección completada!');
+  const sb=document.querySelector('.sb-check.active-check');
+  if(sb){sb.classList.remove('active-check');sb.classList.add('done');sb.textContent='✓';}
+}
+
+function nextLesson(){
+  completeLesson();
+  const progress = JSON.parse(localStorage.getItem('yayika-course-progress') || '{}');
+  progress['mujer-que-negocia-module3-lesson1'] = true;
+  localStorage.setItem('yayika-course-progress', JSON.stringify(progress));
+  alert('🚧 Lección 2 próximamente. ¡Estamos trabajando en ella!');
+}
 </script>
 <script>setTheme(currentTheme);applyTranslations();</script>
 </body>
