@@ -289,14 +289,25 @@ async function getFinancialInsights(monthKey) {
   const summary = await getMonthlySummary(monthKey);
   const insights = [];
   
+  const i18n = {
+    get_started_title: { es: 'Registra tu primer movimiento', en: 'Log your first transaction', pt: 'Registre sua primeira transação', fr: 'Enregistrez votre première transaction', de: 'Erfasse deine erste Transaktion' },
+    get_started_text: { es: 'Empieza registrando tus ingresos y gastos para obtener insights personalizados.', en: 'Start by logging your income and expenses to get personalized insights.', pt: 'Comece registrando suas receitas e despesas para obter insights personalizados.', fr: 'Commence par enregistrer tes revenus et dépenses pour obtenir des insights personnalisés.', de: 'Starte mit der Erfassung deiner Einnahmen und Ausgaben für personalisierte Einblicke.' },
+    savings_good_title: { es: '¡Excelente tasa de ahorro!', en: 'Excellent savings rate!', pt: 'Excelente taxa de poupança!', fr: 'Excellente taux d\'épargne !', de: 'Ausgezeichnete Sparquote!' },
+    savings_good_text: { es: (r) => `Estás ahorrando el ${r}% de tus ingresos. ¡Sigue así!`, en: (r) => `You're saving ${r}% of your income. Keep it up!`, pt: (r) => `Você está poupando ${r}% da sua renda. Continue assim!`, fr: (r) => `Tu épargnes ${r}% de tes revenus. Continue comme ça !`, de: (r) => `Du sparst ${r}% deines Einkommens. Mach weiter so!` },
+    savings_low_title: { es: 'Oportunidad de ahorro', en: 'Savings opportunity', pt: 'Oportunidade de poupança', fr: 'Opportunité d\'épargne', de: 'Sparmöglichkeit' },
+    savings_low_text: { es: (r) => `Tu tasa de ahorro es ${r}%. Intenta reducir gastos en tu categoría principal.`, en: (r) => `Your savings rate is ${r}%. Try reducing expenses in your top category.`, pt: (r) => `Sua taxa de poupança é ${r}%. Tente reduzir gastos na sua categoria principal.`, fr: (r) => `Ton taux d'épargne est de ${r}%. Essaie de réduire les dépenses dans ta catégorie principale.`, de: (r) => `Deine Sparquote beträgt ${r}%. Versuche, die Ausgaben in deiner Hauptkategorie zu reduzieren.` },
+    top_spending_title: { es: 'Mayor gasto este mes', en: 'Top spending this month', pt: 'Maior gasto este mês', fr: 'Principal dépense ce mois', de: 'Höchste Ausgaben diesen Monat' },
+    top_spending_text: { es: (n,p) => `${n} con ${p}% del total. ¿Puedes optimizarlo?`, en: (n,p) => `${n} at ${p}% of total. Can you optimize it?`, pt: (n,p) => `${n} com ${p}% do total. Você pode otimizar?`, fr: (n,p) => `${n} à ${p}% du total. Peux-tu l'optimiser ?`, de: (n,p) => `${n} mit ${p}% des Gesamtbetrags. Kannst du es optimieren?` },
+    over_budget_title: { es: 'Gastos superan ingresos', en: 'Expenses exceed income', pt: 'Despesas superam receitas', fr: 'Les dépenses dépassent les revenus', de: 'Ausgaben übersteigen Einnahmen' },
+    over_budget_text: { es: 'Estás gastando más de lo que ingresas. Revisa tus gastos fijos.', en: 'You\'re spending more than you earn. Review your fixed expenses.', pt: 'Você está gastando mais do que recebe. Revise suas despesas fixas.', fr: 'Tu dépenses plus que tu ne gagnes. Révise tes dépenses fixes.', de: 'Du gibst mehr aus als du verdienst. Überprüfe deine Fixkosten.' }
+  };
+  
   if (summary.totalExpenses === 0 && summary.totalIncome === 0) {
     insights.push({
       type: 'get_started',
       icon: '💳',
-      title: lang === 'es' ? 'Registra tu primer movimiento' : 'Log your first transaction',
-      text: lang === 'es' 
-        ? 'Empieza registrando tus ingresos y gastos para obtener insights personalizados.'
-        : 'Start by logging your income and expenses to get personalized insights.',
+      title: i18n.get_started_title[lang] || i18n.get_started_title['es'],
+      text: i18n.get_started_text[lang] || i18n.get_started_text['es'],
       color: '#1A9E8F'
     });
     return insights;
@@ -306,23 +317,21 @@ async function getFinancialInsights(monthKey) {
   if (summary.totalIncome > 0) {
     const savingsRate = ((summary.balance / summary.totalIncome) * 100).toFixed(1);
     if (savingsRate >= 20) {
+      const textFn = i18n.savings_good_text[lang] || i18n.savings_good_text['es'];
       insights.push({
         type: 'savings_good',
         icon: '🎉',
-        title: lang === 'es' ? '¡Excelente tasa de ahorro!' : 'Excellent savings rate!',
-        text: lang === 'es'
-          ? `Estás ahorrando el ${savingsRate}% de tus ingresos. ¡Sigue así!`
-          : `You're saving ${savingsRate}% of your income. Keep it up!`,
+        title: i18n.savings_good_title[lang] || i18n.savings_good_title['es'],
+        text: textFn(savingsRate),
         color: '#3BAF7A'
       });
     } else if (savingsRate < 10) {
+      const textFn = i18n.savings_low_text[lang] || i18n.savings_low_text['es'];
       insights.push({
         type: 'savings_low',
         icon: '💡',
-        title: lang === 'es' ? 'Oportunidad de ahorro' : 'Savings opportunity',
-        text: lang === 'es'
-          ? `Tu tasa de ahorro es ${savingsRate}%. Intenta reducir gastos en tu categoría principal.`
-          : `Your savings rate is ${savingsRate}%. Try reducing expenses in your top category.`,
+        title: i18n.savings_low_title[lang] || i18n.savings_low_title['es'],
+        text: textFn(savingsRate),
         color: '#B8943A'
       });
     }
@@ -331,13 +340,12 @@ async function getFinancialInsights(monthKey) {
   // Top spending category
   if (summary.topCategories.length > 0) {
     const top = summary.topCategories[0];
+    const textFn = i18n.top_spending_text[lang] || i18n.top_spending_text['es'];
     insights.push({
       type: 'top_spending',
       icon: top.icon,
-      title: lang === 'es' ? 'Mayor gasto este mes' : 'Top spending this month',
-      text: lang === 'es'
-        ? `${top.name[lang]} con ${top.percentage}% del total. ¿Puedes optimizarlo?`
-        : `${top.name[lang]} at ${top.percentage}% of total. Can you optimize it?`,
+      title: i18n.top_spending_title[lang] || i18n.top_spending_title['es'],
+      text: textFn(top.name[lang] || top.name['es'], top.percentage),
       color: top.color
     });
   }
@@ -346,17 +354,12 @@ async function getFinancialInsights(monthKey) {
   try {
     const budget = await getOrCreateBudget(monthKey);
     if (budget && budget.monthly_income > 0) {
-      const needsLimit = budget.monthly_income * (budget.needs_pct / 100);
-      const wantsLimit = budget.monthly_income * (budget.wants_pct / 100);
-      
       if (summary.totalExpenses > budget.monthly_income) {
         insights.push({
           type: 'over_budget',
           icon: '⚠️',
-          title: lang === 'es' ? 'Gastos superan ingresos' : 'Expenses exceed income',
-          text: lang === 'es'
-            ? 'Estás gastando más de lo que ingresas. Revisa tus gastos fijos.'
-            : 'You\'re spending more than you earn. Review your fixed expenses.',
+          title: i18n.over_budget_title[lang] || i18n.over_budget_title['es'],
+          text: i18n.over_budget_text[lang] || i18n.over_budget_text['es'],
           color: '#E74C3C'
         });
       }
@@ -373,7 +376,9 @@ async function getFinancialInsights(monthKey) {
 // ============================================================
 
 function formatCurrency(amount, currency = 'MXN') {
-  const formatted = new Intl.NumberFormat(currentLang === 'es' ? 'es-MX' : 'en-US', {
+  const localeMap = { es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' };
+  const locale = localeMap[currentLang] || 'es-MX';
+  const formatted = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency,
     minimumFractionDigits: 0,

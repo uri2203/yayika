@@ -109,83 +109,99 @@ async function checkAndAwardBadges() {
     
     if (!progress) return;
     
-    // Check streak badges
+    // Check streak badges — each wrapped in individual try/catch
     const streakMilestones = [3, 7, 14, 30, 60, 100];
     for (const days of streakMilestones) {
-      if (progress.streak_days >= days) {
-        await awardBadge(`streak_${days}`);
-      }
+      try {
+        if (progress.streak_days >= days) {
+          await awardBadge(`streak_${days}`);
+        }
+      } catch (e) { console.warn(`Badge streak_${days} error:`, e); }
     }
     
     // Check check-in count
-    const { count: checkinCount } = await supabase
-      .from('yayika_daily_mood')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', currentUser.id);
-    
-    if (checkinCount > 0) await awardBadge('first_checkin');
-    if (checkinCount >= 7) await awardBadge('checkin_7');
-    if (checkinCount >= 30) await awardBadge('checkin_30');
+    try {
+      const { count: checkinCount } = await supabase
+        .from('yayika_daily_mood')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id);
+      
+      if (checkinCount > 0) await awardBadge('first_checkin');
+      if (checkinCount >= 7) await awardBadge('checkin_7');
+      if (checkinCount >= 30) await awardBadge('checkin_30');
+    } catch (e) { console.warn('Badge checkin check error:', e); }
     
     // Check cycle logs
-    const { count: cycleCount } = await supabase
-      .from('yayika_cycle_log')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', currentUser.id);
-    
-    if (cycleCount > 0) await awardBadge('first_cycle_log');
-    if (cycleCount >= 30) await awardBadge('cycle_30');
-    if (cycleCount >= 84) await awardBadge('cycle_master'); // ~3 cycles
+    try {
+      const { count: cycleCount } = await supabase
+        .from('yayika_cycle_log')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id);
+      
+      if (cycleCount > 0) await awardBadge('first_cycle_log');
+      if (cycleCount >= 30) await awardBadge('cycle_30');
+      if (cycleCount >= 84) await awardBadge('cycle_master');
+    } catch (e) { console.warn('Badge cycle check error:', e); }
     
     // Check challenges completed
-    const { data: allChallenges } = await supabase
-      .from('yayika_weekly_challenges')
-      .select('completed')
-      .eq('user_id', currentUser.id);
-    
-    let totalChallengesCompleted = 0;
-    let perfectWeekFound = false;
-    if (allChallenges) {
-      allChallenges.forEach(week => {
-        const completed = week.completed || [];
-        const completedCount = completed.filter(Boolean).length;
-        totalChallengesCompleted += completedCount;
-        if (completedCount >= 4) perfectWeekFound = true; // All 4 challenges
-      });
-    }
-    
-    if (totalChallengesCompleted > 0) await awardBadge('first_challenge');
-    if (totalChallengesCompleted >= 10) await awardBadge('challenges_10');
-    if (perfectWeekFound) await awardBadge('perfect_week');
+    try {
+      const { data: allChallenges } = await supabase
+        .from('yayika_weekly_challenges')
+        .select('completed')
+        .eq('user_id', currentUser.id);
+      
+      let totalChallengesCompleted = 0;
+      let perfectWeekFound = false;
+      if (allChallenges) {
+        allChallenges.forEach(week => {
+          const completed = week.completed || [];
+          const completedCount = completed.filter(Boolean).length;
+          totalChallengesCompleted += completedCount;
+          if (completedCount >= 4) perfectWeekFound = true;
+        });
+      }
+      
+      if (totalChallengesCompleted > 0) await awardBadge('first_challenge');
+      if (totalChallengesCompleted >= 10) await awardBadge('challenges_10');
+      if (perfectWeekFound) await awardBadge('perfect_week');
+    } catch (e) { console.warn('Badge challenges check error:', e); }
     
     // Check first transaction
-    const { count: txCount } = await supabase
-      .from('yayika_transactions')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', currentUser.id);
-    
-    if (txCount > 0) await awardBadge('first_transaction');
+    try {
+      const { count: txCount } = await supabase
+        .from('yayika_transactions')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id);
+      
+      if (txCount > 0) await awardBadge('first_transaction');
+    } catch (e) { console.warn('Badge transaction check error:', e); }
     
     // Check savings goals
-    const { count: goalCount } = await supabase
-      .from('yayika_savings_goals')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', currentUser.id);
-    
-    if (goalCount > 0) await awardBadge('savings_goal');
+    try {
+      const { count: goalCount } = await supabase
+        .from('yayika_savings_goals')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id);
+      
+      if (goalCount > 0) await awardBadge('savings_goal');
+    } catch (e) { console.warn('Badge savings check error:', e); }
     
     // Check circles
-    const { count: circleCount } = await supabase
-      .from('yayika_circle_members')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', currentUser.id);
-    
-    if (circleCount > 0) await awardBadge('first_circle');
+    try {
+      const { count: circleCount } = await supabase
+        .from('yayika_circle_members')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id);
+      
+      if (circleCount > 0) await awardBadge('first_circle');
+    } catch (e) { console.warn('Badge circles check error:', e); }
     
     // Check time-based badges
-    const hour = new Date().getHours();
-    if (hour < 8) await awardBadge('early_bird');
-    if (hour >= 22) await awardBadge('night_owl');
+    try {
+      const hour = new Date().getHours();
+      if (hour < 8) await awardBadge('early_bird');
+      if (hour >= 22) await awardBadge('night_owl');
+    } catch (e) { console.warn('Badge time check error:', e); }
     
   } catch (e) {
     console.warn('Badge check error:', e);
@@ -295,8 +311,15 @@ function renderBadgeCard(badge) {
 function renderBadgeGrid(badges) {
   if (!badges || badges.length === 0) {
     const lang = currentLang || 'es';
+    const noBadgesText = {
+      es: 'Aún no tienes logros. ¡Empieza a completar retos!',
+      en: 'No badges yet. Start completing challenges!',
+      pt: 'Nenhuma conquista ainda. Comece a completar desafios!',
+      fr: 'Aucun badge pour l\'instant. Commence à relever des défis !',
+      de: 'Noch keine Abzeichen. Starte mit Herausforderungen!'
+    };
     return `<div style="text-align:center;padding:20px;color:var(--suave);font-size:13px;">
-      ${lang === 'es' ? 'Aún no tienes logros. ¡Empieza a completar retos!' : 'No badges yet. Start completing challenges!'}
+      ${noBadgesText[lang] || noBadgesText['es']}
     </div>`;
   }
   

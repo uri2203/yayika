@@ -239,6 +239,7 @@ const I18N = {
     stat_productos: 'Productos activos',
     stat_racha: 'Días de racha',
     stat_logros: 'Logros ganados',
+    active_label: 'activas',
     // Cycle card
     cycle_title: 'Tu ciclo hoy',
     cycle_ver_guia: 'registrar',
@@ -250,6 +251,7 @@ const I18N = {
     cycle_next_event: 'Próximo evento',
     cycle_best_for: 'Mejor para hoy',
     cycle_freeze_token: 'Usar token de congelamiento',
+    cycle_freeze_available: 'disponibles',
     // Financial tracker
     finance_title: 'Mis finanzas',
     finance_income: 'Ingresos',
@@ -529,6 +531,7 @@ const I18N = {
     stat_productos: 'Active products',
     stat_racha: 'Streak days',
     stat_logros: 'Achievements earned',
+    active_label: 'active',
     // Cycle card
     cycle_title: 'Your cycle today',
     cycle_ver_guia: 'log',
@@ -539,7 +542,9 @@ const I18N = {
     cycle_energy_forecast: 'Energy Forecast',
     cycle_next_event: 'Next Event',
     cycle_best_for: 'Best for today',
+    cycle_best_for: 'Best for today',
     cycle_freeze_token: 'Use freeze token',
+    cycle_freeze_available: 'available',
     // Financial tracker
     finance_title: 'My finances',
     finance_income: 'Income',
@@ -819,6 +824,7 @@ const I18N = {
     stat_productos: 'Produtos ativos',
     stat_racha: 'Dias de sequência',
     stat_logros: 'Conquistas ganhas',
+    active_label: 'ativas',
     // Cycle card
     cycle_title: 'Seu ciclo hoje',
     cycle_ver_guia: 'registrar',
@@ -830,6 +836,7 @@ const I18N = {
     cycle_next_event: 'Próximo evento',
     cycle_best_for: 'Melhor para hoje',
     cycle_freeze_token: 'Usar token de congelamento',
+    cycle_freeze_available: 'disponíveis',
     // Financial tracker
     finance_title: 'Minhas finanças',
     finance_income: 'Receitas',
@@ -1109,6 +1116,7 @@ const I18N = {
     stat_productos: 'Produits actifs',
     stat_racha: 'Jours de série',
     stat_logros: 'Réalisations obtenues',
+    active_label: 'actifs',
     // Cycle card
     cycle_title: 'Votre cycle aujourd\'hui',
     cycle_ver_guia: 'voir le guide',
@@ -1120,6 +1128,7 @@ const I18N = {
     cycle_next_event: 'Prochain événement',
     cycle_best_for: 'Idéal pour aujourd\'hui',
     cycle_freeze_token: 'Utiliser un token gel',
+    cycle_freeze_available: 'disponibles',
     // Financial tracker
     finance_title: 'Mes finances',
     finance_income: 'Revenus',
@@ -1399,6 +1408,7 @@ const I18N = {
     stat_productos: 'Aktive Produkte',
     stat_racha: 'Serientage',
     stat_logros: 'Errungenschaften',
+    active_label: 'aktiv',
     // Cycle card
     cycle_title: 'Dein Zyklus heute',
     cycle_ver_guia: 'Leitfaden ansehen',
@@ -1410,6 +1420,7 @@ const I18N = {
     cycle_next_event: 'Nächstes Ereignis',
     cycle_best_for: 'Ideal für heute',
     cycle_freeze_token: 'Freeze-Token verwenden',
+    cycle_freeze_available: 'verfügbar',
     // Financial tracker
     finance_title: 'Meine Finanzen',
     finance_income: 'Einnahmen',

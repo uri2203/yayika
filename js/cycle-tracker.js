@@ -403,7 +403,7 @@ async function getPersonalizedInsights(userId, cycleDay) {
     insights.push({
       type: 'energy',
       icon: energy.trend === 'rising' ? '📈' : energy.trend === 'declining' ? '📉' : '➡️',
-      title: lang === 'es' ? 'Pronóstico de energía' : 'Energy Forecast',
+      title: { es: 'Pronóstico de energía', en: 'Energy Forecast', pt: 'Previsão de energia', fr: 'Prévision d\'énergie', de: 'Energieprognose' }[lang] || 'Pronóstico de energía',
       text: energy.recommendation[lang],
       color: energy.trend === 'rising' ? '#3BAF7A' : energy.trend === 'declining' ? '#C96B7A' : '#B8943A'
     });
@@ -415,7 +415,7 @@ async function getPersonalizedInsights(userId, cycleDay) {
     insights.push({
       type: 'activities',
       icon: '🎯',
-      title: lang === 'es' ? 'Mejor para hoy' : 'Best for today',
+      title: { es: 'Mejor para hoy', en: 'Best for today', pt: 'Melhor para hoje', fr: 'Meilleur pour aujourd\'hui', de: 'Am besten für heute' }[lang] || 'Mejor para hoy',
       text: bestActivities.join(' · '),
       color: '#1A9E8F'
     });
@@ -433,7 +433,7 @@ async function getPersonalizedInsights(userId, cycleDay) {
           insights.push({
             type: 'pattern',
             icon: '📊',
-            title: lang === 'es' ? 'Patrón detectado' : 'Pattern detected',
+            title: { es: 'Patrón detectado', en: 'Pattern detected', pt: 'Padrão detectado', fr: 'Modèle détecté', de: 'Muster erkannt' }[lang] || 'Patrón detectado',
             text: symptomAdvice,
             color: '#7B5EA7'
           });
@@ -452,22 +452,30 @@ function getSymptomAdvice(symptom, lang) {
     'Dolor de cabeza': {
       es: 'El dolor de cabeza es común en fase lútea. Intenta reducir la cafeína y dormir más.',
       en: 'Headaches are common in luteal phase. Try reducing caffeine and sleeping more.',
-      pt: 'Dores de cabeça são comuns na fase lútea. Tente reduzir a cafeína e dormir mais.'
+      pt: 'Dores de cabeça são comuns na fase lútea. Tente reduzir a cafeína e dormir mais.',
+      fr: 'Les maux de tête sont fréquents en phase lutéale. Essaie de réduire la caféine et de mieux dormir.',
+      de: 'Kopfschmerzen sind in der Lutealphase häufig. Versuche, Koffein zu reduzieren und mehr zu schlafen.'
     },
     'Cólicos': {
       es: 'Los cólicos pueden aliviarse con calor abdominal y té de jengibre.',
       en: 'Cramps can be relieved with heat and ginger tea.',
-      pt: 'Cólicas podem ser aliviadas com calor e chá de gengibre.'
+      pt: 'Cólicas podem ser aliviadas com calor e chá de gengibre.',
+      fr: 'Les crampes peuvent être soulagées par la chaleur et le thé au gingembre.',
+      de: 'Krämpfe können durch Wärme und Ingwertee gelindert werden.'
     },
     'Hinchazón': {
       es: 'La hinchazón es normal en fase lútea. Reduce el sodio y bebe más agua.',
       en: 'Bloating is normal in luteal phase. Reduce sodium and drink more water.',
-      pt: 'Inchaço é normal na fase lútea. Reduza o sódio e beba mais água.'
+      pt: 'Inchaço é normal na fase lútea. Reduza o sódio e beba mais água.',
+      fr: 'Les ballonnements sont normaux en phase lutéale. Réduis le sodium et bois plus d\'eau.',
+      de: 'Blähungen sind in der Lutealphase normal. Reduziere Natrium und trinke mehr Wasser.'
     },
     'Cansancio': {
       es: 'El cansancio indica que tu cuerpo necesita descanso. Prioriza el sueño.',
       en: 'Fatigue means your body needs rest. Prioritize sleep.',
-      pt: 'Cansaço indica que seu corpo precisa de descanso. Priorize o sono.'
+      pt: 'Cansaço indica que seu corpo precisa de descanso. Priorize o sono.',
+      fr: 'La fatigue indique que ton corps a besoin de repos. Priorise le sommeil.',
+      de: 'Müdigkeit zeigt, dass dein Körper Erholung braucht. Priorisiere den Schlaf.'
     }
   };
   

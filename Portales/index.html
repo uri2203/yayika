@@ -522,13 +522,13 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
             
             <!-- Best Activities -->
             <div id="bestActivities" style="display:none;margin-top:8px;padding:8px 10px;background:var(--lila-l);border-radius:8px;">
-              <div style="font-size:11px;font-weight:600;color:var(--lila-d);margin-bottom:4px;">🎯 Mejor para hoy:</div>
+              <div style="font-size:11px;font-weight:600;color:var(--lila-d);margin-bottom:4px;">🎯 <span data-i18n="cycle_best_for">Mejor para hoy</span>:</div>
               <div id="bestActivitiesList" style="font-size:11px;color:var(--texto);"></div>
             </div>
             
             <!-- Freeze Token Button -->
             <div id="freezeTokenSection" style="display:none;margin-top:10px;text-align:center;">
-              <button onclick="useFreeze()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--turquesa-l);color:var(--turquesa-d);border:1.5px solid var(--turquesa);cursor:pointer;font-weight:500;">🧊 Usar token de congelamiento (<span id="freezeCount">0</span> disponibles)</button>
+              <button onclick="useFreeze()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--turquesa-l);color:var(--turquesa-d);border:1.5px solid var(--turquesa);cursor:pointer;font-weight:500;">🧊 <span data-i18n="cycle_freeze_token">Usar token de congelamiento</span> (<span id="freezeCount">0</span> <span data-i18n="cycle_freeze_available">disponibles</span>)</button>
             </div>
           </div>
         </div>
@@ -590,21 +590,21 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
               <div style="text-align:center;padding:10px;background:var(--verde-l);border-radius:10px">
                 <div style="font-size:18px;font-weight:600;color:var(--verde-d)" id="financeIncome">$0</div>
-                <div style="font-size:10px;color:var(--suave)">Ingresos</div>
+                <div style="font-size:10px;color:var(--suave)" data-i18n="finance_income">Ingresos</div>
               </div>
               <div style="text-align:center;padding:10px;background:var(--rosa-l);border-radius:10px">
                 <div style="font-size:18px;font-weight:600;color:var(--rosa)" id="financeExpenses">$0</div>
-                <div style="font-size:10px;color:var(--suave)">Gastos</div>
+                <div style="font-size:10px;color:var(--suave)" data-i18n="finance_expenses">Gastos</div>
               </div>
               <div style="text-align:center;padding:10px;background:var(--lila-l);border-radius:10px">
                 <div style="font-size:18px;font-weight:600;color:var(--lila-d)" id="financeBalance">$0</div>
-                <div style="font-size:10px;color:var(--suave)">Balance</div>
+                <div style="font-size:10px;color:var(--suave)" data-i18n="finance_balance">Balance</div>
               </div>
             </div>
             <div id="financeTopCategory" style="margin-bottom:10px"></div>
             <div style="display:flex;gap:6px;justify-content:center">
-              <button onclick="openAddTransaction('expense')" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--rosa-l);color:var(--rosa);border:1.5px solid var(--rosa);cursor:pointer;font-weight:500">💸 Gasto</button>
-              <button onclick="openAddTransaction('income')" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--verde-l);color:var(--verde);border:1.5px solid var(--verde);cursor:pointer;font-weight:500">💰 Ingreso</button>
+              <button onclick="openAddTransaction('expense')" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--rosa-l);color:var(--rosa);border:1.5px solid var(--rosa);cursor:pointer;font-weight:500">💸 <span data-i18n="finance_add_expense">Gasto</span></button>
+              <button onclick="openAddTransaction('income')" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--verde-l);color:var(--verde);border:1.5px solid var(--verde);cursor:pointer;font-weight:500">💰 <span data-i18n="finance_add_income">Ingreso</span></button>
             </div>
           </div>
         </div>
@@ -624,7 +624,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
           <div class="dash-card">
             <div class="dc-title">
               <span>👥 <span data-i18n="dash_my_circles">Mis círculos</span></span>
-              <div class="live-pill"><div class="live-dot-g"></div><span id="circleOnlineCount">0</span> activas</div>
+              <div class="live-pill"><div class="live-dot-g"></div><span id="circleOnlineCount">0</span> <span data-i18n="active_label">activas</span></div>
             </div>
             <div id="myCirclesList" style="margin-bottom:10px">
               <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px" data-i18n="circle_cargando">Cargando círculos...</div>
@@ -641,7 +641,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <div class="dash-card" style="margin-bottom:14px">
         <div class="dc-title">🏅 <span data-i18n="badges_title">Mis logros</span><span class="dc-see" id="badgeCount">0 logros</span></div>
         <div id="badgesWidget" style="max-height:180px;overflow-y:auto">
-          <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Cargando logros...</div>
+          <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">${{ es: 'Cargando logros...', en: 'Loading achievements...', pt: 'Carregando conquistas...', fr: 'Chargement des réalisations...', de: 'Lade Abzeichen...' }[currentLang || 'es']}</div>
         </div>
       </div>
 
@@ -779,26 +779,26 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
     <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:16px"><span id="txModalTitle">💸 Registrar gasto</span></h3>
     
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Categoría</label>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="finance_category">Categoría</label>
       <div style="display:flex;flex-wrap:wrap;gap:6px" id="txCategoryPicker"></div>
     </div>
 
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Monto ($)</label>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="finance_amount">Monto ($)</label>
       <input type="number" id="txAmount" class="form-input" placeholder="0.00" min="0" step="0.01" style="font-size:18px;font-weight:600">
     </div>
 
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Descripción (opcional)</label>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="finance_description">Descripción (opcional)</label>
       <input type="text" id="txDescription" class="form-input" placeholder="Ej: Compra en supermercado">
     </div>
 
     <div style="margin-bottom:16px">
-      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Fecha</label>
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px" data-i18n="finance_date">Fecha</label>
       <input type="date" id="txDate" class="form-input">
     </div>
 
-    <button onclick="submitTransaction()" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">💰 Registrar</button>
+    <button onclick="submitTransaction()" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">💰 <span data-i18n="dash_checkin_submit">Registrar</span></button>
   </div>
 </div>
 
@@ -818,12 +818,12 @@ async function doLogin() {
   const pass = document.getElementById('passInput').value;
   const err = document.getElementById('loginError');
 
-  if (!email || !pass) { err.textContent = 'Por favor llena todos los campos.'; err.style.display = 'block'; return; }
+  if (!email || !pass) { err.textContent = t('portal_login_error') || 'Please fill in all fields.'; err.style.display = 'block'; return; }
 
   // Ensure Supabase is initialized
   if (!supabase) {
     if (!initSupabase()) {
-      err.textContent = 'Error de conexión. Recarga la página.';
+      err.textContent = t('portal_login_error') || 'Connection error. Reload the page.';
       err.style.display = 'block';
       return;
     }
@@ -832,7 +832,7 @@ async function doLogin() {
   try {
     err.style.display = 'none';
     const btn = document.querySelector('.btn-login');
-    btn.textContent = 'Entrando...';
+    btn.textContent = t('portal_login_btn') + '...';
     btn.disabled = true;
 
     const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
@@ -842,10 +842,10 @@ async function doLogin() {
     sessionStorage.setItem('yayika_user', JSON.stringify({ email: data.user.email }));
     await loadDashboard();
   } catch (e) {
-    err.textContent = e.message || 'Correo o contraseña incorrectos.';
+    err.textContent = e.message || (t('portal_login_error') || 'Incorrect email or password.');
     err.style.display = 'block';
     const btn = document.querySelector('.btn-login');
-    btn.textContent = 'Entrar a mi portal';
+    btn.textContent = t('portal_login_btn') || 'Enter portal';
     btn.disabled = false;
   }
 }
@@ -856,8 +856,8 @@ async function doRegister() {
   const name = document.getElementById('nameInput')?.value.trim() || '';
   const err = document.getElementById('loginError');
 
-  if (!email || !pass) { err.textContent = 'Por favor llena todos los campos.'; err.style.display = 'block'; return; }
-  if (pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres.'; err.style.display = 'block'; return; }
+  if (!email || !pass) { err.textContent = t('portal_login_error') || 'Please fill in all fields.'; err.style.display = 'block'; return; }
+  if (pass.length < 6) { err.textContent = { es: 'La contraseña debe tener al menos 6 caracteres.', en: 'Password must be at least 6 characters.', pt: 'A senha deve ter pelo menos 6 caracteres.', fr: 'Le mot de passe doit contenir au moins 6 caractères.', de: 'Das Passwort muss mindestens 6 Zeichen lang sein.' }[currentLang || 'es']; err.style.display = 'block'; return; }
 
   try {
     err.style.display = 'none';
@@ -867,7 +867,8 @@ async function doRegister() {
       options: { data: { full_name: name } }
     });
     if (error) throw error;
-    err.textContent = 'Cuenta creada. Revisa tu correo para confirmar.';
+    const signupMsg = { es: 'Cuenta creada. Revisa tu correo para confirmar.', en: 'Account created. Check your email to confirm.', pt: 'Conta criada. Verifique seu e-mail para confirmar.', fr: 'Compte créé. Vérifie ton email pour confirmer.', de: 'Konto erstellt. Überprüfe deine E-Mail zur Bestätigung.' }[currentLang || 'es'];
+    err.textContent = signupMsg;
     err.style.display = 'block';
     err.style.background = '#E8F8F1';
     err.style.color = '#1F7A4E';
@@ -907,11 +908,18 @@ async function loadDashboard() {
     if (progress) {
       xp = progress.xp_total || 0;
       const level = Math.floor(xp / 100) + 1;
-      const levelName = level <= 3 ? 'Semilla' : level <= 7 ? 'Guerrera' : 'Diamante';
+      const levelNames = {
+        es: level <= 3 ? 'Semilla' : level <= 7 ? 'Guerrera' : 'Diamante',
+        en: level <= 3 ? 'Seed' : level <= 7 ? 'Warrior' : 'Diamond',
+        pt: level <= 3 ? 'Semente' : level <= 7 ? 'Guerreira' : 'Diamante',
+        fr: level <= 3 ? 'Graine' : level <= 7 ? 'Guerrière' : 'Diamant',
+        de: level <= 3 ? 'Samen' : level <= 7 ? 'Kriegerin' : 'Diamant'
+      };
+      const levelName = levelNames[currentLang] || levelNames['es'];
       document.getElementById('totalXP').textContent = xp;
       document.getElementById('xpFill').style.width = (xp / 10) + '%';
       document.getElementById('xpVal').textContent = xp + ' / 1000 XP';
-      document.getElementById('xpLevel').textContent = '⭐ Nivel ' + level + ' — ' + levelName;
+      document.getElementById('xpLevel').textContent = '⭐ ' + { es: 'Nivel', en: 'Level', pt: 'Nível', fr: 'Niveau', de: 'Stufe' }[currentLang || 'es'] + ' ' + level + ' — ' + levelName;
       document.getElementById('streakNum').textContent = progress.streak_days || 0;
       document.getElementById('streakStat').textContent = progress.streak_days || 0;
       buildStreak(progress.streak_days || 0);
@@ -964,7 +972,7 @@ async function loadDashboard() {
           const initials = profile.initials || '??';
           const fullName = profile.full_name || 'Anónima';
           const color = profile.avatar_color || '#7B5EA7';
-          const detail = a.activity_detail || 'Actividad reciente';
+          const detail = a.activity_detail || { es: 'Actividad reciente', en: 'Recent activity', pt: 'Atividade recente', fr: 'Activité récente', de: 'Letzte Aktivität' }[currentLang || 'es'];
           const item = document.createElement('div');
           item.className = 'feed-item';
           item.innerHTML = '<div class="feed-av" style="background:' + color + '">' + initials + '</div>' +
@@ -1017,7 +1025,9 @@ async function loadDashboard() {
         const div = document.createElement('div');
         div.style.cssText = 'padding:10px;background:var(--bg);border-radius:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid var(--borde)';
         div.onclick = () => openCircleChat(c);
-        div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + (c.name || 'Círculo') + '</div>' +
+        const circleLabel = { es: 'Círculo', en: 'Circle', pt: 'Círculo', fr: 'Cercle', de: 'Kreis' }[currentLang || 'es'];
+        const activeLabel = { es: 'activas', en: 'active', pt: 'ativas', fr: 'actifs', de: 'aktiv' }[currentLang || 'es'];
+        div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + (c.name || circleLabel) + '</div>' +
           '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' ' + t('circle_members') + ' · ' + (c.circle_type || 'general') + '</div>';
         cList.appendChild(div);
       });
@@ -1035,14 +1045,29 @@ async function loadDashboard() {
       const renewDate = new Date(sub.current_period_end);
       const daysLeft = Math.ceil((renewDate - new Date()) / (1000 * 60 * 60 * 24));
       const planName = sub.plan_id === 'semilla' ? 'Semilla' : sub.plan_id === 'guerrera' ? 'Guerrera' : 'Diamante';
-      const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-      const dateStr = renewDate.getDate() + ' de ' + months[renewDate.getMonth()] + ' ' + renewDate.getFullYear();
-      document.getElementById('rcLabel').textContent = 'Tu membresía ' + planName + ' renueva en';
-      document.getElementById('rcDate').textContent = daysLeft + ' días — ' + dateStr;
-      document.getElementById('rcPromo').textContent = 'Renueva automáticamente. Puedes cancelar en cualquier momento desde tu portal.';
+      const monthsI18n = {
+        es: ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],
+        en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+        pt: ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'],
+        fr: ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],
+        de: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']
+      };
+      const months = monthsI18n[currentLang] || monthsI18n['es'];
+      const dateStr = renewDate.getDate() + ' ' + { es: 'de', en: '', pt: 'de', fr: 'de', de: '' }[currentLang || 'es'] + ' ' + months[renewDate.getMonth()] + ' ' + renewDate.getFullYear();
+      const renewalI18n = {
+        es: { label: 'Tu membresía', renewIn: 'renueva en', days: 'días', auto: 'Renueva automáticamente. Puedes cancelar en cualquier momento desde tu portal.', manage: 'Gestionar membresía' },
+        en: { label: 'Your', renewIn: 'renews in', days: 'days', auto: 'Auto-renews. You can cancel anytime from your portal.', manage: 'Manage membership' },
+        pt: { label: 'Sua', renewIn: 'renova em', days: 'dias', auto: 'Renova automaticamente. Você pode cancelar a qualquer momento.', manage: 'Gerenciar assinatura' },
+        fr: { label: 'Votre', renewIn: 'renouvelle dans', days: 'jours', auto: 'Renouvellement automatique. Tu peux annuler à tout moment.', manage: 'Gérer l\'abonnement' },
+        de: { label: 'Dein', renewIn: 'erneuert sich in', days: 'Tage', auto: 'Verlängert sich automatisch. Du kannst jederzeit kündigen.', manage: 'Mitgliedschaft verwalten' }
+      };
+      const ri = renewalI18n[currentLang] || renewalI18n['es'];
+      document.getElementById('rcLabel').textContent = ri.label + ' ' + planName + ' ' + ri.renewIn;
+      document.getElementById('rcDate').textContent = daysLeft + ' ' + ri.days + ' — ' + dateStr;
+      document.getElementById('rcPromo').textContent = ri.auto;
       document.getElementById('rcDate').style.fontSize = '15px';
-      document.querySelector('.rc-btn').textContent = 'Gestionar membresía';
-      document.querySelector('.rc-btn').onclick = function() { alert('Gestión de membresía disponível próximamente.'); };
+      document.querySelector('.rc-btn').textContent = ri.manage;
+      document.querySelector('.rc-btn').onclick = function() { alert({ es: 'Gestión de membresía disponible próximamente.', en: 'Membership management coming soon.', pt: 'Gerenciamento de assinatura disponível em breve.', fr: 'Gestion de l\'abonnement bientôt disponible.', de: 'Mitgliedschaftsverwaltung demnächst verfügbar.' }[currentLang || 'es']); };
     }
   } catch (e) {}
 }
@@ -1153,7 +1178,8 @@ async function submitCheckin() {
     }
   } catch (e) {
     console.error('Checkin error:', e);
-    showToast('Error al guardar. Intenta de nuevo.');
+    const msg = { es: 'Error al guardar. Intenta de nuevo.', en: 'Save error. Try again.', pt: 'Erro ao salvar. Tente novamente.', fr: 'Erreur de sauvegarde. Réessaie.', de: 'Fehler beim Speichern. Versuche es erneut.' }[currentLang || 'es'];
+    showToast(msg);
   }
 }
 
@@ -1226,13 +1252,14 @@ async function submitCycleLog() {
       notes: document.getElementById('cycleNotes').value
     });
     closeCycleModal();
-    showToast('📝 +10 XP — Ciclo registrado');
+    showToast('📝 ' + { es: '+10 XP — Ciclo registrado', en: '+10 XP — Cycle logged', pt: '+10 XP — Ciclo registrado', fr: '+10 XP — Cycle enregistré', de: '+10 XP — Zyklus erfasst' }[currentLang || 'es']);
     cycleFlow = null;
     cycleSymptoms = [];
     cycleEnergy = 0;
   } catch (e) {
     console.error('Cycle log error:', e);
-    showToast('Error al guardar. Intenta de nuevo.');
+    const msg = { es: 'Error al guardar. Intenta de nuevo.', en: 'Save error. Try again.', pt: 'Erro ao salvar. Tente novamente.', fr: 'Erreur de sauvegarde. Réessaie.', de: 'Fehler beim Speichern. Versuche es erneut.' }[currentLang || 'es'];
+    showToast(msg);
   }
 }
 
@@ -1311,11 +1338,11 @@ async function showAvailableCircles() {
         div.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center">' +
           '<div><div style="font-weight:500;font-size:13px;color:var(--texto)">' + (c.name || 'Círculo') + '</div>' +
           '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + '/' + (c.max_members || 10) + ' ' + t('circle_members') + '</div></div>' +
-          '<button onclick="joinCircleAction(' + c.id + ', this)" style="padding:6px 12px;border-radius:100px;background:var(--verde);color:white;border:none;font-size:11px;cursor:pointer;font-weight:500">Unirse</button></div>';
+          '<button onclick="joinCircleAction(' + c.id + ', this)" style="padding:6px 12px;border-radius:100px;background:var(--verde);color:white;border:none;font-size:11px;cursor:pointer;font-weight:500">' + { es: 'Unirse', en: 'Join', pt: 'Entrar', fr: 'Rejoindre', de: 'Beitreten' }[currentLang || 'es'] + '</button></div>';
         cList.appendChild(div);
       });
     } else {
-      cList.innerHTML = '<div style="text-align:center;padding:12px;color:var(--suave);font-size:12px">No hay círculos disponibles</div>';
+      cList.innerHTML = '<div style="text-align:center;padding:12px;color:var(--suave);font-size:12px">' + { es: 'No hay círculos disponibles', en: 'No circles available', pt: 'Nenhum círculo disponível', fr: 'Aucun cercle disponible', de: 'Keine Kreise verfügbar' }[currentLang || 'es'] + '</div>';
     }
   } catch (e) {
     console.error('Show circles error:', e);
@@ -1325,13 +1352,14 @@ async function showAvailableCircles() {
 async function joinCircleAction(circleId, btn) {
   try {
     await joinCircle(circleId);
-    btn.textContent = '¡Unido!';
+    btn.textContent = { es: '¡Unido!', en: 'Joined!', pt: 'Unido!', fr: 'Rejoint !', de: 'Beigetreten!' }[currentLang || 'es'];
     btn.style.background = 'var(--suave)';
     btn.style.pointerEvents = 'none';
-    showToast('🎉 ¡Te uniste al círculo!');
+    showToast({ es: '🎉 ¡Te uniste al círculo!', en: '🎉 You joined the circle!', pt: '🎉 Você entrou no círculo!', fr: '🎉 Tu as rejoint le cercle !', de: '🎉 Du bist dem Kreis beigetreten!' }[currentLang || 'es']);
     setTimeout(() => loadMyCircles(), 1000);
   } catch (e) {
-    showToast('Error al unirse. Intenta de nuevo.');
+    const errMsg = { es: 'Error al unirse. Intenta de nuevo.', en: 'Error joining. Try again.', pt: 'Erro ao entrar. Tente novamente.', fr: 'Erreur de connexion. Réessaie.', de: 'Fehler beim Beitreten. Versuche es erneut.' }[currentLang || 'es'];
+    showToast(errMsg);
   }
 }
 
@@ -1357,7 +1385,7 @@ async function loadMyCircles() {
 }
 
 function openCircleChat(circle) {
-  showToast('💬 Chat del círculo próximamente');
+  showToast({ es: '💬 Chat del círculo próximamente', en: '💬 Circle chat coming soon', pt: '💬 Chat do círculo em breve', fr: '💬 Chat du cercle bientôt disponible', de: '💬 Kreis-Chat demnächst' }[currentLang || 'es']);
 }
 
 // ===== INIT =====
@@ -1410,19 +1438,28 @@ async function initCycleWidget() {
       
       const progressInfo = CycleTracker.getPhaseProgress(cycleDay);
       if (progressInfo) {
+        const daysRemLabel = { es: 'días en esta fase', en: 'days left in this phase', pt: 'dias nesta fase', fr: 'joursrestants dans cette phase', de: 'Tage in dieser Phase' }[lang] || 'días en esta fase';
         document.getElementById('cyclePhaseDesc').textContent = 
-          `Días ${phaseInfo.days[0]}–${phaseInfo.days[1]} · Quedan ${progressInfo.daysRemaining} días en esta fase`;
+          `Días ${phaseInfo.days[0]}–${phaseInfo.days[1]} · Quedan ${progressInfo.daysRemaining} ${daysRemLabel}`;
       }
       
-      document.getElementById('cycleDayLabel').textContent = `Día ${cycleDay} de tu ciclo`;
+      const dayLabel = { es: 'Día', en: 'Day', pt: 'Dia', fr: 'Jour', de: 'Tag' }[lang] || 'Día';
+      const ofCycleLabel = { es: 'de tu ciclo', en: 'of your cycle', pt: 'do seu ciclo', fr: 'de ton cycle', de: 'deines Zyklus' }[lang] || 'de tu ciclo';
+      document.getElementById('cycleDayLabel').textContent = `${dayLabel} ${cycleDay} ${ofCycleLabel}`;
       
       // Energy forecast
       const energy = CycleTracker.getEnergyForecast(cycleDay);
       if (energy) {
         const energyEl = document.getElementById('energyForecast');
         energyEl.style.display = 'block';
+        const energyLabels = {
+          rising: { es: 'Subiendo', en: 'Rising', pt: 'Subindo', fr: 'En hausse', de: 'Steigend' },
+          declining: { es: 'Bajando', en: 'Declining', pt: 'Diminuindo', fr: 'En baisse', de: 'Sinkend' },
+          stable: { es: 'Estable', en: 'Stable', pt: 'Estável', fr: 'Stable', de: 'Stabil' }
+        };
+        const energyLabel = energyLabels[energy.trend] || energyLabels.stable;
         document.getElementById('energyIcon').textContent = energy.trend === 'rising' ? '📈' : energy.trend === 'declining' ? '📉' : '➡️';
-        document.getElementById('energyText').textContent = `Energía: ${energy.current}/5 (${energy.trend === 'rising' ? 'Subiendo' : energy.trend === 'declining' ? 'Bajando' : 'Estable'})`;
+        document.getElementById('energyText').textContent = { es: 'Energía', en: 'Energy', pt: 'Energia', fr: 'Énergie', de: 'Energie' }[lang] + ': ' + energy.current + '/5 (' + (energyLabel[lang] || energyLabel['es']) + ')';
         energyEl.style.background = energy.trend === 'rising' ? 'var(--verde-l)' : energy.trend === 'declining' ? 'var(--rosa-l)' : 'var(--oro-l)';
       }
       
@@ -1460,9 +1497,14 @@ async function initCycleWidget() {
       if (nextEvent) {
         const nextEventEl = document.getElementById('nextEventPrediction');
         nextEventEl.style.display = 'block';
-        const eventLabel = nextEvent.type === 'next_period' ? 'Próxima menstruación' : 'Ovulación estimada';
+        const eventLabels = {
+          next_period: { es: 'Próxima menstruación', en: 'Next period', pt: 'Próxima menstruação', fr: 'Prochaine menstruation', de: 'Nächste Periode' },
+          ovulation: { es: 'Ovulación estimada', en: 'Estimated ovulation', pt: 'Ovulação estimada', fr: 'Ovulation estimée', de: 'Geschätzte Ovulation' }
+        };
+        const eventLabel = (eventLabels[nextEvent.type] || eventLabels.next_period)[lang] || 'Evento';
+        const confidenceLabel = { es: 'confianza', en: 'confidence', pt: 'confiança', fr: 'confiance', de: 'Konfidenz' }[lang] || 'confianza';
         document.getElementById('nextEventIcon').textContent = nextEvent.type === 'next_period' ? '🩸' : '✨';
-        document.getElementById('nextEventText').textContent = `${eventLabel} en ${nextEvent.daysUntil} días (${Math.round(nextEvent.confidence * 100)}% confianza)`;
+        document.getElementById('nextEventText').textContent = `${eventLabel} en ${nextEvent.daysUntil} días (${Math.round(nextEvent.confidence * 100)}% ${confidenceLabel})`;
       }
     } catch (e) {
       console.warn('Predictions error:', e);
@@ -1492,9 +1534,15 @@ async function initFinanceWidget() {
     const lang = currentLang || 'es';
     
     // Update month label
-    const months = { es: ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'], en: ['January','February','March','April','May','June','July','August','September','October','November','December'] };
+    const monthsAll = {
+      es: ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],
+      en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+      pt: ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'],
+      fr: ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],
+      de: ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']
+    };
     const now = new Date();
-    document.getElementById('financeMonth').textContent = (months[lang] || months['es'])[now.getMonth()] + ' ' + now.getFullYear();
+    document.getElementById('financeMonth').textContent = (monthsAll[lang] || monthsAll['es'])[now.getMonth()] + ' ' + now.getFullYear();
     
     // Update summary cards
     document.getElementById('financeIncome').textContent = FinancialTracker.formatCurrency(summary.totalIncome);
@@ -1504,10 +1552,12 @@ async function initFinanceWidget() {
     // Top category
     if (summary.topCategories && summary.topCategories.length > 0) {
       const top = summary.topCategories[0];
+      const topSpendingLabel = { es: 'Mayor gasto:', en: 'Top spending:', pt: 'Maior gasto:', fr: 'Principal dépense:', de: 'Höchste Ausgaben:' }[lang] || 'Mayor gasto:';
       document.getElementById('financeTopCategory').innerHTML = 
         `<div style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg);border-radius:8px;font-size:12px">
           <span style="font-size:16px">${top.icon}</span>
-          <span style="flex:1;color:var(--texto)">Mayor gasto: <strong>${top.name[lang] || top.name['es']}</strong> (${top.percentage}%)</span>
+          <span style="flex:1;color:var(--texto)">${topSpendingLabel} <strong>${top.name[lang] || top.name['es']}</strong> (${top.percentage}%)
+          </span>
         </div>`;
     }
     
@@ -1528,7 +1578,7 @@ async function initBadgesWidget() {
     const badges = await BadgeSystem.getUserBadges();
     const lang = currentLang || 'es';
     
-    document.getElementById('badgeCount').textContent = `${badges.length} logros`;
+    document.getElementById('badgeCount').textContent = `${badges.length} ${t('stat_logros') || 'achievements'}`;
     
     if (badges.length > 0) {
       document.getElementById('badgesWidget').innerHTML = BadgeSystem.renderBadgeGrid(badges);
@@ -1588,13 +1638,15 @@ function closeTransactionModal() {
 
 async function submitTransaction() {
   if (!txCategory) {
-    showToast('Selecciona una categoría');
+    const msg = { es: 'Selecciona una categoría', en: 'Select a category', pt: 'Selecione uma categoria', fr: 'Sélectionne une catégorie', de: 'Wähle eine Kategorie' }[currentLang || 'es'];
+    showToast(msg);
     return;
   }
   
   const amount = parseFloat(document.getElementById('txAmount').value);
   if (!amount || amount <= 0) {
-    showToast('Ingresa un monto válido');
+    const msg = { es: 'Ingresa un monto válido', en: 'Enter a valid amount', pt: 'Insira um valor válido', fr: 'Entre un montant valide', de: 'Gib einen gültigen Betrag ein' }[currentLang || 'es'];
+    showToast(msg);
     return;
   }
   
@@ -1608,14 +1660,16 @@ async function submitTransaction() {
     });
     
     closeTransactionModal();
-    const label = txType === 'expense' ? 'Gasto' : 'Ingreso';
-    showToast(`💰 ${label} registrado: ${FinancialTracker.formatCurrency(amount)}`);
+    const labels = { es: { expense: 'Gasto', income: 'Ingreso' }, en: { expense: 'Expense', income: 'Income' }, pt: { expense: 'Despesa', income: 'Receita' }, fr: { expense: 'Dépense', income: 'Revenu' }, de: { expense: 'Ausgabe', income: 'Einnahme' } };
+    const label = (labels[currentLang] || labels['es'])[txType];
+    showToast(`💰 ${label}: ${FinancialTracker.formatCurrency(amount)}`);
     
     // Refresh finance widget
     await initFinanceWidget();
   } catch (e) {
     console.error('Transaction error:', e);
-    showToast('Error al guardar. Intenta de nuevo.');
+    const msg = { es: 'Error al guardar. Intenta de nuevo.', en: 'Save error. Try again.', pt: 'Erro ao salvar. Tente novamente.', fr: 'Erreur de sauvegarde. Réessaie.', de: 'Fehler beim Speichern. Versuche es erneut.' }[currentLang || 'es'];
+    showToast(msg);
   }
 }
 
