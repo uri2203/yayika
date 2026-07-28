@@ -493,20 +493,43 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
       <div class="grid2">
 
-        <!-- CICLO -->
+        <!-- CICLO - ENHANCED WITH PREDICTIVE INTELLIGENCE -->
         <div class="dash-card">
-          <div class="dc-title">🌕 <span data-i18n="cycle_title">Tu ciclo hoy</span><span class="dc-see" data-i18n="cycle_ver_guia">ver guía</span></div>
-          <div class="cycle-widget">
-            <div class="cw-phase-name" data-i18n="cycle_phase">Fase Ovulatoria</div>
-            <div class="cw-phase-desc" data-i18n="cycle_dias_restantes">Días 14–17 · Quedan 2 días en esta fase</div>
-            <div class="cw-dots">
+          <div class="dc-title">🌕 <span data-i18n="cycle_title">Tu ciclo hoy</span><span class="dc-see" onclick="openCycleDiary()" data-i18n="cycle_ver_guia">registrar</span></div>
+          <div class="cycle-widget" id="cycleWidget">
+            <div class="cw-phase-name" id="cyclePhaseName">Fase Ovulatoria</div>
+            <div class="cw-phase-desc" id="cyclePhaseDesc">Días 14–17 · Quedan 2 días en esta fase</div>
+            <div class="cw-dots" id="cycleDots">
               <div class="cw-dot done"></div>
               <div class="cw-dot done"></div>
               <div class="cw-dot active"></div>
               <div class="cw-dot"></div>
             </div>
-            <div class="cw-days" data-i18n="cycle_dia">Día 15 de tu ciclo</div>
-            <div class="cw-tip" data-i18n="cycle_tip">💡 Energía máxima. Ideal para negociar, presentar y conectar. ¿Tienes una conversación importante pendiente?</div>
+            <div class="cw-days" id="cycleDayLabel">Día 15 de tu ciclo</div>
+            
+            <!-- Energy Forecast -->
+            <div id="energyForecast" style="display:none;margin-top:10px;padding:8px 10px;background:var(--verde-l);border-radius:8px;font-size:12px;">
+              <span id="energyIcon">📈</span> <span id="energyText">Energía: Alta</span>
+            </div>
+            
+            <!-- Next Event Prediction -->
+            <div id="nextEventPrediction" style="display:none;margin-top:8px;padding:8px 10px;background:var(--turquesa-l);border-radius:8px;font-size:12px;">
+              <span id="nextEventIcon">🔮</span> <span id="nextEventText">Próximo evento en X días</span>
+            </div>
+            
+            <!-- Personalized Tip -->
+            <div class="cw-tip" id="cycleTip">💡 Energía máxima. Ideal para negociar, presentar y conectar.</div>
+            
+            <!-- Best Activities -->
+            <div id="bestActivities" style="display:none;margin-top:8px;padding:8px 10px;background:var(--lila-l);border-radius:8px;">
+              <div style="font-size:11px;font-weight:600;color:var(--lila-d);margin-bottom:4px;">🎯 Mejor para hoy:</div>
+              <div id="bestActivitiesList" style="font-size:11px;color:var(--texto);"></div>
+            </div>
+            
+            <!-- Freeze Token Button -->
+            <div id="freezeTokenSection" style="display:none;margin-top:10px;text-align:center;">
+              <button onclick="useFreeze()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--turquesa-l);color:var(--turquesa-d);border:1.5px solid var(--turquesa);cursor:pointer;font-weight:500;">🧊 Usar token de congelamiento (<span id="freezeCount">0</span> disponibles)</button>
+            </div>
           </div>
         </div>
 
@@ -560,6 +583,32 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
           </div>
         </div>
 
+        <!-- FINANCIAL TRACKER -->
+        <div class="dash-card">
+          <div class="dc-title">💰 <span data-i18n="finance_title">Mis finanzas</span><span class="dc-see" id="financeMonth"></span></div>
+          <div id="financeWidget">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+              <div style="text-align:center;padding:10px;background:var(--verde-l);border-radius:10px">
+                <div style="font-size:18px;font-weight:600;color:var(--verde-d)" id="financeIncome">$0</div>
+                <div style="font-size:10px;color:var(--suave)">Ingresos</div>
+              </div>
+              <div style="text-align:center;padding:10px;background:var(--rosa-l);border-radius:10px">
+                <div style="font-size:18px;font-weight:600;color:var(--rosa)" id="financeExpenses">$0</div>
+                <div style="font-size:10px;color:var(--suave)">Gastos</div>
+              </div>
+              <div style="text-align:center;padding:10px;background:var(--lila-l);border-radius:10px">
+                <div style="font-size:18px;font-weight:600;color:var(--lila-d)" id="financeBalance">$0</div>
+                <div style="font-size:10px;color:var(--suave)">Balance</div>
+              </div>
+            </div>
+            <div id="financeTopCategory" style="margin-bottom:10px"></div>
+            <div style="display:flex;gap:6px;justify-content:center">
+              <button onclick="openAddTransaction('expense')" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--rosa-l);color:var(--rosa);border:1.5px solid var(--rosa);cursor:pointer;font-weight:500">💸 Gasto</button>
+              <button onclick="openAddTransaction('income')" style="font-size:11px;padding:6px 14px;border-radius:100px;background:var(--verde-l);color:var(--verde);border:1.5px solid var(--verde);cursor:pointer;font-weight:500">💰 Ingreso</button>
+            </div>
+          </div>
+        </div>
+
         <!-- RANKING + FEED -->
         <div>
           <div class="dash-card" style="margin-bottom:14px">
@@ -586,6 +635,14 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
           </div>
         </div>
 
+      </div>
+
+      <!-- BADGES / LOGROS -->
+      <div class="dash-card" style="margin-bottom:14px">
+        <div class="dc-title">🏅 <span data-i18n="badges_title">Mis logros</span><span class="dc-see" id="badgeCount">0 logros</span></div>
+        <div id="badgesWidget" style="max-height:180px;overflow-y:auto">
+          <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Cargando logros...</div>
+        </div>
       </div>
 
       <!-- RENEWAL / UPGRADE -->
@@ -715,9 +772,42 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
   </div>
 </div>
 
+<!-- ===== TRANSACTION MODAL ===== -->
+<div id="transactionModal" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:white;border-radius:20px;padding:28px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative;max-height:85vh;overflow-y:auto">
+    <button onclick="closeTransactionModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--suave)">✕</button>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:16px"><span id="txModalTitle">💸 Registrar gasto</span></h3>
+    
+    <div style="margin-bottom:16px">
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Categoría</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px" id="txCategoryPicker"></div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Monto ($)</label>
+      <input type="number" id="txAmount" class="form-input" placeholder="0.00" min="0" step="0.01" style="font-size:18px;font-weight:600">
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Descripción (opcional)</label>
+      <input type="text" id="txDescription" class="form-input" placeholder="Ej: Compra en supermercado">
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="font-size:12px;font-weight:500;color:var(--suave);display:block;margin-bottom:6px">Fecha</label>
+      <input type="date" id="txDate" class="form-input">
+    </div>
+
+    <button onclick="submitTransaction()" style="width:100%;background:var(--turquesa);color:white;border:none;padding:12px;border-radius:100px;font-size:14px;font-weight:500;cursor:pointer">💰 Registrar</button>
+  </div>
+</div>
+
 <script src="../js/i18n.js"></script>
 <script src="../js/theme.js"></script>
 <script src="../js/app.js"></script>
+<script src="../js/cycle-tracker.js"></script>
+<script src="../js/financial-tracker.js"></script>
+<script src="../js/badges.js"></script>
 <script>
 // ===== SUPABASE AUTH =====
 async function doLogin() {
@@ -1287,6 +1377,271 @@ window.addEventListener('load', async () => {
     }, 1000);
   }
 });
+
+// ===== ENHANCED CYCLE TRACKER INITIALIZATION =====
+async function initCycleWidget() {
+  if (!currentUser) return;
+  
+  try {
+    // Get cycle day from DB or calculate
+    const { data: cycleData } = await supabase
+      .rpc('yayika_get_cycle_day', { p_user_id: currentUser.id });
+    
+    const cycleDay = cycleData || 15; // Default to day 15 if no data
+    const lang = currentLang || 'es';
+    
+    // Detect current phase
+    const phaseInfo = CycleTracker.detectCurrentPhase(cycleDay);
+    if (phaseInfo) {
+      document.getElementById('cyclePhaseName').textContent = phaseInfo.name[lang] || phaseInfo.name['es'];
+      document.getElementById('cyclePhaseName').innerHTML = phaseInfo.icon + ' ' + (phaseInfo.name[lang] || phaseInfo.name['es']);
+      
+      const progressInfo = CycleTracker.getPhaseProgress(cycleDay);
+      if (progressInfo) {
+        document.getElementById('cyclePhaseDesc').textContent = 
+          `Días ${phaseInfo.days[0]}–${phaseInfo.days[1]} · Quedan ${progressInfo.daysRemaining} días en esta fase`;
+      }
+      
+      document.getElementById('cycleDayLabel').textContent = `Día ${cycleDay} de tu ciclo`;
+      
+      // Energy forecast
+      const energy = CycleTracker.getEnergyForecast(cycleDay);
+      if (energy) {
+        const energyEl = document.getElementById('energyForecast');
+        energyEl.style.display = 'block';
+        document.getElementById('energyIcon').textContent = energy.trend === 'rising' ? '📈' : energy.trend === 'declining' ? '📉' : '➡️';
+        document.getElementById('energyText').textContent = `Energía: ${energy.current}/5 (${energy.trend === 'rising' ? 'Subiendo' : energy.trend === 'declining' ? 'Bajando' : 'Estable'})`;
+        energyEl.style.background = energy.trend === 'rising' ? 'var(--verde-l)' : energy.trend === 'declining' ? 'var(--rosa-l)' : 'var(--oro-l)';
+      }
+      
+      // Personalized tip
+      const tips = phaseInfo.tips[lang] || phaseInfo.tips['es'];
+      const randomTip = tips[Math.floor(Math.random() * tips.length)];
+      document.getElementById('cycleTip').innerHTML = '💡 ' + randomTip;
+      
+      // Best activities
+      const bestFor = phaseInfo.bestFor[lang] || phaseInfo.bestFor['es'];
+      if (bestFor && bestFor.length > 0) {
+        document.getElementById('bestActivities').style.display = 'block';
+        document.getElementById('bestActivitiesList').textContent = bestFor.join(' · ');
+      }
+      
+      // Update dots
+      const dotsContainer = document.getElementById('cycleDots');
+      dotsContainer.innerHTML = '';
+      const phases = ['menstrual', 'follicular', 'ovulatory', 'luteal'];
+      phases.forEach((p, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'cw-dot';
+        if (p === phaseInfo.key) dot.classList.add('active');
+        if (phases.indexOf(phaseInfo.key) > i) dot.classList.add('done');
+        dotsContainer.appendChild(dot);
+      });
+    }
+    
+    // Get predictions
+    try {
+      await CycleTracker.calculateAndStorePredictions(currentUser.id);
+      const predictions = await CycleTracker.getCyclePredictions(currentUser.id);
+      const nextEvent = CycleTracker.getNextEvent(predictions);
+      
+      if (nextEvent) {
+        const nextEventEl = document.getElementById('nextEventPrediction');
+        nextEventEl.style.display = 'block';
+        const eventLabel = nextEvent.type === 'next_period' ? 'Próxima menstruación' : 'Ovulación estimada';
+        document.getElementById('nextEventIcon').textContent = nextEvent.type === 'next_period' ? '🩸' : '✨';
+        document.getElementById('nextEventText').textContent = `${eventLabel} en ${nextEvent.daysUntil} días (${Math.round(nextEvent.confidence * 100)}% confianza)`;
+      }
+    } catch (e) {
+      console.warn('Predictions error:', e);
+    }
+    
+    // Get freeze tokens
+    try {
+      const freezeTokens = await BadgeSystem.getFreezeTokens();
+      document.getElementById('freezeCount').textContent = freezeTokens;
+      if (freezeTokens > 0) {
+        document.getElementById('freezeTokenSection').style.display = 'block';
+      }
+    } catch (e) {}
+    
+  } catch (e) {
+    console.warn('Cycle widget init error:', e);
+  }
+}
+
+// ===== FINANCIAL TRACKER INITIALIZATION =====
+async function initFinanceWidget() {
+  if (!currentUser) return;
+  
+  try {
+    const monthKey = FinancialTracker.getCurrentMonthKey();
+    const summary = await FinancialTracker.getMonthlySummary(monthKey);
+    const lang = currentLang || 'es';
+    
+    // Update month label
+    const months = { es: ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'], en: ['January','February','March','April','May','June','July','August','September','October','November','December'] };
+    const now = new Date();
+    document.getElementById('financeMonth').textContent = (months[lang] || months['es'])[now.getMonth()] + ' ' + now.getFullYear();
+    
+    // Update summary cards
+    document.getElementById('financeIncome').textContent = FinancialTracker.formatCurrency(summary.totalIncome);
+    document.getElementById('financeExpenses').textContent = FinancialTracker.formatCurrency(summary.totalExpenses);
+    document.getElementById('financeBalance').textContent = FinancialTracker.formatCurrency(summary.balance);
+    
+    // Top category
+    if (summary.topCategories && summary.topCategories.length > 0) {
+      const top = summary.topCategories[0];
+      document.getElementById('financeTopCategory').innerHTML = 
+        `<div style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg);border-radius:8px;font-size:12px">
+          <span style="font-size:16px">${top.icon}</span>
+          <span style="flex:1;color:var(--texto)">Mayor gasto: <strong>${top.name[lang] || top.name['es']}</strong> (${top.percentage}%)</span>
+        </div>`;
+    }
+    
+  } catch (e) {
+    console.warn('Finance widget init error:', e);
+  }
+}
+
+// ===== BADGES INITIALIZATION =====
+async function initBadgesWidget() {
+  if (!currentUser) return;
+  
+  try {
+    // Check and award new badges
+    await BadgeSystem.checkAndAwardBadges();
+    
+    // Get user badges
+    const badges = await BadgeSystem.getUserBadges();
+    const lang = currentLang || 'es';
+    
+    document.getElementById('badgeCount').textContent = `${badges.length} logros`;
+    
+    if (badges.length > 0) {
+      document.getElementById('badgesWidget').innerHTML = BadgeSystem.renderBadgeGrid(badges);
+    } else {
+      document.getElementById('badgesWidget').innerHTML = 
+        `<div style="text-align:center;padding:20px;color:var(--suave);font-size:12px">
+          ${lang === 'es' ? 'Aún no tienes logros. ¡Empieza a completar retos!' : 'No badges yet. Start completing challenges!'}
+        </div>`;
+    }
+  } catch (e) {
+    console.warn('Badges widget init error:', e);
+  }
+}
+
+// ===== TRANSACTION MODAL =====
+let txType = 'expense';
+let txCategory = '';
+
+function openAddTransaction(type) {
+  txType = type;
+  txCategory = '';
+  
+  const lang = currentLang || 'es';
+  const title = type === 'expense' ? '💸 Registrar gasto' : '💰 Registrar ingreso';
+  document.getElementById('txModalTitle').textContent = title;
+  
+  // Set today's date
+  document.getElementById('txDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('txAmount').value = '';
+  document.getElementById('txDescription').value = '';
+  
+  // Populate categories
+  const categories = type === 'expense' ? FinancialTracker.EXPENSE_CATEGORIES : FinancialTracker.INCOME_CATEGORIES;
+  const picker = document.getElementById('txCategoryPicker');
+  picker.innerHTML = '';
+  
+  Object.entries(categories).forEach(([key, cat]) => {
+    const btn = document.createElement('button');
+    btn.className = 'symptom-chip';
+    btn.style.cssText = 'padding:6px 12px;border:1.5px solid var(--borde);border-radius:100px;background:var(--bg);font-size:11px;cursor:pointer';
+    btn.textContent = cat.icon + ' ' + (cat.name[lang] || cat.name['es']);
+    btn.onclick = () => {
+      document.querySelectorAll('#txCategoryPicker .symptom-chip').forEach(b => { b.style.borderColor = 'var(--borde)'; b.style.background = 'var(--bg)'; });
+      btn.style.borderColor = type === 'expense' ? 'var(--rosa)' : 'var(--verde)';
+      btn.style.background = type === 'expense' ? 'var(--rosa-l)' : 'var(--verde-l)';
+      txCategory = key;
+    };
+    picker.appendChild(btn);
+  });
+  
+  document.getElementById('transactionModal').style.display = 'flex';
+}
+
+function closeTransactionModal() {
+  document.getElementById('transactionModal').style.display = 'none';
+}
+
+async function submitTransaction() {
+  if (!txCategory) {
+    showToast('Selecciona una categoría');
+    return;
+  }
+  
+  const amount = parseFloat(document.getElementById('txAmount').value);
+  if (!amount || amount <= 0) {
+    showToast('Ingresa un monto válido');
+    return;
+  }
+  
+  try {
+    await FinancialTracker.addTransaction({
+      type: txType,
+      category: txCategory,
+      amount: amount,
+      description: document.getElementById('txDescription').value,
+      date: document.getElementById('txDate').value
+    });
+    
+    closeTransactionModal();
+    const label = txType === 'expense' ? 'Gasto' : 'Ingreso';
+    showToast(`💰 ${label} registrado: ${FinancialTracker.formatCurrency(amount)}`);
+    
+    // Refresh finance widget
+    await initFinanceWidget();
+  } catch (e) {
+    console.error('Transaction error:', e);
+    showToast('Error al guardar. Intenta de nuevo.');
+  }
+}
+
+// ===== FREEZE TOKEN =====
+async function useFreeze() {
+  if (!currentUser) return;
+  
+  try {
+    const result = await BadgeSystem.useFreezeToken();
+    if (result === 'OK') {
+      await initCycleWidget(); // Refresh freeze count
+      await initBadgesWidget(); // Refresh badges
+    } else if (result === 'NO_TOKENS') {
+      showToast('No tienes tokens de congelamiento disponibles');
+    }
+  } catch (e) {
+    console.error('Freeze error:', e);
+  }
+}
+
+// ===== INITIALIZE ALL WIDGETS =====
+async function initAllWidgets() {
+  if (!currentUser) return;
+  
+  await Promise.all([
+    initCycleWidget(),
+    initFinanceWidget(),
+    initBadgesWidget()
+  ]);
+}
+
+// ===== ENHANCED LOAD DASHBOARD =====
+const originalLoadDashboard = window.loadDashboard;
+window.loadDashboard = async function() {
+  if (originalLoadDashboard) await originalLoadDashboard();
+  // Initialize enhanced features after dashboard loads
+  setTimeout(() => initAllWidgets(), 500);
+};
 </script>
 <script>
 setTheme(currentTheme);
