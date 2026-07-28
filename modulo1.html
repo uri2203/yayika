@@ -473,15 +473,13 @@ function completeLesson(){
 
 function nextLesson(){
   completeLesson();
-  // Save progress to localStorage
   const progress = JSON.parse(localStorage.getItem('yayika-course-progress') || '{}');
   progress['ciclo-productiva-module1-lesson1'] = true;
   localStorage.setItem('yayika-course-progress', JSON.stringify(progress));
-  // Navigate to next lesson (for now, stay on same page)
-  window.location.href = 'modulo1.html#lesson2';
+  // For now, show coming soon message
+  alert('🚧 Lección 2 próximamente. ¡Estamos trabajando en ella!');
 }
 </script>
-<script src="/js/courses.js"></script>
-<script>setTheme(currentTheme);applyTranslations();initCourse('ciclo-productiva', 1, 0);</script>
+<script>setTheme(currentTheme);applyTranslations();</script>
 </body>
 </html>
