@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Gracias por tu compra! — Yayika</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+<script defer data-domain="yayika.com" src="https://plausible.io/js/script.js"></script>
+<meta name="theme-color" content="#4E3470">
+<meta name="robots" content="noindex, nofollow">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#FDFAF7;color:#333;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:24px;padding:48px 40px;max-width:480px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(78,52,112,.08)}
+.check{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1A9E8F,#16837A);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+.check svg{width:36px;height:36px;stroke:#fff;stroke-width:3;fill:none}
+h1{font-family:'Playfair Display',serif;font-size:28px;color:#4E3470;margin-bottom:12px}
+p{font-size:16px;color:#666;line-height:1.6;margin-bottom:24px}
+.highlight{color:#1A9E8F;font-weight:600}
+.btn{display:inline-block;background:linear-gradient(135deg,#4E3470,#6B4E99);color:#fff;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(78,52,112,.3)}
+.note{font-size:13px;color:#999;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="check">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+  </div>
+  <h1>¡Gracias por tu compra!</h1>
+  <p>Tu acceso ya está activo. Revisa tu <span class="highlight">correo electrónico</span> con los detalles de tu compra y las instrucciones para acceder a tu contenido.</p>
+  <a href="/Portales/" class="btn">Ir a mi panel</a>
+  <p class="note">Si no recibes el correo en 5 minutos, revisa tu carpeta de spam o escríbenos a hola@yayika.com</p>
+</div>
+<script>
+// Track conversion if analytics present
+if (typeof gtag === 'function') {
+  gtag('event', 'purchase', { transaction_id: Date.now(), value: 0, currency: 'USD' });
+}
+</script>
+</body>
+</html>

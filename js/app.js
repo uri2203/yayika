@@ -30,6 +30,10 @@ async function signUp(email, password, fullName) {
     options: { data: { full_name: fullName } }
   });
   if (error) throw error;
+  // Profile auto-created by trigger; show confirmation message
+  if (data && !data.session) {
+    return { ...data, message: 'Te enviamos un correo de confirmación. Revisa tu bandeja de entrada.' };
+  }
   return data;
 }
 
@@ -40,6 +44,13 @@ async function signIn(email, password) {
   });
   if (error) throw error;
   currentUser = data.user;
+  // Load profile
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', currentUser.id)
+    .single();
+  if (profile) currentUser.profile = profile;
   return data;
 }
 
@@ -50,7 +61,15 @@ async function signOut() {
 
 async function getSession() {
   const { data: { session } } = await supabase.auth.getSession();
-  if (session) currentUser = session.user;
+  if (session) {
+    currentUser = session.user;
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', currentUser.id)
+      .single();
+    if (profile) currentUser.profile = profile;
+  }
   return session;
 }
 
@@ -232,9 +251,9 @@ async function getRanking() {
 // ============================================================
 
 const STRIPE_PLANS = {
-  semilla: { priceId: 'price_1TyEO3DkAO2FeDgt5FKomxVD', name: 'Semilla', price: 9.99, link: 'https://buy.stripe.com/6oU5kD9D0cgGbEI1elgA809' },
-  guerrera: { priceId: 'price_1TyEO3DkAO2FeDgtm8GpFi2H', name: 'Guerrera', price: 19.99, link: 'https://buy.stripe.com/6oUdR9dTg5SifUYaOVgA80a' },
-  diamante: { priceId: 'price_1TyEO3DkAO2FeDgtfs8lzJlL', name: 'Diamante', price: 29.99, link: 'https://buy.stripe.com/28E3cvaH42G6bEI5uBgA80b' }
+  semilla: { priceId: 'price_1TyEO3DkAO2FeDgt5FKomxVD', name: 'Semilla', price: 9.99, link: 'https://buy.stripe.com/00wcN502q0xY2481elgA80f' },
+  guerrera: { priceId: 'price_1TyEO3DkAO2FeDgtm8GpFi2H', name: 'Guerrera', price: 19.99, link: 'https://buy.stripe.com/14A4gzeXk0xY4cg3mtgA80g' },
+  diamante: { priceId: 'price_1TyEO3DkAO2FeDgtfs8lzJlL', name: 'Diamante', price: 29.99, link: 'https://buy.stripe.com/cNi9ATdTgfsSbEI4qxgA80h' }
 };
 
 async function createCheckoutSession(planKey) {
