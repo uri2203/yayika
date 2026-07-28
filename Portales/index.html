@@ -809,6 +809,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/financial-tracker.js"></script>
 <script src="../js/badges.js"></script>
 <script>
+// ===== SUPABASE INIT (ensure it's ready before auth) =====
+if (!supabase) { initSupabase(); }
+
 // ===== SUPABASE AUTH =====
 async function doLogin() {
   const email = document.getElementById('emailInput').value.trim().toLowerCase();
@@ -816,6 +819,15 @@ async function doLogin() {
   const err = document.getElementById('loginError');
 
   if (!email || !pass) { err.textContent = 'Por favor llena todos los campos.'; err.style.display = 'block'; return; }
+
+  // Ensure Supabase is initialized
+  if (!supabase) {
+    if (!initSupabase()) {
+      err.textContent = 'Error de conexión. Recarga la página.';
+      err.style.display = 'block';
+      return;
+    }
+  }
 
   try {
     err.style.display = 'none';
