@@ -232,9 +232,9 @@ async function getRanking() {
 // ============================================================
 
 const STRIPE_PLANS = {
-  semilla: { priceId: 'price_1TxrxdDkAO2FeDgtMYXiiBXX', name: 'Semilla', price: 99, link: 'https://buy.stripe.com/3cIdR9cPc0xYdMQ5uBgA803' },
-  guerrera: { priceId: 'price_1TxrxeDkAO2FeDgtQdgoojNk', name: 'Guerrera', price: 199, link: 'https://buy.stripe.com/5kQ00j4iG80qaAEbSZgA804' },
-  diamante: { priceId: 'price_1TxrxeDkAO2FeDgtz3pCfEdE', name: 'Diamante', price: 349, link: 'https://buy.stripe.com/eVqaEXdTg1C2aAEf5bgA805' }
+  semilla: { priceId: 'price_1TyEO3DkAO2FeDgt5FKomxVD', name: 'Semilla', price: 9.99, link: 'https://buy.stripe.com/6oU5kD9D0cgGbEI1elgA809' },
+  guerrera: { priceId: 'price_1TyEO3DkAO2FeDgtm8GpFi2H', name: 'Guerrera', price: 19.99, link: 'https://buy.stripe.com/6oUdR9dTg5SifUYaOVgA80a' },
+  diamante: { priceId: 'price_1TyEO3DkAO2FeDgtfs8lzJlL', name: 'Diamante', price: 29.99, link: 'https://buy.stripe.com/28E3cvaH42G6bEI5uBgA80b' }
 };
 
 async function createCheckoutSession(planKey) {
