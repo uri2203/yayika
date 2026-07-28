@@ -118,6 +118,7 @@ const I18N = {
     cta_btn: 'Queremos empezar ahora',
     // Footer
     footer_products: 'Productos',
+    footer_products_desc: 'Productos digitales para mujeres que quieren más. Acceso instantáneo desde cualquier dispositivo.',
     footer_legal: 'Legal',
     footer_privacy: 'Privacidad',
     footer_terms: 'Términos de uso',
@@ -214,6 +215,7 @@ const I18N = {
     portal_login_title: 'Entrar a mi portal',
     portal_login_sub: 'Ingresa con tu cuenta de Yayika',
     portal_login_error: 'Correo o contraseña incorrectos. Intenta de nuevo.',
+    signup_confirm_email: 'Te enviamos un correo de confirmación. Revisa tu bandeja de entrada.',
     portal_email_label: 'Correo electrónico',
     portal_pass_label: 'Contraseña',
     portal_forgot_pass: '¿Olvidaste tu contraseña?',
@@ -413,6 +415,7 @@ const I18N = {
     cta_sub: 'We don\'t need more time or money. Just the right resource at the right moment. Together we\'re stronger.',
     cta_btn: 'Let\'s start now',
     footer_products: 'Products',
+    footer_products_desc: 'Digital products for women who want more. Instant access from any device.',
     footer_legal: 'Legal',
     footer_privacy: 'Privacy',
     footer_terms: 'Terms of use',
@@ -502,6 +505,7 @@ const I18N = {
     portal_login_title: 'Enter my portal',
     portal_login_sub: 'Sign in with your Yayika account',
     portal_login_error: 'Incorrect email or password. Try again.',
+    signup_confirm_email: 'We sent you a confirmation email. Check your inbox.',
     portal_email_label: 'Email',
     portal_pass_label: 'Password',
     portal_forgot_pass: 'Forgot your password?',
@@ -701,6 +705,7 @@ const I18N = {
     cta_sub: 'Você não precisa de mais tempo nem de mais dinheiro. Apenas o recurso certo no momento certo.',
     cta_btn: 'Quero começar agora',
     footer_products: 'Produtos',
+    footer_products_desc: 'Produtos digitais para mulheres que querem mais. Acesso instantâneo de qualquer dispositivo.',
     footer_legal: 'Jurídico',
     footer_privacy: 'Privacidade',
     footer_terms: 'Termos de uso',
@@ -790,6 +795,7 @@ const I18N = {
     portal_login_title: 'Entrar no meu portal',
     portal_login_sub: 'Entre com sua conta Yayika',
     portal_login_error: 'Email ou senha incorretos. Tente novamente.',
+    signup_confirm_email: 'Enviámos um email de confirmação. Verifique sua caixa de entrada.',
     portal_email_label: 'Email',
     portal_pass_label: 'Senha',
     portal_forgot_pass: 'Esqueceu sua senha?',
@@ -989,6 +995,7 @@ const I18N = {
     cta_sub: 'Vous n\'avez pas besoin de plus de temps ni d\'argent. Juste la bonne ressource au bon moment.',
     cta_btn: 'Je veux commencer maintenant',
     footer_products: 'Produits',
+    footer_products_desc: 'Produits numériques pour les femmes qui en veulent plus. Accès instantané depuis n\'importe quel appareil.',
     footer_legal: 'Juridique',
     footer_privacy: 'Confidentialité',
     footer_terms: 'Conditions d\'utilisation',
@@ -1078,6 +1085,7 @@ const I18N = {
     portal_login_title: 'Entrer dans mon portail',
     portal_login_sub: 'Connectez-vous avec votre compte Yayika',
     portal_login_error: 'Email ou mot de passe incorrect. Réessayez.',
+    signup_confirm_email: 'Nous vous avons envoyé un email de confirmation. Vérifiez votre boîte de réception.',
     portal_email_label: 'Email',
     portal_pass_label: 'Mot de passe',
     portal_forgot_pass: 'Mot de passe oublié?',
@@ -1277,6 +1285,7 @@ const I18N = {
     cta_sub: 'Du brauchst nicht mehr Zeit oder Geld. Nur die richtige Ressource zum richtigen Zeitpunkt.',
     cta_btn: 'Ich will jetzt anfangen',
     footer_products: 'Produkte',
+    footer_products_desc: 'Digitale Produkte für Frauen, die mehr wollen. Sofortiger Zugriff von jedem Gerät.',
     footer_legal: 'Rechtliches',
     footer_privacy: 'Datenschutz',
     footer_terms: 'Nutzungsbedingungen',
@@ -1366,6 +1375,7 @@ const I18N = {
     portal_login_title: 'In mein Portal einloggen',
     portal_login_sub: 'Melde dich mit deinem Yayika-Konto an',
     portal_login_error: 'Falsche E-Mail oder Passwort. Versuche es erneut.',
+    signup_confirm_email: 'Wir haben dir eine Bestätigungs-E-Mail geschickt. Überprüfe deinen Posteingang.',
     portal_email_label: 'E-Mail',
     portal_pass_label: 'Passwort',
     portal_forgot_pass: 'Passwort vergessen?',
@@ -1559,14 +1569,15 @@ function updatePrices() {
     const val = t(key);
     if (val) el.textContent = sym + val;
   });
-  // Update JSON-LD currency
-  const ldScript = document.querySelector('script[type="application/ld+json"]');
-  if (ldScript) {
+  // Update JSON-LD currency (find the Product schema)
+  document.querySelectorAll('script[type="application/ld+json"]').forEach(ldScript => {
     try {
       const ld = JSON.parse(ldScript.textContent);
-      ld.offers.priceCurrency = t('price_currency');
-      ld.offers.price = t('price_ciclo');
-      ldScript.textContent = JSON.stringify(ld, null, 2);
+      if (ld['@type'] === 'Product' && ld.offers) {
+        ld.offers.priceCurrency = t('price_currency');
+        ld.offers.price = t('price_ciclo');
+        ldScript.textContent = JSON.stringify(ld, null, 2);
+      }
     } catch(e) {}
-  }
+  });
 }

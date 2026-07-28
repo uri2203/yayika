@@ -32,7 +32,7 @@ async function signUp(email, password, fullName) {
   if (error) throw error;
   // Profile auto-created by trigger; show confirmation message
   if (data && !data.session) {
-    return { ...data, message: 'Te enviamos un correo de confirmación. Revisa tu bandeja de entrada.' };
+    return { ...data, message: typeof t === 'function' ? t('signup_confirm_email') : 'Te enviamos un correo de confirmación. Revisa tu bandeja de entrada.' };
   }
   return data;
 }
@@ -46,10 +46,10 @@ async function signIn(email, password) {
   currentUser = data.user;
   // Load profile
   const { data: profile } = await supabase
-    .from('profiles')
+    .from('yayika_profiles')
     .select('*')
     .eq('id', currentUser.id)
-    .single();
+    .maybeSingle();
   if (profile) currentUser.profile = profile;
   return data;
 }
@@ -64,10 +64,10 @@ async function getSession() {
   if (session) {
     currentUser = session.user;
     const { data: profile } = await supabase
-      .from('profiles')
+      .from('yayika_profiles')
       .select('*')
       .eq('id', currentUser.id)
-      .single();
+      .maybeSingle();
     if (profile) currentUser.profile = profile;
   }
   return session;
@@ -82,7 +82,7 @@ async function getProgress() {
     .from('yayika_progress')
     .select('*')
     .eq('user_id', currentUser.id)
-    .single();
+    .maybeSingle();
   if (error) throw error;
   return data;
 }
@@ -124,7 +124,7 @@ async function completeModule(moduleNumber, xpEarned) {
   // Actualizar módulo actual en progress
   await supabase
     .from('yayika_progress')
-    .update({ current_module: Math.max(moduleNumber + 1, 5) })
+    .update({ current_module: Math.min(moduleNumber + 1, 5) })
     .eq('user_id', currentUser.id);
 
   // Agregar XP
@@ -212,14 +212,19 @@ async function getSavedIdeas() {
 // ============================================================
 
 async function logActivity(type, detail, xp) {
-  await supabase
-    .from('yayika_activity_log')
-    .insert({
-      user_id: currentUser.id,
-      activity_type: type,
-      activity_detail: detail,
-      xp_earned: xp || 0
-    });
+  try {
+    if (!currentUser || !supabase) return;
+    await supabase
+      .from('yayika_activity_log')
+      .insert({
+        user_id: currentUser.id,
+        activity_type: type,
+        activity_detail: detail,
+        xp_earned: xp || 0
+      });
+  } catch (e) {
+    console.error('logActivity error:', e);
+  }
 }
 
 async function getRecentActivity(limit = 20) {
@@ -289,10 +294,13 @@ function showToast(msg) {
 }
 
 function formatDate(dateStr) {
-  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  const d = new Date(dateStr);
-  return `${days[d.getDay()]} ${d.getDate()} de ${months[d.getMonth()]}`;
+  const localeMap = { es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' };
+  const locale = localeMap[currentLang] || 'es-MX';
+  const d = new Date(dateStr + 'T12:00:00');
+  const dayName = new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(d);
+  const monthName = new Intl.DateTimeFormat(locale, { month: 'long' }).format(d);
+  const capitalized = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+  return `${capitalized} ${d.getDate()} de ${monthName}`;
 }
 
 function timeAgo(dateStr) {
