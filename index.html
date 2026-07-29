@@ -500,6 +500,14 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 @media(max-width:768px){
   .qr-container{display:none!important}
 }
+
+/* AI Section Responsive */
+@media(max-width:900px){
+  .ai-grid-3{grid-template-columns:repeat(2,1fr)!important}
+}
+@media(max-width:600px){
+  .ai-grid-3{grid-template-columns:1fr!important}
+}
 </style>
 </head>
 <body>
@@ -762,6 +770,82 @@ footer{background:var(--texto);padding:44px 5vw 24px}
       <div class="test-stars">★★★★★</div>
       <div class="test-text" data-i18n="test_3_text">"Usé los scripts de negociación y pedí mi primer aumento. Me dijeron que sí. Literalmente cambió mi vida."</div>
         <div class="test-author"><img class="test-av" src="/assets/img/testimonios/valentina.jpg" alt="Valentina R." loading="lazy" width="34" height="34"><div><div class="test-name">Valentina R.</div><div class="test-city">Diseñadora · Monterrey</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== IA PARA MUJERES ===== -->
+<section class="ai-section" id="ia" style="padding:80px 5vw;background:linear-gradient(180deg,#1A0E30 0%,#0D0820 100%);position:relative;overflow:hidden">
+  <div style="position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(123,94,167,0.15) 0%,transparent 70%);pointer-events:none"></div>
+  <div style="position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(26,158,143,0.1) 0%,transparent 70%);pointer-events:none"></div>
+  
+  <div style="max-width:1100px;margin:0 auto;position:relative;z-index:1">
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:48px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:2px;color:#D4B8F5;text-transform:uppercase;margin-bottom:12px">Inteligencia Artificial</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4.5vw,50px);font-weight:700;color:white;margin:0 0 16px;line-height:1.15">
+        Tu <em style="color:#D4B8F5;font-style:italic">IA</em> que te entiende
+      </h2>
+      <p style="font-size:16px;color:rgba(255,255,255,0.5);max-width:520px;margin:0 auto;line-height:1.7;font-weight:300">
+        No es una chatbot genérica. Yayika tiene 6 agentes de IA creados específicamente para acompañarte en tu ciclo, tus finanzas y tu bienestar.
+      </p>
+    </div>
+
+    <!-- AI Agents Grid -->
+    <div class="ai-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px">
+      
+      <!-- 1. Cycle Coach -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(26,158,143,0.1)';this.style.borderColor='rgba(26,158,143,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="font-size:32px;margin-bottom:12px">🧠</div>
+        <h3 style="font-size:16px;font-weight:600;color:white;margin:0 0 8px">Tu Coach de Ciclo</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;margin:0">Analiza tu fase, energía y síntomas. Te da coaching personalizado con acciones concretas para hoy.</p>
+      </div>
+
+      <!-- 2. Affirmations -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(123,94,167,0.1)';this.style.borderColor='rgba(123,94,167,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="font-size:32px;margin-bottom:12px">💜</div>
+        <h3 style="font-size:16px;font-weight:600;color:white;margin:0 0 8px">Afirmación del Día</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;margin:0">Cada mañana recibes una afirmación única, basada en tu fase y tu estado de ánimo. Para compartir y recordar.</p>
+      </div>
+
+      <!-- 3. Smart Notifications -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(201,107,122,0.1)';this.style.borderColor='rgba(201,107,122,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="font-size:32px;margin-bottom:12px">🔔</div>
+        <h3 style="font-size:16px;font-weight:600;color:white;margin:0 0 8px">Notificaciones Inteligentes</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;margin:0">No es un recordatorio aburrido. Detecta tu fase, tu racha y tu estado para enviarte el mensaje justo.</p>
+      </div>
+
+      <!-- 4. Financial Coach -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(59,175,122,0.1)';this.style.borderColor='rgba(59,175,122,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="font-size:32px;margin-bottom:12px">💰</div>
+        <h3 style="font-size:16px;font-weight:600;color:white;margin:0 0 8px">Coach Financiero</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;margin:0">Analiza tus gastos, detecta patrones por fase del ciclo y te ayuda a mejorar tu relación con el dinero.</p>
+      </div>
+
+      <!-- 5. Weekly Digest -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(184,148,58,0.1)';this.style.borderColor='rgba(184,148,58,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="font-size:32px;margin-bottom:12px">📊</div>
+        <h3 style="font-size:16px;font-weight:600;color:white;margin:0 0 8px">Resumen Semanal</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;margin:0">Cada lunes recibes un email con tu resumen: ciclo, finanzas, retos completados y tu progreso.</p>
+      </div>
+
+      <!-- 6. Wellness Planner -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all 0.3s;cursor:default" onmouseover="this.style.background='rgba(184,148,58,0.1)';this.style.borderColor='rgba(184,148,58,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.04)';this.style.borderColor='rgba(255,255,255,0.08)'">
+        <div style="font-size:32px;margin-bottom:12px">🥗</div>
+        <h3 style="font-size:16px;font-weight:600;color:white;margin:0 0 8px">Plan de Bienestar</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;margin:0">Comidas y ejercicios adaptados a tu fase hormonal. Tu cuerpo necesita cosas diferentes cada semana.</p>
+      </div>
+
+    </div>
+
+    <!-- Bottom CTA -->
+    <div style="text-align:center">
+      <p style="font-size:14px;color:rgba(255,255,255,0.4);margin:0 0 20px;font-style:italic">
+        "No es una chatbot. Es una coach que entiende tu ciclo mejor que tú."
+      </p>
+      <a href="#membresia" style="display:inline-block;background:linear-gradient(135deg,#1A9E8F,#0E7A6D);color:white;padding:14px 36px;border-radius:100px;text-decoration:none;font-size:14px;font-weight:500;transition:all 0.3s;box-shadow:0 4px 20px rgba(26,158,143,0.3)" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(26,158,143,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(26,158,143,0.3)'">
+        Prueba la IA gratis →
+      </a>
     </div>
   </div>
 </section>
