@@ -60,15 +60,70 @@ async function generateAIResponse(message, cycleDay = null) {
     }
   }
   
-  // Generate response based on category and context
+  // Try real LLM first (via Supabase Edge Function)
+  try {
+    const llmResponse = await callLLM(message, category, phaseContext, lang);
+    if (llmResponse) {
+      return {
+        text: llmResponse,
+        suggestions: getSuggestions(lang, category),
+        phase: phaseContext,
+        category,
+        source: 'llm'
+      };
+    }
+  } catch (e) {
+    console.log('LLM unavailable, falling back to rule-based:', e.message);
+  }
+  
+  // Fallback to rule-based responses
   const responses = generateContextualResponse(category, message, phaseContext, lang);
   
   return {
     text: responses.text,
     suggestions: responses.suggestions,
     phase: phaseContext,
-    category
+    category,
+    source: 'rules'
   };
+}
+
+// ============================================================
+// LLM INTEGRATION (Supabase Edge Function proxy)
+// ============================================================
+
+async function callLLM(message, category, phaseContext, lang) {
+  const supabaseUrl = typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : '';
+  const supabaseKey = typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '';
+  
+  if (!supabaseUrl || !supabaseKey) return null;
+  
+  const systemPrompt = AI_CONFIG.systemPrompts[category] || AI_CONFIG.systemPrompts.general;
+  
+  let contextInfo = '';
+  if (phaseContext) {
+    contextInfo = `\nContexto del usuario: Está en fase ${phaseContext.phase} del ciclo, energía promedio ${phaseContext.energy}/5.`;
+  }
+  
+  const response = await fetch(`${supabaseUrl}/functions/v1/ai-chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${supabaseKey}`,
+    },
+    body: JSON.stringify({
+      messages: [
+        { role: 'system', content: systemPrompt + contextInfo },
+        { role: 'user', content: message }
+      ],
+      lang
+    })
+  });
+  
+  if (!response.ok) throw new Error(`LLM API error: ${response.status}`);
+  
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || data.reply || null;
 }
 
 function generateContextualResponse(category, message, phaseContext, lang) {
