@@ -509,6 +509,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <!-- DAILY AFFIRMATION WIDGET -->
       <div id="affirmationContainer"></div>
 
+      <!-- PUSH NOTIFICATION PERMISSION -->
+      <div id="pushPermissionContainer"></div>
+
       <div class="stats-row">
         <div class="stat-card"><div class="sc-num turquesa" id="totalXP">680</div><div class="sc-label" data-i18n="stat_xp">Puntos XP totales</div></div>
         <div class="stat-card"><div class="sc-num rosa" id="modulesCompleted">3</div><div class="sc-label" data-i18n="stat_productos">Productos activos</div></div>
@@ -849,6 +852,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/ai-agent.js" defer></script>
 <script src="../js/cycle-coach.js" defer></script>
 <script src="../js/daily-affirmations.js" defer></script>
+<script src="../js/smart-push.js" defer></script>
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
@@ -1103,6 +1107,19 @@ async function loadDashboard() {
     }
   } catch (e) {
     console.warn('Daily Affirmations init error:', e);
+  }
+
+  // ===== SMART PUSH NOTIFICATIONS =====
+  try {
+    if (typeof SmartPush !== 'undefined') {
+      SmartPush.init();
+      const pushContainer = document.getElementById('pushPermissionContainer');
+      if (pushContainer && SmartPush._permission !== 'granted') {
+        pushContainer.innerHTML = SmartPush.renderPermissionBanner();
+      }
+    }
+  } catch (e) {
+    console.warn('Smart Push init error:', e);
   }
 
   // Check subscription status
