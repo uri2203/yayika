@@ -242,6 +242,7 @@
 [data-theme="dark"] #installBanner .ib-title{color:var(--texto)!important}
 [data-theme="dark"] #installBanner .ib-sub{color:var(--suave)!important}
 [data-theme="dark"] #installBanner .ib-cancel{background:var(--lila-l)!important;color:var(--suave)!important;border-color:var(--borde)!important}
+[data-theme="dark"] .qr-card{box-shadow:0 8px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.05)}
 
 /* URGENCY */
 [data-theme="dark"] .urgency-bar{background:var(--turquesa-d)}
@@ -484,7 +485,13 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 }
 
 /* QR Code */
-.qr-container{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+.qr-container{display:flex;flex-direction:column;align-items:center;margin-bottom:0}
+.qr-wrapper{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.qr-glow{position:absolute;width:240px;height:240px;background:radial-gradient(circle,rgba(201,107,122,0.25) 0%,transparent 70%);border-radius:50%;filter:blur(30px);animation:qrPulse 4s ease-in-out infinite}
+@keyframes qrPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+.qr-card{position:relative;background:white;border-radius:20px;padding:16px;box-shadow:0 8px 40px rgba(0,0,0,0.2),0 0 0 1px rgba(255,255,255,0.1);z-index:1;transition:transform .3s ease}
+.qr-card:hover{transform:scale(1.03)}
+.qr-badge{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--turquesa),var(--lila));color:white;padding:5px 16px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:1.5px;z-index:2;box-shadow:0 4px 12px rgba(26,158,143,0.4);white-space:nowrap}
 @media(min-width:769px){
   .qr-container{display:flex!important}
 }
@@ -858,11 +865,17 @@ function installApp(){
     
     <!-- QR Code (visible on desktop, hidden on mobile) -->
     <div class="qr-container" id="qrContainer">
-      <div id="qrCode" style="width:200px;height:200px;background:white;border-radius:16px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:16px;overflow:hidden">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyayika.com&color=4E3470&bgcolor=FFFFFF&margin=10&format=png" alt="QR Yayika" style="width:180px;height:180px;display:block" crossorigin="anonymous">
+      <div class="qr-wrapper">
+        <div class="qr-glow"></div>
+        <div class="qr-card">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyayika.com&color=4E3470&bgcolor=FFFFFF&margin=0&format=png&logo=https%3A%2F%2Fyayika.com%2Ficon.svg" alt="QR Yayika" style="width:180px;height:180px;display:block;border-radius:8px" crossorigin="anonymous">
+        </div>
+        <div class="qr-badge">
+          <span>ESCÁNEAME</span>
+        </div>
       </div>
-      <p style="font-size:13px;color:var(--suave);margin-bottom:4px">Escanea con la cámara de tu celular</p>
-      <p style="font-size:11px;color:var(--suave);opacity:0.6">Se abrirá yayika.com para instalar</p>
+      <p style="font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:6px;font-weight:500">Escanea con la cámara de tu celular</p>
+      <p style="font-size:12px;color:rgba(255,255,255,0.45)">Se abrirá yayika.com — toca "Instalar"</p>
     </div>
 
     <!-- Install buttons (visible on mobile) -->
