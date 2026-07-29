@@ -858,7 +858,9 @@ function installApp(){
     
     <!-- QR Code (visible on desktop, hidden on mobile) -->
     <div class="qr-container" id="qrContainer">
-      <div id="qrCode" style="width:180px;height:180px;background:white;border-radius:16px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:16px"></div>
+      <div id="qrCode" style="width:200px;height:200px;background:white;border-radius:16px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:16px;overflow:hidden">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyayika.com&color=4E3470&bgcolor=FFFFFF&margin=10&format=png" alt="QR Yayika" style="width:180px;height:180px;display:block" crossorigin="anonymous">
+      </div>
       <p style="font-size:13px;color:var(--suave);margin-bottom:4px">Escanea con la cámara de tu celular</p>
       <p style="font-size:11px;color:var(--suave);opacity:0.6">Se abrirá yayika.com para instalar</p>
     </div>
@@ -1028,98 +1030,6 @@ function installApp(){
   // Init theme + i18n on load
   setTheme(currentTheme);
   applyTranslations();
-  
-  // Generate QR Code for install section
-  function generateQR(text, container, size) {
-    // Simple QR-like pattern (for production use a real QR library)
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    
-    // White background
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, size, size);
-    
-    // Generate deterministic pattern from URL
-    const modules = 25;
-    const cellSize = size / modules;
-    ctx.fillStyle = '#1E1528';
-    
-    // Corner markers (finder patterns)
-    function drawFinder(x, y) {
-      // Outer
-      ctx.fillRect(x * cellSize, y * cellSize, 7 * cellSize, 7 * cellSize);
-      ctx.fillStyle = 'white';
-      ctx.fillRect((x + 1) * cellSize, (y + 1) * cellSize, 5 * cellSize, 5 * cellSize);
-      ctx.fillStyle = '#1E1528';
-      ctx.fillRect((x + 2) * cellSize, (y + 2) * cellSize, 3 * cellSize, 3 * cellSize);
-    }
-    
-    drawFinder(0, 0);
-    drawFinder(modules - 7, 0);
-    drawFinder(0, modules - 7);
-    
-    // Timing patterns
-    for (let i = 8; i < modules - 8; i++) {
-      if (i % 2 === 0) {
-        ctx.fillRect(i * cellSize, 6 * cellSize, cellSize, cellSize);
-        ctx.fillRect(6 * cellSize, i * cellSize, cellSize, cellSize);
-      }
-    }
-    
-    // Data modules (deterministic from URL hash)
-    let hash = 0;
-    for (let i = 0; i < text.length; i++) {
-      hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
-    }
-    
-    const seed = Math.abs(hash);
-    for (let y = 0; y < modules; y++) {
-      for (let x = 0; x < modules; x++) {
-        // Skip finder patterns and timing
-        if ((x < 8 && y < 8) || (x > modules - 9 && y < 8) || (x < 8 && y > modules - 9)) continue;
-        if (x === 6 || y === 6) continue;
-        
-        // Pseudo-random data
-        const val = ((seed * (x * modules + y + 1) * 1103515245 + 12345) >>> 16) & 1;
-        if (val) {
-          ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-        }
-      }
-    }
-    
-    // Center logo circle
-    const centerX = (size / 2);
-    const centerY = (size / 2);
-    const logoSize = cellSize * 5;
-    
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, logoSize / 2 + cellSize, 0, Math.PI * 2);
-    ctx.fill();
-    
-    ctx.fillStyle = '#4E3470';
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, logoSize / 2, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Y letter in center
-    ctx.fillStyle = 'white';
-    ctx.font = `bold ${cellSize * 3}px Georgia, serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('Y', centerX, centerY + 1);
-    
-    container.innerHTML = '';
-    container.appendChild(canvas);
-  }
-  
-  // Generate QR on desktop
-  const qrEl = document.getElementById('qrCode');
-  if (qrEl && window.innerWidth > 768) {
-    generateQR('https://yayika.com', qrEl, 156);
-  }
   
   // Responsive: show/hide QR vs buttons
   function updateInstallUI() {
