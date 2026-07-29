@@ -90,7 +90,7 @@ const WellnessPlanner = {
     return {
       meals: [
         { name: lang === 'es' ? 'Desayuno nutritivo' : 'Nutritious breakfast', icon: '🥣' },
-        { name: lang === 'es' ? 'Almuerzo balanceado' : 'Balanced lunch', icon: '🥗' },
+        { name: lang === 'es' ? 'Almuerzo balanceado' : 'Balanced lunch', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>' },
       ],
       exercise: [
         { name: lang === 'es' ? 'Movimiento suave' : 'Gentle movement', duration: '20 min' },
@@ -105,13 +105,14 @@ const WellnessPlanner = {
   
   render() {
     const lang = currentLang || 'es';
+    const svgIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M12 22c1-3 5.5-6 10-6V4c-4.5 0-9 3-10 6"/><path d="M12 16c-1-3-5.5-6-10-6v12c4.5 0 9-3 10-6"/><circle cx="12" cy="12" r="2"/></svg>';
     const title = {
-      es: '🥗 Plan de bienestar hoy',
-      en: '🥗 Today\'s wellness plan',
-      pt: '🥗 Plano de bem-estar hoje',
-      fr: '🥗 Plan bien-être du jour',
-      de: '🥗 Wellness-Plan für heute'
-    }[lang] || '🥗 Plan de bienestar hoy';
+      es: `${svgIcon} Plan de bienestar hoy`,
+      en: `${svgIcon} Today's wellness plan`,
+      pt: `${svgIcon} Plano de bem-estar hoje`,
+      fr: `${svgIcon} Plan bien-être du jour`,
+      de: `${svgIcon} Wellness-Plan für heute`
+    }[lang] || `${svgIcon} Plan de bienestar hoy`;
     
     const mealsLabel = { es: '🍎 Comidas recomendadas', en: '🍎 Recommended meals', pt: '🍎 Refeições recomendadas', fr: '🍎 Repas recommandés', de: '🍎 Empfohlene Mahlzeiten' }[lang] || '🍎 Comidas';
     const exerciseLabel = { es: '🏃 Ejercicio sugerido', en: '🏃 Suggested exercise', pt: '🏃 Exercício sugerido', fr: '🏃 Exercice suggéré', de: '🏃 Vorgeschlagene Übung' }[lang] || '🏃 Ejercicio';
@@ -124,7 +125,7 @@ const WellnessPlanner = {
         </div>
         <div id="wellnessContent" style="padding:4px 0">
           <div style="text-align:center;padding:16px;color:var(--suave);font-size:13px">
-            <div style="font-size:20px;margin-bottom:6px;animation:pulse 1.5s infinite">🥗</div>
+            <div style="margin-bottom:6px;animation:pulse 1.5s infinite"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--oro)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c1-3 5.5-6 10-6V4c-4.5 0-9 3-10 6"/><path d="M12 16c-1-3-5.5-6-10-6v12c4.5 0 9-3 10-6"/><circle cx="12" cy="12" r="2"/></svg></div>
             Preparando tu plan...
           </div>
         </div>

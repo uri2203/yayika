@@ -145,13 +145,14 @@ const DailyAffirmations = {
   
   render() {
     const lang = currentLang || 'es';
+    const svgIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 3z"/></svg>';
     const title = {
-      es: '💜 Afirmación del día',
-      en: '💜 Daily affirmation',
-      pt: '💜 Afirmção do dia',
-      fr: '💜 Affirmation du jour',
-      de: '💜 Tages-Be affirmación'
-    }[lang] || '💜 Afirmación del día';
+      es: `${svgIcon} Afirmación del día`,
+      en: `${svgIcon} Daily affirmation`,
+      pt: `${svgIcon} Afirmção do dia`,
+      fr: `${svgIcon} Affirmation du jour`,
+      de: `${svgIcon} Tages-Bestätigung`
+    }[lang] || `${svgIcon} Afirmación del día`;
     
     const shareText = {
       es: 'Compartir',
@@ -175,17 +176,19 @@ const DailyAffirmations = {
         <div style="font-size:11px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-bottom:12px">${title}</div>
         <div id="affirmationText" style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:white;line-height:1.5;margin-bottom:8px;font-style:italic">
           <div style="text-align:center;padding:16px;color:rgba(255,255,255,0.5);font-size:13px;font-style:normal">
-            <div style="font-size:20px;margin-bottom:6px;animation:pulse 1.5s infinite">✨</div>
+            <div style="margin-bottom:6px;animation:pulse 1.5s infinite"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 3z"/></svg></div>
             Preparando tu afirmación...
           </div>
         </div>
         <div id="affirmationType" style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:14px"></div>
         <div style="display:flex;gap:8px;justify-content:center">
           <button onclick="DailyAffirmations.copyAffirmation()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);cursor:pointer;font-weight:500;transition:all 0.15s">
-            📋 ${copyText}
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            ${copyText}
           </button>
           <button onclick="DailyAffirmations.shareAffirmation()" style="font-size:11px;padding:6px 14px;border-radius:100px;background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.2);cursor:pointer;font-weight:500;transition:all 0.15s">
-            🔗 ${shareText}
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            ${shareText}
           </button>
         </div>
       </div>

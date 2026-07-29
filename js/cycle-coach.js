@@ -183,13 +183,14 @@ const CycleCoach = {
   
   render() {
     const lang = currentLang || 'es';
+    const svgIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
     const title = {
-      es: '🧠 Tu coach de hoy',
-      en: '🧠 Your coach today',
-      pt: '🧠 Seu coach de hoje',
-      fr: '🧠 Ton coach du jour',
-      de: '🧠 Dein Coach für heute'
-    }[lang] || '🧠 Tu coach de hoy';
+      es: `${svgIcon} Tu coach de hoy`,
+      en: `${svgIcon} Your coach today`,
+      pt: `${svgIcon} Seu coach de hoje`,
+      fr: `${svgIcon} Ton coach du jour`,
+      de: `${svgIcon} Dein Coach für heute`
+    }[lang] || `${svgIcon} Tu coach de hoy`;
     
     const loadingText = {
       es: 'Preparando tu coaching personalizado...',
@@ -207,13 +208,14 @@ const CycleCoach = {
         </div>
         <div id="coachContent" style="padding:4px 0">
           <div style="text-align:center;padding:20px;color:var(--suave);font-size:13px">
-            <div style="font-size:24px;margin-bottom:8px;animation:pulse 1.5s infinite">🤖</div>
+            <div style="margin-bottom:8px;animation:pulse 1.5s infinite"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--turquesa)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
             ${loadingText}
           </div>
         </div>
         <div style="margin-top:12px;display:flex;gap:6px;justify-content:center">
           <button onclick="CycleCoach.refresh()" style="font-size:11px;padding:5px 12px;border-radius:100px;background:var(--turquesa-l);color:var(--turquesa-d);border:1px solid var(--turquesa);cursor:pointer;font-weight:500">
-            🔄 ${{
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            ${{
               es: 'Actualizar coaching',
               en: 'Refresh coaching',
               pt: 'Atualizar coaching',
@@ -222,7 +224,8 @@ const CycleCoach = {
             }[lang] || 'Actualizar coaching'}
           </button>
           <button onclick="CycleCoach.showHistory()" style="font-size:11px;padding:5px 12px;border-radius:100px;background:var(--lila-l);color:var(--lila-d);border:1px solid var(--lila);cursor:pointer;font-weight:500">
-            📅 ${{
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            ${{
               es: 'Historial',
               en: 'History',
               pt: 'Histórico',

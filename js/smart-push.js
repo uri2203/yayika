@@ -265,12 +265,13 @@ const SmartPush = {
     if (this._permission === 'granted') return '';
     
     const lang = currentLang || 'es';
+    const bellSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
     const texts = {
-      es: { title: '🔔 Activa las notificaciones', desc: 'Recibe recordatorios inteligentes basados en tu ciclo', btn: 'Activar' },
-      en: { title: '🔔 Enable notifications', desc: 'Get smart reminders based on your cycle', btn: 'Enable' },
-      pt: { title: '🔔 Ative as notificações', desc: 'Receba lembretes inteligentes baseados no seu ciclo', btn: 'Ativar' },
-      fr: { title: '🔔 Active les notifications', desc: 'Reçois des rappels intelligents basés sur ton cycle', btn: 'Activer' },
-      de: { title: '🔔 Aktiviere Benachrichtigungen', desc: 'Erhalte intelligente Erinnerungen basierend auf deinem Zyklus', btn: 'Aktivieren' }
+      es: { title: `${bellSvg} Activa las notificaciones`, desc: 'Recibe recordatorios inteligentes basados en tu ciclo', btn: 'Activar' },
+      en: { title: `${bellSvg} Enable notifications`, desc: 'Get smart reminders based on your cycle', btn: 'Enable' },
+      pt: { title: `${bellSvg} Ative as notificações`, desc: 'Receba lembretes inteligentes baseados no seu ciclo', btn: 'Ativar' },
+      fr: { title: `${bellSvg} Active les notifications`, desc: 'Reçois des rappels intelligents basés sur ton cycle', btn: 'Activer' },
+      de: { title: `${bellSvg} Aktiviere Benachrichtigungen`, desc: 'Erhalte intelligente Erinnerungen basierend auf deinem Zyklus', btn: 'Aktivieren' }
     };
     const t = texts[lang] || texts['es'];
     

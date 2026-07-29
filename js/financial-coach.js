@@ -155,13 +155,14 @@ const FinancialCoach = {
   
   render() {
     const lang = currentLang || 'es';
+    const svgIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
     const title = {
-      es: '💡 Consejo financiero de hoy',
-      en: '💡 Today\'s financial tip',
-      pt: '💡 Conselho financeiro de hoje',
-      fr: '💡 Conseil financier du jour',
-      de: '💡 Finanz-Tipp für heute'
-    }[lang] || '💡 Consejo financiero de hoy';
+      es: `${svgIcon} Consejo financiero de hoy`,
+      en: `${svgIcon} Today's financial tip`,
+      pt: `${svgIcon} Conselho financeiro de hoje`,
+      fr: `${svgIcon} Conseil financier du jour`,
+      de: `${svgIcon} Finanz-Tipp für heute`
+    }[lang] || `${svgIcon} Consejo financiero de hoy`;
     
     return `
       <div id="financialCoachWidget" style="background:linear-gradient(135deg,var(--verde-d) 0%,#1A5E3A 100%);border-radius:14px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden">
@@ -169,7 +170,7 @@ const FinancialCoach = {
         <div style="font-size:11px;font-weight:600;letter-spacing:1px;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-bottom:10px">${title}</div>
         <div id="financialCoachContent" style="font-size:13px;color:white;line-height:1.6">
           <div style="text-align:center;padding:12px;color:rgba(255,255,255,0.5)">
-            <div style="font-size:18px;margin-bottom:4px;animation:pulse 1.5s infinite">🤖</div>
+            <div style="margin-bottom:4px;animation:pulse 1.5s infinite"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
             Analizando tus finanzas...
           </div>
         </div>
