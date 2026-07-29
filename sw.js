@@ -12,6 +12,7 @@ const OFFLINE_URL = '/offline.html';
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
+  '/splash.html',
   '/offline.html',
   '/Portales/index.html',
   '/afiliadas.html',
