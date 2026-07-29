@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sin conexión — Yayika</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#FAF7F2;color:#2C2240;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;text-align:center}
+.container{max-width:400px}
+.icon{font-size:64px;margin-bottom:20px}
+h1{font-size:24px;margin-bottom:12px;color:#4E3470}
+p{color:#7A6E85;font-size:16px;line-height:1.6;margin-bottom:24px}
+.btn{display:inline-block;padding:14px 32px;border-radius:50px;font-weight:600;font-size:15px;text-decoration:none;transition:transform .2s;background:#4E3470;color:white;border:none;cursor:pointer}
+.btn:hover{transform:translateY(-2px)}
+.tips{margin-top:32px;text-align:left;background:white;border-radius:16px;padding:20px;border:1px solid rgba(123,94,167,0.13)}
+.tips h3{font-size:14px;color:#4E3470;margin-bottom:12px}
+.tips li{font-size:13px;color:#7A6E85;margin-bottom:8px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="icon">📡</div>
+  <h1>Sin conexión a internet</h1>
+  <p>Parece que no tienes conexión en este momento. No te preocupes — tu progreso está guardado localmente.</p>
+  <button class="btn" onclick="location.reload()">Reintentar</button>
+  
+  <div class="tips">
+    <h3>Lo que puedes hacer offline:</h3>
+    <ul>
+      <li>Revisar tu último ciclo registrado</li>
+      <li>Ver tus badges y progreso</li>
+      <li>Leer notas de cursos descargados</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
