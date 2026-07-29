@@ -2,6 +2,58 @@
 // COURSE ENGINE — Dynamic lessons, videos, completion tracking
 // ============================================================
 
+function getLang(obj) {
+  if (!obj || typeof obj !== 'object') return obj || '';
+  var lang = (typeof currentLang !== 'undefined') ? currentLang : 'es';
+  return obj[lang] || obj['es'] || '';
+}
+
+const COURSE_JSON_MAP = {
+  'ciclo-productiva': '/courses/module1-lessons.json',
+  'dinero-sin-pena': '/courses/module2-lessons.json',
+  'mujer-que-negocia': '/courses/module3-lessons.json'
+};
+
+async function loadCourseTranslations(courseId) {
+  var course = COURSES[courseId];
+  if (!course) return;
+  var jsonPath = COURSE_JSON_MAP[courseId];
+  if (!jsonPath) return;
+  try {
+    var response = await fetch(jsonPath);
+    if (!response.ok) return;
+    var data = await response.json();
+    if (data.title) {
+      course.name = getLang(data.title);
+    }
+    var jsonLessons = data.lessons || [];
+    var jsonIdx = 0;
+    course.modules.forEach(function (mod) {
+      if (data.title && typeof data.title === 'object') {
+        mod.subtitle = getLang(data.description) || mod.subtitle;
+      }
+      mod.lessons.forEach(function (lesson) {
+        if (jsonIdx < jsonLessons.length) {
+          var jsonLesson = jsonLessons[jsonIdx];
+          if (jsonLesson.title) {
+            lesson.title = getLang(jsonLesson.title);
+          }
+          if (lesson.type === 'exercise' && jsonLesson.content) {
+            var content = getLang(jsonLesson.content);
+            var match = content.match(/(?:Ejercicio|Exercise|Exercício|Exercice|Übung)[:\s]*(.*?)(?:\.|$)/i);
+            if (match) {
+              lesson.prompt = match[1].trim();
+            }
+          }
+          jsonIdx++;
+        }
+      });
+    });
+  } catch (e) {
+    console.error('Error loading translations for', courseId, e);
+  }
+}
+
 const COURSES = {
   'ciclo-productiva': {
     id: 'ciclo-productiva',
@@ -296,10 +348,11 @@ let currentCourse = null;
 let currentModule = 1;
 let currentLesson = 0;
 
-function initCourse(courseId, moduleNum, lessonIdx) {
+async function initCourse(courseId, moduleNum, lessonIdx) {
   currentCourse = courseId;
   currentModule = moduleNum || 1;
   currentLesson = lessonIdx || 0;
+  await loadCourseTranslations(courseId);
   renderCurrentLesson();
 }
 
