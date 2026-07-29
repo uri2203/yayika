@@ -1,11 +1,11 @@
 // ============================================================
-// Yayika — Service Worker v3
-// Cache-first for static assets, network-first for API calls
+// Yayika — Service Worker v4
+// Enhanced PWA: navigation preload, better offline, period sync
 // ============================================================
 
-const CACHE_VERSION = 'yayika-v3';
-const STATIC_CACHE = 'yayika-static-v3';
-const DYNAMIC_CACHE = 'yayika-dynamic-v3';
+const CACHE_VERSION = 'yayika-v4';
+const STATIC_CACHE = 'yayika-static-v4';
+const DYNAMIC_CACHE = 'yayika-dynamic-v4';
 const OFFLINE_URL = '/offline.html';
 
 // Static assets to pre-cache
@@ -15,6 +15,7 @@ const PRECACHE_ASSETS = [
   '/offline.html',
   '/Portales/index.html',
   '/afiliadas.html',
+  '/soporte.html',
   '/modulo1.html',
   '/modulo2.html',
   '/modulo3.html',
@@ -47,7 +48,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate — clean old caches
+// Activate — clean old caches + enable navigation preload
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -56,7 +57,12 @@ self.addEventListener('activate', event => {
           .filter(key => key !== STATIC_CACHE && key !== DYNAMIC_CACHE)
           .map(key => caches.delete(key))
       )
-    ).then(() => self.clients.claim())
+    ).then(() => {
+      // Enable navigation preload where supported
+      if (self.registration.navigationPreload) {
+        return self.registration.navigationPreload.enable();
+      }
+    }).then(() => self.clients.claim())
   );
 });
 
@@ -68,18 +74,52 @@ self.addEventListener('fetch', event => {
   // Skip non-GET requests
   if (request.method !== 'GET') return;
 
-  // Skip Supabase API calls (always go to network)
+  // Skip Supabase/Stripe/Plausible API calls (always go to network)
   if (url.hostname.includes('supabase.co') || 
       url.hostname.includes('api.stripe.com') ||
-      url.hostname.includes('plausible.io')) {
+      url.hostname.includes('plausible.io') ||
+      url.hostname.includes('pagead2.googlesyndication.com') ||
+      url.hostname.includes('resend.com')) {
     event.respondWith(fetch(request).catch(() => new Response('Offline', { status: 503 })));
     return;
   }
 
-  // Skip cross-origin requests (CDN scripts, fonts, etc.)
+  // Skip cross-origin requests (CDN scripts, fonts, etc.) — stale-while-revalidate
   if (url.origin !== location.origin) {
     event.respondWith(
-      caches.match(request).then(cached => cached || fetch(request))
+      caches.open(DYNAMIC_CACHE).then(cache =>
+        cache.match(request).then(cached => {
+          const fetchPromise = fetch(request).then(response => {
+            if (response.ok) cache.put(request, response.clone());
+            return response;
+          }).catch(() => cached);
+          return cached || fetchPromise;
+        })
+      )
+    );
+    return;
+  }
+
+  // HTML pages — network-first with navigation preload + offline fallback
+  if (request.destination === 'document' || 
+      request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(
+      (self.registration.navigationPreload
+        ? self.registration.navigationPreload.response
+        : Promise.resolve(null)
+      ).then(preloadResponse => {
+        if (preloadResponse) {
+          // Cache the preload response
+          const clone = preloadResponse.clone();
+          caches.open(DYNAMIC_CACHE).then(cache => cache.put(request, clone));
+          return preloadResponse;
+        }
+        return fetch(request).then(response => {
+          const clone = response.clone();
+          caches.open(DYNAMIC_CACHE).then(cache => cache.put(request, clone));
+          return response;
+        });
+      }).catch(() => caches.match(request).then(cached => cached || caches.match(OFFLINE_URL)))
     );
     return;
   }
@@ -93,7 +133,8 @@ self.addEventListener('fetch', event => {
       url.pathname.endsWith('.css') ||
       url.pathname.endsWith('.png') ||
       url.pathname.endsWith('.svg') ||
-      url.pathname.endsWith('.mp4')) {
+      url.pathname.endsWith('.jpg') ||
+      url.pathname.endsWith('.webp')) {
     event.respondWith(
       caches.match(request).then(cached => {
         if (cached) return cached;
@@ -103,21 +144,6 @@ self.addEventListener('fetch', event => {
           return response;
         });
       }).catch(() => caches.match(OFFLINE_URL))
-    );
-    return;
-  }
-
-  // HTML pages — network-first with offline fallback
-  if (request.destination === 'document' || 
-      request.headers.get('accept')?.includes('text/html')) {
-    event.respondWith(
-      fetch(request)
-        .then(response => {
-          const clone = response.clone();
-          caches.open(DYNAMIC_CACHE).then(cache => cache.put(request, clone));
-          return response;
-        })
-        .catch(() => caches.match(request).then(cached => cached || caches.match(OFFLINE_URL)))
     );
     return;
   }
@@ -139,14 +165,22 @@ self.addEventListener('sync', event => {
   if (event.tag === 'sync-cycle-log') {
     event.waitUntil(syncCycleLog());
   }
+  if (event.tag === 'sync-finance') {
+    event.waitUntil(syncFinance());
+  }
 });
 
 async function syncCycleLog() {
-  // Read pending logs from IndexedDB and sync when back online
-  // This will be implemented in the client-side JS
   const clients = await self.clients.matchAll();
   clients.forEach(client => {
     client.postMessage({ type: 'SYNC_COMPLETE', tag: 'cycle-log' });
+  });
+}
+
+async function syncFinance() {
+  const clients = await self.clients.matchAll();
+  clients.forEach(client => {
+    client.postMessage({ type: 'SYNC_COMPLETE', tag: 'finance' });
   });
 }
 
@@ -162,14 +196,41 @@ self.addEventListener('push', event => {
       icon: '/assets/img/icon-192.png',
       badge: '/icon.svg',
       vibrate: [200, 100, 200],
-      data: data.url || '/'
+      tag: data.tag || 'yayika-notification',
+      renotify: true,
+      data: data.url || '/',
+      actions: [
+        { action: 'open', title: 'Abrir', icon: '/assets/img/icon-192.png' },
+        { action: 'dismiss', title: 'Cerrar' }
+      ]
     })
   );
 });
 
 self.addEventListener('notificationclick', event => {
   event.notification.close();
+  if (event.action === 'dismiss') return;
   event.waitUntil(
     clients.openWindow(event.notification.data || '/')
   );
 });
+
+// Periodic background sync (for reminders, streaks)
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'daily-reminder') {
+    event.waitUntil(showDailyReminder());
+  }
+});
+
+async function showDailyReminder() {
+  const clients = await self.clients.matchAll();
+  if (clients.length === 0) {
+    self.registration.showNotification('Yayika', {
+      body: '¡No olvides registrar tu día! Tu racha está en juego 🔥',
+      icon: '/assets/img/icon-192.png',
+      badge: '/icon.svg',
+      tag: 'daily-reminder',
+      data: '/Portales/'
+    });
+  }
+}
