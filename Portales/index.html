@@ -116,6 +116,11 @@
 [data-theme="dark"] .cw-days{color:var(--suave)}
 [data-theme="dark"] .cw-tip{background:var(--lila-l);color:var(--texto)}
 
+/* CYCLE COACH */
+[data-theme="dark"] #cycleCoachContainer .dash-card{border-left-color:var(--turquesa-text)}
+[data-theme="dark"] #coachPhase{background:var(--turquesa-l);color:var(--turquesa-text)}
+[data-theme="dark"] #coachContent{color:var(--texto)}
+
 /* PRODUCTS LIST */
 [data-theme="dark"] .pl-item{background:var(--bg);color:var(--texto)}
 [data-theme="dark"] .pl-item:hover{background:var(--lila-l)}
@@ -498,6 +503,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <span class="xp-val" id="xpVal">680 / 1000 XP</span>
       </div>
 
+      <!-- AI CYCLE COACH WIDGET -->
+      <div id="cycleCoachContainer"></div>
+
       <div class="stats-row">
         <div class="stat-card"><div class="sc-num turquesa" id="totalXP">680</div><div class="sc-label" data-i18n="stat_xp">Puntos XP totales</div></div>
         <div class="stat-card"><div class="sc-num rosa" id="modulesCompleted">3</div><div class="sc-label" data-i18n="stat_productos">Productos activos</div></div>
@@ -836,6 +844,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/admin.js" defer></script>
 <script src="../js/affiliate.js" defer></script>
 <script src="../js/ai-agent.js" defer></script>
+<script src="../js/cycle-coach.js" defer></script>
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
@@ -1072,6 +1081,15 @@ async function loadDashboard() {
     }
   } catch (e) {
     console.warn('Circles load error:', e);
+  }
+
+  // ===== AI CYCLE COACH =====
+  try {
+    if (typeof CycleCoach !== 'undefined') {
+      CycleCoach.init();
+    }
+  } catch (e) {
+    console.warn('Cycle Coach init error:', e);
   }
 
   // Check subscription status
