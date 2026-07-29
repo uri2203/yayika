@@ -641,8 +641,18 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <div class="dash-card" style="margin-bottom:14px">
         <div class="dc-title">🏅 <span data-i18n="badges_title">Mis logros</span><span class="dc-see" id="badgeCount">0 logros</span></div>
         <div id="badgesWidget" style="max-height:180px;overflow-y:auto">
-          <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">${{ es: 'Cargando logros...', en: 'Loading achievements...', pt: 'Carregando conquistas...', fr: 'Chargement des réalisations...', de: 'Lade Abzeichen...' }[currentLang || 'es']}</div>
+          <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Cargando logros...</div>
         </div>
+      </div>
+
+      <!-- AI CHAT ASSISTANT -->
+      <div id="aiChatWidget"></div>
+
+      <!-- AFFILIATE DASHBOARD -->
+      <div id="affiliateDashboard"></div>
+
+      <!-- ADMIN PANEL (only visible for admins) -->
+      <div id="adminPanelContainer"></div>
       </div>
 
       <!-- RENEWAL / UPGRADE -->
@@ -808,6 +818,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/cycle-tracker.js"></script>
 <script src="../js/financial-tracker.js"></script>
 <script src="../js/badges.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/affiliate.js"></script>
+<script src="../js/ai-agent.js"></script>
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
@@ -867,6 +880,14 @@ async function doRegister() {
       options: { data: { full_name: name } }
     });
     if (error) throw error;
+
+    // Process referral if exists
+    const refCode = sessionStorage.getItem('yayika_ref');
+    if (refCode && data.user && typeof AffiliateSystem !== 'undefined') {
+      await AffiliateSystem.processReferralOnSignup(refCode);
+      sessionStorage.removeItem('yayika_ref');
+    }
+
     const signupMsg = { es: 'Cuenta creada. Revisa tu correo para confirmar.', en: 'Account created. Check your email to confirm.', pt: 'Conta criada. Verifique seu e-mail para confirmar.', fr: 'Compte créé. Vérifie ton email pour confirmer.', de: 'Konto erstellt. Überprüfe deine E-Mail zur Bestätigung.' }[currentLang || 'es'];
     err.textContent = signupMsg;
     err.style.display = 'block';
@@ -1395,6 +1416,13 @@ window.addEventListener('load', async () => {
     return;
   }
 
+  // Track referral if ?ref= parameter exists
+  const refCode = new URLSearchParams(window.location.search).get('ref');
+  if (refCode && typeof AffiliateSystem !== 'undefined') {
+    sessionStorage.setItem('yayika_ref', refCode);
+    AffiliateSystem.trackClick(refCode);
+  }
+
   document.getElementById('passInput').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
   document.getElementById('emailInput').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('passInput').focus(); });
 
@@ -1699,6 +1727,26 @@ async function initAllWidgets() {
     initFinanceWidget(),
     initBadgesWidget()
   ]);
+
+  // Initialize AI Chat
+  const aiChatEl = document.getElementById('aiChatWidget');
+  if (aiChatEl && typeof AIAgent !== 'undefined') {
+    aiChatEl.innerHTML = AIAgent.renderAIChat();
+  }
+
+  // Initialize Affiliate Dashboard
+  const affEl = document.getElementById('affiliateDashboard');
+  if (affEl && typeof AffiliateSystem !== 'undefined') {
+    AffiliateSystem.loadAffiliateDashboard();
+  }
+
+  // Initialize Admin Panel (only for admins)
+  const adminEl = document.getElementById('adminPanelContainer');
+  if (adminEl && typeof AdminPanel !== 'undefined' && AdminPanel.isAdmin()) {
+    adminEl.innerHTML = AdminPanel.renderAdminPanel();
+    document.getElementById('adminPanel').style.display = 'block';
+    AdminPanel.showAdminTab('users');
+  }
 }
 
 // ===== ENHANCED LOAD DASHBOARD =====
