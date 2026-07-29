@@ -486,12 +486,14 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 
 /* QR Code */
 .qr-container{display:flex;flex-direction:column;align-items:center;margin-bottom:0}
-.qr-wrapper{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-.qr-glow{position:absolute;width:240px;height:240px;background:radial-gradient(circle,rgba(201,107,122,0.25) 0%,transparent 70%);border-radius:50%;filter:blur(30px);animation:qrPulse 4s ease-in-out infinite}
-@keyframes qrPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
-.qr-card{position:relative;background:white;border-radius:20px;padding:16px;box-shadow:0 8px 40px rgba(0,0,0,0.2),0 0 0 1px rgba(255,255,255,0.1);z-index:1;transition:transform .3s ease}
-.qr-card:hover{transform:scale(1.03)}
-.qr-badge{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--turquesa),var(--lila));color:white;padding:5px 16px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:1.5px;z-index:2;box-shadow:0 4px 12px rgba(26,158,143,0.4);white-space:nowrap}
+.qr-wrapper{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:20px;padding:20px}
+.qr-glow{position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(201,107,122,0.4) 0%,rgba(123,94,167,0.2) 40%,transparent 70%);border-radius:50%;filter:blur(40px);animation:qrPulse 3s ease-in-out infinite;z-index:0}
+@keyframes qrPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.qr-card{position:relative;background:white;border-radius:20px;padding:16px;box-shadow:0 8px 40px rgba(0,0,0,0.3),0 0 80px rgba(123,94,167,0.15);z-index:1;transition:transform .3s ease}
+.qr-card:hover{transform:scale(1.03) translateY(-4px)}
+.qr-logo-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:linear-gradient(135deg,#4E3470,#7B5EA7);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(78,52,112,0.5);border:3px solid white;z-index:2}
+.qr-logo-overlay span{font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:700;color:white;line-height:1}
+.qr-badge{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--turquesa),#1A9E8F);color:white;padding:6px 20px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:2px;z-index:3;box-shadow:0 4px 16px rgba(26,158,143,0.5);white-space:nowrap}
 @media(min-width:769px){
   .qr-container{display:flex!important}
 }
@@ -868,7 +870,10 @@ function installApp(){
       <div class="qr-wrapper">
         <div class="qr-glow"></div>
         <div class="qr-card">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyayika.com&color=4E3470&bgcolor=FFFFFF&margin=0&format=png&logo=https%3A%2F%2Fyayika.com%2Ficon.svg" alt="QR Yayika" style="width:180px;height:180px;display:block;border-radius:8px" crossorigin="anonymous">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyayika.com&color=4E3470&bgcolor=FFFFFF&margin=0&format=png" alt="QR Yayika" style="width:180px;height:180px;display:block;border-radius:8px" crossorigin="anonymous">
+          <div class="qr-logo-overlay">
+            <span>Y</span>
+          </div>
         </div>
         <div class="qr-badge">
           <span>ESCÁNEAME</span>
