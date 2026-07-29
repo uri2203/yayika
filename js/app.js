@@ -1,21 +1,24 @@
 /* ============================================================
    Yayika — app.js
-   Core: Supabase Auth + DB + XP system + Stripe
+   Core: Supabase Auth + DB + XP system + Stripe + Analytics
    ============================================================ */
+
+// --- Analytics Helper ---
+function track(event, props = {}) {
+  if (typeof plausible !== 'undefined') {
+    plausible(event, { props });
+  }
+}
 
 // --- Global Error Logging ---
 window.addEventListener('error', e => {
   console.error('[Yayika Error]', e.message, e.filename, e.lineno);
-  if (typeof plausible !== 'undefined') {
-    plausible('JS Error', { props: { message: e.message, file: e.filename || 'unknown' } });
-  }
+  track('JS Error', { message: e.message, file: e.filename || 'unknown' });
 });
 
 window.addEventListener('unhandledrejection', e => {
   console.error('[Yayika Unhandled]', e.reason);
-  if (typeof plausible !== 'undefined') {
-    plausible('JS Error', { props: { message: 'Unhandled: ' + (e.reason?.message || e.reason || 'unknown'), file: 'promise' } });
-  }
+  track('JS Error', { message: 'Unhandled: ' + (e.reason?.message || e.reason || 'unknown'), file: 'promise' });
 });
 
 // --- Configuración ---
@@ -62,6 +65,9 @@ async function signUp(email, password, fullName) {
     }).catch(e => console.log('Welcome email (non-blocking):', e));
   }
 
+  // Analytics
+  track('Signup', { method: 'email' });
+
   // Profile auto-created by trigger; show confirmation message
   if (data && !data.session) {
     return { ...data, message: typeof t === 'function' ? t('signup_confirm_email') : 'Te enviamos un correo de confirmación. Revisa tu bandeja de entrada.' };
@@ -83,11 +89,13 @@ async function signIn(email, password) {
     .eq('id', currentUser.id)
     .maybeSingle();
   if (profile) currentUser.profile = profile;
+  track('Login', { method: 'email' });
   return data;
 }
 
 async function signOut() {
   await supabase.auth.signOut();
+  track('Logout');
   currentUser = null;
 }
 

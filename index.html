@@ -857,6 +857,7 @@ const PRODUCT_LINKS = {
 };
 
 function buyProduct(key) {
+  if (typeof plausible !== 'undefined') plausible('Checkout Start', { props: { product: key, type: 'one-time' } });
   const link = PRODUCT_LINKS[key];
   if (!link || link.includes('PLACEHOLDER')) {
     window.location.href = '#membresia';
@@ -866,6 +867,7 @@ function buyProduct(key) {
 }
 
 function startCheckout(plan) {
+  if (typeof plausible !== 'undefined') plausible('Checkout Start', { props: { product: plan, type: 'subscription' } });
   const link = PRODUCT_LINKS[plan];
   if (!link || link.includes('PLACEHOLDER')) {
     alert('Pronto estarán disponibles los planes de membresía.');
