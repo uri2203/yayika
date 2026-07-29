@@ -45,6 +45,23 @@ async function signUp(email, password, fullName) {
     options: { data: { full_name: fullName } }
   });
   if (error) throw error;
+  
+  // Send welcome email (non-blocking)
+  if (data && data.user) {
+    fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'welcome',
+        to: email,
+        name: fullName || email.split('@')[0],
+      }),
+    }).catch(e => console.log('Welcome email (non-blocking):', e));
+  }
+
   // Profile auto-created by trigger; show confirmation message
   if (data && !data.session) {
     return { ...data, message: typeof t === 'function' ? t('signup_confirm_email') : 'Te enviamos un correo de confirmación. Revisa tu bandeja de entrada.' };

@@ -133,6 +133,41 @@ serve(async (req: Request) => {
       }
 
       console.log(`Subscription created: ${plan} for ${customerEmail}`);
+
+      // --- Send purchase/subscription email ---
+      try {
+        const emailType = subscriptionId ? "subscription" : "purchase";
+        const emailPayload = {
+          type: emailType,
+          to: customerEmail,
+          name: customerEmail.split("@")[0],
+          product: `Membresía ${plan.charAt(0).toUpperCase() + plan.slice(1)}`,
+          amount: `$${amountPaid.toFixed(2)}`,
+          plan: plan,
+        };
+
+        // Call send-email function (internal)
+        const emailResponse = await fetch(
+          `${supabaseUrl}/functions/v1/send-email`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${supabaseServiceKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(emailPayload),
+          }
+        );
+
+        if (emailResponse.ok) {
+          console.log(`Email sent: ${emailType} → ${customerEmail}`);
+        } else {
+          const emailError = await emailResponse.text();
+          console.error("Email send failed:", emailError);
+        }
+      } catch (emailErr) {
+        console.error("Email error (non-blocking):", emailErr);
+      }
     }
 
     // ============================================================
