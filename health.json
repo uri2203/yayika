@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "service": "yayika",
+  "version": "1.0.0",
+  "timestamp": "2026-07-29",
+  "checks": {
+    "supabase": "https://odbhxiymteppgaqqdsoy.supabase.co",
+    "domain": "https://yayika.com",
+    "plausible": "active"
+  }
+}

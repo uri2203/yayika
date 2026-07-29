@@ -3,6 +3,21 @@
    Core: Supabase Auth + DB + XP system + Stripe
    ============================================================ */
 
+// --- Global Error Logging ---
+window.addEventListener('error', e => {
+  console.error('[Yayika Error]', e.message, e.filename, e.lineno);
+  if (typeof plausible !== 'undefined') {
+    plausible('JS Error', { props: { message: e.message, file: e.filename || 'unknown' } });
+  }
+});
+
+window.addEventListener('unhandledrejection', e => {
+  console.error('[Yayika Unhandled]', e.reason);
+  if (typeof plausible !== 'undefined') {
+    plausible('JS Error', { props: { message: 'Unhandled: ' + (e.reason?.message || e.reason || 'unknown'), file: 'promise' } });
+  }
+});
+
 // --- Configuración ---
 const SUPABASE_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc';
