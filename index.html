@@ -772,20 +772,20 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 <!-- APP BANNER -->
 <section class="app-banner texture-diagonal" id="app">
   <div>
-    <div class="ab-tag" data-i18n="app_tag">Próximamente</div>
+    <div class="ab-tag" style="color:var(--turquesa)">Disponible ahora</div>
     <h2 class="ab-title"><span data-i18n="app_title">Yayika en tu</span> <em data-i18n="app_title_2">bolsillo</em></h2>
-    <p class="ab-sub" data-i18n="app_sub">La app de Yayika está en desarrollo. Por ahora el portal funciona perfecto desde tu celular — solo ábrelo en Chrome y agrégalo a tu pantalla de inicio como si fuera una app.</p>
+    <p class="ab-sub">Instálala en tu celular como una app real. Acceso rápido, funciona sin internet y se actualiza sola.</p>
     <div class="app-btns">
-      <a href="#" class="app-btn">
-        <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        <div><div class="app-btn-text">Próximamente en</div><div class="app-btn-store">App Store</div></div>
-      </a>
-      <a href="#" class="app-btn">
-        <svg viewBox="0 0 24 24"><path d="M3.18 23.76c.3.17.64.22.99.14l12.12-6.99-2.54-2.54-10.57 9.39zM20.7 10.37L17.66 8.6 14.84 11.4l2.82 2.82 3.06-1.78c.87-.51.87-1.67-.02-2.07zM2.09.29C1.78.64 1.6 1.17 1.6 1.85v20.29c0 .68.18 1.21.49 1.56l.08.08 11.37-11.37v-.27L2.17.21l-.08.08zM16.23 15.43L12.08 11.3 2.17 21.21l14.06-5.78z"/></svg>
-        <div><div class="app-btn-text">Próximamente en</div><div class="app-btn-store">Google Play</div></div>
+      <button onclick="installApp()" class="app-btn" style="cursor:pointer">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14v-4H8l4-4 4 4h-3v4h-2z"/></svg>
+        <div><div class="app-btn-text">Instalar gratis</div><div class="app-btn-store">Desde tu navegador</div></div>
+      </button>
+      <a href="/Portales/" class="app-btn">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        <div><div class="app-btn-text">Abrir portal</div><div class="app-btn-store">Entrar ahora</div></div>
       </a>
     </div>
-    <p style="font-size:12px;color:var(--suave);margin-top:16px">💡 <strong>Tip:</strong> En Chrome → menú ⋮ → "Agregar a pantalla de inicio" → funciona como app nativa, gratis.</p>
+    <p style="font-size:12px;color:var(--suave);margin-top:16px">📱 En iPhone: Safari → compartir → "Agregar a pantalla de inicio"</p>
   </div>
   <div class="ab-phones">
     <div class="ab-phone">
