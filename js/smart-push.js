@@ -285,6 +285,79 @@ const SmartPush = {
       </div>
     `;
   }
+
+  // ============================================================
+  // COMPETITIVE NOTIFICATIONS (Growth Coach integration)
+  // ============================================================
+  
+  async sendCompetitivePush(title, body, url = '/Portales/') {
+    if (this._permission !== 'granted') return;
+    
+    try {
+      // Browser notification
+      const notification = new Notification(title, {
+        body,
+        icon: '/assets/img/icon-192.png',
+        badge: '/assets/img/icon-192.png',
+        tag: 'growth-competitive',
+        renotify: true,
+        data: { url }
+      });
+      
+      notification.onclick = () => {
+        window.focus();
+        window.location.href = url;
+        notification.close();
+      };
+      
+      // Auto-close after 8 seconds
+      setTimeout(() => notification.close(), 8000);
+    } catch (e) {
+      console.warn('Competitive push error:', e);
+    }
+  }
+  
+  showCompetitiveToast(message, type = 'competition') {
+    const existing = document.getElementById('growthToast');
+    if (existing) existing.remove();
+    
+    const colors = {
+      competition: { border: '#C96B7A', bg: 'linear-gradient(135deg,#1A0E30,#2D1855)' },
+      milestone: { border: '#5ED4C5', bg: 'linear-gradient(135deg,#0E2E2A,#1A3E35)' },
+      urgency: { border: '#B8943A', bg: 'linear-gradient(135deg,#2D2010,#3D3018)' },
+      social_proof: { border: '#7B5EA7', bg: 'linear-gradient(135deg,#1A0E30,#2D1855)' }
+    };
+    const c = colors[type] || colors.competition;
+    
+    const toast = document.createElement('div');
+    toast.id = 'growthToast';
+    toast.style.cssText = `
+      position:fixed;bottom:80px;right:20px;z-index:1000;
+      max-width:340px;padding:14px 18px;
+      background:${c.bg};
+      border:1px solid ${c.border}33;
+      border-left:3px solid ${c.border};
+      border-radius:14px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.3);
+      font-size:12px;color:white;line-height:1.5;
+      animation:slideInRight 0.3s ease;
+      cursor:pointer;
+    `;
+    toast.innerHTML = `
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${c.border}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div style="flex:1">${message}</div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;cursor:pointer" onclick="this.closest('#growthToast').remove()"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    `;
+    toast.onclick = () => {
+      document.getElementById('affiliateTab')?.click();
+      toast.remove();
+    };
+    
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 8000);
+  }
 };
 
 // Add CSS animation

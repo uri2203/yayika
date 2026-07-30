@@ -518,6 +518,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <!-- WELLNESS PLANNER WIDGET -->
       <div id="wellnessContainer"></div>
 
+      <!-- GROWTH COACH (IMPULSO) WIDGET -->
+      <div id="growthCoachContainer"></div>
+
       <div class="stats-row">
         <div class="stat-card"><div class="sc-num turquesa" id="totalXP">680</div><div class="sc-label" data-i18n="stat_xp">Puntos XP totales</div></div>
         <div class="stat-card"><div class="sc-num rosa" id="modulesCompleted">3</div><div class="sc-label" data-i18n="stat_productos">Productos activos</div></div>
@@ -861,6 +864,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/smart-push.js" defer></script>
 <script src="../js/financial-coach.js" defer></script>
 <script src="../js/wellness-planner.js" defer></script>
+<script src="../js/growth-coach.js" defer></script>
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
@@ -1143,6 +1147,9 @@ async function loadDashboard() {
   try {
     if (typeof WellnessPlanner !== 'undefined') {
       WellnessPlanner.init();
+
+      // Initialize Growth Coach (Impulso)
+      if (typeof GrowthCoach !== 'undefined') GrowthCoach.init();
     }
   } catch (e) {
     console.warn('Wellness Planner init error:', e);
