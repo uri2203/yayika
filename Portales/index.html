@@ -518,6 +518,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <!-- WELLNESS PLANNER WIDGET -->
       <div id="wellnessContainer"></div>
 
+      <!-- ONBOARDING INTELIGENTE WIDGET -->
+      <div id="onboardingContainer"></div>
+
       <!-- SHARE & EARN WIDGET -->
       <div id="shareEarnContainer"></div>
 
@@ -872,6 +875,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/wellness-planner.js" defer></script>
 <script src="../js/growth-coach.js" defer></script>
 <script src="../js/share-earn.js" defer></script>
+<script src="../js/onboarding.js" defer></script>
 <script src="../js/community.js" defer></script>
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
@@ -1158,6 +1162,9 @@ async function loadDashboard() {
 
       // Initialize Share & Earn
       if (typeof ShareEarn !== 'undefined') ShareEarn.init();
+
+      // Initialize Onboarding
+      if (typeof Onboarding !== 'undefined') Onboarding.init();
 
       // Initialize Growth Coach (Impulso)
       if (typeof GrowthCoach !== 'undefined') GrowthCoach.init();
