@@ -63,6 +63,81 @@ serve(async (req: Request) => {
       const paymentStatus = data.payment_status;
       const metadata = data.metadata || {};
 
+      // ============================================================
+      // MARKETPLACE PURCHASE (product_id in metadata = marketplace sale)
+      // ============================================================
+      if (metadata.product_id && metadata.seller_id) {
+        console.log(`Marketplace purchase: product=${metadata.product_id}, seller=${metadata.seller_id}`);
+
+        // Process marketplace sale via function
+        const { data: saleId, error: saleError } = await supabase.rpc("yayika_process_marketplace_sale", {
+          p_seller_id: metadata.seller_id,
+          p_product_id: metadata.product_id,
+          p_amount_cents: data.amount_total || 0,
+          p_stripe_session_id: data.id,
+          p_buyer_email: customerEmail || "",
+          p_buyer_name: data.customer_details?.name || null,
+          p_buyer_id: metadata.buyer_id !== "guest" ? metadata.buyer_id : null,
+          p_country_code: metadata.country_code || "MX",
+          p_affiliate_id: metadata.affiliate_id || null,
+        });
+
+        if (saleError) {
+          console.error("Marketplace sale error:", saleError);
+        } else {
+          console.log(`Marketplace sale processed: ${saleId}`);
+
+          // Record in activity log
+          if (metadata.buyer_id && metadata.buyer_id !== "guest") {
+            await supabase.from("yayika_activity_log").insert({
+              user_id: metadata.buyer_id,
+              action: "marketplace_purchase",
+              details: JSON.stringify({
+                product_id: metadata.product_id,
+                seller_id: metadata.seller_id,
+                amount: amountPaid,
+                stripe_session_id: data.id,
+              }),
+            });
+          }
+
+          // Send purchase email
+          try {
+            const { data: product } = await supabase
+              .from("yayika_marketplace_products_v2")
+              .select("name")
+              .eq("id", metadata.product_id)
+              .single();
+
+            await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${supabaseServiceKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                type: "purchase",
+                to: customerEmail,
+                name: customerEmail?.split("@")[0] || "Compradora",
+                product: product?.name || "Producto del marketplace",
+                amount: `$${amountPaid.toFixed(2)}`,
+                plan: "marketplace",
+              }),
+            });
+          } catch (e) {
+            console.error("Email error (non-blocking):", e);
+          }
+        }
+
+        return new Response(JSON.stringify({ received: true, type: "marketplace" }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // ============================================================
+      // MEMBERSHIP PURCHASE (existing logic)
+      // ============================================================
       // Find user by email
       const { data: profiles } = await supabase
         .from("yayika_profiles")
@@ -230,6 +305,188 @@ serve(async (req: Request) => {
       }
 
       console.log(`Invoice paid: ${customerId} → $${amountPaid}`);
+    }
+
+    // ============================================================
+    // CHARGE.REFUNDED - Marketplace refund
+    // ============================================================
+    if (eventType === "charge.refunded") {
+      const chargeId = data.id;
+      const refundAmount = (data.amount_refunded || 0) / 100;
+      const paymentIntent = data.payment_intent;
+
+      console.log(`Charge refunded: ${chargeId}, amount: $${refundAmount}`);
+
+      // Find the sale by stripe_charge_id or payment_intent
+      const { data: sale } = await supabase
+        .from("yayika_marketplace_sales_v2")
+        .select("*")
+        .or(`stripe_charge_id.eq.${chargeId},stripe_payment_intent.eq.${paymentIntent}`)
+        .single();
+
+      if (sale) {
+        // Update sale status
+        await supabase
+          .from("yayika_marketplace_sales_v2")
+          .update({
+            status: "refunded",
+            refund_amount_cents: Math.round(refundAmount * 100),
+            refunded_at: new Date().toISOString(),
+          })
+          .eq("id", sale.id);
+
+        // Deduct from seller balance
+        const { data: balance } = await supabase
+          .from("yayika_seller_balances")
+          .select("available_cents")
+          .eq("seller_id", sale.seller_id)
+          .single();
+
+        if (balance) {
+          const refundSellerPortion = Math.round(sale.seller_net_cents * (refundAmount * 100 / sale.amount_cents));
+          await supabase
+            .from("yayika_seller_balances")
+            .update({
+              available_cents: Math.max(0, (balance.available_cents || 0) - refundSellerPortion),
+              lifetime_refunded_cents: (balance.lifetime_refunded_cents || 0) + refundSellerPortion,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("seller_id", sale.seller_id);
+
+          // Record in ledger
+          const { data: newBalance } = await supabase
+            .from("yayika_seller_balances")
+            .select("available_cents")
+            .eq("seller_id", sale.seller_id)
+            .single();
+
+          await supabase.from("yayika_financial_transactions").insert({
+            seller_id: sale.seller_id,
+            type: "refund",
+            direction: "debit",
+            amount_cents: refundSellerPortion,
+            balance_after_cents: newBalance?.available_cents || 0,
+            reference_type: "sale",
+            reference_id: sale.id,
+            description: `Reembolso de compra - $${refundAmount.toFixed(2)}`,
+            metadata: JSON.stringify({ charge_id: chargeId, refund_amount: refundAmount }),
+          });
+        }
+
+        console.log(`Refund processed for sale ${sale.id}`);
+      }
+    }
+
+    // ============================================================
+    // TRANSFER.CREATED - Track Connect transfers
+    // ============================================================
+    if (eventType === "transfer.created") {
+      const transferId = data.id;
+      const destination = data.destination;
+      const amount = (data.amount || 0) / 100;
+
+      console.log(`Transfer created: ${transferId} → ${destination}, amount: $${amount}`);
+
+      // Find seller by stripe_account_id
+      const { data: seller } = await supabase
+        .from("yayika_seller_profiles")
+        .select("id")
+        .eq("stripe_account_id", destination)
+        .single();
+
+      if (seller) {
+        // Update payout request status
+        await supabase
+          .from("yayika_payout_requests_v2")
+          .update({
+            status: "processing",
+            stripe_transfer_id: transferId,
+            processed_at: new Date().toISOString(),
+          })
+          .eq("seller_id", seller.id)
+          .eq("status", "pending");
+      }
+    }
+
+    // ============================================================
+    // TRANSFER.PAID - Payout completed
+    // ============================================================
+    if (eventType === "transfer.paid") {
+      const transferId = data.id;
+      console.log(`Transfer paid: ${transferId}`);
+
+      // Update payout status
+      await supabase
+        .from("yayika_payout_requests_v2")
+        .update({
+          status: "completed",
+          completed_at: new Date().toISOString(),
+        })
+        .eq("stripe_transfer_id", transferId);
+
+      // Update seller balance
+      const { data: payout } = await supabase
+        .from("yayika_payout_requests_v2")
+        .select("seller_id, amount_cents")
+        .eq("stripe_transfer_id", transferId)
+        .single();
+
+      if (payout) {
+        await supabase
+          .from("yayika_seller_balances")
+          .update({
+            reserved_cents: 0,
+            lifetime_paid_out_cents: supabase.rpc ? undefined : 0,
+            last_payout_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .eq("seller_id", payout.seller_id);
+      }
+    }
+
+    // ============================================================
+    // TRANSFER.FAILED - Payout failed
+    // ============================================================
+    if (eventType === "transfer.failed") {
+      const transferId = data.id;
+      const failureMessage = data.failure_message || "Transfer failed";
+
+      console.log(`Transfer failed: ${transferId}: ${failureMessage}`);
+
+      // Update payout status
+      const { data: payout } = await supabase
+        .from("yayika_payout_requests_v2")
+        .select("seller_id, amount_cents")
+        .eq("stripe_transfer_id", transferId)
+        .single();
+
+      if (payout) {
+        await supabase
+          .from("yayika_payout_requests_v2")
+          .update({
+            status: "failed",
+            failure_reason: failureMessage,
+          })
+          .eq("stripe_transfer_id", transferId);
+
+        // Restore balance
+        const { data: balance } = await supabase
+          .from("yayika_seller_balances")
+          .select("available_cents")
+          .eq("seller_id", payout.seller_id)
+          .single();
+
+        if (balance) {
+          await supabase
+            .from("yayika_seller_balances")
+            .update({
+              available_cents: balance.available_cents + payout.amount_cents,
+              reserved_cents: 0,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("seller_id", payout.seller_id);
+        }
+      }
     }
 
     return new Response(JSON.stringify({ received: true }), {

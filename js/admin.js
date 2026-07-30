@@ -174,7 +174,7 @@ async function renderAdminSubscriptions(container) {
   const rows = stats.subscriptions.map(s => {
     const planColors = { semilla: '#3BAF7A', guerrera: '#C96B7A', diamante: '#B8943A' };
     const color = planColors[s.plan] || '#7B5EA7';
-    const price = { semilla: '$9.99', guerrera: '$19.99', diamante: '$29.99' }[s.plan] || '-';
+    const price = { semilla: '$5', guerrera: '$10', diamante: '$18' }[s.plan] || '-';
     const statusColors = { active: '#3BAF7A', past_due: '#E74C3C', cancelled: '#95A5A6' };
     const sColor = statusColors[s.status] || '#B8943A';
 
