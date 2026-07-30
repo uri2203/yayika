@@ -329,6 +329,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .fp4{bottom:160px;right:20px;animation-delay:0.4s}
 .fp5{top:350px;left:-10px;animation-delay:1.2s}
 .fp6{bottom:20px;right:60px;animation-delay:2s}
+.fp7{bottom:50px;left:10px;animation-delay:1.5s}
 
 /* Decorative bg elements */
 .hero-decor{position:absolute;border-radius:50%;pointer-events:none}
@@ -631,6 +632,7 @@ footer{background:var(--texto);padding:44px 5vw 24px}
       </div>
       <div class="floating-pill fp5 pill-sm pill-soft">🏠 Sin salir de casa</div>
       <div class="floating-pill fp6 pill-sm pill-accent">💜 +2,400 mujeres</div>
+      <div class="floating-pill fp7 pill-sm pill-warm" style="animation-delay:1.5s">💰 Gana con Yayika</div>
     </div>
   </div>
 </section>
@@ -1053,10 +1055,83 @@ function installApp(){
   </div>
 </section>
 
+<!-- GANA CON YAYIKA SECTION -->
+<section class="section" style="background:linear-gradient(180deg,rgba(184,148,58,0.04) 0%,transparent 100%);padding:80px 5vw 60px">
+  <div style="max-width:1000px;margin:0 auto">
+    <div class="section-tag" style="color:var(--oro)">💰 Gana con Yayika</div>
+    <h2 class="section-title" style="margin-bottom:8px"><span>No solo te cuidamos —</span> <em>te ayudamos a ganar</em></h2>
+    <p class="section-sub" style="margin-bottom:48px">Yayika no es solo una app. Es una comunidad donde las mujeres ganan dinero, comparten conocimiento y se apoyan entre sí.</p>
+
+    <!-- 3 Pillars -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px">
+      <!-- Invita y Gana -->
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 24px;text-align:center;transition:transform 0.3s" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(0,180,216,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">🌱</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:8px">Invita y Gana</h3>
+        <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:16px">Comparte tu código con amigas. Gana <strong style="color:var(--turquesa)">20% de comisión</strong> por cada membresía que compren.</p>
+        <div style="font-size:11px;color:var(--turquesa);font-weight:600">Ganancias ilimitadas →</div>
+      </div>
+
+      <!-- Vende y Crece -->
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 24px;text-align:center;transition:transform 0.3s" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(233,30,99,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">🛒</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:8px">Vende y Crece</h3>
+        <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:16px">Crea templates, guías o cursos. Véndelos a otras mujeres en nuestro <strong style="color:var(--rosa)">Marketplace</strong>.</p>
+        <div style="font-size:11px;color:var(--rosa);font-weight:600">Tú pones el precio →</div>
+      </div>
+
+      <!-- Enseña y Apoya -->
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px 24px;text-align:center;transition:transform 0.3s" onmouseenter="this.style.transform='translateY(-4px)'" onmouseleave="this.style.transform=''">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(123,94,167,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px">👩‍🏫</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:8px">Enseña y Apoya</h3>
+        <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:16px">Ofrece sesiones de mentoring 1:1. Las mujeres pagan por tu <strong style="color:var(--lila)">experiencia</strong>.</p>
+        <div style="font-size:11px;color:var(--lila);font-weight:600">Conviértete en mentora →</div>
+      </div>
+    </div>
+
+    <!-- Social Proof -->
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px 32px;max-width:700px;margin:0 auto 32px">
+      <div style="font-size:12px;color:var(--suave);text-align:center;margin-bottom:20px;font-weight:500;text-transform:uppercase;letter-spacing:1px">Ya ganan con Yayika</div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:42px;height:42px;border-radius:50%;background:var(--rosa);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">M</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--texto)">María de México</div>
+            <div style="font-size:12px;color:var(--suave)">"Gané <strong style="color:var(--oro)">$340</strong> el mes pasado solo invitando amigas. ¡Es real!"</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:42px;height:42px;border-radius:50%;background:var(--turquesa);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">A</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--texto)">Ana de Colombia</div>
+            <div style="font-size:12px;color:var(--suave)">"Vendí <strong style="color:var(--oro)">12 planners</strong> en una semana en el Marketplace."</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:42px;height:42px;border-radius:50%;background:var(--lila);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">L</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--texto)">Laura de España</div>
+            <div style="font-size:12px;color:var(--suave)">"Mis sesiones de mentoring <strong style="color:var(--oro)">se llenan</strong> cada semana. Yayika me cambió la vida."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center">
+      <a href="#membresia" class="btn-primary" style="font-size:16px;padding:16px 40px;background:var(--oro);color:#fff;border-radius:12px;display:inline-block;text-decoration:none;font-weight:600;transition:transform 0.2s" onmouseenter="this.style.transform='scale(1.03)'" onmouseleave="this.style.transform=''">💰 Empieza a ganar →</a>
+      <div style="font-size:11px;color:var(--suave);margin-top:10px">Gratis para empezar. Sin compromiso.</div>
+    </div>
+  </div>
+</section>
+
 <section class="cta-section">
   <h2><span data-i18n="cta_title">¿Lista para invertir</span> <em data-i18n="cta_title_2">en ti</em>?</h2>
   <p data-i18n="cta_sub">No necesitas más tiempo ni más dinero. Solo el recurso correcto en el momento correcto.</p>
-  <a href="#membresia" class="btn-primary" style="font-size:15px;padding:14px 36px;background:var(--turquesa)" data-i18n="cta_btn">Quiero empezar ahora</a>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="#membresia" class="btn-primary" style="font-size:15px;padding:14px 36px;background:var(--turquesa)" data-i18n="cta_btn">Quiero empezar ahora</a>
+    <a href="#membresia" class="btn-secondary" style="font-size:15px;padding:14px 36px;border-color:var(--oro);color:var(--oro)">💰 Quiero ganar con Yayika</a>
+  </div>
 </section>
 
 <footer>
