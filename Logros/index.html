@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Logros | Yayika</title>
+<meta name="description" content="Tu galería de logros Yayika: badges, XP, rachas y成就. Comparte tus logros con amigas.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+<meta name="theme-color" content="#4E3470">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/shared.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lila:#7B5EA7;--lila-l:#F0EBF8;--lila-d:#4E3470;
+  --rosa:#C96B7A;--rosa-l:#FDF0F2;
+  --oro:#B8943A;--oro-l:#FBF6E8;
+  --verde:#3BAF7A;--verde-l:#E8F8F1;
+  --turquesa:#1A9E8F;--turquesa-l:#E6F7F5;
+  --bg:#F8F5FF;--card:#FDFCFB;--texto:#2C2240;--suave:#7A6E85;
+  --borde:rgba(123,94,167,0.13);
+  --crema:#FBF8F4;
+}
+[data-theme="dark"]{
+  --bg:#1A0E30;--card:#241545;--texto:#E8E0F0;--suave:#9B8FB0;
+  --borde:rgba(123,94,167,0.25);--crema:#1E1238;
+  --lila-l:#2D1855;--rosa-l:#3D1A25;--oro-l:#3D3010;--verde-l:#1A3025;--turquesa-l:#1A2D2A;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);min-height:100vh}
+
+/* Layout */
+.page{max-width:800px;margin:0 auto;padding:16px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--suave);text-decoration:none;font-size:13px;margin-bottom:16px;cursor:pointer}
+.back-btn:hover{color:var(--lila)}
+
+/* Hero Stats */
+.hero{background:linear-gradient(135deg,#1A0E30 0%,#2D1855 50%,#4E3470 100%);border-radius:20px;padding:28px 24px;color:white;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(94,212,160,0.12) 0%,transparent 70%)}
+.hero::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(184,148,58,0.08) 0%,transparent 70%)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;margin-bottom:4px;position:relative;z-index:1}
+.hero-sub{font-size:13px;opacity:0.7;margin-bottom:20px;position:relative;z-index:1}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative;z-index:1}
+.hero-stat{text-align:center;padding:14px 8px;background:rgba(255,255,255,0.08);border-radius:14px;backdrop-filter:blur(4px)}
+.hero-stat-num{font-size:28px;font-weight:700;line-height:1}
+.hero-stat-label{font-size:10px;opacity:0.6;margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+
+/* XP Progress */
+.xp-bar-wrap{margin-top:16px;position:relative;z-index:1}
+.xp-bar-header{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px;opacity:0.7}
+.xp-bar{height:6px;background:rgba(255,255,255,0.12);border-radius:3px;overflow:hidden}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,#5ED4A0,#1A9E8F);border-radius:3px;transition:width 1s ease}
+
+/* Filters */
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+.filters::-webkit-scrollbar{display:none}
+.filter-btn{flex-shrink:0;padding:8px 16px;border:1px solid var(--borde);border-radius:100px;background:white;color:var(--suave);font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.filter-btn.active{background:var(--lila);color:white;border-color:var(--lila)}
+.filter-btn:hover{border-color:var(--lila)}
+[data-theme="dark"] .filter-btn{background:var(--card)}
+
+/* Badge Grid */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.badge-card{background:var(--card);border-radius:16px;padding:18px 12px;text-align:center;cursor:pointer;transition:all 0.3s;border:1px solid var(--borde);position:relative;overflow:hidden}
+.badge-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+.badge-card.locked{opacity:0.45;filter:grayscale(0.8)}
+.badge-card.locked:hover{opacity:0.6}
+.badge-icon{font-size:36px;margin-bottom:8px;display:block;transition:transform 0.3s}
+.badge-card:hover .badge-icon{transform:scale(1.15)}
+.badge-name{font-size:12px;font-weight:600;color:var(--texto);line-height:1.3;margin-bottom:4px}
+.badge-tier{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.5px}
+.tier-bronze{background:#F5E6D0;color:#8B6914}
+.tier-silver{background:#E8E8E8;color:#666}
+.tier-gold{background:#FFF3D0;color:#B8943A}
+.tier-diamond{background:#E0F0FF;color:#4A90D9}
+.badge-date{font-size:9px;color:var(--suave);margin-top:6px}
+.badge-check{position:absolute;top:8px;right:8px;width:20px;height:20px;background:linear-gradient(135deg,#5ED4A0,#1A9E8F);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:white}
+
+/* Locked overlay */
+.locked-overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:24px;opacity:0.3}
+
+/* Section titles */
+.section-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* Empty state */
+.empty{text-align:center;padding:40px 20px;color:var(--suave)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.empty-text{font-size:14px;line-height:1.5}
+
+/* Share modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.2s}
+.modal{background:white;border-radius:20px;padding:24px;max-width:360px;width:100%;text-align:center;animation:slideUp 0.3s}
+[data-theme="dark"] .modal{background:var(--card)}
+.modal-icon{font-size:56px;margin-bottom:12px}
+.modal-name{font-size:18px;font-weight:700;margin-bottom:4px}
+.modal-desc{font-size:13px;color:var(--suave);margin-bottom:16px;line-height:1.4}
+.modal-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.modal-btn{padding:10px 18px;border:none;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;transition:transform 0.15s}
+.modal-btn:hover{transform:scale(1.03)}
+.modal-close{background:none;border:1px solid var(--borde);color:var(--suave)}
+.modal-share{background:linear-gradient(135deg,#7B5EA7,#A78BDB);color:white}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+.badge-card{animation:popIn 0.3s ease backwards}
+.badge-card:nth-child(1){animation-delay:0.02s}
+.badge-card:nth-child(2){animation-delay:0.04s}
+.badge-card:nth-child(3){animation-delay:0.06s}
+.badge-card:nth-child(4){animation-delay:0.08s}
+.badge-card:nth-child(5){animation-delay:0.10s}
+.badge-card:nth-child(6){animation-delay:0.12s}
+.badge-card:nth-child(7){animation-delay:0.14s}
+.badge-card:nth-child(8){animation-delay:0.16s}
+
+/* Confetti */
+.confetti{position:fixed;top:-10px;z-index:1000;pointer-events:none;animation:confettiFall 3s linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+@media(max-width:480px){
+  .badge-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .badge-card{padding:14px 8px}
+  .badge-icon{font-size:30px}
+  .hero-stats{grid-template-columns:repeat(3,1fr);gap:8px}
+  .hero-stat{padding:10px 4px}
+  .hero-stat-num{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <!-- Back button -->
+  <a href="../Portales/" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    <span data-i18n="back">Volver al portal</span>
+  </a>
+
+  <!-- Hero -->
+  <div class="hero" id="heroSection">
+    <div class="hero-title" data-i18n="hero_title">Mis Logros</div>
+    <div class="hero-sub" data-i18n="hero_sub">Tu progreso en Yayika</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="totalXP" style="color:#5ED4A0">0</div>
+        <div class="hero-stat-label">XP</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="totalBadges" style="color:#B8943A">0</div>
+        <div class="hero-stat-label" data-i18n="badges">Badges</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" id="totalStreak" style="color:#C96B7A">0</div>
+        <div class="hero-stat-label" data-i18n="streak">Racha</div>
+      </div>
+    </div>
+    <div class="xp-bar-wrap">
+      <div class="xp-bar-header">
+        <span id="xpLevel">Nivel 1</span>
+        <span id="xpProgress">0 / 500 XP</span>
+      </div>
+      <div class="xp-bar"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters" id="filterContainer">
+    <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Todos</button>
+    <button class="filter-btn" data-filter="streak">🔥 Rachas</button>
+    <button class="filter-btn" data-filter="checkin">📝 Check-ins</button>
+    <button class="filter-btn" data-filter="cycle">🌙 Ciclo</button>
+    <button class="filter-btn" data-filter="challenge">🎯 Retos</button>
+    <button class="filter-btn" data-filter="financial">💰 Finanzas</button>
+    <button class="filter-btn" data-filter="social">👥 Social</button>
+    <button class="filter-btn" data-filter="referral">🌱 Referrals</button>
+    <button class="filter-btn" data-filter="special">✨ Especiales</button>
+  </div>
+
+  <!-- Earned badges -->
+  <div id="earnedSection">
+    <div class="section-title">🏅 <span data-i18n="earned_title">Mis Badges</span> <span id="earnedCount" style="font-size:14px;color:var(--suave);font-weight:400"></span></div>
+    <div class="badge-grid" id="earnedGrid"></div>
+  </div>
+
+  <!-- Locked badges -->
+  <div id="lockedSection">
+    <div class="section-title">🔒 <span data-i18n="locked_title">Por Desbloquear</span> <span id="lockedCount" style="font-size:14px;color:var(--suave);font-weight:400"></span></div>
+    <div class="badge-grid" id="lockedGrid"></div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty" id="emptyState" style="display:none">
+    <div class="empty-icon">🌟</div>
+    <div class="empty-text" data-i18n="empty_text">Aún no tienes logros. ¡Empieza a completar retos para ganar badges!</div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="modal-overlay" id="shareModal" style="display:none" onclick="if(event.target===this)Achievements.closeModal()">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon"></div>
+    <div class="modal-name" id="modalName"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <div style="margin-bottom:16px">
+      <span class="badge-tier" id="modalTier" style="font-size:11px;padding:4px 12px"></span>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-share" onclick="Achievements.shareBadge()">
+        <span data-i18n="share">📤 Compartir</span>
+      </button>
+      <button class="modal-btn modal-close" onclick="Achievements.closeModal()">
+        <span data-i18n="close">Cerrar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Inline Supabase init
+const SUPABASE_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc';
+let supabase = null;
+let currentUser = null;
+let currentLang = localStorage.getItem('yayika_lang') || 'es';
+
+function initSupabase() {
+  if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return true;
+  }
+  return false;
+}
+
+async function checkAuth() {
+  if (!supabase) return;
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user) {
+    currentUser = session.user;
+  } else {
+    // Redirect to portal login
+    window.location.href = '../Portales/';
+  }
+}
+
+// Load badges.js inline (simplified version)
+const BADGE_DEFS = {
+  streak_3: { icon: '🔥', name: { es: 'Racha de 3 días', en: '3-Day Streak' }, tier: 'bronze', cat: 'streak', desc: { es: '3 días seguidos de actividad', en: '3 consecutive days of activity' } },
+  streak_7: { icon: '🔥', name: { es: 'Racha de 7 días', en: '7-Day Streak' }, tier: 'silver', cat: 'streak', desc: { es: '7 días seguidos — ¡Una semana!', en: '7 days straight — A full week!' } },
+  streak_14: { icon: '👑', name: { es: 'Racha de 14 días', en: '14-Day Streak' }, tier: 'gold', cat: 'streak', desc: { es: '14 días seguidos — ¡Eres constante!', en: '14 days straight — Consistent!' } },
+  streak_30: { icon: '💎', name: { es: 'Racha de 30 días', en: '30-Day Streak' }, tier: 'diamond', cat: 'streak', desc: { es: '30 días seguidos — ¡Leyenda!', en: '30 days straight — Legend!' } },
+  streak_60: { icon: '🌟', name: { es: 'Racha de 60 días', en: '60-Day Streak' }, tier: 'diamond', cat: 'streak', desc: { es: '60 días seguidos — ¡Increíble!', en: '60 days straight — Incredible!' } },
+  streak_100: { icon: '🏆', name: { es: 'Racha de 100 días', en: '100-Day Streak' }, tier: 'diamond', cat: 'streak', desc: { es: '100 días — ¡Imparable!', en: '100 days — Unstoppable!' } },
+  first_checkin: { icon: '🌟', name: { es: 'Primer check-in', en: 'First Check-in' }, tier: 'bronze', cat: 'checkin', desc: { es: 'Completaste tu primer check-in', en: 'Completed your first check-in' } },
+  checkin_7: { icon: '📝', name: { es: '7 check-ins', en: '7 Check-ins' }, tier: 'silver', cat: 'checkin', desc: { es: '7 check-ins diarios completados', en: '7 daily check-ins completed' } },
+  checkin_30: { icon: '📋', name: { es: '30 check-ins', en: '30 Check-ins' }, tier: 'gold', cat: 'checkin', desc: { es: '30 check-ins — ¡Un mes!', en: '30 check-ins — A full month!' } },
+  first_cycle_log: { icon: '🌙', name: { es: 'Primer registro', en: 'First Cycle Log' }, tier: 'bronze', cat: 'cycle', desc: { es: 'Registraste tu primer día de ciclo', en: 'Logged your first cycle day' } },
+  cycle_30: { icon: '🌕', name: { es: '30 días de ciclo', en: '30 Cycle Days' }, tier: 'silver', cat: 'cycle', desc: { es: '30 días de ciclo registrados', en: '30 cycle days logged' } },
+  cycle_master: { icon: '🌙', name: { es: 'Maestra del ciclo', en: 'Cycle Master' }, tier: 'gold', cat: 'cycle', desc: { es: '3 ciclos completos', en: '3 complete cycles' } },
+  first_challenge: { icon: '🎯', name: { es: 'Primer reto', en: 'First Challenge' }, tier: 'bronze', cat: 'challenge', desc: { es: 'Completaste tu primer reto', en: 'Completed your first challenge' } },
+  challenges_10: { icon: '🎯', name: { es: '10 retos', en: '10 Challenges' }, tier: 'silver', cat: 'challenge', desc: { es: '10 retos semanales', en: '10 weekly challenges' } },
+  perfect_week: { icon: '⭐', name: { es: 'Semana perfecta', en: 'Perfect Week' }, tier: 'gold', cat: 'challenge', desc: { es: 'Todos los retos de una semana', en: 'All challenges in a week' } },
+  first_transaction: { icon: '💰', name: { es: 'Primer registro', en: 'First Transaction' }, tier: 'bronze', cat: 'financial', desc: { es: 'Tu primer movimiento financiero', en: 'Your first financial transaction' } },
+  budget_starter: { icon: '📊', name: { es: 'Presupuesto', en: 'Budget Created' }, tier: 'bronze', cat: 'financial', desc: { es: 'Creaste tu primer presupuesto', en: 'Created your first budget' } },
+  savings_goal: { icon: '🎯', name: { es: 'Meta de ahorro', en: 'Savings Goal' }, tier: 'silver', cat: 'financial', desc: { es: 'Creaste una meta de ahorro', en: 'Created a savings goal' } },
+  course_complete: { icon: '🎓', name: { es: 'Curso completado', en: 'Course Completed' }, tier: 'gold', cat: 'special', desc: { es: 'Completaste un curso entero', en: 'Completed an entire course' } },
+  first_circle: { icon: '👥', name: { es: 'Primer círculo', en: 'First Circle' }, tier: 'bronze', cat: 'social', desc: { es: 'Te uniste a tu primer círculo', en: 'Joined your first circle' } },
+  early_bird: { icon: '🌅', name: { es: 'Madrugadora', en: 'Early Bird' }, tier: 'bronze', cat: 'special', desc: { es: 'Check-in antes de las 8am', en: 'Checked in before 8am' } },
+  night_owl: { icon: '🦉', name: { es: 'Nocturna', en: 'Night Owl' }, tier: 'bronze', cat: 'special', desc: { es: 'Check-in después de las 10pm', en: 'Checked in after 10pm' } },
+  freeze_user: { icon: '🧊', name: { es: 'Congelamiento', en: 'Freeze Used' }, tier: 'bronze', cat: 'special', desc: { es: 'Usaste un token de congelamiento', en: 'Used a freeze token' } },
+  first_referral: { icon: '🌱', name: { es: 'Primera embajadora', en: 'First Ambassador' }, tier: 'bronze', cat: 'referral', desc: { es: 'Invitaste a tu primera amiga', en: 'Invited your first friend' } },
+  referrals_5: { icon: '🔥', name: { es: 'Embajadora activa', en: 'Active Ambassador' }, tier: 'silver', cat: 'referral', desc: { es: '5 amigas invitadas', en: '5 friends invited' } },
+  referrals_25: { icon: '💎', name: { es: 'Embajadora élite', en: 'Elite Ambassador' }, tier: 'gold', cat: 'referral', desc: { es: '25 amigas invitadas', en: '25 friends invited' } },
+  referrals_50: { icon: '👑', name: { es: 'Nivel Gold', en: 'Gold Level' }, tier: 'gold', cat: 'referral', desc: { es: '50 referrals — Nivel Gold', en: '50 referrals — Gold level' } },
+  referrals_100: { icon: '🏆', name: { es: 'Leyenda Yayika', en: 'Yayika Legend' }, tier: 'gold', cat: 'referral', desc: { es: '100 amigas — ¡Leyenda!', en: '100 friends — Legend!' } },
+  first_commission: { icon: '💰', name: { es: 'Primera comisión', en: 'First Commission' }, tier: 'bronze', cat: 'referral', desc: { es: 'Ganaste tu primera comisión', en: 'Earned your first commission' } },
+  earnings_100: { icon: '💸', name: { es: 'CienDólares', en: '$100 Club' }, tier: 'silver', cat: 'referral', desc: { es: '$100 en comisiones', en: '$100 in commissions' } },
+  earnings_500: { icon: '🏦', name: { es: 'Quinientas', en: '$500 Club' }, tier: 'gold', cat: 'referral', desc: { es: '$500 en comisiones', en: '$500 in commissions' } },
+  week_streak_share: { icon: '📈', name: { es: 'Racha de sharing', en: 'Share Streak' }, tier: 'bronze', cat: 'social', desc: { es: 'Código compartido 7 días seguidos', en: 'Shared your code 7 days in a row' } }
+};
+
+const TIER_COLORS = { bronze: 'tier-bronze', silver: 'tier-silver', gold: 'tier-gold', diamond: 'tier-diamond' };
+const TIER_LABELS = { es: { bronze: 'Bronce', silver: 'Plata', gold: 'Oro', diamond: 'Diamante' }, en: { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', diamond: 'Diamond' } };
+const XP_LEVELS = [0, 500, 1500, 3500, 7000, 12000, 20000];
+
+const Achievements = {
+  _earned: [],
+  _filter: 'all',
+  _selectedBadge: null,
+
+  async init() {
+    if (!initSupabase()) { setTimeout(() => this.init(), 200); return; }
+    await checkAuth();
+    if (!currentUser) return;
+
+    this._render();
+    await this._loadData();
+    this._setupFilters();
+  },
+
+  async _loadData() {
+    try {
+      // Get earned badges
+      const { data: badges } = await supabase
+        .from('yayika_badges')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('earned_at', { ascending: false });
+
+      this._earned = badges || [];
+
+      // Get progress (XP, streak)
+      const { data: progress } = await supabase
+        .from('yayika_progress')
+        .select('xp_total, streak_days')
+        .eq('user_id', currentUser.id)
+        .single();
+
+      this._xp = progress?.xp_total || 0;
+      this._streak = progress?.streak_days || 0;
+
+      this._updateHero();
+      this._renderBadges();
+    } catch (e) {
+      console.warn('Load data error:', e);
+      this._xp = 0;
+      this._streak = 0;
+      this._earned = [];
+      this._updateHero();
+      this._renderBadges();
+    }
+  },
+
+  _updateHero() {
+    document.getElementById('totalXP').textContent = this._xp;
+    document.getElementById('totalBadges').textContent = this._earned.length;
+    document.getElementById('totalStreak').textContent = this._streak;
+
+    // XP level
+    let level = 1;
+    for (let i = XP_LEVELS.length - 1; i >= 0; i--) {
+      if (this._xp >= XP_LEVELS[i]) { level = i + 1; break; }
+    }
+    const nextLevelXP = XP_LEVELS[level] || XP_LEVELS[XP_LEVELS.length - 1] + 10000;
+    const prevLevelXP = XP_LEVELS[level - 1] || 0;
+    const progress = Math.min(100, ((this._xp - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100);
+
+    document.getElementById('xpLevel').textContent = `Nivel ${level}`;
+    document.getElementById('xpProgress').textContent = `${this._xp} / ${nextLevelXP} XP`;
+    document.getElementById('xpBarFill').style.width = `${progress}%`;
+  },
+
+  _renderBadges() {
+    const lang = currentLang || 'es';
+    const earnedKeys = new Set(this._earned.map(b => b.badge_key));
+    const earned = [];
+    const locked = [];
+
+    for (const [key, def] of Object.entries(BADGE_DEFS)) {
+      const isEarned = earnedKeys.has(key);
+      const earnedData = this._earned.find(b => b.badge_key === key);
+      const card = {
+        key,
+        ...def,
+        earned: isEarned,
+        earnedAt: earnedData?.earned_at,
+        name: def.name[lang] || def.name.es,
+        desc: def.desc[lang] || def.desc.es,
+      };
+      if (isEarned) earned.push(card);
+      else locked.push(card);
+    }
+
+    document.getElementById('earnedCount').textContent = `(${earned.length})`;
+    document.getElementById('lockedCount').textContent = `(${locked.length})`;
+
+    const earnedGrid = document.getElementById('earnedGrid');
+    const lockedGrid = document.getElementById('lockedGrid');
+    const emptyState = document.getElementById('emptyState');
+    const lockedSection = document.getElementById('lockedSection');
+
+    if (earned.length === 0 && locked.length === 0) {
+      emptyState.style.display = 'block';
+      document.getElementById('earnedSection').style.display = 'none';
+      lockedSection.style.display = 'none';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    document.getElementById('earnedSection').style.display = 'block';
+    lockedSection.style.display = 'block';
+
+    earnedGrid.innerHTML = earned.filter(b => this._filter === 'all' || b.cat === this._filter).map(b => this._badgeCard(b, true)).join('');
+    lockedGrid.innerHTML = locked.filter(b => this._filter === 'all' || b.cat === this._filter).map(b => this._badgeCard(b, false)).join('');
+
+    if (earned.filter(b => this._filter === 'all' || b.cat === this._filter).length === 0) {
+      earnedGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--suave);font-size:12px">No hay badges en esta categoría</div>';
+    }
+    if (locked.filter(b => this._filter === 'all' || b.cat === this._filter).length === 0) {
+      lockedGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--suave);font-size:12px">¡Todos desbloqueados en esta categoría! 🎉</div>';
+    }
+  },
+
+  _badgeCard(badge, isEarned) {
+    const date = badge.earnedAt ? new Date(badge.earnedAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : '';
+    return `
+      <div class="badge-card ${isEarned ? '' : 'locked'}" onclick="Achievements.showBadge('${badge.key}')" style="${isEarned ? '' : ''}">
+        ${isEarned ? '<div class="badge-check">✓</div>' : ''}
+        <span class="badge-icon">${badge.icon}</span>
+        <div class="badge-name">${badge.name}</div>
+        <span class="badge-tier ${TIER_COLORS[badge.tier]}">${TIER_LABELS[lang]?.[badge.tier] || badge.tier}</span>
+        ${isEarned && date ? `<div class="badge-date">${date}</div>` : ''}
+        ${!isEarned ? '<div class="locked-overlay">🔒</div>' : ''}
+      </div>
+    `;
+  },
+
+  _setupFilters() {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this._filter = btn.dataset.filter;
+        this._renderBadges();
+      });
+    });
+  },
+
+  showBadge(key) {
+    const def = BADGE_DEFS[key];
+    if (!def) return;
+    const lang = currentLang || 'es';
+    const isEarned = this._earned.some(b => b.badge_key === key);
+
+    this._selectedBadge = { key, ...def, earned: isEarned };
+
+    document.getElementById('modalIcon').textContent = def.icon;
+    document.getElementById('modalName').textContent = def.name[lang] || def.name.es;
+    document.getElementById('modalDesc').textContent = isEarned
+      ? (def.desc[lang] || def.desc.es)
+      : (lang === 'es' ? '🔒 Completa el reto para desbloquear este badge' : '🔒 Complete the challenge to unlock this badge');
+    const tierEl = document.getElementById('modalTier');
+    tierEl.textContent = (TIER_LABELS[lang] || TIER_LABELS.es)[def.tier];
+    tierEl.className = `badge-tier ${TIER_COLORS[def.tier]}`;
+
+    document.getElementById('shareModal').style.display = 'flex';
+  },
+
+  closeModal() {
+    document.getElementById('shareModal').style.display = 'none';
+    this._selectedBadge = null;
+  },
+
+  shareBadge() {
+    const b = this._selectedBadge;
+    if (!b) return;
+    const lang = currentLang || 'es';
+    const text = `🏆 ${b.name[lang] || b.name.es}\n\n${b.desc[lang] || b.desc.es}\n\n${b.earned ? '✅ Lo logré en Yayika!' : '¡Únete a Yayika y desbloquea logros!'}\nhttps://yayika.com`;
+
+    if (navigator.share) {
+      navigator.share({ title: 'Yayika Logro', text }).catch(() => {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      this._showToast('Copiado al portapapeles 📋');
+    }
+    this.closeModal();
+  },
+
+  _showToast(msg) {
+    const existing = document.getElementById('logrosToast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'logrosToast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:100px;color:white;font-size:12px;font-weight:600;background:linear-gradient(135deg,#7B5EA7,#A78BDB);z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.15);cursor:pointer';
+    toast.textContent = msg;
+    toast.onclick = () => toast.remove();
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+};
+
+// Init on load
+document.addEventListener('DOMContentLoaded', () => Achievements.init());
+</script>
+</body>
+</html>
