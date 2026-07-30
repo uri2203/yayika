@@ -982,22 +982,6 @@ footer{background:var(--texto);padding:44px 5vw 24px}
 function isIOS(){return/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
 function isAndroid(){return/iAndroid/.test(navigator.userAgent)}
 function closeIOSModal(){document.getElementById('iosInstallModal').style.display='none'}
-function installApp(){
-  if(isIOS()){
-    document.getElementById('iosInstallModal').style.display='flex';
-    return;
-  }
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(c=>{
-      deferredPrompt=null;
-      document.getElementById("installBanner").style.display="none";
-    });
-  } else {
-    // Fallback: show instructions
-    document.getElementById('iosInstallModal').style.display='flex';
-  }
-}
 </script>
 
 <!-- APP BANNER -->
@@ -1216,10 +1200,78 @@ if("serviceWorker" in navigator){
     navigator.serviceWorker.register("/sw.js").then(r=>console.log("SW OK")).catch(e=>console.log("SW Error",e));
   });
 }
+// === PWA Install Detection ===
+// Check if app is already installed (running in standalone mode OR already installed)
+function isAppInstalled(){
+  // Standalone mode = app was launched from home screen
+  if(window.matchMedia('(display-mode: standalone)').matches) return true;
+  if(navigator.standalone === true) return true;
+  // Check our own flag (set after successful install or user dismiss)
+  if(localStorage.getItem('yayika-app-installed') === '1') return true;
+  if(localStorage.getItem('yayika-install-never-show') === '1') return true;
+  return false;
+}
+
+// Async check using the browser's installed apps API
+async function checkInstalledViaAPI(){
+  try {
+    if(navigator.getInstalledRelatedApps){
+      const apps = await navigator.getInstalledRelatedApps();
+      if(apps && apps.length > 0){
+        localStorage.setItem('yayika-app-installed','1');
+        return true;
+      }
+    }
+  } catch(e){}
+  return false;
+}
+
+// Global flag to track if we already decided
+let pwaInstallDecided = false;
+
+// Immediately hide banner if already decided
+function hideInstallUI(){
+  const b=document.getElementById("installBanner");
+  if(b) b.style.display="none";
+  const btns=document.getElementById("installBtns");
+  if(btns) btns.style.display="none";
+  const qrContainer=document.getElementById("qrContainer");
+  if(qrContainer) qrContainer.style.display="none";
+  const installSection=document.getElementById("app");
+  if(installSection){
+    const tag=installSection.querySelector('.ab-tag');
+    if(tag) tag.textContent='Ya la tienes ✨';
+    const sub=installSection.querySelector('.ab-sub');
+    if(sub) sub.textContent='Tu app de bienestar para mujeres. Toca abrirla.';
+    // Keep only the "Abrir portal" button
+    const installBtn=document.getElementById('installBtnBanner');
+    if(installBtn) installBtn.style.display='none';
+  }
+}
+
+// Run initial check immediately
+if(isAppInstalled()){
+  pwaInstallDecided = true;
+  hideInstallUI();
+}
+
+// Run async API check to catch cases where user installed but not in standalone
+(async function(){
+  if(pwaInstallDecided) return;
+  await checkInstalledViaAPI();
+  if(isAppInstalled()){
+    pwaInstallDecided = true;
+    hideInstallUI();
+  }
+})();
+
 let deferredPrompt;
 window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault();
   deferredPrompt=e;
+  // If already installed, ignore this event entirely
+  if(isAppInstalled()) return;
+  pwaInstallDecided = true;
   // Only show auto-banner on Android (iOS can't auto-install)
   if(!isIOS()){
     const banner=document.getElementById("installBanner");
@@ -1236,8 +1288,8 @@ window.addEventListener("beforeinstallprompt",e=>{
   }
 });
 
-// Auto-show install prompt on iOS after 3 seconds
-if(isIOS()){
+// Auto-show install prompt on iOS after 3 seconds (skip if installed)
+if(isIOS() && !isAppInstalled()){
   setTimeout(()=>{
     const banner=document.getElementById("installBanner");
     if(banner && !localStorage.getItem('yayika-ios-dismissed')){
@@ -1246,18 +1298,28 @@ if(isIOS()){
   },3000);
 }
 
-// Dismiss iOS banner permanently
+// Dismiss banner permanently (never show again)
 function dismissInstallBanner(){
   const banner=document.getElementById("installBanner");
   if(banner) banner.style.display="none";
-  if(isIOS()) localStorage.setItem('yayika-ios-dismissed','1');
+  localStorage.setItem('yayika-ios-dismissed','1');
+  localStorage.setItem('yayika-install-never-show','1');
 }
 function installApp(){
+  if(isIOS()){
+    document.getElementById('iosInstallModal').style.display='flex';
+    return;
+  }
   if(deferredPrompt){
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(c=>{
       deferredPrompt=null;
       document.getElementById("installBanner").style.display="none";
+      // Mark as installed
+      if(c.outcome==='accepted'){
+        localStorage.setItem('yayika-app-installed','1');
+        hideInstallUI();
+      }
     });
   }
 }
