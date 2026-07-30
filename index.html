@@ -300,11 +300,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .proof-text strong{color:var(--texto);font-weight:500}
 
 .hero-right{position:relative}
-.hero-card-stack{position:relative;height:480px}
-.hcard{position:absolute;background:white;border-radius:20px;padding:22px;box-shadow:0 8px 40px rgba(0,0,0,0.08);border:0.5px solid var(--borde)}
-.hcard-main{width:300px;top:40px;left:10px;z-index:3}
-.hcard-back1{width:270px;top:20px;left:40px;z-index:2;opacity:0.6;transform:rotate(3deg);background:#FBF8FF}
-.hcard-back2{width:250px;top:4px;left:64px;z-index:1;opacity:0.35;transform:rotate(6deg);background:#F7F4FD}
+.hero-card-stack{position:relative;height:500px}
+.hcard{position:absolute;background:white;border-radius:20px;padding:22px;box-shadow:0 8px 40px rgba(0,0,0,0.08);border:0.5px solid var(--borde);transition:transform 0.3s}
+.hcard-main{width:300px;top:60px;left:30px;z-index:3}
+.hcard-back1{width:260px;top:30px;left:60px;z-index:2;opacity:0.7;transform:rotate(2.5deg);background:#FBF8FF;padding:18px}
+.hcard-back2{width:230px;top:0;left:80px;z-index:1;opacity:0.45;transform:rotate(5deg);background:#F7F4FD;padding:16px}
 .hcard-tag{font-size:10px;font-weight:500;color:var(--lila-d);background:var(--lila-l);padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:10px}
 .hcard-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--texto);margin-bottom:6px;margin-top:10px}
 .hcard-desc{font-size:12px;color:var(--suave);line-height:1.5;margin-bottom:14px}
@@ -313,10 +313,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgb
 .hcard-price{font-size:16px;font-weight:500;color:var(--lila-d)}
 .hcard-price s{font-size:12px;color:var(--suave);margin-right:4px;font-weight:400}
 .hcard-btn{background:var(--turquesa);color:white;padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;border:none;cursor:pointer}
-.floating-pill{position:absolute;background:white;border-radius:100px;padding:7px 14px;box-shadow:0 4px 20px rgba(0,0,0,0.1);display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--texto);animation:float 3s ease-in-out infinite}
-.fp1{bottom:100px;right:0;animation-delay:0s}
-.fp2{top:20px;right:0;animation-delay:1.5s}
+
+/* Floating Pills - varied sizes and stagger */
+.floating-pill{position:absolute;background:white;border-radius:100px;padding:7px 14px;box-shadow:0 4px 20px rgba(0,0,0,0.1);display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--texto);animation:float 3s ease-in-out infinite;white-space:nowrap}
+.floating-pill.pill-sm{font-size:11px;padding:5px 12px}
+.floating-pill.pill-accent{background:var(--lila-l);color:var(--lila-d);border:1px solid var(--borde)}
+.floating-pill.pill-success{background:var(--turquesa-l);color:var(--turquesa-d);border:1px solid rgba(26,158,143,0.15)}
+.floating-pill.pill-warm{background:var(--oro-l);color:#8A6D1F;border:1px solid rgba(184,148,58,0.15)}
+.floating-pill.pill-soft{background:var(--rosa-l);color:#8B3D4D;border:1px solid rgba(201,107,122,0.15)}
+
+/* Pill positions */
+.fp1{bottom:80px;left:0;animation-delay:0s}
+.fp2{top:10px;right:10px;animation-delay:0.8s}
+.fp3{top:180px;right:-10px;animation-delay:1.6s}
+.fp4{bottom:160px;right:20px;animation-delay:0.4s}
+.fp5{top:350px;left:-10px;animation-delay:1.2s}
+.fp6{bottom:20px;right:60px;animation-delay:2s}
+
+/* Decorative bg elements */
+.hero-decor{position:absolute;border-radius:50%;pointer-events:none}
+.hero-decor-1{width:120px;height:120px;background:radial-gradient(circle,rgba(123,94,167,0.08) 0%,transparent 70%);top:40px;right:60px}
+.hero-decor-2{width:80px;height:80px;background:radial-gradient(circle,rgba(26,158,143,0.06) 0%,transparent 70%);bottom:60px;left:20px}
+.hero-decor-3{width:60px;height:60px;background:radial-gradient(circle,rgba(184,148,58,0.06) 0%,transparent 70%);top:280px;left:0}
+
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes floatAlt{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(1deg)}}
 .live-dot{width:8px;height:8px;background:#4CAF50;border-radius:50%;animation:blink 2s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
@@ -572,8 +593,22 @@ footer{background:var(--texto);padding:44px 5vw 24px}
   </div>
   <div class="hero-right">
     <div class="hero-card-stack">
-      <div class="hcard hcard-back2"></div>
-      <div class="hcard hcard-back1"></div>
+      <!-- Decorative background -->
+      <div class="hero-decor hero-decor-1"></div>
+      <div class="hero-decor hero-decor-2"></div>
+      <div class="hero-decor hero-decor-3"></div>
+
+      <!-- Card stack -->
+      <div class="hcard hcard-back2">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="#FBF6E8"/><path d="M24 14l3 6 6.5.9-4.7 4.6 1.1 6.5L24 29l-5.9 3 .9-6.5-4.7-4.6 6.5-.9z" fill="#B8943A"/></svg>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--texto);margin-top:8px">La Mujer Que Negocia</div>
+        <div style="font-size:10px;color:var(--suave);margin-top:4px">Scripts para pedir más</div>
+      </div>
+      <div class="hcard hcard-back1">
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="#FDF0F2"/><rect x="14" y="16" width="20" height="16" rx="3" stroke="#C96B7A" stroke-width="2"/><path d="M24 12v8M20 24h8" stroke="#C96B7A" stroke-width="2" stroke-linecap="round"/></svg>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;color:var(--texto);margin-top:8px">Dinero Sin Pena</div>
+        <div style="font-size:10px;color:var(--suave);margin-top:4px">Finanzas con psicología</div>
+      </div>
       <div class="hcard hcard-main">
         <svg class="icon" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="#EDE8F9"/><path d="M24 8C15.16 8 8 15.16 8 24s7.16 16 16 16 16-7.16 16-16S32.84 8 24 8zm0 4c6.63 0 12 5.37 12 12S30.63 36 24 36 12 30.63 12 24 17.37 12 24 12zm-1 4v9l7.5 4.5-1.5 2.5-9-5.5V16h3z" fill="#7B5EA7"/></svg>
         <span class="hcard-tag">Más popular</span>
@@ -585,8 +620,17 @@ footer{background:var(--texto);padding:44px 5vw 24px}
           <button class="hcard-btn" onclick="buyProduct('ciclo-productiva')">Obtenerlo</button>
         </div>
       </div>
+
+      <!-- Floating Pills -->
       <div class="floating-pill fp1"><div class="live-dot"></div>28 mujeres activas ahora</div>
-      <div class="floating-pill fp2">🔥 12 ventas hoy</div>
+      <div class="floating-pill fp2 pill-warm">🔥 12 ventas hoy</div>
+      <div class="floating-pill fp3 pill-accent">⭐ 4.9 estrellas</div>
+      <div class="floating-pill fp4 pill-success">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c1-3 5.5-6 10-6V4c-4.5 0-9 3-10 6"/><path d="M12 16c-1-3-5.5-6-10-6v12c4.5 0 9-3 10-6"/><circle cx="12" cy="12" r="2"/></svg>
+        4 fases hormonales
+      </div>
+      <div class="floating-pill fp5 pill-sm pill-soft">🏠 Sin salir de casa</div>
+      <div class="floating-pill fp6 pill-sm pill-accent">💜 +2,400 mujeres</div>
     </div>
   </div>
 </section>
