@@ -479,6 +479,10 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
         <span class="ds-text">💰 Gana con Yayika</span>
       </a>
+      <a href="#sellerDashboardContainer" class="ds-item" onclick="document.getElementById('sellerDashboardContainer')?.scrollIntoView({behavior:'smooth'})">
+        <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <span class="ds-text">📊 Mi Dashboard Financiero</span>
+      </a>
 
       <div class="ds-section" data-i18n="sidebar_cuenta">Cuenta</div>
       <a href="#" class="ds-item">
@@ -553,6 +557,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
       <!-- GANA CON YAYIKA -->
       <div id="ganaContainer"></div>
+
+      <!-- SELLER FINANCIAL DASHBOARD -->
+      <div id="sellerDashboardContainer"></div>
 
       <div class="stats-row">
         <div class="stat-card"><div class="sc-num turquesa" id="totalXP">680</div><div class="sc-label" data-i18n="stat_xp">Puntos XP totales</div></div>
@@ -905,6 +912,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/product-catalog.js" defer></script>
 <script src="../js/weekly-challenges.js" defer></script>
 <script src="../js/gana-con-yayika.js" defer></script>
+<script src="../js/seller-dashboard.js" defer></script>
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
@@ -1211,6 +1219,12 @@ async function loadDashboard() {
 
       // Initialize Gana con Yayika
       if (typeof GanaConYayika !== 'undefined') GanaConYayika.init();
+
+      // Initialize Seller Financial Dashboard
+      const sellerDashEl = document.getElementById('sellerDashboardContainer');
+      if (sellerDashEl && typeof sellerDash !== 'undefined') {
+        sellerDash.render(sellerDashEl);
+      }
     }
   } catch (e) {
     console.warn('Wellness Planner init error:', e);
