@@ -296,14 +296,30 @@ async function getRanking() {
 // ============================================================
 
 const STRIPE_PLANS = {
-  semilla: { priceId: 'price_1TcbvF7nIcYtQjcNrU0V34qU', name: 'Semilla', price: 5, link: 'https://buy.stripe.com/eVqdR34ix4Hw3VEaNN1oI02' },
-  guerrera: { priceId: 'price_1TcbzT7nIcYtQjcNNDitMOYD', name: 'Guerrera', price: 10, link: 'https://buy.stripe.com/28E28l02hfmadwe7BB1oI03' },
-  diamante: { priceId: 'price_1Tcc1M7nIcYtQjcNR1QKoOoM', name: 'Diamante', price: 18, link: 'https://buy.stripe.com/7sY7sFcP3ei677Q7BB1oI04' }
+  semilla: { priceId: 'price_1TcbvF7nIcYtQjcNrU0V34qU', name: 'Semilla', price: 5, link: 'https://buy.stripe.com/eVqdR34ix4Hw3VEaNN1oI02', taxCode: 'txcd_10103000' },
+  guerrera: { priceId: 'price_1TcbzT7nIcYtQjcNNDitMOYD', name: 'Guerrera', price: 10, link: 'https://buy.stripe.com/28E28l02hfmadwe7BB1oI03', taxCode: 'txcd_10103000' },
+  diamante: { priceId: 'price_1Tcc1M7nIcYtQjcNR1QKoOoM', name: 'Diamante', price: 18, link: 'https://buy.stripe.com/7sY7sFcP3ei677Q7BB1oI04', taxCode: 'txcd_10103000' }
+};
+
+// Product tax codes for Stripe Dashboard
+const PRODUCT_TAX_CODES = {
+  membership: 'txcd_10103000',  // SaaS - personal use
+  planner: 'txcd_10302000',    // Digital documents
+  course: 'txcd_20060158',     // On demand online courses
+  ebook: 'txcd_10302000'       // Digital books
 };
 
 async function createCheckoutSession(planKey) {
   const plan = STRIPE_PLANS[planKey];
   if (!plan) throw new Error('Plan no válido');
+  
+  // Log tax configuration for debugging
+  if (typeof StripeTax !== 'undefined') {
+    console.log('[Yayika Tax] Checkout for:', planKey, '| Tax code:', plan.taxCode);
+    console.log('[Yayika Tax] Stripe Tax enabled:', StripeTax.config.enabled);
+    console.log('[Yayika Tax] Liability:', StripeTax.config.liabilityType);
+  }
+  
   window.location.href = plan.link;
 }
 

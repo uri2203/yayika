@@ -29,7 +29,7 @@ async function getAdminStats() {
   const allSubs = revenueResult.data || [];
 
   // Revenue calculation
-  const planPrices = { semilla: 9.99, guerrera: 19.99, diamante: 29.99 };
+  const planPrices = { semilla: 5, guerrera: 10, diamante: 18 };
   let monthlyRevenue = 0;
   let totalRevenue = 0;
   const now = new Date();
