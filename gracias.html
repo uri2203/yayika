@@ -30,11 +30,12 @@ p{font-size:16px;color:#666;line-height:1.6;margin-bottom:24px}
   <div class="check">
     <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
   </div>
-  <h1>¡Gracias por tu compra!</h1>
-  <p>Tu acceso ya está activo. Revisa tu <span class="highlight">correo electrónico</span> con los detalles de tu compra y las instrucciones para acceder a tu contenido.</p>
-  <a href="/Portales/" class="btn">Ir a mi panel</a>
-  <p class="note">Si no recibes el correo en 5 minutos, revisa tu carpeta de spam o escríbenos a hola@yayika.com</p>
+  <h1 data-i18n="thankYouHeading">¡Gracias por tu compra!</h1>
+  <p data-i18n="thankYouDesc">Tu acceso ya está activo. Revisa tu <span class="highlight">correo electrónico</span> con los detalles de tu compra y las instrucciones para acceder a tu contenido.</p>
+  <a href="/Portales/" class="btn" data-i18n="goToPanel">Ir a mi panel</a>
+  <p class="note" data-i18n="spamNote">Si no recibes el correo en 5 minutos, revisa tu carpeta de spam o escríbenos a hola@yayika.com</p>
 </div>
+<script src="js/i18n.js"></script>
 <script>
 // Track conversion if analytics present
 if (typeof gtag === 'function') {

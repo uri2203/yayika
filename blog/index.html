@@ -48,42 +48,43 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--texto)}
 footer{background:#2C2240;color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px;margin-top:40px}
 </style>
 <script defer data-domain="yayika.com" src="https://plausible.io/js/script.js"></script>
+<script src="../js/i18n.js"></script>
 </head>
 <body>
 <nav>
   <a href="/" class="nav-logo">Yay<span>ika</span></a>
   <div class="nav-links">
-    <a href="/">Inicio</a>
-    <a href="/blog/">Blog</a>
-    <a href="/Portales/">Portal</a>
+    <a href="/" data-i18n="blog_navInicio">Inicio</a>
+    <a href="/blog/" data-i18n="blog_navBlog">Blog</a>
+    <a href="/Portales/" data-i18n="blog_navPortal">Portal</a>
   </div>
 </nav>
 
 <div class="hero">
   <h1>Blog de Yayika</h1>
-  <p>Artículos prácticos sobre productividad femenina, finanzas personales, ciclo menstrual y bienestar.</p>
+  <p data-i18n="blog_hero_sub">Artículos prácticos sobre productividad femenina, finanzas personales, ciclo menstrual y bienestar.</p>
 </div>
 
 <div class="container">
   <a href="/blog/ciclo-productivo-semanal.html" class="article-card">
-    <span class="article-tag tag-ciclo">Ciclo Menstrual</span>
-    <h2>Cómo organizar tu semana según tu fase del ciclo</h2>
-    <p>Descubre qué días son ideales para reuniones importantes, cuáles para trabajo creativo y cuáles para descansar — sin culpa.</p>
-    <span class="article-meta">5 min de lectura · Jul 2026</span>
+    <span class="article-tag tag-ciclo" data-i18n="blog_tag_ciclo">Ciclo Menstrual</span>
+    <h2 data-i18n="blog_article_1_title">Cómo organizar tu semana según tu fase del ciclo</h2>
+    <p data-i18n="blog_article_1_desc">Descubre qué días son ideales para reuniones importantes, cuáles para trabajo creativo y cuáles para descansar — sin culpa.</p>
+    <span class="article-meta" data-i18n="blog_article_1_meta">5 min de lectura · Jul 2026</span>
   </a>
 
   <a href="/blog/negociacion-salarial-mujeres.html" class="article-card">
-    <span class="article-tag tag-negociacion">Negociación</span>
-    <h2>Guía para negociar tu salario: lo que nadie te enseñó</h2>
-    <p>Las mujeres negocian menos y ganan menos por ello. Aquí tienes un script paso a paso para pedir lo que mereces.</p>
-    <span class="article-meta">7 min de lectura · Jul 2026</span>
+    <span class="article-tag tag-negociacion" data-i18n="blog_tag_negociacion">Negociación</span>
+    <h2 data-i18n="blog_article_2_title">Guía para negociar tu salario: lo que nadie te enseñó</h2>
+    <p data-i18n="blog_article_2_desc">Las mujeres negocian menos y ganan menos por ello. Aquí tienes un script paso a paso para pedir lo que mereces.</p>
+    <span class="article-meta" data-i18n="blog_article_2_meta">7 min de lectura · Jul 2026</span>
   </a>
 
   <a href="/blog/presupuesto-50-30-20.html" class="article-card">
-    <span class="article-tag tag-finanzas">Finanzas</span>
-    <h2>El método 50/30/20 para manejar tu dinero sin ansiedad</h2>
-    <p>La forma más simple de organizar tus finanzas personales. Sin spreadsheets complicados, sin restricciones extremas.</p>
-    <span class="article-meta">4 min de lectura · Jul 2026</span>
+    <span class="article-tag tag-finanzas" data-i18n="blog_tag_finanzas">Finanzas</span>
+    <h2 data-i18n="blog_article_3_title">El método 50/30/20 para manejar tu dinero sin ansiedad</h2>
+    <p data-i18n="blog_article_3_desc">La forma más simple de organizar tus finanzas personales. Sin spreadsheets complicados, sin restricciones extremas.</p>
+    <span class="article-meta" data-i18n="blog_article_3_meta">4 min de lectura · Jul 2026</span>
   </a>
 
   <!-- AdSense: Banner entre artículos (activar con ID de publicación) -->
@@ -93,36 +94,36 @@ footer{background:#2C2240;color:rgba(255,255,255,.5);text-align:center;padding:2
   </div> -->
 
   <a href="/blog/energia-ciclo-menstrual.html" class="article-card">
-    <span class="article-tag tag-bienestar">Bienestar</span>
-    <h2>Tu energía no es constante — y está bien</h2>
-    <p>Por qué sentirse diferente cada semana no es un defecto, sino tu superpoder oculto. Ciencia y consejos prácticos.</p>
-    <span class="article-meta">6 min de lectura · Jul 2026</span>
+    <span class="article-tag tag-bienestar" data-i18n="blog_tag_bienestar">Bienestar</span>
+    <h2 data-i18n="blog_article_4_title">Tu energía no es constante — y está bien</h2>
+    <p data-i18n="blog_article_4_desc">Por qué sentirse diferente cada semana no es un defecto, sino tu superpoder oculto. Ciencia y consejos prácticos.</p>
+    <span class="article-meta" data-i18n="blog_article_4_meta">6 min de lectura · Jul 2026</span>
   </a>
 
   <a href="/blog/invertir-primer-paso.html" class="article-card">
-    <span class="article-tag tag-finanzas">Finanzas</span>
-    <h2>Invertir no es para ricos: tu primer paso hoy</h2>
-    <p>Mitos sobre la inversión y cómo empezar con poco dinero. Por qué esperar "tener más" es el mayor error financiero.</p>
-    <span class="article-meta">5 min de lectura · Jul 2026</span>
+    <span class="article-tag tag-finanzas" data-i18n="blog_tag_finanzas">Finanzas</span>
+    <h2 data-i18n="blog_article_5_title">Invertir no es para ricos: tu primer paso hoy</h2>
+    <p data-i18n="blog_article_5_desc">Mitos sobre la inversión y cómo empezar con poco dinero. Por qué esperar "tener más" es el mayor error financiero.</p>
+    <span class="article-meta" data-i18n="blog_article_5_meta">5 min de lectura · Jul 2026</span>
   </a>
 
   <a href="/blog/ahorrar-dinero-mama.html" class="article-card">
-    <span class="article-tag tag-finanzas">Finanzas</span>
-    <h2>Cómo ahorrar dinero siendo mama trabajadora: 7 estrategias reales</h2>
-    <p>Guía práctica de ahorro para mamás trabajadoras. 7 estrategias reales para organizar tu dinero sin sacrificar tiempo con tu familia.</p>
-    <span class="article-meta">6 min de lectura · Jul 2026</span>
+    <span class="article-tag tag-finanzas" data-i18n="blog_tag_finanzas">Finanzas</span>
+    <h2 data-i18n="blog_article_6_title">Cómo ahorrar dinero siendo mama trabajadora: 7 estrategias reales</h2>
+    <p data-i18n="blog_article_6_desc">Guía práctica de ahorro para mamás trabajadoras. 7 estrategias reales para organizar tu dinero sin sacrificar tiempo con tu familia.</p>
+    <span class="article-meta" data-i18n="blog_article_6_meta">6 min de lectura · Jul 2026</span>
   </a>
 
   <a href="/blog/senales-burnout-mujeres.html" class="article-card">
-    <span class="article-tag tag-bienestar">Bienestar</span>
-    <h2>5 señales de que estás en burnout (y qué hacer hoy mismo)</h2>
-    <p>Reconoce las 5 señales de burnout en mujeres y descubre qué hacer hoy para recuperar tu energía. Guía basada en neurociencia y psicología.</p>
-    <span class="article-meta">5 min de lectura · Jul 2026</span>
+    <span class="article-tag tag-bienestar" data-i18n="blog_tag_bienestar">Bienestar</span>
+    <h2 data-i18n="blog_article_7_title">5 señales de que estás en burnout (y qué hacer hoy mismo)</h2>
+    <p data-i18n="blog_article_7_desc">Reconoce las 5 señales de burnout en mujeres y descubre qué hacer hoy para recuperar tu energía. Guía basada en neurociencia y psicología.</p>
+    <span class="article-meta" data-i18n="blog_article_7_meta">5 min de lectura · Jul 2026</span>
   </a>
 </div>
 
 <footer>
-  © 2026 Yayika · <a href="/" style="color:rgba(255,255,255,.7)">yayika.com</a>
+  <span data-i18n="blog_footer">© 2026 Yayika · <a href="/" style="color:rgba(255,255,255,.7)">yayika.com</a></span>
 </footer>
 </body>
 </html>
