@@ -234,6 +234,15 @@ const CycleCoach = {
             }[lang] || 'Historial'}
           </button>
         </div>
+        <div style="margin-top:10px;font-size:10px;color:var(--suave);text-align:center;line-height:1.4">
+          ${{
+            es: '🤖 Contenido generado por IA — No constituye asesoría médica ni profesional',
+            en: '🤖 AI-generated content — Does not constitute medical or professional advice',
+            pt: '🤖 Conteúdo gerado por IA — Não constitui aconselhamento médico ou profissional',
+            fr: '🤖 Contenu généré par IA — Ne constitue pas un avis médical ou professionnel',
+            de: '🤖 KI-generierter Inhalt — Keine medizinische oder professionelle Beratung'
+          }[lang] || '🤖 Contenido generado por IA — No constituye asesoría médica ni profesional'}
+        </div>
       </div>
     `;
   },

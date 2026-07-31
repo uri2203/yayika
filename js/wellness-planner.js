@@ -129,6 +129,9 @@ const WellnessPlanner = {
             Preparando tu plan...
           </div>
         </div>
+        <div style="margin-top:10px;font-size:10px;color:var(--suave);text-align:center;line-height:1.4">
+          🤖 Contenido generado por IA — No constituye asesoría médica ni profesional
+        </div>
       </div>
     `;
   },

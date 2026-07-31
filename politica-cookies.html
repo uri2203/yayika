@@ -120,10 +120,32 @@
     <li><strong>Google Fonts:</strong> Para cargar fuentes web. Google puede recabar dirección IP como parte del proceso de entrega. Consulta: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></li>
   </ul>
 
-  <h2>6. Gestión de cookies</h2>
-  <p>Puedes controlar y gestionar las cookies de las siguientes maneras:</p>
+  <h2>6. Gestión de cookies y consentimiento</h2>
   
-  <h3>A nivel de navegador:</h3>
+  <h3>6.1 Banner de consentimiento</h3>
+  <p>Al visitar Yayika por primera vez, se te presentará un <strong>banner de consentimiento de cookies</strong> que te permite:</p>
+  <ul>
+    <li><strong>Aceptar todo:</strong> Activar todas las cookies (necesarias + análisis)</li>
+    <li><strong>Rechazar todo:</strong> Desactivar cookies de análisis (solo necesarias)</li>
+    <li><strong>Guardar selección:</strong> Elegir qué categorías de cookies deseas activar</li>
+  </ul>
+  <p>El botón de "Rechazar" tiene la misma prominencia visual que el de "Aceptar", conforme a las directrices del EDPB y CNIL.</p>
+
+  <h3>6.2 Global Privacy Control (GPC)</h3>
+  <p>Yayika respeta la señal <strong>Global Privacy Control (GPC)</strong>. Si tu navegador envía esta señal, las cookies de análisis se deshabilitan automáticamente sin necesidad de interacción. Esto cumple con los requisitos del <strong>CCPA/CPRA</strong> de California.</p>
+
+  <h3>6.3 "No vender ni compartir"</h3>
+  <p>Conforme al <strong>CCPA/CPRA</strong>, el banner de cookies incluye un enlace "No vender ni compartir mi información personal". Yayika <strong>no vende ni comparte</strong> información personal con terceros para fines publicitarios. Este enlace está disponible para residentes de California y otros estados de EE.UU.</p>
+
+  <h3>6.4 Cambiar tu preferencia</h3>
+  <p>Puedes cambiar tu preferencia de cookies en cualquier momento:</p>
+  <ul>
+    <li>Haciendo clic en el enlace "Configuración de cookies" en el pie de página</li>
+    <li>Llamando a la función JavaScript: <code>YayikaCookieConsent.updateConsent({ analytics: true/false })</code></li>
+    <li>Contactando a <strong>admin@yayika.com</strong></li>
+  </ul>
+
+  <h3>6.5 A nivel de navegador:</h3>
   <ul>
     <li><strong>Chrome:</strong> Configuración → Privacidad y seguridad → Cookies</li>
     <li><strong>Firefox:</strong> Opciones → Privacidad y seguridad → Cookies y datos del sitio</li>

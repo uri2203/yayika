@@ -174,6 +174,9 @@ const FinancialCoach = {
             Analizando tus finanzas...
           </div>
         </div>
+        <div style="margin-top:10px;font-size:10px;color:rgba(255,255,255,0.35);text-align:center;line-height:1.4">
+          ⚠️ Contenido generado por IA — No constituye asesoría financiera profesional
+        </div>
       </div>
     `;
   },

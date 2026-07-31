@@ -246,6 +246,9 @@ const GrowthCoach = {
             ${t.your_code}: <strong style="color:#5ED4C5;letter-spacing:1px">${this._data?.ref_code || this._affiliate?.ref_code || '—'}</strong>
           </div>
         </div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.3);text-align:center;margin-top:8px;position:relative;z-index:1">
+          🤖 Contenido generado por IA
+        </div>
       </div>
     `;
 
