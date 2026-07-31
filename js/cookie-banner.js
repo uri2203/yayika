@@ -7,6 +7,28 @@
 (function() {
   'use strict';
 
+  // Helper: use i18n if available, otherwise fallback to Spanish
+  function ct(key) {
+    try {
+      if (typeof t === 'function') return t(key);
+    } catch(e) {}
+    // Fallback to ES
+    const es = {
+      cookie_title: '🍪 Utilizamos cookies para mejorar tu experiencia',
+      cookie_desc: 'Yayika utiliza cookies <strong>estrictamente necesarias</strong> para el funcionamiento de la plataforma (sesiones, preferencias). Opcionalmente, utilizamos <strong>Plausible Analytics</strong> para mejorar nuestro servicio — es un sistema de análisis respetuoso con la privacidad que no utiliza cookies de rastreo publicitario. Consulta nuestra <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para más detalles.',
+      cookie_necessary: 'Necesarias — Siempre activas (sesiones, seguridad, preferencias)',
+      cookie_analytics: 'Análisis — Plausible Analytics (privacidad, sin publicidad)',
+      cookie_reject: 'Rechazar todo',
+      cookie_accept: 'Aceptar todo',
+      cookie_save: 'Guardar selección',
+      cookie_ccpa: 'No vender ni compartir mi información personal',
+      cookie_ccpa_note: ' (CCPA/CPRA — California)',
+      cookie_gpc_notice: '🔒 Se detectó Global Privacy Control (GPC) activo. Las cookies de análisis han sido deshabilitadas automáticamente.',
+      cookie_ccpa_alert: 'Se ha deshabilitado el rastreo de análisis. Yayika no vende ni comparte información personal con terceros.',
+    };
+    return es[key] || key;
+  }
+
   const STORAGE_KEY = 'yayika_cookie_consent';
   const CONSENT_VERSION = '1.0';
 
@@ -72,7 +94,7 @@
   function createBannerHTML() {
     const isGPC = detectGPC();
     const gpcNotice = isGPC 
-      ? '<p style="font-size:12px; color:#888; margin-top:8px;">🔒 Se detectó Global Privacy Control (GPC) activo. Las cookies de análisis han sido deshabilitadas automáticamente.</p>'
+      ? '<p style="font-size:12px; color:#888; margin-top:8px;">' + ct('cookie_gpc_notice') + '</p>'
       : '';
 
     return `
@@ -85,12 +107,10 @@
     ">
       <div style="max-width: 900px; margin: 0 auto;">
         <p style="margin: 0 0 12px 0; font-weight: 500;">
-          🍪 Utilizamos cookies para mejorar tu experiencia
+          ${ct('cookie_title')}
         </p>
         <p style="margin: 0 0 16px 0; line-height: 1.6; font-size: 13px; color: #555;">
-          Yayika utiliza cookies <strong>estrictamente necesarias</strong> para el funcionamiento de la plataforma (sesiones, preferencias). 
-          Opcionalmente, utilizamos <strong>Plausible Analytics</strong> para mejorar nuestro servicio — es un sistema de análisis respetuoso con la privacidad que no utiliza cookies de rastreo publicitario.
-          Consulta nuestra <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para más detalles.
+          ${ct('cookie_desc')}
         </p>
         ${gpcNotice}
         
@@ -98,11 +118,11 @@
         <div style="margin: 16px 0; padding: 12px; background: #f9fafb; border-radius: 8px;">
           <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: default;">
             <input type="checkbox" checked disabled style="accent-color: #7c3aed;">
-            <span><strong>Necesarias</strong> — Siempre activas (sesiones, seguridad, preferencias)</span>
+            <span><strong>${ct('cookie_necessary')}</strong></span>
           </label>
           <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
             <input type="checkbox" id="yayika-analytics-consent" ${isGPC ? '' : 'checked'} style="accent-color: #7c3aed;">
-            <span><strong>Análisis</strong> — Plausible Analytics (privacidad, sin publicidad)</span>
+            <span><strong>${ct('cookie_analytics')}</strong></span>
           </label>
         </div>
 
@@ -112,24 +132,24 @@
             padding: 10px 20px; border: 1px solid #d1d5db; border-radius: 8px;
             background: #fff; color: #374151; font-weight: 500; cursor: pointer;
             font-size: 14px; flex: 1; min-width: 120px;
-          ">Rechazar todo</button>
+          ">${ct('cookie_reject')}</button>
           
           <button id="yayika-cookie-accept" style="
             padding: 10px 20px; border: none; border-radius: 8px;
             background: #7c3aed; color: #fff; font-weight: 500; cursor: pointer;
             font-size: 14px; flex: 1; min-width: 120px;
-          ">Aceptar todo</button>
+          ">${ct('cookie_accept')}</button>
           
           <button id="yayika-cookie-save" style="
             padding: 10px 20px; border: 1px solid #7c3aed; border-radius: 8px;
             background: #fff; color: #7c3aed; font-weight: 500; cursor: pointer;
             font-size: 14px; flex: 1; min-width: 120px;
-          ">Guardar selección</button>
+          ">${ct('cookie_save')}</button>
         </div>
 
         <!-- CCPA Do Not Sell link for US visitors -->
         <p style="margin-top: 12px; font-size: 12px; color: #888;">
-          <a href="#" id="yayika-do-not-sell" style="color: #888; text-decoration: underline;">No vender ni compartir mi información personal</a> (CCPA/CPRA — California)
+          <a href="#" id="yayika-do-not-sell" style="color: #888; text-decoration: underline;">${ct('cookie_ccpa')}</a>${ct('cookie_ccpa_note')}
         </p>
       </div>
     </div>`;
@@ -175,7 +195,7 @@
       e.preventDefault();
       saveConsent({ analytics: false, preferences: false });
       removeBanner();
-      alert('Se ha deshabilitado el rastreo de análisis. Yayika no vende ni comparte información personal con terceros.');
+      alert(ct('cookie_ccpa_alert'));
     });
   }
 

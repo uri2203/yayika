@@ -617,6 +617,18 @@ const I18N = {
     sp_faq_a7: 'Yayika está disponible en Español, English, Português, Français y Deutsch. Puedes cambiar el idioma desde el selector en la parte superior del sitio.',
     sp_form_sending: 'Enviando...',
     sp_form_error: 'Error — Intenta de nuevo',
+    // Cookie banner
+    cookie_title: '🍪 Utilizamos cookies para mejorar tu experiencia',
+    cookie_desc: 'Yayika utiliza cookies <strong>estrictamente necesarias</strong> para el funcionamiento de la plataforma (sesiones, preferencias). Opcionalmente, utilizamos <strong>Plausible Analytics</strong> para mejorar nuestro servicio — es un sistema de análisis respetuoso con la privacidad que no utiliza cookies de rastreo publicitario. Consulta nuestra <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para más detalles.',
+    cookie_necessary: 'Necesarias — Siempre activas (sesiones, seguridad, preferencias)',
+    cookie_analytics: 'Análisis — Plausible Analytics (privacidad, sin publicidad)',
+    cookie_reject: 'Rechazar todo',
+    cookie_accept: 'Aceptar todo',
+    cookie_save: 'Guardar selección',
+    cookie_ccpa: 'No vender ni compartir mi información personal',
+    cookie_ccpa_note: ' (CCPA/CPRA — California)',
+    cookie_gpc_notice: '🔒 Se detectó Global Privacy Control (GPC) activo. Las cookies de análisis han sido deshabilitadas automáticamente.',
+    cookie_ccpa_alert: 'Se ha deshabilitado el rastreo de análisis. Yayika no vende ni comparte información personal con terceros.',
   },
 
   en: {
@@ -1214,6 +1226,18 @@ const I18N = {
     sp_faq_a7: 'Yayika is available in Spanish, English, Portuguese, French and German. You can change the language from the selector at the top of the site.',
     sp_form_sending: 'Sending...',
     sp_form_error: 'Error — Try again',
+    // Cookie banner
+    cookie_title: '🍪 We use cookies to improve your experience',
+    cookie_desc: 'Yayika uses <strong>strictly necessary</strong> cookies for the platform to function (sessions, preferences). Optionally, we use <strong>Plausible Analytics</strong> to improve our service — it\'s a privacy-respecting analytics system that doesn\'t use advertising tracking cookies. See our <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Cookie Policy</a> for more details.',
+    cookie_necessary: 'Necessary — Always active (sessions, security, preferences)',
+    cookie_analytics: 'Analytics — Plausible Analytics (privacy-focused, no ads)',
+    cookie_reject: 'Reject all',
+    cookie_accept: 'Accept all',
+    cookie_save: 'Save selection',
+    cookie_ccpa: 'Do not sell or share my personal information',
+    cookie_ccpa_note: ' (CCPA/CPRA — California)',
+    cookie_gpc_notice: '🔒 Global Privacy Control (GPC) detected. Analytics cookies have been automatically disabled.',
+    cookie_ccpa_alert: 'Analytics tracking has been disabled. Yayika does not sell or share personal information with third parties.',
   },
 
   pt: {
@@ -1811,6 +1835,18 @@ const I18N = {
     sp_faq_a7: 'Yayika está disponível em Espanhol, Inglês, Português, Francês e Alemão. Você pode mudar o idioma pelo seletor no topo do site.',
     sp_form_sending: 'Enviando...',
     sp_form_error: 'Erro — Tente novamente',
+    // Cookie banner
+    cookie_title: '🍪 Usamos cookies para melhorar sua experiência',
+    cookie_desc: 'Yayika usa cookies <strong>estritamente necessários</strong> para o funcionamento da plataforma (sessões, preferências). Opcionalmente, usamos <strong>Plausible Analytics</strong> para melhorar nosso serviço — é um sistema de análise respeitoso com a privacidade que não usa cookies de rastreamento publicitário. Consulte nossa <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para mais detalhes.',
+    cookie_necessary: 'Necessários — Sempre ativos (sessões, segurança, preferências)',
+    cookie_analytics: 'Análise — Plausible Analytics (privacidade, sem anúncios)',
+    cookie_reject: 'Rejeitar tudo',
+    cookie_accept: 'Aceitar tudo',
+    cookie_save: 'Salvar seleção',
+    cookie_ccpa: 'Não vender nem compartilhar minhas informações pessoais',
+    cookie_ccpa_note: ' (CCPA/CPRA — Califórnia)',
+    cookie_gpc_notice: '🔒 Controle Global de Privacidade (GPC) detectado. Cookies de análise foram desativados automaticamente.',
+    cookie_ccpa_alert: 'O rastreamento de análise foi desativado. Yayika não vende nem compartilha informações pessoais com terceiros.',
   },
 
   fr: {
@@ -2408,6 +2444,18 @@ const I18N = {
     sp_faq_a7: 'Yayika est disponible en Espagnol, Anglais, Portugais, Français et Allemand. Vous pouvez changer la langue depuis le sélecteur en haut du site.',
     sp_form_sending: 'Envoi...',
     sp_form_error: 'Erreur — Réessayez',
+    // Cookie banner
+    cookie_title: '🍪 Nous utilisons des cookies pour améliorer votre expérience',
+    cookie_desc: 'Yayika utilise des cookies <strong>strictement nécessaires</strong> au fonctionnement de la plateforme (sessions, préférences). Nous utilisons optionnellement <strong>Plausible Analytics</strong> pour améliorer notre service — c\'est un système d\'analyse respectueux de la vie privée qui n\'utilise pas de cookies de suivi publicitaire. Consultez notre <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Politique de Cookies</a> pour plus de détails.',
+    cookie_necessary: 'Nécessaires — Toujours actifs (sessions, sécurité, préférences)',
+    cookie_analytics: 'Analyse — Plausible Analytics (confidentialité, pas de publicité)',
+    cookie_reject: 'Tout refuser',
+    cookie_accept: 'Tout accepter',
+    cookie_save: 'Enregistrer la sélection',
+    cookie_ccpa: 'Ne pas vendre ni partager mes informations personnelles',
+    cookie_ccpa_note: ' (CCPA/CPRA — Californie)',
+    cookie_gpc_notice: '🔒 Contrôle mondial de la confidentialité (GPC) détecté. Les cookies d\'analyse ont été automatiquement désactivés.',
+    cookie_ccpa_alert: 'Le suivi d\'analyse a été désactivé. Yayika ne vend ni ne partage d\'informations personnelles avec des tiers.',
   },
 
   de: {
@@ -3005,6 +3053,18 @@ const I18N = {
     sp_faq_a7: 'Yayika ist auf Spanisch, Englisch, Portugiesisch, Französisch und Deutsch verfügbar. Du kannst die Sprache über den Selector oben auf der Seite ändern.',
     sp_form_sending: 'Senden...',
     sp_form_error: 'Fehler — Versuche es erneut',
+    // Cookie banner
+    cookie_title: '🍪 Wir verwenden Cookies, um dein Erlebnis zu verbessern',
+    cookie_desc: 'Yayika verwendet <strong>unbedingt erforderliche</strong> Cookies für den Betrieb der Plattform (Sitzungen, Einstellungen). Optional verwenden wir <strong>Plausible Analytics</strong> zur Verbesserung unseres Dienstes — ein datenschutzfreundliches Analysesystem, das keine Werbe-Tracking-Cookies verwendet. Siehe unsere <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Cookie-Richtlinie</a> für weitere Details.',
+    cookie_necessary: 'Erforderlich — Immer aktiv (Sitzungen, Sicherheit, Einstellungen)',
+    cookie_analytics: 'Analyse — Plausible Analytics (Datenschutz, keine Werbung)',
+    cookie_reject: 'Alle ablehnen',
+    cookie_accept: 'Alle akzeptieren',
+    cookie_save: 'Auswahl speichern',
+    cookie_ccpa: 'Verkaufe oder teile meine persönlichen Daten nicht',
+    cookie_ccpa_note: ' (CCPA/CPRA — Kalifornien)',
+    cookie_gpc_notice: '🔒 Global Privacy Control (GPC) erkannt. Analyse-Cookies wurden automatisch deaktiviert.',
+    cookie_ccpa_alert: 'Das Analyse-Tracking wurde deaktiviert. Yayika verkauft oder teilt persönliche Daten nicht mit Dritten.',
   }
 };
 
