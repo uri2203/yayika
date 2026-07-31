@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mis Logros | Yayika</title>
-<meta name="description" content="Tu galería de logros Yayika: badges, XP, rachas y成就. Comparte tus logros con amigas.">
+<meta name="description" content="Tu galería de logros Yayika: badges, XP, rachas y logros. Comparte tus logros con amigas.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -170,14 +170,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);mi
   <!-- Filters -->
   <div class="filters" id="filterContainer">
     <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Todos</button>
-    <button class="filter-btn" data-filter="streak">🔥 Rachas</button>
-    <button class="filter-btn" data-filter="checkin">📝 Check-ins</button>
-    <button class="filter-btn" data-filter="cycle">🌙 Ciclo</button>
-    <button class="filter-btn" data-filter="challenge">🎯 Retos</button>
-    <button class="filter-btn" data-filter="financial">💰 Finanzas</button>
-    <button class="filter-btn" data-filter="social">👥 Social</button>
-    <button class="filter-btn" data-filter="referral">🌱 Referrals</button>
-    <button class="filter-btn" data-filter="special">✨ Especiales</button>
+    <button class="filter-btn" data-filter="streak" data-i18n="filter_streak">🔥 Rachas</button>
+    <button class="filter-btn" data-filter="checkin" data-i18n="filter_checkin">📝 Check-ins</button>
+    <button class="filter-btn" data-filter="cycle" data-i18n="filter_cycle">🌙 Ciclo</button>
+    <button class="filter-btn" data-filter="challenge" data-i18n="filter_challenge">🎯 Retos</button>
+    <button class="filter-btn" data-filter="financial" data-i18n="filter_financial">💰 Finanzas</button>
+    <button class="filter-btn" data-filter="social" data-i18n="filter_social">👥 Social</button>
+    <button class="filter-btn" data-filter="referral" data-i18n="filter_referral">🌱 Referrals</button>
+    <button class="filter-btn" data-filter="special" data-i18n="filter_special">✨ Especiales</button>
   </div>
 
   <!-- Earned badges -->
@@ -221,6 +221,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);mi
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- i18n -->
+<script src="../js/i18n.js"></script>
 <script>
 // Inline Supabase init
 const SUPABASE_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
@@ -350,7 +352,7 @@ const Achievements = {
     const prevLevelXP = XP_LEVELS[level - 1] || 0;
     const progress = Math.min(100, ((this._xp - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100);
 
-    document.getElementById('xpLevel').textContent = `Nivel ${level}`;
+    document.getElementById('xpLevel').textContent = `${typeof t === 'function' ? t('logros_level') : 'Nivel'} ${level}`;
     document.getElementById('xpProgress').textContent = `${this._xp} / ${nextLevelXP} XP`;
     document.getElementById('xpBarFill').style.width = `${progress}%`;
   },
@@ -399,10 +401,10 @@ const Achievements = {
     lockedGrid.innerHTML = locked.filter(b => this._filter === 'all' || b.cat === this._filter).map(b => this._badgeCard(b, false)).join('');
 
     if (earned.filter(b => this._filter === 'all' || b.cat === this._filter).length === 0) {
-      earnedGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--suave);font-size:12px">No hay badges en esta categoría</div>';
+      earnedGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--suave);font-size:12px">${typeof t === 'function' ? t('logros_no_badges_category') : 'No hay badges en esta categoría'}</div>`;
     }
     if (locked.filter(b => this._filter === 'all' || b.cat === this._filter).length === 0) {
-      lockedGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--suave);font-size:12px">¡Todos desbloqueados en esta categoría! 🎉</div>';
+      lockedGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--suave);font-size:12px">${typeof t === 'function' ? t('logros_all_unlocked_category') : '¡Todos desbloqueados en esta categoría! 🎉'}</div>`;
     }
   },
 
@@ -443,7 +445,7 @@ const Achievements = {
     document.getElementById('modalName').textContent = def.name[lang] || def.name.es;
     document.getElementById('modalDesc').textContent = isEarned
       ? (def.desc[lang] || def.desc.es)
-      : (lang === 'es' ? '🔒 Completa el reto para desbloquear este badge' : '🔒 Complete the challenge to unlock this badge');
+      : (typeof t === 'function' ? t('logros_unlock_hint') : '🔒 Completa el reto para desbloquear este badge');
     const tierEl = document.getElementById('modalTier');
     tierEl.textContent = (TIER_LABELS[lang] || TIER_LABELS.es)[def.tier];
     tierEl.className = `badge-tier ${TIER_COLORS[def.tier]}`;
@@ -460,13 +462,14 @@ const Achievements = {
     const b = this._selectedBadge;
     if (!b) return;
     const lang = currentLang || 'es';
-    const text = `🏆 ${b.name[lang] || b.name.es}\n\n${b.desc[lang] || b.desc.es}\n\n${b.earned ? '✅ Lo logré en Yayika!' : '¡Únete a Yayika y desbloquea logros!'}\nhttps://yayika.com`;
+    const shareText = b.earned ? t('logros_share_earned') : t('logros_share_join');
+    const text = `🏆 ${b.name[lang] || b.name.es}\n\n${b.desc[lang] || b.desc.es}\n\n${shareText}\nhttps://yayika.com`;
 
     if (navigator.share) {
-      navigator.share({ title: 'Yayika Logro', text }).catch(() => {});
+      navigator.share({ title: t('logros_share_title'), text }).catch(() => {});
     } else if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
-      this._showToast('Copiado al portapapeles 📋');
+      this._showToast(t('logros_copied'));
     }
     this.closeModal();
   },

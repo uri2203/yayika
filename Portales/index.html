@@ -465,7 +465,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       </a>
       <a href="#" class="ds-item">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <span class="ds-text">Ranking</span>
+        <span class="ds-text" data-i18n="sidebar_ranking">Ranking</span>
       </a>
       <a href="#challengesContainer" class="ds-item" onclick="document.getElementById('challengesContainer')?.scrollIntoView({behavior:'smooth'})">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
@@ -473,15 +473,15 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       </a>
       <a href="#catalogContainer" class="ds-item" onclick="document.getElementById('catalogContainer')?.scrollIntoView({behavior:'smooth'})">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-        <span class="ds-text">📚 Catálogo</span>
+        <span class="ds-text" data-i18n="sidebar_catalogo">📚 Catálogo</span>
       </a>
       <a href="#ganaContainer" class="ds-item" onclick="document.getElementById('ganaContainer')?.scrollIntoView({behavior:'smooth'})">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <span class="ds-text">💰 Gana con Yayika</span>
+        <span class="ds-text" data-i18n="sidebar_gana">💰 Gana con Yayika</span>
       </a>
       <a href="#sellerDashboardContainer" class="ds-item" onclick="document.getElementById('sellerDashboardContainer')?.scrollIntoView({behavior:'smooth'})">
         <div class="ds-icon"><svg viewBox="0 0 24 24" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-        <span class="ds-text">📊 Mi Dashboard Financiero</span>
+        <span class="ds-text" data-i18n="sidebar_financiero">📊 Mi Dashboard Financiero</span>
       </a>
 
       <div class="ds-section" data-i18n="sidebar_cuenta">Cuenta</div>
@@ -716,9 +716,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 
       <!-- BADGES / LOGROS -->
       <div class="dash-card" style="margin-bottom:14px">
-        <div class="dc-title">🏅 <span data-i18n="badges_title">Mis logros</span><span class="dc-see" id="badgeCount">0 logros</span></div>
+        <div class="dc-title">🏅 <span data-i18n="badges_title">Mis logros</span><span class="dc-see" id="badgeCount" data-i18n="logros_count">0 logros</span></div>
         <div id="badgesWidget" style="max-height:180px;overflow-y:auto">
-          <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Cargando logros...</div>
+          <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px" data-i18n="loading_badges">Cargando logros...</div>
         </div>
       </div>
 
@@ -1546,13 +1546,13 @@ async function showAvailableCircles() {
 async function joinCircleAction(circleId, btn) {
   try {
     await joinCircle(circleId);
-    btn.textContent = { es: '¡Unido!', en: 'Joined!', pt: 'Unido!', fr: 'Rejoint !', de: 'Beigetreten!' }[currentLang || 'es'];
+    btn.textContent = t('circle_joined');
     btn.style.background = 'var(--suave)';
     btn.style.pointerEvents = 'none';
-    showToast({ es: '🎉 ¡Te uniste al círculo!', en: '🎉 You joined the circle!', pt: '🎉 Você entrou no círculo!', fr: '🎉 Tu as rejoint le cercle !', de: '🎉 Du bist dem Kreis beigetreten!' }[currentLang || 'es']);
+    showToast(t('circle_joined_toast'));
     setTimeout(() => loadMyCircles(), 1000);
   } catch (e) {
-    const errMsg = { es: 'Error al unirse. Intenta de nuevo.', en: 'Error joining. Try again.', pt: 'Erro ao entrar. Tente novamente.', fr: 'Erreur de connexion. Réessaie.', de: 'Fehler beim Beitreten. Versuche es erneut.' }[currentLang || 'es'];
+    const errMsg = t('circle_join_error');
     showToast(errMsg);
   }
 }
@@ -1786,7 +1786,7 @@ async function initBadgesWidget() {
     } else {
       document.getElementById('badgesWidget').innerHTML = 
         `<div style="text-align:center;padding:20px;color:var(--suave);font-size:12px">
-          ${lang === 'es' ? 'Aún no tienes logros. ¡Empieza a completar retos!' : 'No badges yet. Start completing challenges!'}
+          ${t('badges_empty')}
         </div>`;
     }
   } catch (e) {
@@ -1803,7 +1803,7 @@ function openAddTransaction(type) {
   txCategory = '';
   
   const lang = currentLang || 'es';
-  const title = type === 'expense' ? '💸 Registrar gasto' : '💰 Registrar ingreso';
+  const title = type === 'expense' ? t('tx_register_expense') : t('tx_register_income');
   document.getElementById('txModalTitle').textContent = title;
   
   // Set today's date
@@ -1839,14 +1839,14 @@ function closeTransactionModal() {
 
 async function submitTransaction() {
   if (!txCategory) {
-    const msg = { es: 'Selecciona una categoría', en: 'Select a category', pt: 'Selecione uma categoria', fr: 'Sélectionne une catégorie', de: 'Wähle eine Kategorie' }[currentLang || 'es'];
+    const msg = t('tx_select_category');
     showToast(msg);
     return;
   }
   
   const amount = parseFloat(document.getElementById('txAmount').value);
   if (!amount || amount <= 0) {
-    const msg = { es: 'Ingresa un monto válido', en: 'Enter a valid amount', pt: 'Insira um valor válido', fr: 'Entre un montant valide', de: 'Gib einen gültigen Betrag ein' }[currentLang || 'es'];
+    const msg = t('tx_valid_amount');
     showToast(msg);
     return;
   }
@@ -1862,14 +1862,14 @@ async function submitTransaction() {
     
     closeTransactionModal();
     const labels = { es: { expense: 'Gasto', income: 'Ingreso' }, en: { expense: 'Expense', income: 'Income' }, pt: { expense: 'Despesa', income: 'Receita' }, fr: { expense: 'Dépense', income: 'Revenu' }, de: { expense: 'Ausgabe', income: 'Einnahme' } };
-    const label = (labels[currentLang] || labels['es'])[txType];
+    const label = t('tx_label_' + txType) || txType;
     showToast(`💰 ${label}: ${FinancialTracker.formatCurrency(amount)}`);
     
     // Refresh finance widget
     await initFinanceWidget();
   } catch (e) {
     console.error('Transaction error:', e);
-    const msg = { es: 'Error al guardar. Intenta de nuevo.', en: 'Save error. Try again.', pt: 'Erro ao salvar. Tente novamente.', fr: 'Erreur de sauvegarde. Réessaie.', de: 'Fehler beim Speichern. Versuche es erneut.' }[currentLang || 'es'];
+    const msg = t('tx_save_error');
     showToast(msg);
   }
 }
@@ -1884,7 +1884,7 @@ async function useFreeze() {
       await initCycleWidget(); // Refresh freeze count
       await initBadgesWidget(); // Refresh badges
     } else if (result === 'NO_TOKENS') {
-      showToast('No tienes tokens de congelamiento disponibles');
+      showToast(t('freeze_no_tokens'));
     }
   } catch (e) {
     console.error('Freeze error:', e);
