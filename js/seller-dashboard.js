@@ -122,6 +122,272 @@
       faq_2_a:'Tú eres responsable de declarar tus ingresos. Consulta la guía fiscal para más detalles.',
       faq_3_q:'¿Puedo cambiar de plan?',
       faq_3_a:'Sí, puedes cambiar en cualquier momento desde tu dashboard.',
+      loading:'Cargando...',
+      error_loading:'Error cargando datos',
+      tip:'Consejo:',
+      tip_text:'Crea tu propio enlace de pago en Stripe, PayPal o tu método preferido y compártelo con tus clientas',
+      plans_subtitle:'Elige el plan que mejor se adapte a tu negocio',
+      current_plan_badge:'Plan actual',
+      add_product_placeholder:'Producto',
+      price_placeholder:'Precio',
+      status_placeholder:'Estado',
+      actions_placeholder:'Acciones',
+      change_plan_free:'Cambiado al plan Básico (Gratis)',
+      change_plan_redirect:'Para cambiar al plan {name} ({price}), te redirigiremos a Stripe para completar el pago.',
+      add_product_alert:'Función de agregar producto — Próximamente',
+      edit_product_alert:'Función de editar producto — Próximamente',
+    },
+    en:{
+      title:'My Store on Yayika',
+      subtitle:'Manage your products and payment links',
+      plans_title:'Seller Plans',
+      plan_basic:'Basic (Free)',
+      plan_pro:'Professional ($199/mo)',
+      plan_premium:'Premium ($499/mo)',
+      current_plan:'Your current plan',
+      change_plan:'Change plan',
+      features:'Features',
+      my_store:'My Store',
+      store_name:'Store name',
+      store_description:'Description',
+      store_url:'Your store URL',
+      payment_link:'Your payment link',
+      copy_link:'Copy link',
+      link_copied:'Link copied!',
+      my_products:'My products',
+      add_product:'Add product',
+      product_name:'Product',
+      product_price:'Price',
+      product_status:'Status',
+      active:'Active',
+      inactive:'Inactive',
+      edit:'Edit',
+      delete:'Delete',
+      no_products:'You don\'t have products yet. Add your first one!',
+      how_it_works:'How does it work?',
+      step_1_title:'1. Create your profile',
+      step_1_desc:'Set up your store with name, description and payment link',
+      step_2_title:'2. Add products',
+      step_2_desc:'Upload your digital products with prices and descriptions',
+      step_3_title:'3. Share your link',
+      step_3_desc:'Share your payment link with your customers',
+      step_4_title:'4. Get paid directly!',
+      step_4_desc:'Your customers pay you directly to your account',
+      notice_title:'📌 Community Model',
+      notice_text:'At Yayika, each seller is responsible for their own payments and taxes. You collect payments directly with your payment link (Stripe, PayPal, etc.). Yayika only charges a monthly membership fee.',
+      taxes_title:'Taxes',
+      taxes_text:'As an independent seller, you are responsible for declaring your income to the tax authorities in your country. Yayika does not withhold or declare taxes for you.',
+      taxes_action:'View Sellers Tax Guide',
+      faq_title:'Frequently asked questions',
+      faq_1_q:'How do I charge my customers?',
+      faq_1_a:'You can use your own Stripe link, PayPal, or any payment method. Yayika does not process your payments.',
+      faq_2_q:'What about taxes?',
+      faq_2_a:'You are responsible for declaring your income. Check the tax guide for more details.',
+      faq_3_q:'Can I change plans?',
+      faq_3_a:'Yes, you can change at any time from your dashboard.',
+      loading:'Loading...',
+      error_loading:'Error loading data',
+      tip:'Tip:',
+      tip_text:'Create your own payment link on Stripe, PayPal or your preferred method and share it with your customers',
+      plans_subtitle:'Choose the plan that best fits your business',
+      current_plan_badge:'Current plan',
+      add_product_placeholder:'Product',
+      price_placeholder:'Price',
+      status_placeholder:'Status',
+      actions_placeholder:'Actions',
+      change_plan_free:'Switched to Basic plan (Free)',
+      change_plan_redirect:'To switch to the {name} plan ({price}), we\'ll redirect you to Stripe to complete payment.',
+      add_product_alert:'Add product — Coming soon',
+      edit_product_alert:'Edit product — Coming soon',
+    },
+    pt:{
+      title:'Minha Loja no Yayika',
+      subtitle:'Gerencie seus produtos e links de pagamento',
+      plans_title:'Planos de Vendedora',
+      plan_basic:'Básica (Grátis)',
+      plan_pro:'Profissional ($199/mês)',
+      plan_premium:'Premium ($499/mês)',
+      current_plan:'Seu plano atual',
+      change_plan:'Mudar plano',
+      features:'Características',
+      my_store:'Minha Loja',
+      store_name:'Nome da loja',
+      store_description:'Descrição',
+      store_url:'URL da sua loja',
+      payment_link:'Seu link de pagamento',
+      copy_link:'Copiar link',
+      link_copied:'Link copiado!',
+      my_products:'Meus produtos',
+      add_product:'Adicionar produto',
+      product_name:'Produto',
+      product_price:'Preço',
+      product_status:'Estado',
+      active:'Ativo',
+      inactive:'Inativo',
+      edit:'Editar',
+      delete:'Excluir',
+      no_products:'Você ainda não tem produtos. Adicione o primeiro!',
+      how_it_works:'Como funciona?',
+      step_1_title:'1. Crie seu perfil',
+      step_1_desc:'Configure sua loja com nome, descrição e link de pagamento',
+      step_2_title:'2. Adicione produtos',
+      step_2_desc:'Faça upload dos seus produtos digitais com preços e descrições',
+      step_3_title:'3. Compartilhe seu link',
+      step_3_desc:'Compartilhe seu link de pagamento com suas clientes',
+      step_4_title:'4. Receba diretamente!',
+      step_4_desc:'Suas clientes pagam diretamente na sua conta',
+      notice_title:'📌 Modelo de Comunidade',
+      notice_text:'No Yayika, cada vendedora é responsável por seus próprios pagamentos e impostos. Você cobra diretamente com seu link de pagamento (Stripe, PayPal, etc.). O Yayika cobra apenas uma assinatura mensal.',
+      taxes_title:'Impostos',
+      taxes_text:'Como vendedora independente, você é responsável por declarar seus rendimentos às autoridades fiscais do seu país. O Yayika não retém nem declara impostos por você.',
+      taxes_action:'Ver Guia Fiscal para Vendedoras',
+      faq_title:'Perguntas frequentes',
+      faq_1_q:'Como cobro das minhas clientes?',
+      faq_1_a:'Você pode usar seu próprio link do Stripe, PayPal ou qualquer método de pagamento. O Yayika não processa seus pagamentos.',
+      faq_2_q:'E os impostos?',
+      faq_2_a:'Você é responsável por declarar seus rendimentos. Consulte o guia fiscal para mais detalhes.',
+      faq_3_q:'Posso mudar de plano?',
+      faq_3_a:'Sim, pode mudar a qualquer momento pelo seu painel.',
+      loading:'Carregando...',
+      error_loading:'Erro ao carregar dados',
+      tip:'Dica:',
+      tip_text:'Crie seu próprio link de pagamento no Stripe, PayPal ou método preferido e compartilhe com suas clientes',
+      plans_subtitle:'Escolha o plano que melhor se adapta ao seu negócio',
+      current_plan_badge:'Plano atual',
+      add_product_placeholder:'Produto',
+      price_placeholder:'Preço',
+      status_placeholder:'Estado',
+      actions_placeholder:'Ações',
+      change_plan_free:'Plano Básico (Grátis) selecionado',
+      change_plan_redirect:'Para mudar para o plano {name} ({price}), redirecionaremos você ao Stripe para concluir o pagamento.',
+      add_product_alert:'Adicionar produto — Em breve',
+      edit_product_alert:'Editar produto — Em breve',
+    },
+    fr:{
+      title:'Ma Boutique sur Yayika',
+      subtitle:'Gérez vos produits et liens de paiement',
+      plans_title:'Plans Vendeuse',
+      plan_basic:'Basique (Gratuit)',
+      plan_pro:'Professionnel ($199/mois)',
+      plan_premium:'Premium ($499/mois)',
+      current_plan:'Votre plan actuel',
+      change_plan:'Changer de plan',
+      features:'Caractéristiques',
+      my_store:'Ma Boutique',
+      store_name:'Nom de la boutique',
+      store_description:'Description',
+      store_url:'URL de votre boutique',
+      payment_link:'Votre lien de paiement',
+      copy_link:'Copier le lien',
+      link_copied:'Lien copié!',
+      my_products:'Mes produits',
+      add_product:'Ajouter un produit',
+      product_name:'Produit',
+      product_price:'Prix',
+      product_status:'État',
+      active:'Actif',
+      inactive:'Inactif',
+      edit:'Modifier',
+      delete:'Supprimer',
+      no_products:'Vous n\'avez pas encore de produits. Ajoutez le premier!',
+      how_it_works:'Comment ça marche?',
+      step_1_title:'1. Créez votre profil',
+      step_1_desc:'Configurez votre boutique avec nom, description et lien de paiement',
+      step_2_title:'2. Ajoutez des produits',
+      step_2_desc:'Téléchargez vos produits numériques avec prix et descriptions',
+      step_3_title:'3. Partagez votre lien',
+      step_3_desc:'Partagez votre lien de paiement avec vos clientes',
+      step_4_title:'4. Soyez payée directement!',
+      step_4_desc:'Vos clientes vous paient directement sur votre compte',
+      notice_title:'📌 Modèle Communautaire',
+      notice_text:'Chez Yayika, chaque vendeuse est responsable de ses propres paiements et impôts. Vous collectez directement avec votre lien de paiement (Stripe, PayPal, etc.). Yayika ne facture qu\'une cotisation mensuelle.',
+      taxes_title:'Impôts',
+      taxes_text:'En tant que vendeuse indépendante, vous êtes responsable de déclarer vos revenus aux autorités fiscales de votre pays. Yayika ne retient ni ne déclare les impôts pour vous.',
+      taxes_action:'Voir le Guide Fiscal Vendeuses',
+      faq_title:'Questions fréquentes',
+      faq_1_q:'Comment facturez-vous vos clientes?',
+      faq_1_a:'Vous pouvez utiliser votre propre lien Stripe, PayPal ou tout moyen de paiement. Yayika ne traite pas vos paiements.',
+      faq_2_q:'Et les impôts?',
+      faq_2_a:'Vous êtes responsable de déclarer vos revenus. Consultez le guide fiscal pour plus de détails.',
+      faq_3_q:'Puis-je changer de plan?',
+      faq_3_a:'Oui, vous pouvez changer à tout moment depuis votre tableau de bord.',
+      loading:'Chargement...',
+      error_loading:'Erreur de chargement',
+      tip:'Astuce:',
+      tip_text:'Créez votre propre lien de paiement sur Stripe, PayPal ou votre méthode préférée et partagez-le avec vos clientes',
+      plans_subtitle:'Choisissez le plan qui correspond le mieux à votre activité',
+      current_plan_badge:'Plan actuel',
+      add_product_placeholder:'Produit',
+      price_placeholder:'Prix',
+      status_placeholder:'État',
+      actions_placeholder:'Actions',
+      change_plan_free:'Plan Basique (Gratuit) sélectionné',
+      change_plan_redirect:'Pour passer au plan {name} ({price}), nous vous redirigerons vers Stripe pour finaliser le paiement.',
+      add_product_alert:'Ajouter un produit — Bientôt disponible',
+      edit_product_alert:'Modifier un produit — Bientôt disponible',
+    },
+    de:{
+      title:'Mein Shop bei Yayika',
+      subtitle:'Verwalte deine Produkte und Zahlungslinks',
+      plans_title:'Verkäuferpläne',
+      plan_basic:'Basis (Kostenlos)',
+      plan_pro:'Professionell ($199/Monat)',
+      plan_premium:'Premium ($499/Monat)',
+      current_plan:'Dein aktueller Plan',
+      change_plan:'Plan wechseln',
+      features:'Funktionen',
+      my_store:'Mein Shop',
+      store_name:'Shopname',
+      store_description:'Beschreibung',
+      store_url:'Deine Shop-URL',
+      payment_link:'Dein Zahlungslink',
+      copy_link:'Link kopieren',
+      link_copied:'Link kopiert!',
+      my_products:'Meine Produkte',
+      add_product:'Produkt hinzufügen',
+      product_name:'Produkt',
+      product_price:'Preis',
+      product_status:'Status',
+      active:'Aktiv',
+      inactive:'Inaktiv',
+      edit:'Bearbeiten',
+      delete:'Löschen',
+      no_products:'Du hast noch keine Produkte. Füge dein erstes hinzu!',
+      how_it_works:'Wie funktioniert es?',
+      step_1_title:'1. Erstelle dein Profil',
+      step_1_desc:'Richte deinen Shop mit Name, Beschreibung und Zahlungslink ein',
+      step_2_title:'2. Füge Produkte hinzu',
+      step_2_desc:'Lade deine digitalen Produkte mit Preisen und Beschreibungen hoch',
+      step_3_title:'3. Teile deinen Link',
+      step_3_desc:'Teile deinen Zahlungslink mit deinen Kundinnen',
+      step_4_title:'4. Werde direkt bezahlt!',
+      step_4_desc:'Deine Kundinnen bezahlen dich direkt auf dein Konto',
+      notice_title:'📌 Community-Modell',
+      notice_text:'Bei Yayika ist jede Verkäuferin für ihre eigenen Zahlungen und Steuern verantwortlich. Du kassierst direkt mit deinem Zahlungslink (Stripe, PayPal usw.). Yayika berechnet nur einen monatlichen Mitgliedsbeitrag.',
+      taxes_title:'Steuern',
+      taxes_text:'Als unabhängige Verkäuferin bist du dafür verantwortlich, deine Einkünfte bei den Steuerbehörden deines Landes zu deklarieren. Yayika behält keine Steuern ein und deklariert sie nicht für dich.',
+      taxes_action:'Verkäufer-Steuerguide ansehen',
+      faq_title:'Häufig gestellte Fragen',
+      faq_1_q:'Wie berechne ich meinen Kundinnen?',
+      faq_1_a:'Du kannst deinen eigenen Stripe-Link, PayPal oder jede Zahlungsmethode verwenden. Yayika verarbeitet deine Zahlungen nicht.',
+      faq_2_q:'Und die Steuern?',
+      faq_2_a:'Du bist dafür verantwortlich, deine Einkünfte zu deklarieren. Sieh dir den Steuerguide für weitere Details an.',
+      faq_3_q:'Kann ich den Plan wechseln?',
+      faq_3_a:'Ja, du kannst jederzeit über dein Dashboard wechseln.',
+      loading:'Laden...',
+      error_loading:'Fehler beim Laden',
+      tip:'Tipp:',
+      tip_text:'Erstelle deinen eigenen Zahlungslink bei Stripe, PayPal oder deiner bevorzugten Methode und teile ihn mit deinen Kundinnen',
+      plans_subtitle:'Wähle den Plan, der am besten zu deinem Geschäft passt',
+      current_plan_badge:'Aktueller Plan',
+      add_product_placeholder:'Produkt',
+      price_placeholder:'Preis',
+      status_placeholder:'Status',
+      actions_placeholder:'Aktionen',
+      change_plan_free:'Basis-Plan (Kostenlos) ausgewählt',
+      change_plan_redirect:'Um zum {name}-Plan ({price}) zu wechseln, leiten wir dich zu Stripe weiter, um die Zahlung abzuschließen.',
+      add_product_alert:'Produkt hinzufügen — Demnächst',
+      edit_product_alert:'Produkt bearbeiten — Demnächst',
     }
   };
 
@@ -203,7 +469,7 @@
   async function loadSellerData(){
     const content=document.getElementById('seller-dashboard-content');
     if(!content)return;
-    content.innerHTML=`<div style="text-align:center;padding:48px;color:${C.sub}"><div style="font-size:24px;margin-bottom:8px">⏳</div>Cargando...</div>`;
+    content.innerHTML=`<div style="text-align:center;padding:48px;color:${C.sub}"><div style="font-size:24px;margin-bottom:8px">⏳</div>${t('loading')}</div>`;
 
     try{
       // For now, show the dashboard with mock data
@@ -217,7 +483,7 @@
       });
     }catch(e){
       console.error('Seller data load error:',e);
-      content.innerHTML=`<div class="sd-empty"><div class="sd-empty-icon">⚠️</div><div>Error cargando datos</div><div style="font-size:12px;margin-top:8px">${e.message}</div></div>`;
+      content.innerHTML=`<div class="sd-empty"><div class="sd-empty-icon">⚠️</div><div>${t('error_loading')}</div><div style="font-size:12px;margin-top:8px">${e.message}</div></div>`;
     }
   }
 
@@ -324,7 +590,7 @@
             📋 ${t('copy_link')}
           </button>
           <div style="margin-top:16px;padding:12px;background:#E8F5E9;border-radius:8px;font-size:13px;color:#2E7D32">
-            💡 <strong>Tip:</strong> Crea tu propio enlace de pago en Stripe, PayPal o tu método preferido y compártelo con tus clientas
+            💡 <strong>${t('tip')}</strong> ${t('tip_text')}
           </div>
         </div>
       </div>
@@ -412,7 +678,7 @@
         <div style="font-size:18px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'Cormorant Garamond',serif">
           ${t('plans_title')}
         </div>
-        <div style="font-size:14px;color:${C.sub}">Elige el plan que mejor se adapte a tu negocio</div>
+        <div style="font-size:14px;color:${C.sub}">${t('plans_subtitle')}</div>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
@@ -433,7 +699,7 @@
               <button onclick="sellerDash.changePlan('${key}')" class="sd-action-btn ${key==='premium'?'primary':'secondary'}" style="width:100%">
                 ${t('change_plan')}
               </button>
-            `:`<div style="padding:10px;background:#E8F5E9;border-radius:8px;color:#2E7D32;font-size:13px;font-weight:600">Plan actual</div>`}
+            `:`<div style="padding:10px;background:#E8F5E9;border-radius:8px;color:#2E7D32;font-size:13px;font-weight:600">${t('current_plan_badge')}</div>`}
           </div>
         `).join('')}
       </div>
@@ -451,11 +717,11 @@
   }
 
   function addProduct(){
-    alert('Función de agregar producto — Próximamente');
+    alert(t('add_product_alert'));
   }
 
   function editProduct(id){
-    alert('Función de editar producto — Próximamente');
+    alert(t('edit_product_alert'));
   }
 
   function changePlan(planKey){
@@ -463,12 +729,12 @@
     if(!plan) return;
     
     if(plan.price === 0){
-      alert('Cambiado al plan Básico (Gratis)');
+      alert(t('change_plan_free'));
       return;
     }
     
     // In production, this would create a Stripe Checkout Session
-    alert(`Para cambiar al plan ${plan.name} (${plan.priceFormatted}), te redirigiremos a Stripe para completar el pago.`);
+    alert(t('change_plan_redirect').replace('{name}', plan.name).replace('{price}', plan.priceFormatted));
   }
 
   // ============================================================
