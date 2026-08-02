@@ -8,6 +8,25 @@ const STATIC_CACHE = 'yayika-static-v4';
 const DYNAMIC_CACHE = 'yayika-dynamic-v4';
 const OFFLINE_URL = '/offline.html';
 
+function swT(key, lang) {
+  const fallback = {
+    es: {
+      sw_notif_body: 'Tienes una nueva notificación',
+      sw_action_open: 'Abrir',
+      sw_action_close: 'Cerrar',
+      sw_daily_reminder: '¡No olvides registrar tu día! Tu racha está en juego 🔥',
+    },
+    en: {
+      sw_notif_body: 'You have a new notification',
+      sw_action_open: 'Open',
+      sw_action_close: 'Close',
+      sw_daily_reminder: "Don't forget to log your day! Your streak is at risk 🔥",
+    }
+  };
+  const messages = fallback[lang] || fallback.es;
+  return messages[key] || fallback.es[key] || key;
+}
+
 // Static assets to pre-cache
 const PRECACHE_ASSETS = [
   '/',
@@ -189,8 +208,9 @@ async function syncFinance() {
 // Push notifications
 self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
+  const lang = data.lang || 'es';
   const title = data.title || 'Yayika';
-  const body = data.body || 'Tienes una nueva notificación';
+  const body = data.body || swT('sw_notif_body', lang);
   
   event.waitUntil(
     self.registration.showNotification(title, {
@@ -202,8 +222,8 @@ self.addEventListener('push', event => {
       renotify: true,
       data: data.url || '/',
       actions: [
-        { action: 'open', title: 'Abrir', icon: '/assets/img/icon-192.png' },
-        { action: 'dismiss', title: 'Cerrar' }
+        { action: 'open', title: swT('sw_action_open', lang), icon: '/assets/img/icon-192.png' },
+        { action: 'dismiss', title: swT('sw_action_close', lang) }
       ]
     })
   );
@@ -228,7 +248,7 @@ async function showDailyReminder() {
   const clients = await self.clients.matchAll();
   if (clients.length === 0) {
     self.registration.showNotification('Yayika', {
-      body: '¡No olvides registrar tu día! Tu racha está en juego 🔥',
+      body: swT('sw_daily_reminder', 'es'),
       icon: '/assets/img/icon-192.png',
       badge: '/icon.svg',
       tag: 'daily-reminder',

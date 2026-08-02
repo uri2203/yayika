@@ -21,6 +21,72 @@ window.addEventListener('unhandledrejection', e => {
   track('JS Error', { message: 'Unhandled: ' + (e.reason?.message || e.reason || 'unknown'), file: 'promise' });
 });
 
+function appT(key) {
+  try { if (typeof t === 'function') return t(key); } catch(e) {}
+  const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
+  const fallback = { 
+    celebration_checkin_done: 'Check-in completado',
+    celebration_day_start: '¡Hoy empieza bien',
+    celebration_selfcare: 'Auto-cuidado registrado',
+    celebration_streak_3: 'Racha de 3 días',
+    celebration_streak_3_sub: 'Constancia',
+    celebration_streak_7: 'Racha de 7 días',
+    celebration_streak_7_sub: '¡Una semana completa!',
+    celebration_streak_14: '14 días seguidos',
+    celebration_streak_14_sub: 'Eres increíble',
+    celebration_streak_30: '30 días de racha',
+    celebration_streak_30_sub: 'Leyenda',
+    celebration_challenge_done: 'Reto completado',
+    celebration_challenge_sub: '¡Bien hecho!',
+    celebration_reward: 'Recompensa sorpresa',
+    celebration_unlock: 'Contenido desbloqueado',
+    celebration_xp_gained: 'XP ganado',
+    celebration_badge_unlocked: 'Badge desbloqueado',
+    celebration_error_day: 'Error al completar día',
+    challenge_no_screens: 'Descansa 20 min sin pantallas',
+    challenge_new_project: 'Empieza un proyecto nuevo hoy',
+    challenge_move_body: 'Muévete 15 minutos',
+    challenge_hydrate: 'Bebe 2L de agua hoy',
+    challenge_morning: 'Rutina matutina de 10 min',
+    challenge_journal: 'Escribe en tu diario',
+    challenge_social: 'Conecta con una amiga',
+    challenge_financial: 'Revisa tu presupuesto',
+    challenge_creative: 'Dedica 30 min a algo creativo',
+    challenge_rest: 'Toma una siesta de 20 min',
+    challenge_nature: 'Sal al aire libre 15 min',
+    challenge_mindful: 'Medita 10 minutos',
+    challenge_learn: 'Aprende algo nuevo hoy',
+    challenge_gratitude: 'Escribe 3 cosas por las que estás agradecida',
+    challenge_sleep: 'Duérmete antes de las 11pm',
+    challenge_nourish: 'Cocina algo saludable',
+    challenge_plan: 'Planifica tu semana',
+    challenge_delegate: 'Delega una tarea',
+    challenge_celebrate: 'Celebra un logro pequeño',
+    challenge_invest: 'Investiga una opción de inversión',
+    challenge_network: 'Asiste a un evento de networking',
+    challenge_course: 'Avanza en tu curso Yayika',
+    challenge_reflect: 'Reflexiona sobre tus metas',
+    challenge_give: 'Regala algo sin esperar nada',
+    challenge_boundary: 'Di que no a algo que no quieres',
+    challenge_save: 'Ahorra un porcentaje de hoy',
+    log_completed_module: 'Completó Módulo',
+    log_registered_phase: 'Registró fase',
+    log_energy_mood: 'con energía',
+    log_registered_cycle: 'Registró datos de ciclo',
+    log_joined_circle: 'Se unió a un círculo',
+    log_completed_challenge: 'Completó',
+    log_reflection: 'Escribió reflexión',
+    install_platform_iphone: 'Para iPhone/iPad',
+    install_platform_android: 'Para Android',
+    install_tip_iphone: '📱 Toca instalar para ver instrucciones',
+    install_tip_android: '📱 Android: toca instalar y acepta',
+    install_already: 'Ya la tienes ✨',
+    install_already_sub: 'Tu app de bienestar para mujeres. Toca abrirla.',
+    checkout_coming_soon: 'Pronto estarán disponibles los planes de membresía.',
+  };
+  return fallback[key] || key;
+}
+
 // --- Configuración ---
 const SUPABASE_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc';
@@ -171,7 +237,7 @@ async function completeModule(moduleNumber, xpEarned) {
   const newXP = await addXP(xpEarned);
 
   // Log de actividad
-  await logActivity('module_complete', `Completó Módulo ${moduleNumber}`, xpEarned);
+  await logActivity('module_complete', `${appT('log_completed_module')} ${moduleNumber}`, xpEarned);
 
   return newXP;
 }
@@ -201,7 +267,7 @@ async function saveDailyCheck(phase, feeling, taskPlan, xpEarned) {
     });
   if (error) throw error;
   await addXP(xpEarned);
-  await logActivity('daily_check', `Registró fase ${phase}`, xpEarned);
+  await logActivity('daily_check', `${appT('log_registered_phase')} ${phase}`, xpEarned);
 }
 
 // ============================================================
@@ -443,7 +509,7 @@ async function saveDailyMood(energyLevel, mood, cyclePhase, intention) {
 
   if (error) throw error;
   await addXP(xp);
-  await logActivity('daily_check', `${mood} con energía ${energyLevel}/5`, xp);
+  await logActivity('daily_check', `${mood} ${appT('log_energy_mood')} ${energyLevel}/5`, xp);
   return xp;
 }
 
@@ -517,7 +583,7 @@ async function logCycleDay(data) {
 
   if (error) throw error;
   await addXP(10);
-  await logActivity('cycle_log', 'Registró datos de ciclo', 10);
+  await logActivity('cycle_log', appT('log_registered_cycle'), 10);
 }
 
 async function getCycleLog(days = 30) {
@@ -629,13 +695,13 @@ function getStreakBonus(streakDays) {
 
 function showCelebration(type) {
   const messages = {
-    checkin: ['✨ Check-in completado', '🌟 ¡Hoy empieza bien', '💫 Auto-cuidado registrado'],
-    streak3: ['🔥 Racha de 3 días', '💪 Constancia'],
-    streak7: ['🏆 Racha de 7 días', '⚡ ¡Una semana completa'],
-    streak14: ['👑 14 días seguidos', '🌟 Eres increíble'],
-    streak30: ['💎 30 días de racha', '🏆 Leyenda'],
-    challenge: ['🎯 Reto completado', '⭐ ¡Bien hecho'],
-    surprise: ['🎁 Recompensa sorpresa', '🌟 Contenido desbloqueado']
+    checkin: ['✨ ' + appT('celebration_checkin_done'), '🌟 ' + appT('celebration_day_start'), '💫 ' + appT('celebration_selfcare')],
+    streak3: ['🔥 ' + appT('celebration_streak_3'), '💪 ' + appT('celebration_streak_3_sub')],
+    streak7: ['🏆 ' + appT('celebration_streak_7'), '⚡ ' + appT('celebration_streak_7_sub')],
+    streak14: ['👑 ' + appT('celebration_streak_14'), '🌟 ' + appT('celebration_streak_14_sub')],
+    streak30: ['💎 ' + appT('celebration_streak_30'), '🏆 ' + appT('celebration_streak_30_sub')],
+    challenge: ['🎯 ' + appT('celebration_challenge_done'), '⭐ ' + appT('celebration_challenge_sub')],
+    surprise: ['🎁 ' + appT('celebration_reward'), '🌟 ' + appT('celebration_unlock')]
   };
   const pool = messages[type] || messages.checkin;
   const msg = pool[Math.floor(Math.random() * pool.length)];
@@ -655,15 +721,15 @@ function checkStreakMilestone(streakDays) {
 
 const CHALLENGES_BY_PHASE = {
   menstrual: [
-    { text: 'Descansa 20 min sin pantallas', xp: 15, icon: '🛋️' },
-    { text: 'Escribe 3 cosas por las que estás agradecida', xp: 10, icon: '📝' },
+    { text: appT('challenge_no_screens'), xp: 15, icon: '🛋️' },
+    { text: appT('challenge_gratitude'), xp: 10, icon: '📝' },
     { text: 'Toma té caliente y respira 5 min', xp: 10, icon: '🍵' },
     { text: 'Duerme al menos 8 horas esta noche', xp: 20, icon: '😴' },
     { text: 'Dite algo bonito al espejo', xp: 10, icon: '🪞' },
     { text: 'Escoge tu música favorita y baila 3 min', xp: 10, icon: '🎵' }
   ],
   follicular: [
-    { text: 'Empieza un proyecto nuevo hoy', xp: 25, icon: '🚀' },
+    { text: appT('challenge_new_project'), xp: 25, icon: '🚀' },
     { text: 'Sal a caminar 30 min', xp: 20, icon: '🚶‍♀️' },
     { text: 'Prueba algo que nunca has hecho', xp: 30, icon: '✨' },
     { text: 'Planifica tus metas de la semana', xp: 15, icon: '📋' },
@@ -679,7 +745,7 @@ const CHALLENGES_BY_PHASE = {
     { text: 'Invita a alguien a tomar café', xp: 15, icon: '☕' }
   ],
   luteal: [
-    { text: 'Planifica tu semana', xp: 15, icon: '📅' },
+    { text: appT('challenge_plan'), xp: 15, icon: '📅' },
     { text: 'Organiza tu espacio y deshazte de lo que no sirve', xp: 20, icon: '🧹' },
     { text: 'Di no a algo que no te sirve', xp: 25, icon: '🚫' },
     { text: 'Prepara comida saludable para mañana', xp: 15, icon: '🥗' },
@@ -750,7 +816,7 @@ async function completeChallenge(challengeId) {
     .eq('id', data.id);
 
   await addXP(xp);
-  await logActivity('challenge_complete', `Completó: ${challenge.text}`, xp);
+  await logActivity('challenge_complete', `${appT('log_completed_challenge')}: ${challenge.text}`, xp);
   showCelebration('challenge');
   return xp;
 }
@@ -795,7 +861,7 @@ async function joinCircle(circleId) {
     });
 
   if (error) throw error;
-  await logActivity('circle_join', 'Se unió a un círculo', 20);
+  await logActivity('circle_join', appT('log_joined_circle'), 20);
   await addXP(20);
 }
 

@@ -3,6 +3,22 @@
    Referral tracking, commission management, affiliate dashboard
    ============================================================ */
 
+function affT(key) {
+  try { if (typeof t === 'function') return t(key); } catch(e) {}
+  const fallback = {
+    aff_register_prompt: 'Regístrate como afiliada para ver tu dashboard',
+    aff_currently: '— Actualmente:',
+    aff_col_date: 'Fecha',
+    aff_col_product: 'Producto',
+    aff_col_sale: 'Venta',
+    aff_col_commission: 'Comisión',
+    aff_col_status: 'Estado',
+    aff_no_commissions: 'Aún no tienes comisiones registradas',
+    aff_loading: 'Cargando...',
+  };
+  return fallback[key] || key;
+}
+
 // ============================================================
 // AFFILIATE REGISTRATION
 // ============================================================
@@ -223,7 +239,7 @@ async function requestAffiliatePayout(amount) {
 // ============================================================
 
 function renderAffiliateDashboard(data) {
-  if (!data) return '<p style="text-align:center;padding:20px;color:var(--suave)">Regístrate como afiliada para ver tu dashboard</p>';
+  if (!data) return `<p style="text-align:center;padding:20px;color:var(--suave)">${affT('aff_register_prompt')}</p>`;
   
   const lang = currentLang || 'es';
   const affiliate = data.affiliate;
@@ -291,7 +307,7 @@ function renderAffiliateDashboard(data) {
       </div>
       ` : `
       <div style="text-align:center;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:16px;font-size:12px;color:var(--suave)">
-        ${t('min_payout')} — Actualmente: $${parseFloat(affiliate.pending_payout || 0).toFixed(2)}
+        ${t('min_payout')} ${affT('aff_currently')} $${parseFloat(affiliate.pending_payout || 0).toFixed(2)}
       </div>
       `}
       
@@ -300,11 +316,11 @@ function renderAffiliateDashboard(data) {
       ${data.commissions.length > 0 ? `
       <table style="width:100%;border-collapse:collapse">
         <thead><tr style="border-bottom:0.5px solid var(--borde)">
-          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:left">Fecha</th>
-          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:left">Producto</th>
-          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:right">Venta</th>
-          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:right">Comisión</th>
-          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:right">Estado</th>
+          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:left">${affT('aff_col_date')}</th>
+          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:left">${affT('aff_col_product')}</th>
+          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:right">${affT('aff_col_sale')}</th>
+          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:right">${affT('aff_col_commission')}</th>
+          <th style="padding:6px 8px;font-size:10px;color:var(--suave);text-align:right">${affT('aff_col_status')}</th>
         </tr></thead>
         <tbody>
           ${data.commissions.map(c => {
@@ -320,7 +336,7 @@ function renderAffiliateDashboard(data) {
           }).join('')}
         </tbody>
       </table>
-      ` : '<p style="text-align:center;padding:16px;color:var(--suave);font-size:12px">Aún no tienes comisiones registradas</p>'}
+      ` : `<p style="text-align:center;padding:16px;color:var(--suave);font-size:12px">${affT('aff_no_commissions')}</p>`}
     </div>
   `;
 }
@@ -370,7 +386,7 @@ async function loadAffiliateDashboard() {
   const container = document.getElementById('affiliateDashboard');
   if (!container) return;
   
-  container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--suave)">Cargando...</div>';
+  container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--suave)">${affT('aff_loading')}</div>`;
   const data = await getAffiliateDashboard();
   container.innerHTML = renderAffiliateDashboard(data);
 }

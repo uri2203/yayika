@@ -3,6 +3,17 @@
    Social feed, posts, reactions, comments
    ============================================================ */
 
+function commT(key) {
+  try { if (typeof t === 'function') return t(key); } catch(e) {}
+  const fallback = {
+    comm_time_now: 'ahora',
+    comm_share_en: 'en Yayika',
+    comm_share_title: 'Yayika Círculo',
+    comm_copied: 'Copiado al portapapeles',
+  };
+  return fallback[key] || key;
+}
+
 const Community = {
   _posts: [],
   _categories: [],
@@ -398,11 +409,12 @@ const Community = {
     const date = new Date(dateStr);
     const diff = Math.floor((now - date) / 1000);
 
-    if (diff < 60) return 'ahora';
+    if (diff < 60) return commT('comm_time_now');
     if (diff < 3600) return `${Math.floor(diff / 60)}m`;
     if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
     if (diff < 604800) return `${Math.floor(diff / 86400)}d`;
-    return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
+    const locale = typeof currentLang !== 'undefined' && currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : currentLang === 'fr' ? 'fr-FR' : currentLang === 'de' ? 'de-DE' : 'es-MX';
+    return date.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
   },
 
   _escapeHtml(text) {
@@ -415,12 +427,12 @@ const Community = {
     const post = this._posts.find(p => p.post_id === postId);
     if (!post) return;
 
-    const text = `"${post.content.substring(0, 100)}..." — ${post.user_name} en Yayika`;
+    const text = `"${post.content.substring(0, 100)}..." — ${post.user_name} ${commT('comm_share_en')}`;
     if (navigator.share) {
-      navigator.share({ title: 'Yayika Círculo', text });
+      navigator.share({ title: commT('comm_share_title'), text });
     } else if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
-      this._showToast('Copiado al portapapeles');
+      this._showToast(commT('comm_copied'));
     }
   },
 

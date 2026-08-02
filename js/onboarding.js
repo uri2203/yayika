@@ -3,6 +3,16 @@
    7-day guided flow for new users
    ============================================================ */
 
+function onbT(key) {
+  try { if (typeof t === 'function') return t(key); } catch(e) {}
+  const fallback = {
+    onb_xp_gained: 'XP ganado 🎯',
+    onb_badge_unlocked: 'Badge desbloqueado:',
+    onb_error_day: 'Error al completar día',
+  };
+  return fallback[key] || key;
+}
+
 const Onboarding = {
   _data: null,
   _initialized: false,
@@ -203,12 +213,12 @@ const Onboarding = {
         const result = await res.json();
 
         // Show XP toast
-        this._showToast(`+${result.xp_earned || 50} XP ganado 🎯`, 'success');
+        this._showToast(`+${result.xp_earned || 50} ${onbT('onb_xp_gained')}`, 'success');
 
         // If badge earned, show badge toast
         if (result.badge_key) {
           setTimeout(() => {
-            this._showToast(`Badge desbloqueado: ${result.badge_key} 🏆`, 'badge');
+            this._showToast(`${onbT('onb_badge_unlocked')} ${result.badge_key} 🏆`, 'badge');
           }, 1500);
         }
 
@@ -229,7 +239,7 @@ const Onboarding = {
       }
     } catch (e) {
       console.warn('Complete day error:', e);
-      this._showToast('Error al completar día', 'error');
+      this._showToast(onbT('onb_error_day'), 'error');
     }
   },
 
