@@ -417,11 +417,9 @@ const I18N = {
     logros_especiales: '✨ Especiales',
     logros_no_badges: 'No hay badges en esta categoría',
     logros_all_unlocked: '¡Todos desbloqueados en esta categoría! 🎉',
-    logros_unlock_hint: 'Completa el reto para desbloquear este badge',
     logros_share: '✅ Lo logré en Yayika!',
     logros_join: '¡Únete a Yayika!',
     logros_badge_name: 'Yayika Logro',
-    logros_copied: 'Copiado al portapapeles 📋',
     // Blog
     blog_title: 'Blog de Yayika',
     blog_subtitle: 'Productividad, bienestar y finanzas para mujeres que quieren más',
@@ -1248,11 +1246,9 @@ const I18N = {
     logros_especiales: '✨ Special',
     logros_no_badges: 'No badges in this category',
     logros_all_unlocked: 'All unlocked in this category! 🎉',
-    logros_unlock_hint: 'Complete the challenge to unlock this badge',
     logros_share: '✅ I did it on Yayika!',
     logros_join: 'Join Yayika!',
     logros_badge_name: 'Yayika Achievement',
-    logros_copied: 'Copied to clipboard 📋',
     // Blog
     blog_title: 'Yayika Blog',
     blog_subtitle: 'Productivity, wellness and finance for women who want more',
@@ -1683,6 +1679,7 @@ const I18N = {
     modulo3_l1_callout_1: '💡 Fact: Women who negotiate earn an average of $1 million more over their career.',
     modulo3_l1_callout_2: '🎯 Action: Write down your most recent achievement and measure its impact with numbers.',
   },
+  pt: {
     nav_products: 'Produtos',
     nav_membership: 'Associação',
     nav_portal: 'Entrar no portal',
@@ -2077,11 +2074,9 @@ const I18N = {
     logros_especiales: '✨ Especiais',
     logros_no_badges: 'Sem badges nesta categoria',
     logros_all_unlocked: 'Todos desbloqueados nesta categoria! 🎉',
-    logros_unlock_hint: 'Complete o desafio para desbloquear este badge',
     logros_share: '✅ Conquistei na Yayika!',
     logros_join: 'Junte-se à Yayika!',
     logros_badge_name: 'Conquista Yayika',
-    logros_copied: 'Copiado para a área de transferência 📋',
     // Blog
     blog_title: 'Blog da Yayika',
     blog_subtitle: 'Produtividade, bem-estar e finanças para mulheres que querem mais',
@@ -2512,6 +2507,7 @@ const I18N = {
     modulo3_l1_callout_1: '💡 Dado: Mulheres que negociam ganham em média $1 milhão mais ao longo de suas carreiras.',
     modulo3_l1_callout_2: '🎯 Ação: Escreva sua conquista mais recente e meça seu impacto com números.',
   },
+  fr: {
     nav_products: 'Produits',
     nav_membership: 'Adhésion',
     nav_portal: 'Entrer au portail',
@@ -2906,11 +2902,9 @@ const I18N = {
     logros_especiales: '✨ Spécial',
     logros_no_badges: 'Pas de badges dans cette catégorie',
     logros_all_unlocked: 'Tous débloqués dans cette catégorie ! 🎉',
-    logros_unlock_hint: 'Complétez le défi pour débloquer ce badge',
     logros_share: '✅ Je l\'ai fait sur Yayika !',
     logros_join: 'Rejoignez Yayika !',
     logros_badge_name: 'Réalisation Yayika',
-    logros_copied: 'Copié dans le presse-papiers 📋',
     // Blog
     blog_title: 'Blog de Yayika',
     blog_subtitle: 'Productivité, bien-être et finances pour les femmes qui en veulent plus',
@@ -3341,6 +3335,7 @@ const I18N = {
     modulo3_l1_callout_1: '💡 Fait : Les femmes qui négocient gagnent en moyenne 1 million de dollars de plus sur leur carrière.',
     modulo3_l1_callout_2: '🎯 Action : Écrivez votre réalisation la plus récente et mesurez son impact avec des chiffres.',
   },
+  de: {
     nav_products: 'Produkte',
     nav_membership: 'Mitgliedschaft',
     nav_portal: 'Portal betreten',
@@ -3735,11 +3730,9 @@ const I18N = {
     logros_especiales: '✨ Spezial',
     logros_no_badges: 'Keine Abzeichen in dieser Kategorie',
     logros_all_unlocked: 'Alle freigeschaltet in dieser Kategorie! 🎉',
-    logros_unlock_hint: 'Schließe die Herausforderung ab um dieses Abzeichen freizuschalten',
     logros_share: '✅ Ich habe es geschafft bei Yayika!',
     logros_join: 'Tritt Yayika bei!',
     logros_badge_name: 'Yayika-Erfolg',
-    logros_copied: 'In die Zwischenablage kopiert 📋',
     // Blog
     blog_title: 'Yayika Blog',
     blog_subtitle: 'Produktivität, Wohlbefinden und Finanzen für Frauen die mehr wollen',
