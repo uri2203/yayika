@@ -10,12 +10,14 @@ const FROM_EMAIL = "Yayika <hola@yayika.com>";
 const DOMAIN = "https://yayika.com";
 
 interface EmailPayload {
-  type: "welcome" | "purchase" | "subscription" | "custom";
+  type: "welcome" | "purchase" | "subscription" | "commission" | "withdrawal" | "custom";
   to: string;
   name?: string;
   product?: string;
   amount?: string;
   plan?: string;
+  commission?: string;
+  referralName?: string;
   customSubject?: string;
   customHtml?: string;
 }
@@ -135,6 +137,85 @@ function subscriptionTemplate(name: string, plan: string): string {
 </html>`;
 }
 
+function commissionTemplate(name: string, product: string, commission: string, referralName: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF7F2;padding:40px 20px;color:#2C2240">
+  <div style="max-width:520px;margin:0 auto;background:white;border-radius:16px;padding:36px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+    <div style="text-align:center;margin-bottom:24px">
+      <h1 style="font-family:Georgia,serif;font-size:32px;color:#4E3470;margin:0">Yay<span style="color:#C96B7A">ika</span></h1>
+    </div>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:60px;height:60px;background:#FBF6E8;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:28px">💰</div>
+    </div>
+    <h2 style="font-size:22px;color:#2C2240;margin-bottom:12px;text-align:center">¡Nueva comisión ganada!</h2>
+    <p style="font-size:15px;color:#6B7280;line-height:1.7;margin-bottom:20px;text-align:center">
+      Hola ${name}, ¡buenas noticias! Una persona que refiriste acaba de comprar.
+    </p>
+    <div style="background:#FBF6E8;border-radius:12px;padding:20px;margin-bottom:24px">
+      <table style="width:100%;font-size:14px">
+        <tr><td style="color:#6B7280;padding:4px 0">Producto:</td><td style="font-weight:600;text-align:right">${product}</td></tr>
+        <tr><td style="color:#6B7280;padding:4px 0">Referida:</td><td style="font-weight:600;text-align:right">${referralName}</td></tr>
+        <tr><td style="color:#6B7280;padding:4px 0">Tu comisión:</td><td style="font-weight:600;text-align:right;color:#B8943A;font-size:16px">+${commission}</td></tr>
+      </table>
+    </div>
+    <div style="text-align:center;margin-bottom:28px">
+      <a href="${DOMAIN}/billetera.html" style="display:inline-block;background:#B8943A;color:white;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none">
+        Ver mi billetera →
+      </a>
+    </div>
+    <p style="font-size:13px;color:#999;line-height:1.6;border-top:1px solid #eee;padding-top:16px;margin:0">
+      Recibiste este correo porque ganaste una comisión como afiliada Yayika.<br>
+      — El equipo de Yayika 💜
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
+function withdrawalTemplate(name: string, amount: string, method: string, status: string): string {
+  const statusColor = status === 'completed' ? '#3BAF7A' : (status === 'failed' ? '#C96B7A' : '#B8943A');
+  const statusLabel = status === 'completed' ? 'Completado' : (status === 'failed' ? 'Fallido' : 'Pendiente');
+
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF7F2;padding:40px 20px;color:#2C2240">
+  <div style="max-width:520px;margin:0 auto;background:white;border-radius:16px;padding:36px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+    <div style="text-align:center;margin-bottom:24px">
+      <h1 style="font-family:Georgia,serif;font-size:32px;color:#4E3470;margin:0">Yay<span style="color:#C96B7A">ika</span></h1>
+    </div>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:60px;height:60px;background:#E8F8F1;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:28px">💸</div>
+    </div>
+    <h2 style="font-size:22px;color:#2C2240;margin-bottom:12px;text-align:center">Solicitud de retiro</h2>
+    <p style="font-size:15px;color:#6B7280;line-height:1.7;margin-bottom:20px;text-align:center">
+      Hola ${name}, recibimos tu solicitud de retiro.
+    </p>
+    <div style="background:#E8F8F1;border-radius:12px;padding:20px;margin-bottom:24px">
+      <table style="width:100%;font-size:14px">
+        <tr><td style="color:#6B7280;padding:4px 0">Monto:</td><td style="font-weight:600;text-align:right;font-size:16px">${amount}</td></tr>
+        <tr><td style="color:#6B7280;padding:4px 0">Método:</td><td style="font-weight:600;text-align:right">${method}</td></tr>
+        <tr><td style="color:#6B7280;padding:4px 0">Estado:</td><td style="font-weight:600;text-align:right;color:${statusColor}">${statusLabel}</td></tr>
+      </table>
+    </div>
+    <div style="text-align:center;margin-bottom:28px">
+      <a href="${DOMAIN}/billetera.html" style="display:inline-block;background:#4E3470;color:white;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none">
+        Ver mi billetera →
+      </a>
+    </div>
+    <p style="font-size:13px;color:#999;line-height:1.6;border-top:1px solid #eee;padding-top:16px;margin:0">
+      Los retiros se procesan dentro de 3-5 días hábiles.<br>
+      — El equipo de Yayika 💜
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
 // --- Main Handler ---
 
 serve(async (req) => {
@@ -155,7 +236,7 @@ serve(async (req) => {
     }
 
     const payload: EmailPayload = await req.json();
-    const { type, to, name = "Guerrera", product, amount, plan, customSubject, customHtml } = payload;
+    const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, customSubject, customHtml } = payload;
 
     let subject: string;
     let html: string;
@@ -174,6 +255,16 @@ serve(async (req) => {
       case "subscription":
         subject = `👑 ¡Tu membresía ${plan || "Guerrera"} está activa!`;
         html = subscriptionTemplate(name, plan || "guerrera");
+        break;
+
+      case "commission":
+        subject = `💰 ¡Nueva comisión ganada — ${commission || "$0"}!`;
+        html = commissionTemplate(name, product || "Producto", commission || "$0", referralName || "Una referida");
+        break;
+
+      case "withdrawal":
+        subject = `💸 Solicitud de retiro — ${amount || "$0"} MXN`;
+        html = withdrawalTemplate(name, amount || "$0", method || "Banco", "pending");
         break;
 
       case "custom":
