@@ -286,6 +286,62 @@ textarea.form-input {
   background: var(--lila-l) !important;
 }
 
+/* --- Accessibility --- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--lila-d);
+  color: white;
+  padding: 12px 24px;
+  z-index: 9999;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Focus indicators */
+:focus-visible {
+  outline: 3px solid var(--lila);
+  outline-offset: 3px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .btn-primary, .btn-secondary, .btn-turquesa {
+    border: 2px solid ButtonText;
+  }
+  .card {
+    border: 1px solid CanvasText;
+  }
+}
+
 /* --- Cycle Diary --- */
 .flow-btn:hover {
   border-color: var(--rosa) !important;
