@@ -262,7 +262,7 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
 <div class="progress-bar">
   <span class="pb-label" data-i18n="modulo_progress_name">Ciclo Productivo</span>
   <div class="pb-track"><div class="pb-fill" id="pbFill" style="width:5%"></div></div>
-  <span class="pb-pct" id="pbPct">Lección 1 de 10 — Módulo 1</span>
+  <span class="pb-pct" id="pbPct" data-i18n="modulo1_pb_pct">Lección 1 de 10 — Módulo 1</span>
 </div>
 
 <div class="layout">
@@ -334,7 +334,7 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
     <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:24px;background:#000">
       <video controls style="position:absolute;top:0;left:0;width:100%;height:100%" preload="metadata">
         <source src="videos/modulo1/01-bienvenida.mp4" type="video/mp4">
-        Tu navegador no soporta video.
+        <span data-i18n="modulo_video_fallback">Tu navegador no soporta video.</span>
       </video>
     </div>
 
@@ -351,31 +351,31 @@ nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify
 
     <div class="section">
       <h2 data-i18n="modulo1_l1_h2_2">Tus 4 fases — el mapa completo</h2>
-      <p>Cada mes, tu cuerpo pasa por estas 4 fases. Haz clic en cada una para conocerla:</p>
+      <p data-i18n="modulo1_l1_4fases_intro">Cada mes, tu cuerpo pasa por estas 4 fases. Haz clic en cada una para conocerla:</p>
 
       <div class="phase-grid">
         <div class="phase-box active-phase" onclick="showPhase(0)">
           <span class="phase-emoji">🌑</span>
-          <div class="phase-name">Menstrual</div>
-          <div class="phase-days">Días 1–5</div>
+          <div class="phase-name" data-i18n="modulo1_phase_menstrual">Menstrual</div>
+          <div class="phase-days" data-i18n="modulo1_phase_menstrual_days">Días 1–5</div>
           <div class="phase-energy"><div class="phase-energy-fill" style="width:20%"></div></div>
         </div>
         <div class="phase-box" onclick="showPhase(1)">
           <span class="phase-emoji">🌒</span>
-          <div class="phase-name">Folicular</div>
-          <div class="phase-days">Días 6–13</div>
+          <div class="phase-name" data-i18n="modulo1_phase_folicular">Folicular</div>
+          <div class="phase-days" data-i18n="modulo1_phase_folicular_days">Días 6–13</div>
           <div class="phase-energy"><div class="phase-energy-fill" style="width:65%"></div></div>
         </div>
         <div class="phase-box" onclick="showPhase(2)">
           <span class="phase-emoji">🌕</span>
-          <div class="phase-name">Ovulatoria</div>
-          <div class="phase-days">Días 14–17</div>
+          <div class="phase-name" data-i18n="modulo1_phase_ovulatoria">Ovulatoria</div>
+          <div class="phase-days" data-i18n="modulo1_phase_ovulatoria_days">Días 14–17</div>
           <div class="phase-energy"><div class="phase-energy-fill" style="width:100%"></div></div>
         </div>
         <div class="phase-box" onclick="showPhase(3)">
           <span class="phase-emoji">🌘</span>
-          <div class="phase-name">Lútea</div>
-          <div class="phase-days">Días 18–28</div>
+          <div class="phase-name" data-i18n="modulo1_phase_lutea">Lútea</div>
+          <div class="phase-days" data-i18n="modulo1_phase_lutea_days">Días 18–28</div>
           <div class="phase-energy"><div class="phase-energy-fill" style="width:45%"></div></div>
         </div>
       </div>

@@ -136,6 +136,12 @@
       change_plan_redirect:'Para cambiar al plan {name} ({price}), te redirigiremos a Stripe para completar el pago.',
       add_product_alert:'Función de agregar producto — Próximamente',
       edit_product_alert:'Función de editar producto — Próximamente',
+      plan_name_basica:'Básica',plan_price_basica:'Gratis',
+      plan_basica_f1:'Perfil de vendedora básico',plan_basica_f2:'Hasta 3 productos',plan_basica_f3:'Enlace de pago personal',plan_basica_f4:'Soporte por email',
+      plan_name_profesional:'Profesional',plan_price_profesional:'$199 MXN/mes',
+      plan_prof_f1:'Perfil de vendedora premium',plan_prof_f2:'Productos ilimitados',plan_prof_f3:'Enlace de pago personal',plan_prof_f4:'Dominio personalizado',plan_prof_f5:'Estadísticas de visitas',plan_prof_f6:'Soporte prioritario',
+      plan_name_premium:'Premium',plan_price_premium:'$499 MXN/mes',
+      plan_prem_f1:'Todo lo del plan Profesional',plan_prem_f2:'Destacada en el marketplace',plan_prem_f3:'Herramientas de marketing',plan_prem_f4:'API de integración',plan_prem_f5:'Soporte dedicado',plan_prem_f6:'Comisión 0% en ventas',
     },
     en:{
       title:'My Store on Yayika',
@@ -199,6 +205,12 @@
       change_plan_redirect:'To switch to the {name} plan ({price}), we\'ll redirect you to Stripe to complete payment.',
       add_product_alert:'Add product — Coming soon',
       edit_product_alert:'Edit product — Coming soon',
+      plan_name_basica:'Basic',plan_price_basica:'Free',
+      plan_basica_f1:'Basic seller profile',plan_basica_f2:'Up to 3 products',plan_basica_f3:'Personal payment link',plan_basica_f4:'Email support',
+      plan_name_profesional:'Professional',plan_price_profesional:'$199/mo',
+      plan_prof_f1:'Premium seller profile',plan_prof_f2:'Unlimited products',plan_prof_f3:'Personal payment link',plan_prof_f4:'Custom domain',plan_prof_f5:'Visit statistics',plan_prof_f6:'Priority support',
+      plan_name_premium:'Premium',plan_price_premium:'$499/mo',
+      plan_prem_f1:'Everything in Professional',plan_prem_f2:'Featured in marketplace',plan_prem_f3:'Marketing tools',plan_prem_f4:'API integration',plan_prem_f5:'Dedicated support',plan_prem_f6:'0% commission on sales',
     },
     pt:{
       title:'Minha Loja no Yayika',
@@ -262,6 +274,12 @@
       change_plan_redirect:'Para mudar para o plano {name} ({price}), redirecionaremos você ao Stripe para concluir o pagamento.',
       add_product_alert:'Adicionar produto — Em breve',
       edit_product_alert:'Editar produto — Em breve',
+      plan_name_basica:'Básica',plan_price_basica:'Grátis',
+      plan_basica_f1:'Perfil básico de vendedora',plan_basica_f2:'Até 3 produtos',plan_basica_f3:'Link de pagamento pessoal',plan_basica_f4:'Suporte por email',
+      plan_name_profesional:'Profissional',plan_price_profesional:'$199/mês',
+      plan_prof_f1:'Perfil premium de vendedora',plan_prof_f2:'Produtos ilimitados',plan_prof_f3:'Link de pagamento pessoal',plan_prof_f4:'Domínio personalizado',plan_prof_f5:'Estatísticas de visitas',plan_prof_f6:'Suporte prioritário',
+      plan_name_premium:'Premium',plan_price_premium:'$499/mês',
+      plan_prem_f1:'Tudo do plano Profissional',plan_prem_f2:'Destacada no marketplace',plan_prem_f3:'Ferramentas de marketing',plan_prem_f4:'API de integração',plan_prem_f5:'Suporte dedicado',plan_prem_f6:'Comissão 0% nas vendas',
     },
     fr:{
       title:'Ma Boutique sur Yayika',
@@ -325,6 +343,12 @@
       change_plan_redirect:'Pour passer au plan {name} ({price}), nous vous redirigerons vers Stripe pour finaliser le paiement.',
       add_product_alert:'Ajouter un produit — Bientôt disponible',
       edit_product_alert:'Modifier un produit — Bientôt disponible',
+      plan_name_basica:'Basique',plan_price_basica:'Gratuit',
+      plan_basica_f1:'Profil vendeuse basique',plan_basica_f2:'Jusqu\'à 3 produits',plan_basica_f3:'Lien de paiement personnel',plan_basica_f4:'Support par email',
+      plan_name_profesional:'Professionnel',plan_price_profesional:'$199/mois',
+      plan_prof_f1:'Profil vendeuse premium',plan_prof_f2:'Produits illimités',plan_prof_f3:'Lien de paiement personnel',plan_prof_f4:'Domaine personnalisé',plan_prof_f5:'Statistiques de visites',plan_prof_f6:'Support prioritaire',
+      plan_name_premium:'Premium',plan_price_premium:'$499/mois',
+      plan_prem_f1:'Tout du plan Professionnel',plan_prem_f2:'Mise en avant sur le marketplace',plan_prem_f3:'Outils marketing',plan_prem_f4:'API d\'intégration',plan_prem_f5:'Support dédié',plan_prem_f6:'Commission 0% sur les ventes',
     },
     de:{
       title:'Mein Shop bei Yayika',
@@ -388,10 +412,34 @@
       change_plan_redirect:'Um zum {name}-Plan ({price}) zu wechseln, leiten wir dich zu Stripe weiter, um die Zahlung abzuschließen.',
       add_product_alert:'Produkt hinzufügen — Demnächst',
       edit_product_alert:'Produkt bearbeiten — Demnächst',
+      plan_name_basica:'Basis',plan_price_basica:'Kostenlos',
+      plan_basica_f1:'Basis-Verkäuferprofil',plan_basica_f2:'Bis zu 3 Produkte',plan_basica_f3:'Persönlicher Zahlungslink',plan_basica_f4:'E-Mail-Support',
+      plan_name_profesional:'Professionell',plan_price_profesional:'$199/Monat',
+      plan_prof_f1:'Premium-Verkäuferprofil',plan_prof_f2:'Unbegrenzte Produkte',plan_prof_f3:'Persönlicher Zahlungslink',plan_prof_f4:'Eigene Domain',plan_prof_f5:'Besucherstatistiken',plan_prof_f6:'Bevorzugter Support',
+      plan_name_premium:'Premium',plan_price_premium:'$499/Monat',
+      plan_prem_f1:'Alles aus Professionell',plan_prem_f2:'Hervorgehoben im Marketplace',plan_prem_f3:'Marketing-Tools',plan_prem_f4:'API-Integration',plan_prem_f5:'Dedizierter Support',plan_prem_f6:'0% Provision auf Verkäufe',
     }
   };
 
   function t(key){const lang=document.documentElement.lang||'es';return(T[lang]&&T[lang][key])||T.es[key]||key;}
+
+  function getLocalizedPlans(){return{
+    basica:{
+      name:t('plan_name_basica'),price:0,priceFormatted:t('plan_price_basica'),
+      features:[t('plan_basica_f1'),t('plan_basica_f2'),t('plan_basica_f3'),t('plan_basica_f4')],
+      stripePriceId:null
+    },
+    profesional:{
+      name:t('plan_name_profesional'),price:199,priceFormatted:t('plan_price_profesional'),
+      features:[t('plan_prof_f1'),t('plan_prof_f2'),t('plan_prof_f3'),t('plan_prof_f4'),t('plan_prof_f5'),t('plan_prof_f6')],
+      stripePriceId:'price_seller_profesional'
+    },
+    premium:{
+      name:t('plan_name_premium'),price:499,priceFormatted:t('plan_price_premium'),
+      features:[t('plan_prem_f1'),t('plan_prem_f2'),t('plan_prem_f3'),t('plan_prem_f4'),t('plan_prem_f5'),t('plan_prem_f6')],
+      stripePriceId:'price_seller_premium'
+    }
+  };}
 
   // ============================================================
   // COLOR PALETTE
@@ -572,7 +620,7 @@
           <div style="margin-bottom:12px">
             <div class="sd-stat-label">${t('current_plan')}</div>
             <div style="margin-top:4px">
-              <span class="sd-badge success">${SELLER_PLANS[data.plan]?.name || 'Básica'}</span>
+              <span class="sd-badge success">${getLocalizedPlans()[data.plan]?.name || t('plan_name_basica')}</span>
             </div>
           </div>
           <button onclick="sellerDash.toggleView('plans')" class="sd-action-btn secondary" style="margin-top:8px">
@@ -682,7 +730,7 @@
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
-        ${Object.entries(SELLER_PLANS).map(([key, plan])=>`
+        ${Object.entries(getLocalizedPlans()).map(([key, plan])=>`
           <div class="sd-plan-card ${key===currentPlan?'current':''}">
             ${key===currentPlan?`<div style="font-size:11px;font-weight:600;color:${C.green};margin-bottom:8px">✅ ${t('current_plan')}</div>`:''}
             <div style="font-size:18px;font-weight:700;color:${C.text};margin-bottom:8px">${plan.name}</div>
@@ -725,7 +773,7 @@
   }
 
   function changePlan(planKey){
-    const plan = SELLER_PLANS[planKey];
+    const plan = getLocalizedPlans()[planKey];
     if(!plan) return;
     
     if(plan.price === 0){
