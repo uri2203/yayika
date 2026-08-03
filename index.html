@@ -1080,21 +1080,21 @@ function closeIOSModal(){document.getElementById('iosInstallModal').style.displa
         <div style="display:flex;align-items:center;gap:14px">
           <div style="width:42px;height:42px;border-radius:50%;background:var(--rosa);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">M</div>
           <div>
-            <div style="font-size:14px;font-weight:600;color:var(--texto)">María de México</div>
+            <div style="font-size:14px;font-weight:600;color:var(--texto)" data-i18n="gana_test1_author">María de México</div>
             <div style="font-size:12px;color:var(--suave)"><span data-i18n="gana_test1">"Gané</span> <strong style="color:var(--oro)">$340</strong> <span data-i18n="gana_test1b">el mes pasado solo invitando amigas. ¡Es real!"</span></div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <div style="width:42px;height:42px;border-radius:50%;background:var(--turquesa);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">A</div>
           <div>
-            <div style="font-size:14px;font-weight:600;color:var(--texto)">Ana de Colombia</div>
+            <div style="font-size:14px;font-weight:600;color:var(--texto)" data-i18n="gana_test2_author">Ana de Colombia</div>
             <div style="font-size:12px;color:var(--suave)"><span data-i18n="gana_test2">"Vendí</span> <strong style="color:var(--oro)">12 planners</strong> <span data-i18n="gana_test2b">en una semana en el Marketplace."</span></div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:14px">
           <div style="width:42px;height:42px;border-radius:50%;background:var(--lila);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">L</div>
           <div>
-            <div style="font-size:14px;font-weight:600;color:var(--texto)">Laura de España</div>
+            <div style="font-size:14px;font-weight:600;color:var(--texto)" data-i18n="gana_test3_author">Laura de España</div>
             <div style="font-size:12px;color:var(--suave)"><span data-i18n="gana_test3">"Mis sesiones de mentoring</span> <strong style="color:var(--oro)">se llenan</strong> <span data-i18n="gana_test3b">cada semana. Yayika me cambió la vida."</span></div>
           </div>
         </div>
@@ -1197,7 +1197,7 @@ function startCheckout(plan) {
   if (typeof plausible !== 'undefined') plausible('Checkout Start', { props: { product: plan, type: 'subscription' } });
   const link = PRODUCT_LINKS[plan];
   if (!link || link.includes('PLACEHOLDER')) {
-    alert('Pronto estarán disponibles los planes de membresía.');
+    alert(typeof t === 'function' ? t('checkout_membership_coming_soon') : 'Pronto estarán disponibles los planes de membresía.');
     return;
   }
   window.location.href = link;
@@ -1249,9 +1249,9 @@ function hideInstallUI(){
   const installSection=document.getElementById("app");
   if(installSection){
     const tag=installSection.querySelector('.ab-tag');
-    if(tag) tag.textContent='Ya la tienes ✨';
+    if(tag) tag.textContent=(typeof t==='function' ? t('install_already') : 'Ya la tienes ✨');
     const sub=installSection.querySelector('.ab-sub');
-    if(sub) sub.textContent='Tu app de bienestar para mujeres. Toca abrirla.';
+    if(sub) sub.textContent=(typeof t==='function' ? t('install_sub_app') : 'Tu app de bienestar para mujeres. Toca abrirla.');
     // Keep only the "Abrir portal" button
     const installBtn=document.getElementById('installBtnBanner');
     if(installBtn) installBtn.style.display='none';
@@ -1289,11 +1289,11 @@ window.addEventListener("beforeinstallprompt",e=>{
   // Update button text based on platform
   const subtext=document.getElementById("installSubtext");
   if(subtext){
-    subtext.textContent=isIOS()?"Para iPhone/iPad":"Para Android";
+    subtext.textContent=isIOS()?(typeof t==='function'?t('platform_iphone_sub'):'Para iPhone/iPad'):(typeof t==='function'?t('platform_android_sub'):'Para Android');
   }
   const tip=document.getElementById("platformTip");
   if(tip){
-    tip.textContent=isIOS()?"📱 Toca instalar para ver instrucciones":"📱 Android: toca instalar y acepta";
+    tip.textContent=isIOS()?(typeof t==='function'?t('platform_iphone'):'📱 Toca instalar para ver instrucciones'):(typeof t==='function'?t('platform_android'):'📱 Android: toca instalar y acepta');
   }
 });
 

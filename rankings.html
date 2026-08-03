@@ -225,13 +225,13 @@ function renderRankings() {
 
   // Podium (top 3)
   const top3 = sorted.slice(0, 3);
-  const podiumOrder = [top3[1], top3[0], top3[2]]; // 2nd, 1st, 3rd
+  const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean); // 2nd, 1st, 3rd
   podium.innerHTML = podiumOrder.map((p, i) => {
     const pos = [2, 1, 3][i];
     const initials = p.name.split(' ').map(n => n[0]).join('').substring(0, 2);
     const crown = pos === 1 ? '<div class="podium-crown">👑</div>' : '';
     const val = currentTab === 'xp' ? `${p.xp.toLocaleString()} XP` :
-                currentTab === 'badges' ? `${p.badges} badges` : `${p.streak} días`;
+                currentTab === 'badges' ? `${p.badges} ${rk('rank_badges')}` : `${p.streak} ${rk('rank_streak')}`;
     return `
       <div class="podium-place">
         ${crown}

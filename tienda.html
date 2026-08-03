@@ -53,7 +53,7 @@
   --rosa:#C96B7A;--rosa-l:#FDF0F2;
   --oro:#B8943A;--oro-l:#FBF6E8;
   --verde:#3BAF7A;--verde-l:#E8F8F1;
-  --turquesa:#1A9E8F;--turquesa-l:#E6F7F5;
+  --turquesa:#1A9E8F;--turquesa-l:#E6F7F5;--turquesa-d:#0E7A6D;
   --bg:#F8F5FF;--card:#FDFCFB;--texto:#2C2240;--suave:#7A6E85;
   --borde:rgba(123,94,167,0.13);
 }
@@ -177,17 +177,17 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:700}
   <a href="/" class="nav-logo">Yay<span>ika</span></a>
   <div class="nav-links">
     <a href="/" class="nav-link-text" data-i18n="nav_home">Inicio</a>
-    <a href="/blog/" class="nav-link-text">Blog</a>
+    <a href="/blog/" class="nav-link-text" data-i18n="blog_navBlog">Blog</a>
     <a href="/afiliadas.html" class="nav-link-text" data-i18n="nav_affiliates">Afiliadas</a>
     <a href="/soporte.html" class="nav-link-text" data-i18n="nav_support">Soporte</a>
     <div class="lang-selector" id="langSelector">
       <button class="lang-btn" id="langBtn" onclick="toggleLangMenu()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> ES</button>
       <div class="lang-menu" id="langMenu">
-        <button class="lang-opt active" data-lang="es" onclick="setLanguage('es')">🇪🇸 Español</button>
-        <button class="lang-opt" data-lang="en" onclick="setLanguage('en')">🇺🇸 English</button>
-        <button class="lang-opt" data-lang="pt" onclick="setLanguage('pt')">🇧🇷 Português</button>
-        <button class="lang-opt" data-lang="fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
-        <button class="lang-opt" data-lang="de" onclick="setLanguage('de')">🇩🇪 Deutsch</button>
+        <button class="lang-opt active" data-lang="es" onclick="storeSetLanguage('es')">🇪🇸 Español</button>
+        <button class="lang-opt" data-lang="en" onclick="storeSetLanguage('en')">🇺🇸 English</button>
+        <button class="lang-opt" data-lang="pt" onclick="storeSetLanguage('pt')">🇧🇷 Português</button>
+        <button class="lang-opt" data-lang="fr" onclick="storeSetLanguage('fr')">🇫🇷 Français</button>
+        <button class="lang-opt" data-lang="de" onclick="storeSetLanguage('de')">🇩🇪 Deutsch</button>
       </div>
     </div>
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
@@ -244,7 +244,7 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:700}
 
 <!-- FOOTER -->
 <footer style="text-align:center;padding:40px 20px;border-top:1px solid var(--borde);margin-top:40px">
-  <p style="color:var(--suave);font-size:0.85rem">&copy; 2025 Yayika. <span data-i18n="footer_rights">Todos los derechos reservados.</span></p>
+  <p style="color:var(--suave);font-size:0.85rem">&copy; 2026 Yayika. <span data-i18n="footer_rights">Todos los derechos reservados.</span></p>
   <div style="margin-top:12px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
     <a href="/terminos.html" style="color:var(--suave);font-size:0.8rem" data-i18n="footer_terms">Términos</a>
     <a href="/aviso-privacidad.html" style="color:var(--suave);font-size:0.8rem" data-i18n="footer_privacy">Privacidad</a>

@@ -275,12 +275,9 @@ async function checkout() {
     }
   }
 
-  // Multiple products — redirect to Stripe checkout via Supabase function or direct
-  // For now, checkout each product individually
-  const product = cart[0];
-  const link = findPaymentLink(product);
-  if (link) {
-    window.location.href = link;
+  // Multiple products — only single-product checkout supported for now
+  if (cart.length > 1) {
+    alert('Compra un producto a la vez');
     return;
   }
 
@@ -358,7 +355,7 @@ function toggleLangMenu() {
   document.getElementById('langMenu')?.classList.toggle('show');
 }
 
-function setLanguage(lang) {
+function storeSetLanguage(lang) {
   localStorage.setItem('yayika_lang', lang);
   document.documentElement.lang = lang;
   document.querySelectorAll('.lang-opt').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
@@ -382,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Language
   const savedLang = localStorage.getItem('yayika_lang') || 'es';
-  setLanguage(savedLang);
+  storeSetLanguage(savedLang);
 
   // Cart
   updateCartUI();

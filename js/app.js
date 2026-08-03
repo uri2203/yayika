@@ -419,10 +419,7 @@ function formatDate(dateStr) {
   const localeMap = { es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' };
   const locale = localeMap[currentLang] || 'es-MX';
   const d = new Date(dateStr + 'T12:00:00');
-  const dayName = new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(d);
-  const monthName = new Intl.DateTimeFormat(locale, { month: 'long' }).format(d);
-  const capitalized = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-  return `${capitalized} ${d.getDate()} de ${monthName}`;
+  return new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(d);
 }
 
 function timeAgo(dateStr) {

@@ -42,6 +42,8 @@ function wt(key) {
     wallet_withdraw_error: 'Error al procesar retiro',
     wallet_withdraw_min_error: 'El monto mínimo es $500 MXN',
     wallet_withdraw_insufficient: 'Saldo insuficiente',
+    wallet_fill_bank_details: 'Completa los datos bancarios',
+    wallet_fill_paypal_email: 'Completa el email de PayPal',
     commission_sale: 'Comisión por venta',
     commission_member: 'Comisión por membresía',
     payout_pending: 'Pendiente',
@@ -122,12 +124,13 @@ async function loadCommissions(affiliateId) {
   empty.style.display = 'none';
 
   list.innerHTML = commissions.map(c => {
+    const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
     const isPositive = c.status === 'approved' || c.status === 'paid';
     const statusClass = c.status === 'pending' ? 'pending' : (c.status === 'paid' ? '' : '');
     const amountClass = isPositive ? 'positive' : (c.status === 'pending' ? 'pending' : '');
     const icon = c.product_type?.includes('membership') ? '⭐' : '💰';
     const title = c.product_name || wt('commission_sale');
-    const date = new Date(c.created_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    const date = new Date(c.created_at).toLocaleDateString({ es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' }[lang] || 'es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
 
     return `
       <div class="tx-item">
@@ -164,15 +167,16 @@ async function loadPayouts(affiliateId) {
   empty.style.display = 'none';
 
   list.innerHTML = payouts.map(p => {
+    const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
     const statusKey = `payout_${p.status}`;
-    const date = new Date(p.created_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    const date = new Date(p.created_at).toLocaleDateString({ es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' }[lang] || 'es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
 
     return `
       <div class="payout-item">
         <div class="tx-icon debit">💸</div>
         <div class="tx-info">
           <div class="tx-title">${formatWalletCurrency(parseFloat(p.amount))}</div>
-          <div class="tx-desc">${date} — ${p.payout_method === 'paypal' ? 'PayPal' : 'Banco'}</div>
+          <div class="tx-desc">${date} — ${p.payout_method === 'paypal' ? 'PayPal' : wt('wallet_method_bank')}</div>
         </div>
         <span class="payout-status ${p.status}">${wt(statusKey)}</span>
       </div>
@@ -207,10 +211,10 @@ async function submitWithdraw() {
   if (method === 'bank') {
     details.bank = document.getElementById('withdrawBank')?.value;
     details.account = document.getElementById('withdrawAccount')?.value;
-    if (!details.bank || !details.account) { alert('Completa los datos bancarios'); return; }
+    if (!details.bank || !details.account) { alert(wt('wallet_fill_bank_details')); return; }
   } else {
     details.paypal = document.getElementById('withdrawPaypal')?.value;
-    if (!details.paypal) { alert('Completa el email de PayPal'); return; }
+    if (!details.paypal) { alert(wt('wallet_fill_paypal_email')); return; }
   }
 
   const btn = document.getElementById('btnConfirmWithdraw');
