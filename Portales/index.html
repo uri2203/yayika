@@ -1145,7 +1145,13 @@ async function doLogin() {
         });
         if (resp.ok) {
           const setCookie = resp.headers.get('set-cookie');
-          if (setCookie) document.cookie = setCookie;
+          if (setCookie) {
+            const cookieName = setCookie.split('=')[0];
+            const cookieValue = setCookie.split('=')[1]?.split(';')[0];
+            if (cookieName && cookieValue) {
+              document.cookie = `${cookieName}=${cookieValue}; path=/; Secure; SameSite=Strict; Max-Age=86400`;
+            }
+          }
         }
       } catch(e) {}
       

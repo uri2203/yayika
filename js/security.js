@@ -268,6 +268,38 @@ const YayikaSecurity = (() => {
     }
   }
 
+  // ============ REQUEST SIZE LIMITS ============
+  const MAX_REQUEST_SIZE = 1024 * 1024; // 1MB
+
+  function validateRequestSize(data) {
+    const size = new Blob([JSON.stringify(data)]).size;
+    return size <= MAX_REQUEST_SIZE;
+  }
+
+  function sanitizeFormData(formData) {
+    const sanitized = {};
+    for (const [key, value] of Object.entries(formData)) {
+      if (typeof value === 'string') {
+        sanitized[key] = sanitizeInput(value).substring(0, 10000); // Max 10KB per field
+      } else {
+        sanitized[key] = value;
+      }
+    }
+    return sanitized;
+  }
+
+  // ============ CORS VALIDATION ============
+  const ALLOWED_ORIGINS = [
+    'https://yayika.com',
+    'https://www.yayika.com',
+    'http://localhost:3000', // Development
+    'http://localhost:5500'  // Live Server
+  ];
+
+  function validateCORS(origin) {
+    return ALLOWED_ORIGINS.includes(origin);
+  }
+
   // ============ HELPER: SAFE QUERY SELECTOR ============
   function safeQuerySelector(selector) {
     try {
@@ -288,6 +320,8 @@ const YayikaSecurity = (() => {
     session: { start: startSessionTimeout, stop: stopSessionTimeout },
     audit: { log: logAction, get: getAuditLog },
     encryption: { encrypt: encryptData, decrypt: decryptData },
+    requestSize: { validate: validateRequestSize, sanitizeForm: sanitizeFormData, MAX: MAX_REQUEST_SIZE },
+    cors: { validate: validateCORS, origins: ALLOWED_ORIGINS },
     safeQuerySelector
   };
 })();
