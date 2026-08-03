@@ -412,6 +412,11 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
           <label class="form-label" data-i18n="auth_full_name">Nombre completo</label>
           <input class="form-input" type="text" id="nameInput" placeholder="Tu nombre" autocomplete="name">
         </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="auth_dob">Fecha de nacimiento</label>
+          <input class="form-input" type="date" id="dobInput" max="2008-01-01" style="color: #333;">
+          <small data-i18n="auth_dob_hint" style="color: #999; font-size: 11px;">Debes ser mayor de 18 años para registrarte</small>
+        </div>
         
         <!-- Legal acceptance checkboxes -->
         <div class="legal-checkboxes" style="margin: 16px 0; font-size: 13px; color: #666;">
@@ -1022,6 +1027,26 @@ async function doRegister() {
     return;
   }
   legalError.style.display = 'none';
+
+  // Validate age (must be 18+)
+  const dobValue = document.getElementById('dobInput')?.value;
+  if (!dobValue) {
+    document.getElementById('loginError').textContent = getI18nText('auth_dob_required') || 'Ingresa tu fecha de nacimiento.';
+    document.getElementById('loginError').style.display = 'block';
+    return;
+  }
+  const birthDate = new Date(dobValue);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  if (age < 18) {
+    document.getElementById('loginError').textContent = getI18nText('auth_dob_minor') || 'Debes ser mayor de 18 años para crear una cuenta en Yayika.';
+    document.getElementById('loginError').style.display = 'block';
+    return;
+  }
 
   if (!email || !pass) { err.textContent = t('portal_login_error') || 'Please fill in all fields.'; err.style.display = 'block'; return; }
   if (pass.length < 6) { err.textContent = { es: 'La contraseña debe tener al menos 6 caracteres.', en: 'Password must be at least 6 characters.', pt: 'A senha deve ter pelo menos 6 caracteres.', fr: 'Le mot de passe doit contenir au moins 6 caractères.', de: 'Das Passwort muss mindestens 6 Zeichen lang sein.' }[currentLang || 'es']; err.style.display = 'block'; return; }

@@ -960,6 +960,10 @@ const I18N = {
     auth_login_here: 'Entrar aquí',
     auth_creating: 'Creando cuenta...',
     auth_login: 'Entrar a mi portal',
+    auth_dob: 'Fecha de nacimiento',
+    auth_dob_hint: 'Debes ser mayor de 18 años para registrarte',
+    auth_dob_required: 'Ingresa tu fecha de nacimiento.',
+    auth_dob_minor: 'Debes ser mayor de 18 años para crear una cuenta en Yayika.',
   },
 
   en: {
@@ -1861,6 +1865,10 @@ const I18N = {
     auth_login_here: 'Login here',
     auth_creating: 'Creating account...',
     auth_login: 'Login to my portal',
+    auth_dob: 'Date of birth',
+    auth_dob_hint: 'You must be 18 or older to register',
+    auth_dob_required: 'Please enter your date of birth.',
+    auth_dob_minor: 'You must be 18 or older to create a Yayika account.',
   },
   pt: {
     nav_products: 'Produtos',
@@ -2759,6 +2767,10 @@ const I18N = {
     auth_login_here: 'Entrar aqui',
     auth_creating: 'Criando conta...',
     auth_login: 'Entrar no meu portal',
+    auth_dob: 'Data de nascimento',
+    auth_dob_hint: 'Você deve ter 18 anos ou mais para se registrar',
+    auth_dob_required: 'Por favor, insira sua data de nascimento.',
+    auth_dob_minor: 'Você deve ter 18 anos ou mais para criar uma conta no Yayika.',
   },
   fr: {
     nav_products: 'Produits',
@@ -3657,6 +3669,10 @@ const I18N = {
     auth_login_here: 'Se connecter ici',
     auth_creating: 'Création du compte...',
     auth_login: 'Se connecter à mon portail',
+    auth_dob: 'Date de naissance',
+    auth_dob_hint: 'Vous devez avoir 18 ans ou plus pour vous inscrire',
+    auth_dob_required: 'Veuillez entrer votre date de naissance.',
+    auth_dob_minor: 'Vous devez avoir 18 ans ou plus pour créer un compte Yayika.',
   },
   de: {
     nav_products: 'Produkte',
@@ -4555,6 +4571,10 @@ const I18N = {
     auth_login_here: 'Hier einloggen',
     auth_creating: 'Konto wird erstellt...',
     auth_login: 'In mein Portal einloggen',
+    auth_dob: 'Geburtsdatum',
+    auth_dob_hint: 'Sie müssen mindestens 18 Jahre alt sein, um sich zu registrieren',
+    auth_dob_required: 'Bitte geben Sie Ihr Geburtsdatum ein.',
+    auth_dob_minor: 'Sie müssen mindestens 18 Jahre alt sein, um ein Yayika-Konto zu erstellen.',
   }
 };
 

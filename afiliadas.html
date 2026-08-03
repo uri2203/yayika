@@ -148,6 +148,12 @@ footer a{color:rgba(255,255,255,.7)}
       <div id="affRegisterForm">
         <input type="email" id="affEmail" placeholder="Tu correo electrónico" style="width:100%;padding:12px 16px;border:1px solid var(--borde);border-radius:12px;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;background:var(--bg);color:var(--texto)">
         <input type="password" id="affPassword" placeholder="Contraseña (mín. 6 caracteres)" style="width:100%;padding:12px 16px;border:1px solid var(--borde);border-radius:12px;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;background:var(--bg);color:var(--texto)">
+        <!-- Date of birth -->
+        <div style="margin: 12px 0;">
+          <label style="display: block; font-size: 13px; color: #666; margin-bottom: 4px;" data-i18n="auth_dob">Fecha de nacimiento</label>
+          <input type="date" id="affDobInput" max="2008-01-01" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 15px; color: #333; box-sizing: border-box;">
+          <small data-i18n="auth_dob_hint" style="color: #999; font-size: 11px;">Debes ser mayor de 18 años para registrarte</small>
+        </div>
         <!-- Legal acceptance checkboxes -->
         <div style="margin: 16px 0; font-size: 13px; color: #666;">
           <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; cursor: pointer;">
@@ -190,6 +196,26 @@ async function doAffiliateRegister() {
   const email = document.getElementById('affEmail').value.trim().toLowerCase();
   const pass = document.getElementById('affPassword').value;
   const err = document.getElementById('affError');
+  
+  // Validate age (must be 18+)
+  const dobValue = document.getElementById('affDobInput')?.value;
+  if (!dobValue) {
+    err.textContent = getI18nText('auth_dob_required') || 'Ingresa tu fecha de nacimiento.';
+    err.style.display = 'block';
+    return;
+  }
+  const birthDate = new Date(dobValue);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  if (age < 18) {
+    err.textContent = getI18nText('auth_dob_minor') || 'Debes ser mayor de 18 años para crear una cuenta en Yayika.';
+    err.style.display = 'block';
+    return;
+  }
   
   // Validate checkboxes
   const acceptTerms = document.getElementById('affAcceptTerms')?.checked;
