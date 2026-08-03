@@ -2,6 +2,15 @@
 // COURSE ENGINE — Dynamic lessons, videos, completion tracking
 // ============================================================
 
+const COURSE_I18N = {
+  es: { videoSoon: 'Video próximamente', prev: '← Anterior', next: 'Completar y continuar →', loading: 'Cargando contenido...', exercise: 'Ejercicio', exercisePlaceholder: 'Escribe tu respuesta aquí...', save: 'Guardar ejercicio', completeModule: '✓ Completar módulo', moduleOf: 'Módulo {n} de {total}', xpGained: '+{xp} XP ganados', saved: 'Ejercicio guardado', quizQuestion: '¿Qué has aprendido en este módulo?', quizOpt1: 'Entendí las fases de mi ciclo', quizOpt2: 'No estoy segura todavía', quizOpt3: 'Necesito repasar', quizCorrect: '¡Exacto! Has entendido lo esencial. Sigue así.', quizWrong: 'No pasa nada, repasa cuando quieras. Lo importante es que sigas avanzando.' },
+  en: { videoSoon: 'Video coming soon', prev: '← Previous', next: 'Complete & continue →', loading: 'Loading content...', exercise: 'Exercise', exercisePlaceholder: 'Write your answer here...', save: 'Save exercise', completeModule: '✓ Complete module', moduleOf: 'Module {n} of {total}', xpGained: '+{xp} XP earned', saved: 'Exercise saved', quizQuestion: 'What did you learn in this module?', quizOpt1: "I understood my cycle's phases", quizOpt2: "I'm not sure yet", quizOpt3: 'I need to review', quizCorrect: 'Exactly! You got the essentials. Keep going!', quizWrong: "No worries, review whenever you want. The important thing is to keep progressing." },
+  pt: { videoSoon: 'Vídeo em breve', prev: '← Anterior', next: 'Completar e continuar →', loading: 'Carregando conteúdo...', exercise: 'Exercício', exercisePlaceholder: 'Escreva sua resposta aqui...', save: 'Salvar exercício', completeModule: '✓ Completar módulo', moduleOf: 'Módulo {n} de {total}', xpGained: '+{xp} XP ganhos', saved: 'Exercício salvo', quizQuestion: 'O que você aprendeu neste módulo?', quizOpt1: 'Entendi as fases do meu ciclo', quizOpt2: 'Ainda não tenho certeza', quizOpt3: 'Preciso revisar', quizCorrect: 'Exato! Você entendeu o essencial. Continue assim!', quizWrong: 'Sem problemas, revise quando quiser. O importante é continuar avançando.' },
+  fr: { videoSoon: 'Vidéo bientôt disponible', prev: '← Précédent', next: 'Terminer et continuer →', loading: 'Chargement du contenu...', exercise: 'Exercice', exercisePlaceholder: 'Écrivez votre réponse ici...', save: "Enregistrer l'exercice", completeModule: '✓ Terminer le module', moduleOf: 'Module {n} sur {total}', xpGained: '+{xp} XP gagnés', saved: 'Exercice enregistré', quizQuestion: "Qu'avez-vous appris dans ce module ?", quizOpt1: "J'ai compris les phases de mon cycle", quizOpt2: 'Je ne suis pas encore sûre', quizOpt3: 'Je dois réviser', quizCorrect: 'Exact ! Vous avez compris l\'essentiel. Continuez !', quizWrong: "Pas de souci, révisez quand vous voulez. L'important est de continuer." },
+  de: { videoSoon: 'Video kommt bald', prev: '← Zurück', next: 'Abschließen & weiter →', loading: 'Lade Inhalt...', exercise: 'Übung', exercisePlaceholder: 'Schreibe deine Antwort hier...', save: 'Übung speichern', completeModule: '✓ Modul abschließen', moduleOf: 'Modul {n} von {total}', xpGained: '+{xp} XP verdient', saved: 'Übung gespeichert', quizQuestion: 'Was hast du in diesem Modul gelernt?', quizOpt1: 'Ich habe die Phasen meines Zyklus verstanden', quizOpt2: 'Ich bin mir noch nicht sicher', quizOpt3: 'Ich muss wiederholen', quizCorrect: 'Genau! Du hast das Wesentliche verstanden. Weiter so!', quizWrong: 'Kein Problem, wiederhole wann du willst. Wichtig ist, dass du weitermachst.' }
+};
+function cT(k) { const lang = (typeof currentLang !== 'undefined') ? currentLang : 'es'; return (COURSE_I18N[lang]||COURSE_I18N.es)[k] || COURSE_I18N.es[k] || k; }
+function cReplace(s, vars) { Object.keys(vars||{}).forEach(k => s = s.replace(`{${k}}`, vars[k])); return s; }
 function getLang(obj) {
   if (!obj || typeof obj !== 'object') return obj || '';
   var lang = (typeof currentLang !== 'undefined') ? currentLang : 'es';
@@ -267,7 +276,7 @@ function renderVideoLesson(lesson, courseId, moduleNum, lessonIndex) {
     ? `<div class="video-container"><iframe src="${lesson.videoUrl}" frameborder="0" allowfullscreen></iframe></div>`
     : `<div class="video-placeholder">
         <div class="video-icon">🎬</div>
-        <p>Video próximamente</p>
+        <p>${cT('videoSoon')}</p>
         <span class="video-duration">${lesson.duration}</span>
       </div>`;
 
@@ -278,8 +287,8 @@ function renderVideoLesson(lesson, courseId, moduleNum, lessonIndex) {
     </div>
     ${videoEmbed}
     <div class="lesson-nav">
-      <button class="btn-prev" onclick="prevLesson()">← Anterior</button>
-      <button class="btn-next" onclick="completeAndNext(${lesson.xp})">Completar y continuar →</button>
+      <button class="btn-prev" onclick="prevLesson()">${cT('prev')}</button>
+      <button class="btn-next" onclick="completeAndNext(${lesson.xp})">${cT('next')}</button>
     </div>
   `;
 }
@@ -291,11 +300,11 @@ function renderReadingLesson(lesson, courseId, moduleNum, lessonIndex) {
       <h2>${lesson.title}</h2>
     </div>
     <div class="lesson-content" id="lessonContent">
-      <p class="loading-text">Cargando contenido...</p>
+      <p class="loading-text">${cT('loading')}</p>
     </div>
     <div class="lesson-nav">
-      <button class="btn-prev" onclick="prevLesson()">← Anterior</button>
-      <button class="btn-next" onclick="completeAndNext(${lesson.xp})">Completar y continuar →</button>
+      <button class="btn-prev" onclick="prevLesson()">${cT('prev')}</button>
+      <button class="btn-next" onclick="completeAndNext(${lesson.xp})">${cT('next')}</button>
     </div>
   `;
 }
@@ -303,17 +312,17 @@ function renderReadingLesson(lesson, courseId, moduleNum, lessonIndex) {
 function renderExerciseLesson(lesson, courseId, moduleNum, lessonIndex) {
   return `
     <div class="lesson-header">
-      <span class="lesson-badge">✏️ Ejercicio · 10 min</span>
+      <span class="lesson-badge">✏️ ${cT('exercise')} · 10 min</span>
       <h2>${lesson.title}</h2>
     </div>
     <div class="exercise-box">
       <p>${lesson.prompt}</p>
-      <textarea id="exerciseInput" placeholder="Escribe tu respuesta aquí..." rows="6"></textarea>
-      <button class="btn-save" onclick="saveExercise('${lesson.id}')">Guardar ejercicio</button>
+      <textarea id="exerciseInput" placeholder="${cT('exercisePlaceholder')}" rows="6"></textarea>
+      <button class="btn-save" onclick="saveExercise('${lesson.id}')">${cT('save')}</button>
     </div>
     <div class="lesson-nav">
-      <button class="btn-prev" onclick="prevLesson()">← Anterior</button>
-      <button class="btn-next" onclick="completeAndNext(${lesson.xp})">Completar y continuar →</button>
+      <button class="btn-prev" onclick="prevLesson()">${cT('prev')}</button>
+      <button class="btn-next" onclick="completeAndNext(${lesson.xp})">${cT('next')}</button>
     </div>
   `;
 }
@@ -325,17 +334,17 @@ function renderQuizLesson(lesson, courseId, moduleNum, lessonIndex) {
       <h2>${lesson.title}</h2>
     </div>
     <div class="quiz-box" id="quizBox">
-      <p class="quiz-question">¿Qué has aprendido en este módulo?</p>
+      <p class="quiz-question">${cT('quizQuestion')}</p>
       <div class="quiz-options">
-        <button class="quiz-opt" onclick="answerQuiz(this, true)">Entendí las fases de mi ciclo</button>
-        <button class="quiz-opt" onclick="answerQuiz(this, false)">No estoy segura todavía</button>
-        <button class="quiz-opt" onclick="answerQuiz(this, false)">Necesito repasar</button>
+        <button class="quiz-opt" onclick="answerQuiz(this, true)">${cT('quizOpt1')}</button>
+        <button class="quiz-opt" onclick="answerQuiz(this, false)">${cT('quizOpt2')}</button>
+        <button class="quiz-opt" onclick="answerQuiz(this, false)">${cT('quizOpt3')}</button>
       </div>
       <p class="quiz-feedback" id="quizFeedback"></p>
     </div>
     <div class="lesson-nav">
-      <button class="btn-prev" onclick="prevLesson()">← Anterior</button>
-      <button class="btn-complete" onclick="completeAndNext(${lesson.xp})">✓ Completar módulo (+${lesson.xp} XP)</button>
+      <button class="btn-prev" onclick="prevLesson()">${cT('prev')}</button>
+      <button class="btn-complete" onclick="completeAndNext(${lesson.xp})">${cT('completeModule')} (+${lesson.xp} XP)</button>
     </div>
   `;
 }
@@ -395,7 +404,7 @@ async function completeAndNext(xp) {
   try {
     if (typeof addXP === 'function') {
       await addXP(xp);
-      showXPToast(`+${xp} XP ganados`);
+      showXPToast(cReplace(cT('xpGained'), { xp }));
     }
     nextLesson();
   } catch (e) {
@@ -429,7 +438,7 @@ function updateProgress() {
   const fill = document.getElementById('pbFill');
   const text = document.getElementById('pbPct');
   if (fill) fill.style.width = pct + '%';
-  if (text) text.textContent = `Módulo ${currentModule} de ${course.modules.length}`;
+  if (text) text.textContent = cReplace(cT('moduleOf'), { n: currentModule, total: course.modules.length });
 }
 
 function showXPToast(msg) {
@@ -445,7 +454,7 @@ function saveExercise(lessonId) {
   const input = document.getElementById('exerciseInput');
   if (input && input.value.trim()) {
     localStorage.setItem(`exercise_${lessonId}`, input.value);
-    showXPToast('Ejercicio guardado');
+    showXPToast(cT('saved'));
   }
 }
 
@@ -455,8 +464,8 @@ function answerQuiz(btn, correct) {
   const feedback = document.getElementById('quizFeedback');
   if (feedback) {
     feedback.textContent = correct
-      ? '¡Exacto! Has entendido lo esencial. Sigue así.'
-      : 'No pasa nada, repasa cuando quieras. Lo importante es que sigas avanzando.';
+      ? cT('quizCorrect')
+      : cT('quizWrong');
     feedback.style.color = correct ? '#1A9E8F' : '#E67E22';
   }
 }

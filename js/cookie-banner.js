@@ -98,7 +98,7 @@
       : '';
 
     return `
-    <div id="yayika-cookie-banner" role="dialog" aria-label="Consentimiento de cookies" aria-modal="false" style="
+    <div id="yayika-cookie-banner" role="dialog" aria-label="${ct('cookie_title')}" aria-modal="false" style="
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
       background: #fff; border-top: 1px solid #e5e7eb;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.1); padding: 20px 24px;

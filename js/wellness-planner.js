@@ -89,13 +89,13 @@ const WellnessPlanner = {
   getFallback(phase, lang) {
     return {
       meals: [
-        { name: lang === 'es' ? 'Desayuno nutritivo' : 'Nutritious breakfast', icon: '🥣' },
-        { name: lang === 'es' ? 'Almuerzo balanceado' : 'Balanced lunch', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>' },
+        { name: lang === 'es' ? 'Desayuno nutritivo' : lang === 'pt' ? 'Café da manhã nutritivo' : lang === 'fr' ? 'Petit-déjeuner nutritif' : lang === 'de' ? 'Nahrhaftes Frühstück' : 'Nutritious breakfast', icon: '🥣' },
+        { name: lang === 'es' ? 'Almuerzo balanceado' : lang === 'pt' ? 'Almoço balanceado' : lang === 'fr' ? 'Déjeuner équilibré' : lang === 'de' ? 'Ausgewogenes Mittagessen' : 'Balanced lunch', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>' },
       ],
       exercise: [
-        { name: lang === 'es' ? 'Movimiento suave' : 'Gentle movement', duration: '20 min' },
+        { name: lang === 'es' ? 'Movimiento suave' : lang === 'pt' ? 'Movimento suave' : lang === 'fr' ? 'Mouvement doux' : lang === 'de' ? 'Sanfte Bewegung' : 'Gentle movement', duration: '20 min' },
       ],
-      tip: lang === 'es' ? 'Escucha a tu cuerpo y nutrelo con amor.' : 'Listen to your body and nourish it with love.'
+      tip: lang === 'es' ? 'Escucha a tu cuerpo y nutrelo con amor.' : lang === 'pt' ? 'Ouça seu corpo e nutra-o com amor.' : lang === 'fr' ? 'Écoutez votre corps et nourrissez-le avec amour.' : lang === 'de' ? 'Höre auf deinen Körper und nähre ihn mit Liebe.' : 'Listen to your body and nourish it with love.'
     };
   },
 
@@ -126,11 +126,11 @@ const WellnessPlanner = {
         <div id="wellnessContent" style="padding:4px 0">
           <div style="text-align:center;padding:16px;color:var(--suave);font-size:13px">
             <div style="margin-bottom:6px;animation:pulse 1.5s infinite"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--oro)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c1-3 5.5-6 10-6V4c-4.5 0-9 3-10 6"/><path d="M12 16c-1-3-5.5-6-10-6v12c4.5 0 9-3 10-6"/><circle cx="12" cy="12" r="2"/></svg></div>
-            Preparando tu plan...
+            ${lang === 'es' ? 'Preparando tu plan...' : lang === 'pt' ? 'Preparando seu plano...' : lang === 'fr' ? 'Préparation de votre plan...' : lang === 'de' ? 'Bereite deinen Plan vor...' : 'Preparing your plan...'}
           </div>
         </div>
         <div style="margin-top:10px;font-size:10px;color:var(--suave);text-align:center;line-height:1.4">
-          🤖 Contenido generado por IA — No constituye asesoría médica ni profesional
+          ${lang === 'es' ? '🤖 Contenido generado por IA — No constituye asesoría médica ni profesional' : lang === 'pt' ? '🤖 Conteúdo gerado por IA — Não constitui aconselhamento médico ou profissional' : lang === 'fr' ? '🤖 Contenu généré par IA — Ne constitue pas un avis médical ou professionnel' : lang === 'de' ? '🤖 KI-generierter Inhalt — Keine medizinische oder professionelle Beratung' : '🤖 AI-generated content — Not medical or professional advice'}
         </div>
       </div>
     `;
@@ -164,7 +164,7 @@ const WellnessPlanner = {
         const cycleDay = await this.getCycleDay();
         const phase = CycleTracker?.detectCurrentPhase(cycleDay);
         if (phase) {
-          const phaseNames = { es: { menstrual:'Menstrual',follicular:'Folicular',ovulatory:'Ovulatoria',luteal:'Lútea' }, en: { menstrual:'Menstrual',follicular:'Follicular',ovulatory:'Ovulatory',luteal:'Luteal' } };
+          const phaseNames = { es: { menstrual:'Menstrual',follicular:'Folicular',ovulatory:'Ovulatoria',luteal:'Lútea' }, en: { menstrual:'Menstrual',follicular:'Follicular',ovulatory:'Ovulatory',luteal:'Luteal' }, pt: { menstrual:'Menstrual',follicular:'Folicular',ovulatory:'Ovulatória',luteal:'Lútea' }, fr: { menstrual:'Menstruel',follicular:'Folliculaire',ovulatory:'Ovulatoire',luteal:'Lutéale' }, de: { menstrual:'Menstruation',follicular:'Follikularphase',ovulatory:'Ovulationsphase',luteal:'Lutealphase' } };
           phaseLabel.textContent = `${phase.icon} ${(phaseNames[lang]||phaseNames['es'])[phase.key]||phase.key}`;
         }
       }

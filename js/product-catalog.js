@@ -16,6 +16,8 @@
       beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzado',
       all: 'Todos', filter: 'Filtrar', sort: 'Ordenar', price: 'Precio',
       viewAll: 'Ver todo', popular: 'Popular', newest: 'Nuevo', priceLow: 'Menor precio',
+      loading: 'Cargando catálogo...', error: '⚠️ Error cargando catálogo',
+      backToCatalog: 'Volver al catálogo',
     },
     en: {
       title: '📚 Product Catalog', courses: 'Courses', guides: 'Guides', templates: 'Templates',
@@ -26,6 +28,44 @@
       beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced',
       all: 'All', filter: 'Filter', sort: 'Sort', price: 'Price',
       viewAll: 'View all', popular: 'Popular', newest: 'New', priceLow: 'Lowest price',
+      loading: 'Loading catalog...', error: '⚠️ Error loading catalog',
+      backToCatalog: 'Back to catalog',
+    },
+    pt: {
+      title: '📚 Catálogo de Produtos', courses: 'Cursos', guides: 'Guias', templates: 'Modelos',
+      memberships: 'Assinaturas', featured: 'Destaques', free: 'Grátis', lessons: 'aulas',
+      hours: 'horas', buy: 'Começar', access: 'Acessar', progress: 'Progresso',
+      myProducts: 'Meus Produtos', noProducts: 'Você ainda não tem produtos. Explore o catálogo.',
+      noAccess: 'Obtenha acesso para desbloquear todo o conteúdo', included: 'Incluído',
+      beginner: 'Iniciante', intermediate: 'Intermediário', advanced: 'Avançado',
+      all: 'Todos', filter: 'Filtrar', sort: 'Ordenar', price: 'Preço',
+      viewAll: 'Ver tudo', popular: 'Popular', newest: 'Novo', priceLow: 'Menor preço',
+      loading: 'Carregando catálogo...', error: '⚠️ Erro ao carregar catálogo',
+      backToCatalog: 'Voltar ao catálogo',
+    },
+    fr: {
+      title: '📚 Catalogue de Produits', courses: 'Cours', guides: 'Guides', templates: 'Modèles',
+      memberships: 'Adhésions', featured: 'En vedette', free: 'Gratuit', lessons: 'leçons',
+      hours: 'heures', buy: 'Commencer', access: 'Accéder', progress: 'Progrès',
+      myProducts: 'Mes Produits', noProducts: 'Aucun produit pour le moment. Explorez le catalogue.',
+      noAccess: "Obtenez l'accès pour débloquer tout le contenu", included: 'Inclus',
+      beginner: 'Débutant', intermediate: 'Intermédiaire', advanced: 'Avancé',
+      all: 'Tous', filter: 'Filtrer', sort: 'Trier', price: 'Prix',
+      viewAll: 'Tout voir', popular: 'Populaire', newest: 'Nouveau', priceLow: 'Prix le plus bas',
+      loading: 'Chargement du catalogue...', error: '⚠️ Erreur de chargement',
+      backToCatalog: 'Retour au catalogue',
+    },
+    de: {
+      title: '📚 Produktkatalog', courses: 'Kurse', guides: 'Ratgeber', templates: 'Vorlagen',
+      memberships: 'Mitgliedschaften', featured: 'Empfohlen', free: 'Kostenlos', lessons: 'Lektionen',
+      hours: 'Stunden', buy: 'Starten', access: 'Zugreifen', progress: 'Fortschritt',
+      myProducts: 'Meine Produkte', noProducts: 'Noch keine Produkte. Erkunde den Katalog.',
+      noAccess: 'Schalte alle Inhalte frei', included: 'Enthalten',
+      beginner: 'Anfänger', intermediate: 'Mittel', advanced: 'Fortgeschritten',
+      all: 'Alle', filter: 'Filtern', sort: 'Sortieren', price: 'Preis',
+      viewAll: 'Alle ansehen', popular: 'Beliebt', newest: 'Neu', priceLow: 'Niedrigster Preis',
+      loading: 'Lade Katalog...', error: '⚠️ Fehler beim Laden',
+      backToCatalog: 'Zurück zum Katalog',
     }
   };
 
@@ -48,7 +88,7 @@
             <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
           </circle>
         </svg>
-        <p style="color:var(--texto,#E8E8E8);margin-top:12px;opacity:0.8">Cargando catálogo...</p>
+        <p style="color:var(--texto,#E8E8E8);margin-top:12px;opacity:0.8">${t('loading')}</p>
       </div>`;
   }
 
@@ -192,7 +232,7 @@
         html += `</div>`;
         content.innerHTML = html;
       } catch (err) {
-        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">⚠️ Error cargando catálogo</div>`;
+        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">${t('error')}</div>`;
       }
     },
 
@@ -224,7 +264,7 @@
 
         let html = `
           <div style="padding:0 0 8px">
-            <button onclick="ProductCatalog.loadData()" style="margin-bottom:12px;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:transparent;color:var(--texto,#E8E8E8);font-size:11px;cursor:pointer">← ${currentLang==='es'?'Volver al catálogo':'Back to catalog'}</button>
+            <button onclick="ProductCatalog.loadData()" style="margin-bottom:12px;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:transparent;color:var(--texto,#E8E8E8);font-size:11px;cursor:pointer">← ${t('backToCatalog')}</button>
 
             <div style="background:linear-gradient(135deg,${catColor}15,${catColor}05);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px">
               <span style="font-size:48px;display:block;margin-bottom:8px">${catIcon}</span>
@@ -281,7 +321,7 @@
         html += `</div>`;
         content.innerHTML = html;
       } catch (err) {
-        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">⚠️ Error</div>`;
+        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">⚠️ ${t('error')}</div>`;
       }
     }
   };

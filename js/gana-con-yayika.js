@@ -24,6 +24,15 @@
       region: 'Tu región', trending: 'Popular', free: 'Gratis', from: 'Desde',
       mentors: 'Mentoras disponibles', specialties: 'Especialidades',
       commission: 'Comisión', roi: 'Tu ROI', invested: 'Invertido', earned: 'Ganado',
+      loading: 'Cargando...', error: '⚠️ Error cargando datos',
+      back: '← Volver', viewMarketplace: 'Ver Marketplace →', viewMentors: 'Ver Mentoras →',
+      friends: 'amigas', lastEarnings: 'Últimas ganancias', referred: 'Referido',
+      sale: 'Venta', noProducts: 'Aún no hay productos en el marketplace. ¡Sé la primera en vender!',
+      noMentors: 'Aún no hay mentoras disponibles. ¡Convirtete en la primera!',
+      perHour: '/hora', linkCopied: 'Link copiado al portapapeles ✓',
+      shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
+      shareTextEn: 'Join Yayika! 🌙 I\'m part of this amazing community. Use my code:',
+      specCycle: 'Ciclo', specFinance: 'Finanzas', specWellness: 'Bienestar', specCareer: 'Carrera', specParenting: 'Maternidad',
     },
     en: {
       title: '💰 Earn with Yayika', earnings: 'Your Earnings', total: 'Total earned',
@@ -42,6 +51,96 @@
       region: 'Your region', trending: 'Popular', free: 'Free', from: 'From',
       mentors: 'Available mentors', specialties: 'Specialties',
       commission: 'Commission', roi: 'Your ROI', invested: 'Invested', earned: 'Earned',
+      loading: 'Loading...', error: '⚠️ Error loading data',
+      back: '← Back', viewMarketplace: 'View Marketplace →', viewMentors: 'View Mentors →',
+      friends: 'friends', lastEarnings: 'Recent earnings', referred: 'Referral',
+      sale: 'Sale', noProducts: 'No products in the marketplace yet. Be the first to sell!',
+      noMentors: 'No mentors available yet. Become the first one!',
+      perHour: '/hour', linkCopied: 'Link copied to clipboard ✓',
+      shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
+      shareTextEn: 'Join Yayika! 🌙 I\'m part of this amazing community. Use my code:',
+      specCycle: 'Cycle', specFinance: 'Finance', specWellness: 'Wellness', specCareer: 'Career', specParenting: 'Parenting',
+    },
+    pt: {
+      title: '💰 Ganhe com Yayika', earnings: 'Seus Ganhos', total: 'Total ganho',
+      pending: 'Pendente', available: 'Disponível', paidOut: 'Já recebido',
+      referrals: 'Por indicados', marketplace: 'Por vendas', mentoring: 'Por mentoring',
+      inviteTitle: 'Indique e Ganhe', inviteDesc: 'Compartilhe seu código e ganhe comissões para cada amiga que entrar',
+      myCode: 'Seu código', copyCode: 'Copiar código', copied: 'Copiado!',
+      shareNow: 'Compartilhar agora', inviteLink: 'Link de convite',
+      marketplaceTitle: 'Marketplace Entre Nosotras', sellTitle: 'Venda seu produto',
+      sellDesc: 'Modelos, guias, cursos — crie e venda para outras mulheres',
+      mentoringTitle: 'Mentoring entre Nosotras', mentoringDesc: 'Encontre mentoras ou torne-se uma',
+      roiTitle: 'Seu Valor no Yayika', roiDesc: 'Quanto você ganhou vs quanto investiu',
+      sessions: 'sessões', sales: 'vendas', rating: 'avaliação',
+      bookSession: 'Agendar sessão', viewProfile: 'Ver perfil',
+      noEarnings: 'Ainda não tem ganhos. Indique amigas ou venda seu primeiro produto!',
+      region: 'Sua região', trending: 'Popular', free: 'Grátis', from: 'A partir de',
+      mentors: 'Mentoras disponíveis', specialties: 'Especialidades',
+      commission: 'Comissão', roi: 'Seu ROI', invested: 'Investido', earned: 'Ganho',
+      loading: 'Carregando...', error: '⚠️ Erro ao carregar dados',
+      back: '← Voltar', viewMarketplace: 'Ver Marketplace →', viewMentors: 'Ver Mentorras →',
+      friends: 'amigas', lastEarnings: 'Últimos ganhos', referred: 'Indicado',
+      sale: 'Venda', noProducts: 'Ainda não há produtos no marketplace. Seja a primeira a vender!',
+      noMentors: 'Ainda não há mentoras disponíveis. Torne-se a primeira!',
+      perHour: '/hora', linkCopied: 'Link copiado para a área de transferência ✓',
+      shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
+      shareTextEn: 'Join Yayika! 🌙 I\'m part of this amazing community. Use my code:',
+      specCycle: 'Ciclo', specFinance: 'Finanças', specWellness: 'Bem-estar', specCareer: 'Carreira', specParenting: 'Maternidade',
+    },
+    fr: {
+      title: '💰 Gagnez avec Yayika', earnings: 'Vos Gains', total: 'Total gagné',
+      pending: 'En attente', available: 'Disponible', paidOut: 'Payé',
+      referrals: 'Parrainages', marketplace: 'Ventes', mentoring: 'Mentorat',
+      inviteTitle: 'Parrainez et Gagnez', inviteDesc: 'Partagez votre code et gagnez des commissions pour chaque amie qui rejoint',
+      myCode: 'Votre code', copyCode: 'Copier le code', copied: 'Copié !',
+      shareNow: 'Partager maintenant', inviteLink: "Lien d'invitation",
+      marketplaceTitle: 'Marketplace Entre Nosotras', sellTitle: 'Vendez votre produit',
+      sellDesc: 'Modèles, guides, cours — créez et vendez à d\'autres femmes',
+      mentoringTitle: 'Mentorat entre Nous', mentoringDesc: 'Trouvez des mentors ou devenez-en un',
+      roiTitle: 'Votre Valeur sur Yayika', roiDesc: 'Combien vous avez gagné vs investi',
+      sessions: 'sessions', sales: 'ventes', rating: 'note',
+      bookSession: 'Réserver une session', viewProfile: 'Voir le profil',
+      noEarnings: 'Aucun gain pour le moment. Parrainez des amies ou vendez votre premier produit !',
+      region: 'Votre région', trending: 'Populaire', free: 'Gratuit', from: 'À partir de',
+      mentors: 'Mentors disponibles', specialties: 'Spécialités',
+      commission: 'Commission', roi: 'Votre ROI', invested: 'Investi', earned: 'Gagné',
+      loading: 'Chargement...', error: '⚠️ Erreur de chargement',
+      back: '← Retour', viewMarketplace: 'Voir le Marketplace →', viewMentors: 'Voir les Mentors →',
+      friends: 'amies', lastEarnings: 'Gains récents', referred: 'Parrainé',
+      sale: 'Vente', noProducts: 'Aucun produit sur le marketplace. Soyez la première à vendre !',
+      noMentors: 'Aucun mentor disponible. Devenez le premier !',
+      perHour: '/heure', linkCopied: 'Lien copié dans le presse-papiers ✓',
+      shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
+      shareTextEn: 'Join Yayika! 🌙 I\'m part of this amazing community. Use my code:',
+      specCycle: 'Cycle', specFinance: 'Finance', specWellness: 'Bien-être', specCareer: 'Carrière', specParenting: 'Parentalité',
+    },
+    de: {
+      title: '💰 Verdienen mit Yayika', earnings: 'Deine Einnahmen', total: 'Gesamt verdient',
+      pending: 'Ausstehend', available: 'Verfügbar', paidOut: 'Ausgezahlt',
+      referrals: 'Durch Empfehlungen', marketplace: 'Durch Verkäufe', mentoring: 'Durch Mentoring',
+      inviteTitle: 'Empfehlen & Verdienen', inviteDesc: 'Teile deinen Code und verdiene Provisionen für jede Freundin, die beitritt',
+      myCode: 'Dein Code', copyCode: 'Code kopieren', copied: 'Kopiert!',
+      shareNow: 'Jetzt teilen', inviteLink: 'Einladungslink',
+      marketplaceTitle: 'Entre Nosotras Marketplace', sellTitle: 'Verkaufe dein Produkt',
+      sellDesc: 'Vorlagen, Ratgeber, Kurse — erstelle und verkaufe an andere Frauen',
+      mentoringTitle: 'Peer Mentoring', mentoringDesc: 'Finde Mentoren oder werde selbst eine',
+      roiTitle: 'Dein Wert bei Yayika', roiDesc: 'Wie viel du verdient hast vs investiert hast',
+      sessions: 'Sitzungen', sales: 'Verkäufe', rating: 'Bewertung',
+      bookSession: 'Sitzung buchen', viewProfile: 'Profil ansehen',
+      noEarnings: 'Noch keine Einnahmen. Empfehle Freundinnen oder verkaufe dein erstes Produkt!',
+      region: 'Deine Region', trending: 'Beliebt', free: 'Kostenlos', from: 'Ab',
+      mentors: 'Verfügbare Mentoren', specialties: 'Spezialgebiete',
+      commission: 'Provision', roi: 'Dein ROI', invested: 'Investiert', earned: 'Verdient',
+      loading: 'Laden...', error: '⚠️ Fehler beim Laden',
+      back: '← Zurück', viewMarketplace: 'Marketplace ansehen →', viewMentors: 'Mentoren ansehen →',
+      friends: 'Freundinnen', lastEarnings: 'Letzte Einnahmen', referred: 'Empfohlen',
+      sale: 'Verkauf', noProducts: 'Noch keine Produkte im Marketplace. Sei die Erste zum Verkaufen!',
+      noMentors: 'Noch keine Mentoren verfügbar. Werde die Erste!',
+      perHour: '/Stunde', linkCopied: 'Link in Zwischenablage kopiert ✓',
+      shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
+      shareTextEn: 'Join Yayika! 🌙 I\'m part of this amazing community. Use my code:',
+      specCycle: 'Zyklus', specFinance: 'Finanzen', specWellness: 'Wellness', specCareer: 'Karriere', specParenting: 'Elternschaft',
     }
   };
 
@@ -60,7 +159,7 @@
           <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/>
         </circle>
       </svg>
-      <p style="color:var(--texto,#E8E8E8);margin-top:10px;opacity:0.7;font-size:12px">Cargando...</p>
+      <p style="color:var(--texto,#E8E8E8);margin-top:10px;opacity:0.7;font-size:12px">${t('loading')}</p>
     </div>`;
   }
 
@@ -135,19 +234,19 @@
             <div style="font-size:20px;margin-bottom:4px">🌱</div>
             <div style="font-size:14px;font-weight:700;color:var(--turquesa,#00B4D8)">${fmtCents(e.referrals || 0, r.currency)}</div>
             <div style="font-size:9px;color:var(--texto,#E8E8E8);opacity:0.5">${tr.referrals}</div>
-            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.referralsCount || 0} amigas</div>
+            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.referralsCount || 0} ${t('friends')}</div>
           </div>
           <div style="background:rgba(233,30,99,0.06);border-radius:10px;padding:12px;text-align:center">
             <div style="font-size:20px;margin-bottom:4px">🛒</div>
             <div style="font-size:14px;font-weight:700;color:var(--rosa,#E91E63)">${fmtCents(e.marketplace || 0, r.currency)}</div>
             <div style="font-size:9px;color:var(--texto,#E8E8E8);opacity:0.5">${tr.marketplace}</div>
-            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.productsSold || 0} ventas</div>
+            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.productsSold || 0} ${t('sales')}</div>
           </div>
           <div style="background:rgba(123,94,167,0.06);border-radius:10px;padding:12px;text-align:center">
             <div style="font-size:20px;margin-bottom:4px">👩‍🏫</div>
             <div style="font-size:14px;font-weight:700;color:var(--lila,#7B5EA7)">${fmtCents(e.mentoring || 0, r.currency)}</div>
             <div style="font-size:9px;color:var(--texto,#E8E8E8);opacity:0.5">${tr.mentoring}</div>
-            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.mentoringSessions || 0} sesiones</div>
+            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.mentoringSessions || 0} ${t('sessions')}</div>
           </div>
         </div>`;
 
@@ -187,10 +286,10 @@
         // --- Recent Earnings ---
         if (d.recent && d.recent.length > 0) {
           html += `<div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;margin-bottom:12px">
-            <div style="font-weight:600;font-size:12px;color:var(--texto,#E8E8E8);margin-bottom:8px">📈 Últimas ganancias</div>`;
+            <div style="font-weight:600;font-size:12px;color:var(--texto,#E8E8E8);margin-bottom:8px">📈 ${t('lastEarnings')}</div>`;
           d.recent.slice(0, 5).forEach(r => {
             const srcIcon = r.source === 'referral_commission' ? '🌱' : r.source === 'marketplace_sale' ? '🛒' : '👩‍🏫';
-            const srcLabel = r.source === 'referral_commission' ? 'Referido' : r.source === 'marketplace_sale' ? 'Venta' : 'Mentoring';
+            const srcLabel = r.source === 'referral_commission' ? t('referred') : r.source === 'marketplace_sale' ? t('sale') : 'Mentoring';
             const dateStr = new Date(r.created_at).toLocaleDateString(currentLang==='es'?'es':'en', { month:'short', day:'numeric' });
             html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
               <span style="font-size:14px">${srcIcon}</span>
@@ -214,14 +313,14 @@
         html += `<div style="background:rgba(233,30,99,0.06);border-radius:12px;padding:14px;margin-bottom:12px">
           <div style="font-weight:600;font-size:13px;color:var(--rosa,#E91E63);margin-bottom:6px">🛒 ${tr.marketplaceTitle}</div>
           <div style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6;margin-bottom:10px">${tr.sellDesc}</div>
-          <button onclick="GanaConYayika.showMarketplace()" style="width:100%;padding:10px;border:1px solid var(--rosa,#E91E63);border-radius:8px;background:transparent;color:var(--rosa,#E91E63);font-size:11px;font-weight:600;cursor:pointer">Ver Marketplace →</button>
+          <button onclick="GanaConYayika.showMarketplace()" style="width:100%;padding:10px;border:1px solid var(--rosa,#E91E63);border-radius:8px;background:transparent;color:var(--rosa,#E91E63);font-size:11px;font-weight:600;cursor:pointer">${t('viewMarketplace')}</button>
         </div>`;
 
         // --- Mentoring Preview ---
         html += `<div style="background:rgba(123,94,167,0.06);border-radius:12px;padding:14px">
           <div style="font-weight:600;font-size:13px;color:var(--lila,#7B5EA7);margin-bottom:6px">👩‍🏫 ${tr.mentoringTitle}</div>
           <div style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6;margin-bottom:10px">${tr.mentoringDesc}</div>
-          <button onclick="GanaConYayika.showMentors()" style="width:100%;padding:10px;border:1px solid var(--lila,#7B5EA7);border-radius:8px;background:transparent;color:var(--lila,#7B5EA7);font-size:11px;font-weight:600;cursor:pointer">Ver Mentoras →</button>
+          <button onclick="GanaConYayika.showMentors()" style="width:100%;padding:10px;border:1px solid var(--lila,#7B5EA7);border-radius:8px;background:transparent;color:var(--lila,#7B5EA7);font-size:11px;font-weight:600;cursor:pointer">${t('viewMentors')}</button>
         </div>`;
 
         html += `</div>`;
@@ -242,13 +341,13 @@
     async share(code) {
       const url = `https://yayika.com/?ref=${code}`;
       const text = currentLang === 'es'
-        ? `¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código: ${code}`
-        : `Join Yayika! 🌙 I'm part of this amazing community. Use my code: ${code}`;
+        ? `${t('shareTextEs')} ${code}`
+        : `${t('shareTextEn')} ${code}`;
       if (navigator.share) {
         try { await navigator.share({ title: 'Yayika', text, url }); } catch(e) {}
       } else {
         await navigator.clipboard.writeText(`${text}\n${url}`);
-        if (typeof showGlobalAlert === 'function') showGlobalAlert('Link copiado al portapapeles ✓', 'success');
+        if (typeof showGlobalAlert === 'function') showGlobalAlert(t('linkCopied'), 'success');
       }
     },
 
@@ -267,11 +366,11 @@
         const products = data.products || [];
 
         let html = `<div style="padding:0 0 4px">
-          <button onclick="GanaConYayika.loadData()" style="margin-bottom:12px;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:transparent;color:var(--texto,#E8E8E8);font-size:11px;cursor:pointer">← Volver</button>
+          <button onclick="GanaConYayika.loadData()" style="margin-bottom:12px;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:transparent;color:var(--texto,#E8E8E8);font-size:11px;cursor:pointer">${t('back')}</button>
           <div style="font-weight:600;font-size:14px;color:var(--rosa,#E91E63);margin-bottom:12px">🛒 ${tr.marketplaceTitle}</div>`;
 
         if (products.length === 0) {
-          html += `<div style="text-align:center;padding:30px;color:var(--texto,#E8E8E8);opacity:0.4;font-size:12px">Aún no hay productos en el marketplace. ¡Sé la primera en vender!</div>`;
+          html += `<div style="text-align:center;padding:30px;color:var(--texto,#E8E8E8);opacity:0.4;font-size:12px">${t('noProducts')}</div>`;
         } else {
           html += `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">`;
           products.forEach(p => {
@@ -282,7 +381,7 @@
               <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5;margin-bottom:6px">${p.creator_name || 'Yayika'}</div>
               <div style="display:flex;justify-content:space-between;align-items:center">
                 <span style="font-size:14px;font-weight:700;color:var(--rosa,#E91E63)">${price}</span>
-                <span style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4">⭐ ${p.rating_avg || 0} · ${p.total_sales || 0} ventas</span>
+                <span style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4">⭐ ${p.rating_avg || 0} · ${p.total_sales || 0} ${t('sales')}</span>
               </div>
             </div>`;
           });
@@ -291,7 +390,7 @@
         html += `</div>`;
         content.innerHTML = html;
       } catch (err) {
-        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">⚠️ Error</div>`;
+        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">${t('error')}</div>`;
       }
     },
 
@@ -310,25 +409,25 @@
         const mentors = data.mentors || [];
 
         let html = `<div style="padding:0 0 4px">
-          <button onclick="GanaConYayika.loadData()" style="margin-bottom:12px;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:transparent;color:var(--texto,#E8E8E8);font-size:11px;cursor:pointer">← Volver</button>
+          <button onclick="GanaConYayika.loadData()" style="margin-bottom:12px;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:transparent;color:var(--texto,#E8E8E8);font-size:11px;cursor:pointer">${t('back')}</button>
           <div style="font-weight:600;font-size:14px;color:var(--lila,#7B5EA7);margin-bottom:12px">👩‍🏫 ${tr.mentors}</div>`;
 
         if (mentors.length === 0) {
-          html += `<div style="text-align:center;padding:30px;color:var(--texto,#E8E8E8);opacity:0.4;font-size:12px">Aún no hay mentoras disponibles. ¡Convirtete en la primera!</div>`;
+          html += `<div style="text-align:center;padding:30px;color:var(--texto,#E8E8E8);opacity:0.4;font-size:12px">${t('noMentors')}</div>`;
         } else {
           mentors.forEach(m => {
             const specs = (m.specialties || []);
-            const specLabels = { cycle:'Ciclo', finance:'Finanzas', wellness:'Bienestar', career:'Carrera', parenting:'Maternidad' };
+            const specLabels = { cycle: t('specCycle'), finance: t('specFinance'), wellness: t('specWellness'), career: t('specCareer'), parenting: t('specParenting') };
             html += `<div style="background:rgba(123,94,167,0.06);border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid rgba(123,94,167,0.1)">
               <div style="display:flex;align-items:center;gap:10px">
                 <div style="width:40px;height:40px;border-radius:50%;background:var(--lila,#7B5EA7);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">${(m.display_name||'M')[0]}</div>
                 <div style="flex:1">
                   <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${m.display_name || 'Mentor'}</div>
-                  <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5">${m.total_sessions || 0} sesiones · ⭐ ${m.rating_avg || 0}</div>
+                  <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5">${m.total_sessions || 0} ${t('sessions')} · ⭐ ${m.rating_avg || 0}</div>
                 </div>
                 <div style="text-align:right">
                   <div style="font-size:14px;font-weight:700;color:var(--lila,#7B5EA7)">$${(m.hourly_rate_cents/100).toFixed(0)}</div>
-                  <div style="font-size:8px;color:var(--texto,#E8E8E8);opacity:0.4">/hora</div>
+                  <div style="font-size:8px;color:var(--texto,#E8E8E8);opacity:0.4">${t('perHour')}</div>
                 </div>
               </div>
               ${m.bio ? `<div style="margin-top:8px;font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6;line-height:1.4">${m.bio}</div>` : ''}
@@ -341,7 +440,7 @@
         html += `</div>`;
         content.innerHTML = html;
       } catch (err) {
-        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">⚠️ Error</div>`;
+        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">${t('error')}</div>`;
       }
     }
   };

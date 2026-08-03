@@ -17,7 +17,8 @@
       periodStart: 'Inicio de período', ovulation: 'Ovulación', daysLeft: 'días restantes',
       history: 'Historial de Ciclos', cycle: 'Ciclo', length: 'Duración',
       insights: 'Insights personalizados', noData: 'Registra tu ciclo para ver analytics detallados',
-      score: 'Puntuación', phases: { menstrual: 'Menstrual', follicular: 'Folicular', ovulatory: 'Ovulatorio', luteal: 'Lúteo' },
+      score: 'Puntuación', today: 'Hoy',
+      phases: { menstrual: 'Menstrual', follicular: 'Folicular', ovulatory: 'Ovulatorio', luteal: 'Lúteo' },
       confidence: 'Confianza'
     },
     en: {
@@ -30,8 +31,51 @@
       periodStart: 'Period start', ovulation: 'Ovulation', daysLeft: 'days remaining',
       history: 'Cycle History', cycle: 'Cycle', length: 'Length',
       insights: 'Personalized insights', noData: 'Log your cycle to see detailed analytics',
-      score: 'Score', phases: { menstrual: 'Menstrual', follicular: 'Follicular', ovulatory: 'Ovulatory', luteal: 'Luteal' },
+      score: 'Score', today: 'Today',
+      phases: { menstrual: 'Menstrual', follicular: 'Follicular', ovulatory: 'Ovulatory', luteal: 'Luteal' },
       confidence: 'Confidence'
+    },
+    pt: {
+      title: '🧠 Painel de Inteligência do Ciclo', loading: 'Analisando seu ciclo...', refresh: 'Atualizar',
+      overview: 'Resumo do Ciclo', avgCycle: 'Ciclo média', avgPeriod: 'Período médio',
+      cyclesTracked: 'Ciclos registrados', regularity: 'Regularidade', days: 'dias',
+      excellent: 'Excelente', good: 'Boa', irregular: 'Irregular',
+      phasePatterns: 'Padrões por Fase', energy: 'Energia', mood: 'Humor',
+      symptoms: 'Sintomas comuns', predictions: 'Próximas previsões',
+      periodStart: 'Início do período', ovulation: 'Ovulação', daysLeft: 'dias restantes',
+      history: 'Histórico de Ciclos', cycle: 'Ciclo', length: 'Duração',
+      insights: 'Insights personalizados', noData: 'Registre seu ciclo para ver análises detalhadas',
+      score: 'Pontuação', today: 'Hoje',
+      phases: { menstrual: 'Menstrual', follicular: 'Folicular', ovulatory: 'Ovulatório', luteal: 'Lúteo' },
+      confidence: 'Confiança'
+    },
+    fr: {
+      title: '🧠 Tableau de Bord Intelligence du Cycle', loading: 'Analyse de votre cycle...', refresh: 'Actualiser',
+      overview: 'Aperçu du Cycle', avgCycle: 'Cycle moyen', avgPeriod: 'Règles moyennes',
+      cyclesTracked: 'Cycles enregistrés', regularity: 'Régularité', days: 'jours',
+      excellent: 'Excellent', good: 'Bon', irregular: 'Irrégulier',
+      phasePatterns: 'Motifs par Phase', energy: 'Énergie', mood: 'Humeur',
+      symptoms: 'Symptômes courants', predictions: 'Prochaines prédictions',
+      periodStart: 'Début des règles', ovulation: 'Ovulation', daysLeft: 'jours restants',
+      history: 'Historique des Cycles', cycle: 'Cycle', length: 'Durée',
+      insights: 'Aperçus personnalisés', noData: 'Enregistrez votre cycle pour voir les analyses détaillées',
+      score: 'Score', today: "Aujourd'hui",
+      phases: { menstrual: 'Ménstruel', follicular: 'Folliculaire', ovulatory: 'Ovulatoire', luteal: 'Lutéal' },
+      confidence: 'Confiance'
+    },
+    de: {
+      title: '🧠 Zyklus-Intelligenz Dashboard', loading: 'Analysiere deinen Zyklus...', refresh: 'Aktualisieren',
+      overview: 'Zyklusübersicht', avgCycle: 'Durchschn. Zyklus', avgPeriod: 'Durchschn. Periode',
+      cyclesTracked: 'Erfasste Zyklen', regularity: 'Regelmäßigkeit', days: 'Tage',
+      excellent: 'Ausgezeichnet', good: 'Gut', irregular: 'Unregelmäßig',
+      phasePatterns: 'Phasenmuster', energy: 'Energie', mood: 'Stimmung',
+      symptoms: 'Häufige Symptome', predictions: 'Nächste Vorhersagen',
+      periodStart: 'Beginn der Periode', ovulation: 'Eisprung', daysLeft: 'Tage übrig',
+      history: 'Zyklushistorie', cycle: 'Zyklus', length: 'Länge',
+      insights: 'Personalisierte Erkenntnisse', noData: 'Erfasse deinen Zyklus für detaillierte Analysen',
+      score: 'Punktzahl', today: 'Heute',
+      phases: { menstrual: 'Menstruation', follicular: 'Follikularphase', ovulatory: 'Ovulationsphase', luteal: 'Lutealphase' },
+      confidence: 'Konfidenz'
     }
   };
 
@@ -153,7 +197,7 @@
             <span style="font-size:20px">${icon}</span>
             <div style="flex:1">
               <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${label}</div>
-              <div style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6">${dateStr} — ${days > 0 ? `${days} ${tr.daysLeft||t('daysLeft')}` : 'Hoy'}</div>
+              <div style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6">${dateStr} — ${days > 0 ? `${days} ${tr.daysLeft||t('daysLeft')}` : t('today')}</div>
             </div>
             <div style="font-size:11px;color:var(--turquesa,#00B4D8);opacity:0.8">📈 ${conf}%</div>
           </div>`;

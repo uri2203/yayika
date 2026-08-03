@@ -104,7 +104,8 @@ async function addTransaction(txData) {
   
   // Award XP for logging
   await addXP(5);
-  await logActivity('transaction', `${txData.type === 'expense' ? 'Gasto' : 'Ingreso'}: ${txData.amount}`, 5);
+  const txTypeText = { es: txData.type === 'expense' ? 'Gasto' : 'Ingreso', en: txData.type === 'expense' ? 'Expense' : 'Income', pt: txData.type === 'expense' ? 'Despesa' : 'Receita', fr: txData.type === 'expense' ? 'Dépense' : 'Revenu', de: txData.type === 'expense' ? 'Ausgabe' : 'Einnahme' };
+  await logActivity('transaction', `${txTypeText[currentLang] || txTypeText['es']}: ${txData.amount}`, 5);
   
   return true;
 }
@@ -226,7 +227,8 @@ async function createSavingsGoal(goalData) {
   if (error) throw error;
   
   await addXP(20);
-  await logActivity('savings_goal', `Creó meta: ${goalData.name}`, 20);
+  const goalText = { es: `Creó meta: ${goalData.name}`, en: `Goal created: ${goalData.name}`, pt: `Meta criada: ${goalData.name}`, fr: `Objectif créé : ${goalData.name}`, de: `Ziel erstellt: ${goalData.name}` };
+  await logActivity('savings_goal', goalText[currentLang] || goalText['es'], 20);
   
   return data;
 }
@@ -271,8 +273,10 @@ async function updateSavingsGoal(goalId, amount) {
   
   if (isCompleted) {
     await addXP(100);
-    await logActivity('savings_complete', `Meta completada: ${goal.goal_name}`, 100);
-    showToast('🎉 ¡Meta de ahorro completada! +100 XP');
+    const completeText = { es: `Meta completada: ${goal.goal_name}`, en: `Goal completed: ${goal.goal_name}`, pt: `Meta concluída: ${goal.goal_name}`, fr: `Objectif atteint : ${goal.goal_name}`, de: `Ziel erreicht: ${goal.goal_name}` };
+    await logActivity('savings_complete', completeText[currentLang] || completeText['es'], 100);
+    const toastText = { es: '🎉 ¡Meta de ahorro completada! +100 XP', en: '🎉 Savings goal completed! +100 XP', pt: '🎉 Meta de economia concluída! +100 XP', fr: '🎉 Objectif d\'épargne atteint ! +100 XP', de: '🎉 Sparkonto-Ziel erreicht! +100 XP' };
+    showToast(toastText[currentLang] || toastText['es']);
   } else {
     await addXP(10);
   }

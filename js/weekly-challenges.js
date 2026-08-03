@@ -13,6 +13,9 @@
       stats: 'Tus estadísticas', activeCount: 'Activos', completedCount: 'Completados',
       streak: 'Racha', available: 'Retos disponibles', myChallenges: 'Mis Retos',
       done: 'Hecho hoy', congratulations: '¡Felicidades! Reto completado 🎉',
+      loading: 'Cargando retos...', error: '⚠️ Error cargando retos',
+      enrollSuccess: '¡Reto aceptado! 🎯', checkinSuccess: 'Check-in registrado ✓',
+      challengeComplete: '¡Reto completado!',
       difficulty: { easy: 'Fácil', medium: 'Medio', hard: 'Difícil' },
       categories: { cycle: 'Ciclo', fitness: 'Fitness', mindfulness: 'Mindfulness', finance: 'Finanzas', social: 'Social', streak: 'Racha' },
     },
@@ -23,8 +26,50 @@
       stats: 'Your stats', activeCount: 'Active', completedCount: 'Completed',
       streak: 'Streak', available: 'Available challenges', myChallenges: 'My Challenges',
       done: 'Done today', congratulations: 'Congratulations! Challenge completed 🎉',
+      loading: 'Loading challenges...', error: '⚠️ Error loading challenges',
+      enrollSuccess: 'Challenge accepted! 🎯', checkinSuccess: 'Check-in registered ✓',
+      challengeComplete: 'Challenge completed!',
       difficulty: { easy: 'Easy', medium: 'Medium', hard: 'Hard' },
       categories: { cycle: 'Cycle', fitness: 'Fitness', mindfulness: 'Mindfulness', finance: 'Finance', social: 'Social', streak: 'Streak' },
+    },
+    pt: {
+      title: '🎯 Desafios Semanais', join: 'Entrar', checkin: 'Check-in ✓',
+      daysLeft: 'dias restantes', completed: 'Concluído', xpEarned: 'XP ganhos',
+      noActive: 'Você não tem desafios ativos. Participe!', progress: 'Progresso',
+      stats: 'Suas estatísticas', activeCount: 'Ativos', completedCount: 'Concluídos',
+      streak: 'Sequência', available: 'Desafios disponíveis', myChallenges: 'Meus Desafios',
+      done: 'Feito hoje', congratulations: 'Parabéns! Desafio concluído 🎉',
+      loading: 'Carregando desafios...', error: '⚠️ Erro ao carregar desafios',
+      enrollSuccess: 'Desafio aceito! 🎯', checkinSuccess: 'Check-in registrado ✓',
+      challengeComplete: 'Desafio concluído!',
+      difficulty: { easy: 'Fácil', medium: 'Médio', hard: 'Difícil' },
+      categories: { cycle: 'Ciclo', fitness: 'Fitness', mindfulness: 'Mindfulness', finance: 'Finanças', social: 'Social', streak: 'Sequência' },
+    },
+    fr: {
+      title: '🎯 Défis Hebdomadaires', join: 'Rejoindre', checkin: 'Check-in ✓',
+      daysLeft: 'jours restants', completed: 'Terminé', xpEarned: 'XP gagnés',
+      noActive: 'Aucun défi actif. Rejoignez-en un !', progress: 'Progrès',
+      stats: 'Vos stats', activeCount: 'Actifs', completedCount: 'Terminés',
+      streak: 'Série', available: 'Défis disponibles', myChallenges: 'Mes Défis',
+      done: "Fait aujourd'hui", congratulations: 'Félicitations ! Défi terminé 🎉',
+      loading: 'Chargement des défis...', error: '⚠️ Erreur de chargement',
+      enrollSuccess: 'Défi accepté ! 🎯', checkinSuccess: 'Check-in enregistré ✓',
+      challengeComplete: 'Défi terminé !',
+      difficulty: { easy: 'Facile', medium: 'Moyen', hard: 'Difficile' },
+      categories: { cycle: 'Cycle', fitness: 'Fitness', mindfulness: 'Pleine conscience', finance: 'Finance', social: 'Social', streak: 'Série' },
+    },
+    de: {
+      title: '🎯 Wöchentliche Challenges', join: 'Beitreten', checkin: 'Check-in ✓',
+      daysLeft: 'Tage übrig', completed: 'Abgeschlossen', xpEarned: 'XP verdient',
+      noActive: 'Keine aktiven Challenges. Tritt einer bei!', progress: 'Fortschritt',
+      stats: 'Deine Stats', activeCount: 'Aktiv', completedCount: 'Abgeschlossen',
+      streak: 'Serie', available: 'Verfügbare Challenges', myChallenges: 'Meine Challenges',
+      done: 'Heute erledigt', congratulations: 'Herzlichen Glückwunsch! Challenge abgeschlossen 🎉',
+      loading: 'Lade Challenges...', error: '⚠️ Fehler beim Laden',
+      enrollSuccess: 'Challenge angenommen! 🎯', checkinSuccess: 'Check-in registriert ✓',
+      challengeComplete: 'Challenge abgeschlossen!',
+      difficulty: { easy: 'Leicht', medium: 'Mittel', hard: 'Schwer' },
+      categories: { cycle: 'Zyklus', fitness: 'Fitness', mindfulness: 'Achtsamkeit', finance: 'Finanzen', social: 'Sozial', streak: 'Serie' },
     }
   };
 
@@ -40,7 +85,7 @@
           <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/>
         </circle>
       </svg>
-      <p style="color:var(--texto,#E8E8E8);margin-top:10px;opacity:0.7;font-size:12px">Cargando retos...</p>
+      <p style="color:var(--texto,#E8E8E8);margin-top:10px;opacity:0.7;font-size:12px">${t('loading')}</p>
     </div>`;
   }
 
@@ -182,7 +227,7 @@
         html += `</div>`;
         content.innerHTML = html;
       } catch (err) {
-        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">⚠️ Error cargando retos</div>`;
+        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">${t('error')}</div>`;
       }
     },
 
@@ -196,7 +241,7 @@
         const data = await res.json();
         if (data.success) {
           await this.loadData();
-          if (typeof showGlobalAlert === 'function') showGlobalAlert('¡Reto aceptado! 🎯', 'success');
+          if (typeof showGlobalAlert === 'function') showGlobalAlert(t('enrollSuccess'), 'success');
         }
       } catch (err) {}
     },
@@ -212,9 +257,9 @@
         if (data.success) {
           await this.loadData();
           if (data.completed) {
-            if (typeof showGlobalAlert === 'function') showGlobalAlert(`¡Reto completado! +${data.xp_earned} XP 🎉`, 'success');
+            if (typeof showGlobalAlert === 'function') showGlobalAlert(`${t('challengeComplete')} +${data.xp_earned} XP 🎉`, 'success');
           } else {
-            if (typeof showGlobalAlert === 'function') showGlobalAlert(`Check-in registrado ✓ (${data.progress_pct}%)`, 'success');
+            if (typeof showGlobalAlert === 'function') showGlobalAlert(`${t('checkinSuccess')} (${data.progress_pct}%)`, 'success');
           }
         }
       } catch (err) {}

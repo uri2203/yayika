@@ -84,7 +84,14 @@ async function awardBadge(badgeKey) {
     
     // Show celebration
     const tierEmoji = { bronze: '🥉', silver: '🥈', gold: '🥇', diamond: '💎' };
-    showToast(`${tierEmoji[badge.tier]} ${badge.icon} ¡Logro desbloqueado: ${badge.name[lang] || badge.name['es']}!`);
+    const badgeUnlockText = {
+      es: `${tierEmoji[badge.tier]} ${badge.icon} ¡Logro desbloqueado: ${badge.name[lang] || badge.name['es']}!`,
+      en: `${tierEmoji[badge.tier]} ${badge.icon} Badge unlocked: ${badge.name[lang] || badge.name['es']}!`,
+      pt: `${tierEmoji[badge.tier]} ${badge.icon} Conquista desbloqueada: ${badge.name[lang] || badge.name['es']}!`,
+      fr: `${tierEmoji[badge.tier]} ${badge.icon} Badge débloqué : ${badge.name[lang] || badge.name['es']} !`,
+      de: `${tierEmoji[badge.tier]} ${badge.icon} Abzeichen freigeschaltet: ${badge.name[lang] || badge.name['es']}!`
+    };
+    showToast(badgeUnlockText[lang] || badgeUnlockText['es']);
     
     return true;
   } catch (e) {
@@ -236,7 +243,8 @@ async function useFreezeToken() {
     
     if (data === 'OK') {
       await awardBadge('freeze_user');
-      showToast('🧊 Token de congelamiento usado. Tu racha está protegida.');
+      const freezeText = { es: '🧊 Token de congelamiento usado. Tu racha está protegida.', en: '🧊 Freeze token used. Your streak is protected.', pt: '🧊 Token de congelamento usado. Sua sequência está protegida.', fr: '🧊 Jeton gel utilisé. Votre série est protégée.', de: '🧊 Freeze-Token verwendet. Deine Serie ist geschützt.' };
+      showToast(freezeText[currentLang] || freezeText['es']);
       return 'OK';
     }
     
@@ -279,7 +287,8 @@ async function addXPWithMultiplier(baseXP) {
   const finalXP = Math.round(baseXP * multiplier);
   
   if (multiplier > 1) {
-    showToast(`⭐ +${finalXP} XP (${multiplier}x multiplicador de racha)`);
+    const multText = { es: `⭐ +${finalXP} XP (${multiplier}x multiplicador de racha)`, en: `⭐ +${finalXP} XP (${multiplier}x streak multiplier)`, pt: `⭐ +${finalXP} XP (${multiplier}x multiplicador de sequência)`, fr: `⭐ +${finalXP} XP (multiplicateur de série ${multiplier}x)`, de: `⭐ +${finalXP} XP (${multiplier}x Serien-Multiplikator)` };
+    showToast(multText[currentLang] || multText['es']);
   }
   
   await addXP(finalXP);
