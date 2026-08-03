@@ -221,6 +221,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--texto);mi
 .login-register{text-align:center;margin-top:20px;font-size:13px;color:var(--suave)}
 .login-register a{color:var(--lila);text-decoration:none;font-weight:500}
 .login-error{background:#FEF2F2;border:0.5px solid #FECACA;border-radius:8px;padding:10px 14px;font-size:13px;color:#DC2626;margin-bottom:14px;display:none}
+.login-success{background:#E8F8F1;border:0.5px solid #9EE8B8;border-radius:8px;padding:10px 14px;font-size:13px;color:#1F7A4E;margin-bottom:14px;display:none}
 
 /* ============ DASHBOARD ============ */
 .dashboard-screen{display:none}
@@ -395,6 +396,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <p class="lb-sub" data-i18n="portal_login_sub">Ingresa con tu cuenta de Yayika</p>
 
       <div class="login-error" id="loginError" data-i18n="portal_login_error">Correo o contraseña incorrectos. Intenta de nuevo.</div>
+      <div class="login-success" id="loginSuccess" style="background:#E8F8F1;border:0.5px solid #9EE8B8;border-radius:8px;padding:10px 14px;font-size:13px;color:#1F7A4E;margin-bottom:14px;display:none"></div>
 
       <div class="form-group">
         <label class="form-label" data-i18n="portal_email_label">Correo electrónico</label>
@@ -403,6 +405,16 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <div class="form-group">
         <label class="form-label" data-i18n="portal_pass_label">Contraseña</label>
         <input class="form-input" type="password" id="passInput" placeholder="••••••••" autocomplete="current-password">
+        <div id="passwordStrengthBar" style="margin-top:6px; display:none;">
+          <div style="display:flex; gap:4px; margin-bottom:4px;">
+            <div id="str1" style="flex:1; height:4px; border-radius:2px; background:#e5e7eb; transition:all 0.3s;"></div>
+            <div id="str2" style="flex:1; height:4px; border-radius:2px; background:#e5e7eb; transition:all 0.3s;"></div>
+            <div id="str3" style="flex:1; height:4px; border-radius:2px; background:#e5e7eb; transition:all 0.3s;"></div>
+            <div id="str4" style="flex:1; height:4px; border-radius:2px; background:#e5e7eb; transition:all 0.3s;"></div>
+            <div id="str5" style="flex:1; height:4px; border-radius:2px; background:#e5e7eb; transition:all 0.3s;"></div>
+          </div>
+          <span id="passwordStrengthText" style="font-size:11px; color:#999;"></span>
+        </div>
         <a class="forgot" href="#" onclick="openForgotModal(event)" data-i18n="portal_forgot_pass">¿Olvidaste tu contraseña?</a>
       </div>
 
@@ -1010,41 +1022,143 @@ async function doForgotPassword() {
   }
 }
 
+// Password strength indicator
+document.getElementById('passInput')?.addEventListener('input', (e) => {
+  const val = e.target.value;
+  const bar = document.getElementById('passwordStrengthBar');
+  if (!val) { bar.style.display = 'none'; return; }
+  bar.style.display = 'block';
+  
+  const score = YayikaSecurity.password.getStrengthScore(val);
+  const { label, color } = YayikaSecurity.password.getStrengthLabel(score);
+  
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('str' + i);
+    if (el) el.style.background = i <= score ? color : '#e5e7eb';
+  }
+  
+  const textEl = document.getElementById('passwordStrengthText');
+  if (textEl) {
+    textEl.textContent = val.length > 0 ? `Fortaleza: ${label}` : '';
+    textEl.style.color = color;
+  }
+});
+
 // ===== SUPABASE AUTH =====
 async function doLogin() {
   const email = document.getElementById('emailInput').value.trim().toLowerCase();
   const pass = document.getElementById('passInput').value;
-  const err = document.getElementById('loginError');
-
-  if (!email || !pass) { err.textContent = t('portal_login_error') || 'Please fill in all fields.'; err.style.display = 'block'; return; }
-
-  // Ensure Supabase is initialized
-  if (!supabase) {
-    if (!initSupabase()) {
-      err.textContent = t('portal_login_error') || 'Connection error. Reload the page.';
-      err.style.display = 'block';
+  const errEl = document.getElementById('loginError');
+  const successEl = document.getElementById('loginSuccess');
+  
+  errEl.style.display = 'none';
+  successEl.style.display = 'none';
+  
+  if (!email || !pass) {
+    errEl.textContent = 'Ingresa tu correo y contraseña.';
+    errEl.style.display = 'block';
+    return;
+  }
+  
+  // Rate limiting check
+  if (!YayikaSecurity.rateLimit.check('login')) {
+    const remaining = YayikaSecurity.rateLimit.remaining('login');
+    errEl.textContent = `Demasiados intentos. Espera un momento. (${remaining} restantes)`;
+    errEl.style.display = 'block';
+    YayikaSecurity.audit.log('login_rate_limited', { email });
+    return;
+  }
+  
+  // Brute force check
+  if (YayikaSecurity.bruteForce.isLocked(email)) {
+    const lockTime = YayikaSecurity.bruteForce.getRemainingLockoutTime(email);
+    const minutes = Math.ceil(lockTime / 60000);
+    errEl.textContent = `Cuenta bloqueada temporalmente. Intenta en ${minutes} minutos.`;
+    errEl.style.display = 'block';
+    YayikaSecurity.audit.log('login_locked', { email });
+    return;
+  }
+  
+  const btn = document.querySelector('.btn-login');
+  btn.disabled = true;
+  btn.textContent = 'Entrando...';
+  
+  try {
+    // Sanitize email
+    const cleanEmail = YayikaSecurity.sanitize.input(email);
+    
+    const { data, error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password: pass });
+    
+    if (error) {
+      // Record failed attempt
+      YayikaSecurity.bruteForce.record(email);
+      YayikaSecurity.audit.log('login_failed', { email: cleanEmail, error: error.message });
+      
+      let msg = 'Error al iniciar sesión.';
+      if (error.message?.includes('Invalid login')) msg = 'Correo o contraseña incorrectos.';
+      if (error.message?.includes('Email not confirmed')) msg = 'Confirma tu correo electrónico primero.';
+      
+      const attempts = YayikaSecurity.bruteForce.isLocked(email) 
+        ? ' Cuenta bloqueada temporalmente.' 
+        : ` Intentos restantes: ${5 - (JSON.parse(localStorage.getItem('yayika_brute_' + email) || '{}').count || 0)}`;
+      
+      errEl.textContent = msg + attempts;
+      errEl.style.display = 'block';
       return;
     }
-  }
-
-  try {
-    err.style.display = 'none';
-    const btn = document.querySelector('.btn-login');
-    btn.textContent = t('portal_login_btn') + '...';
-    btn.disabled = true;
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-    if (error) throw error;
-
+    
+    // Login successful - reset attempts
+    YayikaSecurity.bruteForce.reset(email);
+    YayikaSecurity.audit.log('login_success', { email: cleanEmail, userId: data.user.id });
+    
     currentUser = data.user;
-    sessionStorage.setItem('yayika_user', JSON.stringify({ email: data.user.email }));
-    await loadDashboard();
-  } catch (e) {
-    err.textContent = e.message || (t('portal_login_error') || 'Incorrect email or password.');
-    err.style.display = 'block';
-    const btn = document.querySelector('.btn-login');
-    btn.textContent = t('portal_login_btn') || 'Enter portal';
+    sessionStorage.setItem('yayika_user', JSON.stringify(data.user));
+    
+    // Start session timeout
+    YayikaSecurity.session.start(() => {
+      signOut();
+      alert('Sesión expirada por inactividad.');
+    });
+    
+    // Load profile
+    const { data: profile } = await supabase.from('yayika_profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    if (profile) currentUser.profile = profile;
+    
+    const name = currentUser.profile?.full_name || currentUser.email.split('@')[0];
+    const firstName = name.split(' ')[0];
+    
+    successEl.style.display = 'block';
+    successEl.innerHTML = `
+      <span style="font-size:14px;">✅</span>
+      <p style="font-size:14px;">¡Bienvenida, ${firstName}!</p>
+      <p style="font-size:13px; opacity:0.8; margin-top:4px;">Cargando tu portal...</p>
+    `;
+    
+    track('Login', { method: 'email' });
+    
+    setTimeout(async () => {
+      try {
+        const resp = await fetch('api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: currentUser.id })
+        });
+        if (resp.ok) {
+          const setCookie = resp.headers.get('set-cookie');
+          if (setCookie) document.cookie = setCookie;
+        }
+      } catch(e) {}
+      
+      loadDashboard();
+    }, 800);
+    
+  } catch (error) {
+    errEl.textContent = 'Error de conexión. Intenta de nuevo.';
+    errEl.style.display = 'block';
+    YayikaSecurity.audit.log('login_error', { email, error: error.message });
+  } finally {
     btn.disabled = false;
+    btn.textContent = 'Entrar a mi portal';
   }
 }
 
@@ -1107,6 +1221,14 @@ async function doRegister() {
     return;
   }
 
+  // Password strength validation
+  const passStrength = YayikaSecurity.password.validate(pass);
+  if (!passStrength.valid) {
+    document.getElementById('loginError').textContent = 'Contraseña débil: ' + passStrength.issues.join(', ');
+    document.getElementById('loginError').style.display = 'block';
+    return;
+  }
+
   if (!email || !pass) { err.textContent = t('portal_login_error') || 'Please fill in all fields.'; err.style.display = 'block'; return; }
   if (pass.length < 6) { err.textContent = { es: 'La contraseña debe tener al menos 6 caracteres.', en: 'Password must be at least 6 characters.', pt: 'A senha deve ter pelo menos 6 caracteres.', fr: 'Le mot de passe doit contenir au moins 6 caractères.', de: 'Das Passwort muss mindestens 6 Zeichen lang sein.' }[currentLang || 'es']; err.style.display = 'block'; return; }
 
@@ -1132,6 +1254,8 @@ async function doRegister() {
       sessionStorage.removeItem('yayika_ref');
     }
 
+    YayikaSecurity.audit.log('register_success', { email, userId: data?.user?.id });
+
     const signupMsg = { es: 'Cuenta creada. Revisa tu correo para confirmar.', en: 'Account created. Check your email to confirm.', pt: 'Conta criada. Verifique seu e-mail para confirmar.', fr: 'Compte créé. Vérifie ton email pour confirmer.', de: 'Konto erstellt. Überprüfe deine E-Mail zur Bestätigung.' }[currentLang || 'es'];
     err.textContent = signupMsg;
     err.style.display = 'block';
@@ -1140,6 +1264,7 @@ async function doRegister() {
     err.style.borderColor = '#9EE8B8';
     btn.textContent = getI18nText('auth_create_account') || 'Crear cuenta';
   } catch (e) {
+    YayikaSecurity.audit.log('register_failed', { email, error: e.message });
     let msg = 'Error al crear cuenta.';
     if (e.message?.includes('already registered')) msg = { es: 'Este correo ya está registrado. Intenta con otro.', en: 'This email is already registered. Try another.', pt: 'Este e-mail já está registrado. Tente outro.', fr: 'Cet email est déjà utilisé. Essaie un autre.', de: 'Diese E-Mail ist bereits registriert. Versuche eine andere.' }[currentLang || 'es'];
     else if (e.message?.includes('valid email')) msg = { es: 'El correo no es válido.', en: 'The email is not valid.', pt: 'O e-mail não é válido.', fr: 'L\'email n\'est pas valide.', de: 'Die E-Mail ist ungültig.' }[currentLang || 'es'];
