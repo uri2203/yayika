@@ -403,7 +403,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <div class="form-group">
         <label class="form-label" data-i18n="portal_pass_label">Contraseña</label>
         <input class="form-input" type="password" id="passInput" placeholder="••••••••" autocomplete="current-password">
-        <a class="forgot" href="#" data-i18n="portal_forgot_pass">¿Olvidaste tu contraseña?</a>
+        <a class="forgot" href="#" onclick="openForgotModal(event)" data-i18n="portal_forgot_pass">¿Olvidaste tu contraseña?</a>
       </div>
 
       <!-- Registration fields (hidden by default, shown when isRegister=true) -->
@@ -448,6 +448,19 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
       <div class="login-register" id="registerLoginLink" style="display:none">
         <span data-i18n="auth_has_account">Ya tienes cuenta?</span> 
         <a href="#" onclick="toggleToLogin()" data-i18n="auth_login_here">Entrar aqui</a>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+      <div style="background:white; border-radius:16px; padding:32px; max-width:400px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3); position:relative;">
+        <button onclick="closeForgotModal()" style="position:absolute; top:12px; right:12px; background:none; border:none; font-size:20px; cursor:pointer; color:#999;">&times;</button>
+        <h3 style="margin:0 0 8px; font-size:18px; color:#1a1a2e;" data-i18n="forgot_title">Recuperar contraseña</h3>
+        <p style="margin:0 0 16px; font-size:14px; color:#666;" data-i18n="forgot_desc">Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.</p>
+        <input type="email" id="forgotEmail" class="form-input" placeholder="tu@correo.com" style="margin-bottom:12px;">
+        <div id="forgotError" style="color:#dc2626; font-size:13px; display:none; margin-bottom:8px;"></div>
+        <div id="forgotSuccess" style="color:#16a34a; font-size:13px; display:none; margin-bottom:8px;"></div>
+        <button onclick="doForgotPassword()" class="btn-login" style="width:100%;" data-i18n="forgot_send">Enviar enlace de recuperación</button>
       </div>
     </div>
   </div>
@@ -950,6 +963,52 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
+
+// ===== FORGOT PASSWORD =====
+function openForgotModal(e) {
+  e.preventDefault();
+  const modal = document.getElementById('forgotModal');
+  modal.style.display = 'flex';
+  document.getElementById('forgotEmail').value = document.getElementById('emailInput')?.value || '';
+  document.getElementById('forgotError').style.display = 'none';
+  document.getElementById('forgotSuccess').style.display = 'none';
+}
+
+function closeForgotModal() {
+  document.getElementById('forgotModal').style.display = 'none';
+}
+
+async function doForgotPassword() {
+  const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+  const errEl = document.getElementById('forgotError');
+  const successEl = document.getElementById('forgotSuccess');
+
+  errEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  if (!email) {
+    errEl.textContent = 'Ingresa tu correo electrónico.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/reset-password.html'
+    });
+
+    if (error) throw error;
+
+    successEl.textContent = 'Te enviamos un correo con el enlace para restablecer tu contraseña. Revisa tu bandeja de entrada.';
+    successEl.style.display = 'block';
+    document.getElementById('forgotEmail').value = '';
+  } catch (error) {
+    let msg = 'Error al enviar el correo.';
+    if (error.message?.includes('not found')) msg = 'No encontramos una cuenta con este correo.';
+    errEl.textContent = msg;
+    errEl.style.display = 'block';
+  }
+}
 
 // ===== SUPABASE AUTH =====
 async function doLogin() {
