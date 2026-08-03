@@ -3,269 +3,362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Protección de Datos Personales — Yayika</title>
-<meta name="robots" content="noindex, nofollow">
+<title>Protección de Datos Personales | Yayika</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
 <meta name="theme-color" content="#4E3470">
-<meta name="description" content="Política de Protección de Datos Personales de Yayika conforme a la LFPDPPP (DOF 20/03/2025).">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/shared.css">
 <style>
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;background:rgba(250,247,242,0.95);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--borde);display:flex;align-items:center;justify-content:space-between;height:60px}
-  .logo{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--lila-d);letter-spacing:-0.5px;text-decoration:none}
-  .logo span{color:var(--rosa)}
-  .nav-links{display:flex;align-items:center;gap:24px}
-  .nav-links a{font-size:14px;color:var(--suave);text-decoration:none;font-weight:400}
-  .nav-links a:hover{color:var(--lila)}
-  .legal-page{max-width:820px;margin:0 auto;padding:100px 24px 80px}
-  .legal-page h1{font-size:2rem;margin-bottom:8px}
-  .legal-page .subtitle{color:var(--suave);font-size:14px;margin-bottom:36px}
-  .legal-page h2{font-size:1.3rem;margin-top:40px;margin-bottom:12px;color:var(--lila-d);border-bottom:2px solid var(--lila-l);padding-bottom:8px}
-  .legal-page h3{font-size:1.05rem;margin-top:24px;margin-bottom:8px}
-  .legal-page p,.legal-page li{font-size:14.5px;line-height:1.8;color:var(--texto);margin-bottom:12px}
-  .legal-page ul,.legal-page ol{padding-left:20px;margin-bottom:16px}
-  .legal-page li{margin-bottom:6px}
-  .legal-page strong{color:var(--lila-d)}
-  .legal-page .info-box{background:var(--lila-l);border-left:3px solid var(--lila);border-radius:8px;padding:16px 20px;margin:20px 0}
-  .legal-page .info-box p{margin-bottom:4px}
-  .legal-page .warning-box{background:#FFF8E1;border-left:3px solid #FFC107;border-radius:8px;padding:16px 20px;margin:20px 0}
-  .legal-page .warning-box p{margin-bottom:4px;color:#E65100}
-  .legal-page table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13.5px}
-  .legal-page th,.legal-page td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--borde)}
-  .legal-page th{background:var(--lila-l);color:var(--lila-d);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px}
-  .legal-page .effective{font-size:13px;color:var(--suave);font-style:italic;margin-bottom:24px}
-  .legal-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--suave);margin-bottom:24px;text-decoration:none}
-  .legal-back:hover{color:var(--lila);text-decoration:none}
-  footer{background:var(--texto);padding:44px 5vw 24px;margin-top:60px}
-  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:36px;margin-bottom:36px}
-  .footer-brand p{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.6;max-width:240px;margin-top:10px}
-  .footer-col h4{font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px}
-  .footer-col a{display:block;font-size:13px;color:rgba(255,255,255,0.35);text-decoration:none;margin-bottom:7px}
-  .footer-col a:hover{color:rgba(255,255,255,0.7)}
-  .footer-bottom{border-top:0.5px solid rgba(255,255,255,0.07);padding-top:18px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.25)}
-  @media(max-width:768px){.footer-grid{grid-template-columns:1fr}.nav-links a:not(.nav-cta){display:none}}
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--lila:#7C5CBF;--lila-l:#EDE8F9;--lila-d:#5A3E9B;--bg:#F8F5FF;--card:#FFFFFF;--texto:#2C2240;--suave:#6B5F7A;--borde:rgba(123,94,167,0.13)}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--texto);line-height:1.8}
+nav{background:#2C2240;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white}
+.nav-logo span{color:#D4B8F5}
+.content{max-width:800px;margin:0 auto;padding:40px 20px}
+h1{font-family:'Playfair Display',serif;font-size:32px;margin-bottom:24px;color:var(--texto)}
+h2{font-family:'Playfair Display',serif;font-size:22px;margin:32px 0 16px;color:var(--lila-d);border-bottom:2px solid var(--lila-l);padding-bottom:8px}
+h3{font-size:16px;font-weight:600;color:var(--lila);margin:20px 0 10px}
+p{margin-bottom:12px;color:#444}
+.region-badge{display:inline-flex;align-items:center;gap:6px;background:var(--lila-l);color:var(--lila-d);font-size:11px;font-weight:600;padding:5px 12px;border-radius:50px;margin-bottom:20px}
+.info-box{background:var(--lila-l);border-left:3px solid var(--lila);border-radius:12px;padding:16px 20px;margin:18px 0}
+.warning-box{background:#FFF3E0;border-left:3px solid #F57C00;border-radius:12px;padding:16px 20px;margin:18px 0}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th,td{padding:10px 12px;border:1px solid var(--borde);text-align:left;font-size:13px}
+th{background:var(--lila-l);color:var(--lila-d);font-weight:600}
+footer{background:#2C2240;color:rgba(255,255,255,0.7);padding:32px 28px;text-align:center;margin-top:40px}
+footer a{color:#D4B8F5;text-decoration:none;margin:0 8px;font-size:13px}
+[data-theme="dark"]{--bg:#1A1030;--card:#231845;--texto:#E8E0F5;--suave:#9B8FB5;--borde:rgba(124,92,191,0.25)}
 </style>
 </head>
 <body>
-
 <nav>
-  <a href="/" class="logo">Yay<span>ika</span></a>
-  <div class="nav-links">
-    <a href="https://yayika.com" data-i18n="nav_products">Productos</a>
-    <a href="https://yayika.com/#membresia" data-i18n="nav_membership">Membresía</a>
-    <a href="Portales/index.html" class="nav-cta" data-i18n="nav_portal">Entrar al portal</a>
-  </div>
+  <a href="index.html" class="nav-logo">Yay<span>ika</span></a>
 </nav>
+<div class="content">
+  <div class="region-badge">📄 Documento Legal — Protección de Datos Personales</div>
+  <h1>Política de Protección de Datos Personales</h1>
+  <p><strong>Última actualización:</strong> Julio 2026</p>
 
-<div class="legal-page">
-  <a href="/" class="legal-back">&larr; Volver a Yayika</a>
-
-  <h1 data-i18n="pd_title">Política de Protección de Datos Personales</h1>
-  <p class="subtitle" data-i18n="pd_subtitle">Última actualización: 30 de julio de 2026 · Conforme a la LFPDPPP (DOF 20/03/2025)</p>
-
+  <h2>1. Responsable del Tratamiento</h2>
+  <p>El responsable del tratamiento de sus datos personales es:</p>
   <div class="info-box">
-    <p data-i18n="pd_responsable"><strong>Responsable del tratamiento de datos personales:</strong></p>
-    <p data-i18n="pd_responsable_rfc">RFC: <strong>AOAE781008V98</strong> (operando bajo la marca registrada <strong>YAYIKA</strong> — Reg. IMPI)</p>
-    <p data-i18n="pd_responsable_email">Correo electrónico: <strong>admin@yayika.com</strong></p>
-    <p data-i18n="pd_responsable_web">Sitio web: <strong>yayika.com</strong></p>
+    <p><strong>Nombre:</strong> Edgar Apolonio Aguilera</p>
+    <p><strong>RFC:</strong> AOAE781008V98</p>
+    <p><strong>Correo electrónico:</strong> admin@yayika.com</p>
+    <p><strong>Sitio web:</strong> yayika.com</p>
   </div>
 
+  <h2>2. Tipos de Datos Personales Recopilados</h2>
+  <p>Yayika puede recopilar las siguientes categorías de datos personales:</p>
+  <table>
+    <tr><th>Categoría</th><th>Descripción</th></tr>
+    <tr><td>Identidad</td><td>Nombre, apellido, fecha de nacimiento, fotografía de perfil</td></tr>
+    <tr><td>Contacto</td><td>Correo electrónico, número telefónico, dirección postal</td></tr>
+    <tr><td>Financieros</td><td>Datos de facturación, historial de pagos, información de tarjetas (procesada por Stripe)</td></tr>
+    <tr><td>Salud / Ciclo menstrual</td><td>Datos de ciclo menstrual, síntomas, notas de bienestar (solo con consentimiento explícito)</td></tr>
+    <tr><td>Comportamiento</td><td>Historial de navegación, preferencias, interacciones con la plataforma</td></tr>
+  </table>
+
+  <h2>3. Finalidades del Tratamiento</h2>
+  <table>
+    <tr><th>Finalidad</th><th>Base Legal</th><th>Categorías de Datos</th></tr>
+    <tr><td>Prestación del servicio</td><td>Ejecución de contrato</td><td>Identidad, Contacto, Ciclo menstrual</td></tr>
+    <tr><td>Gestión de cuentas</td><td>Ejecución de contrato</td><td>Identidad, Contacto</td></tr>
+    <tr><td>Procesamiento de pagos</td><td>Ejecución de contrato</td><td>Financieros</td></tr>
+    <tr><td>Notificaciones del servicio</td><td>Interés legítimo</td><td>Contacto</td></tr>
+    <tr><td>Personalización de experiencia</td><td>Interés legítimo</td><td>Comportamiento</td></tr>
+    <tr><td>Mejora del servicio</td><td>Interés legítimo</td><td>Comportamiento</td></tr>
+    <tr><td>Reportes de salud agregados</td><td>Consentimiento explícito</td><td>Ciclo menstrual</td></tr>
+    <tr><td>Cumplimiento legal</td><td>Obligación legal</td><td>Identidad, Financieros</td></tr>
+    <tr><td>Prevención de fraude</td><td>Interés legítimo</td><td>Identidad, Comportamiento</td></tr>
+  </table>
+
+  <h2>4. Bases Legales para el Tratamiento</h2>
+  <p>Tratamos sus datos personales bajo las siguientes bases legales:</p>
+  <ul style="margin-left:20px;margin-bottom:12px;color:#444">
+    <li><strong>Consentimiento:</strong> Cuando usted nos autoriza expresamente (datos sensibles de salud)</li>
+    <li><strong>Ejecución de contrato:</strong> Para prestar los servicios contratados</li>
+    <li><strong>Interés legítimo:</strong> Para mejorar nuestros servicios y garantizar la seguridad</li>
+    <li><strong>Obligación legal:</strong> Para cumplir con obligaciones fiscales y regulatorias</li>
+  </ul>
+
+  <h2>5. Período de Retención de Datos</h2>
+  <p>Sus datos personales se conservarán por los siguientes períodos:</p>
+  <ul style="margin-left:20px;margin-bottom:12px;color:#444">
+    <li><strong>Datos de cuenta:</strong> Mientras la cuenta esté activa y hasta 2 años después de su eliminación</li>
+    <li><strong>Datos de ciclo menstrual:</strong> Hasta que solicite su eliminación o cierre de cuenta</li>
+    <li><strong>Datos financieros:</strong> Según la normativa fiscal aplicable (mínimo 5 años)</li>
+    <li><strong>Datos de comportamiento:</strong> Máximo 24 meses desde la última interacción</li>
+  </ul>
+
+  <h2>6. Medidas de Seguridad</h2>
+  <p>Yayika implementa medidas de seguridad técnicas, administrativas y físicas para proteger sus datos, incluyendo:</p>
+  <ul style="margin-left:20px;margin-bottom:12px;color:#444">
+    <li>Cifrado TLS/SSL en todas las transmisiones de datos</li>
+    <li>Cifrado en reposo para datos sensibles</li>
+    <li>Control de acceso basado en roles</li>
+    <li>Monitoreo continuo de seguridad</li>
+    <li>Copias de seguridad automatizadas</li>
+    <li>Auditorías periódicas de seguridad</li>
+  </ul>
+
+  <h2>7. Transferencias Internacionales de Datos</h2>
   <div class="warning-box">
-    <p data-i18n="pd_autoridad"><strong>Autoridad de control:</strong> Conforme a la reforma publicada en el DOF el 20 de marzo de 2025, la autoridad competente en materia de protección de datos personales es la <strong>Secretaría Anticorrupción y Buen Gobierno (SABG)</strong>, sustituyendo al extinto INAI.</p>
+    <p><strong>Nota:</strong> Sus datos pueden ser transferidos y almacenados en servidores ubicados fuera de su país de residencia.</p>
   </div>
-
-  <p data-i18n="pd_intro">En cumplimiento de la <strong>Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)</strong> y su Reglamento, así como de la reforma publicada en el Diario Oficial de la Federación el 20 de marzo de 2025, el responsable hace de su conocimiento la siguiente Política de Protección de Datos Personales.</p>
-
-  <h2 data-i18n="pd_s1_title">1. Datos personales que recabamos</h2>
-  <p data-i18n="pd_s1_intro">Para las finalidades descritas en esta política, recabamos las siguientes categorías de datos personales:</p>
-
   <table>
-    <thead><tr><th>Categoría</th><th>Datos</th><th>¿Sensible?</th></tr></thead>
-    <tbody>
-      <tr><td>Identidad</td><td>Nombre completo, correo electrónico, contraseña (cifrada)</td><td>No</td></tr>
-      <tr><td>Contacto</td><td>Correo electrónico, número telefónico (opcional), país y zona horaria</td><td>No</td></tr>
-      <tr><td>Financieros</td><td>Información de pago procesada por Stripe. No almacenamos datos de tarjeta</td><td>No</td></tr>
-      <tr><td>Salud / Ciclo menstrual</td><td>Fases del ciclo, sintomatología, energía, humor, datos de bienestar proporcionados voluntariamente</td><td><strong>Sí</strong></td></tr>
-      <tr><td>Comportamiento</td><td>Preferencias, historial de compras, interacciones con la plataforma, uso de funciones de IA</td><td>No</td></tr>
-    </tbody>
+    <tr><th>Proveedor</th><th>País</th><th>Finalidad</th><th>Garantías</th></tr>
+    <tr><td>Supabase</td><td>Estados Unidos</td><td>Almacenamiento de base de datos</td><td>Cláusulas contractuales estándar</td></tr>
+    <tr><td>Stripe</td><td>Estados Unidos</td><td>Procesamiento de pagos</td><td>Cláusulas contractuales estándar, PCI DSS</td></tr>
   </table>
 
+  <h2>8. Tabla de Tratamiento de Datos</h2>
+  <table>
+    <tr><th>Propósito</th><th>Base Legal</th><th>Categorías</th><th>Retención</th></tr>
+    <tr><td>Servicio principal</td><td>Contrato</td><td>Identidad, Contacto, Salud</td><td>Duración del servicio</td></tr>
+    <tr><td>Pagos</td><td>Contrato</td><td>Financieros</td><td>5+ años (fiscal)</td></tr>
+    <tr><td>Marketing</td><td>Consentimiento</td><td>Contacto, Comportamiento</td><td>Hasta revocación</td></tr>
+    <tr><td>Analítica</td><td>Interés legítimo</td><td>Comportamiento</td><td>24 meses</td></tr>
+    <tr><td>Cumplimiento legal</td><td>Obligación legal</td><td>Identidad, Financieros</td><td>Según normativa</td></tr>
+  </table>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECCIONES REGIONALES -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
+
+  <h2>🇪🇸 MÉXICO — Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)</h2>
+
+  <h3>8.1 Autoridad Supervisora</h3>
+  <p>La autoridad competente es la <strong>Secretaría Anticorrupción y Buen Gobierno (SABG)</strong>, a través de la Unidad de Transparencia.</p>
+
+  <h3>8.2 Derechos ARCO</h3>
+  <p>Con fundamento en los artículos 15 a 47 de la LFPDPPP, usted tiene derecho a:</p>
+  <table>
+    <tr><th>Derecho</th><th>Descripción</th></tr>
+    <tr><td><strong>Acceso</strong></td><td>Conocer qué datos personales tenemos y cómo los tratamos</td></tr>
+    <tr><td><strong>Rectificación</strong></td><td>Solicitar la corrección de datos inexactos o incompletos</td></tr>
+    <tr><td><strong>Cancelación</strong></td><td>Solicitar la eliminación de sus datos cuando ya no sean necesarios</td></tr>
+    <tr><td><strong>Oposición</strong></td><td>Oponerse al tratamiento de sus datos para finalidades específicas</td></tr>
+  </table>
+
+  <h3>8.3 Consentimiento</h3>
+  <ul style="margin-left:20px;margin-bottom:12px;color:#444">
+    <li><strong>Datos sensibles:</strong> Se requiere consentimiento expreso por escrito (Art. 9 LFPDPPP)</li>
+    <li><strong>Datos no sensibles:</strong> El consentimiento puede ser implícito cuando existe relación contractual</li>
+  </ul>
+
+  <h3>8.4 Aviso de Privacidad Simplificado</h3>
+  <p>De conformidad con el Artículo 16 de la LFPDPPP, ponemos a su disposición un aviso de privacidad simplificado que contiene los elementos esenciales del tratamiento de datos.</p>
+
+  <h3>8.5 Encargado de Protección de Datos</h3>
+  <p>Para ejercer sus derechos ARCO, contacte a nuestro encargado: <strong>admin@yayika.com</strong></p>
+
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
+
+  <h2>🇪🇺 UNIÓN EUROPEA — Reglamento General de Protección de Datos (GDPR)</h2>
+
+  <h3>8.6 Base Legal del Tratamiento</h3>
+  <p>El tratamiento se fundamenta en:</p>
+  <ul style="margin-left:20px;margin-bottom:12px;color:#444">
+    <li><strong>Art. 6(1)(a):</strong> Consentimiento del interesado</li>
+    <li><strong>Art. 6(1)(b):</strong> Ejecución de contrato</li>
+    <li><strong>Art. 6(1)(f):</strong> Interés legítimo del responsable</li>
+  </ul>
+
+  <h3>8.7 Derechos del Interesado (GDPR)</h3>
+  <table>
+    <tr><th>Derecho</th><th>Artículo</th><th>Descripción</th></tr>
+    <tr><td>Acceso</td><td>Art. 15</td><td>Obtener confirmación y copia de sus datos</td></tr>
+    <tr><td>Rectificación</td><td>Art. 16</td><td>Corregir datos inexactos</td></tr>
+    <tr><td>Supresión</td><td>Art. 17</td><td>Derecho al olvido — eliminación de datos</td></tr>
+    <tr><td>Limitación</td><td>Art. 18</td><td>Limitar el tratamiento en ciertos casos</td></tr>
+    <tr><td>Portabilidad</td><td>Art. 20</td><td>Recibir datos en formato estructurado</td></tr>
+    <tr><td>Oposición</td><td>Art. 21</td><td>Oponerse al tratamiento basado en interés legítimo</td></tr>
+  </table>
+
+  <h3>8.8 Delegado de Protección de Datos (DPO)</h3>
+  <p>Debido al tamaño de nuestra empresa, no estamos obligados a designar un DPO. No obstante, puede contactarnos en: <strong>admin@yayika.com</strong></p>
+
+  <h3>8.9 Evaluación de Impacto</h3>
+  <p>Realizaremos una Evaluación de Impacto de Protección de Datos (DPIA) para el tratamiento de datos de salud/ciclo menstrual conforme al Artículo 35 del GDPR.</p>
+
+  <h3>8.10 Autoridad de Supervisión</h3>
+  <p>Las autoridades de supervisión varían por país miembro. Ejemplos: CNIL (Francia), BfDI (Alemania), AEPD (España). Usted tiene derecho a presentar una reclamación ante la autoridad de su país de residencia.</p>
+
+  <h3>8.11 Retención de Datos</h3>
+  <p>De conformidad con el Artículo 5(1)(e) del GDPR, los datos no se conservarán más allá de lo necesario para las finalidades del tratamiento.</p>
+
+  <h3>8.12 Consentimiento de Cookies</h3>
+  <p>Cumplimos con la Directiva ePrivacy relativa al uso de cookies. Utilizamos un banner de cookies que le permite aceptar o rechazar cookies no esenciales.</p>
+
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
+
+  <h2>🇧🇷 BRASIL — Lei Geral de Proteção de Dados (LGPD)</h2>
+
+  <h3>8.13 Autoridade Nacional</h3>
+  <p>La autoridad competente es la <strong>Autoridade Nacional de Proteção de Dados (ANPD)</strong>.</p>
+
+  <h3>8.14 Bases Legais (Art. 7 LGPD)</h3>
+  <ul style="margin-left:20px;margin-bottom:12px;color:#444">
+    <li>Consentimiento del titular</li>
+    <li>Cumplimiento de obligación legal o regulatoria</li>
+    <li>Ejecución de políticas públicas o investigación</li>
+    <li>Transferencia internacional de datos</li>
+    <li>Ejecución de contrato o procedimientos preliminares</li>
+    <li>Ejercicio regular de derechos en proceso</li>
+    <li>Protección de la vida o de la salud</li>
+    <li>Legítimo interés del controlador</li>
+  </ul>
+
+  <h3>8.15 Derechos del Titular (Art. 18 LGPD)</h3>
+  <table>
+    <tr><th>Derecho</th><th>Descripción</th></tr>
+    <tr><td>Confirmación</td><td>Confirmar la existencia de tratamiento</td></tr>
+    <tr><td>Acceso</td><td>Acceder a los datos personales</td></tr>
+    <tr><td>Corrección</td><td>Corregir datos incompletos o desactualizados</td></tr>
+    <tr><td>Anonimización</td><td>Anonimizar, bloquear o eliminar datos innecesarios</td></tr>
+    <tr><td>Portabilidad</td><td>Solicitar la portabilidad de los datos</td></tr>
+    <tr><td>Eliminación</td><td>Solicitar la eliminación de datos tratados con consentimiento</td></tr>
+    <tr><td>Información</td><td>Conocer entidades con las que se comparten datos</td></tr>
+  </table>
+
+  <h3>8.16 Encargado de Protección de Datos</h3>
+  <p>Nuestro Encargado (DPO) es: <strong>admin@yayika.com</strong></p>
+
+  <h3>8.17 Datos Sensibles</h3>
+  <p>Los datos de salud (ciclo menstrual) son considerados datos sensibles conforme al Art. 5(II) de la LGPD y requieren consentimiento específico y destacado.</p>
+
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
+
+  <h2>🇺🇸 ESTADOS UNIDOS — CCPA/CPRA (California) y COPPA</h2>
+
+  <h3>8.18 California Consumer Privacy Act (CCPA/CPRA)</h3>
+  <p>Si usted es residente de California, tiene los siguientes derechos:</p>
+  <table>
+    <tr><th>Derecho</th><th>Descripción</th></tr>
+    <tr><td>Right to Know</td><td>Solicitar las categorías y fuentes de datos recopilados</td></tr>
+    <tr><td>Right to Delete</td><td>Solicitar la eliminación de datos personales</td></tr>
+    <tr><td>Right to Opt-Out</td><td>Oponerse a la venta de datos personales</td></tr>
+    <tr><td>Right to Non-Discrimination</td><td>No ser discriminado por ejercer sus derechos</td></tr>
+  </table>
+
+  <h3>8.19 Categorías de Información Personal (CCPA)</h3>
+  <ul style="margin-left:20px;margin-bottom:12px;color:#444">
+    <li>Identificadores (nombre, correo, IP)</li>
+    <li>Información comercial (historial de transacciones)</li>
+    <li>Información de internet (historial de navegación)</li>
+    <li>Inferencias derivadas de las anteriores</li>
+  </ul>
+
+  <h3>8.20 No Venta de Datos</h3>
+  <p>Yayika <strong>no vende</strong> información personal a terceros.</p>
+
+  <h3>8.21 Children's Online Privacy Protection Act (COPPA)</h3>
   <div class="warning-box">
-    <p><strong>Datos sensibles:</strong> Los datos de salud y ciclo menstrual se consideran datos personales sensibles conforme al Art. 3, fracc. V de la LFPDPPP. Su tratamiento requiere <strong>consentimiento expreso y por escrito</strong> de la titular.</p>
+    <p><strong>Plataforma diseñada para mayores de 18 años.</strong> No recopilamos intencionadamente datos de menores de 13 años. Si descubrimos que un usuario menor de 13 años ha proporcionado datos, eliminaremos la cuenta de inmediato.</p>
   </div>
 
-  <h2>2. Finalidades del tratamiento</h2>
-  <h3>2.1 Finalidades primarias (necesarias para el servicio)</h3>
-  <ul>
-    <li>Procesar compras y entregas de productos digitales</li>
-    <li>Gestionar membresías y accesos a la plataforma</li>
-    <li>Enviar confirmaciones de compra, recibos y actualizaciones del servicio</li>
-    <li>Brindar atención al cliente y soporte técnico</li>
-    <li>Procesar devoluciones y reembolsos</li>
-    <li>Cumplir obligaciones legales y fiscales</li>
-    <li>Proporcionar servicios de seguimiento de ciclo y bienestar personalizados</li>
-  </ul>
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
 
-  <h3>2.2 Finalidades secundarias (opcionales)</h3>
-  <ul>
-    <li>Enviar comunicaciones sobre nuevos productos, funciones y promociones</li>
-    <li>Personalizar la experiencia de uso en la plataforma</li>
-    <li>Realizar análisis estadísticos y de comportamiento para mejorar el servicio</li>
-    <li>Enviar newsletters y contenido educativo relacionado con bienestar, productividad y finanzas</li>
-    <li>Proporcionar recomendaciones personalizadas mediante inteligencia artificial</li>
-  </ul>
-  <p>Si no deseas recibir comunicaciones de finalidades secundarias, puedes indicarlo al momento de proporcionar tus datos o en cualquier momento a través de <strong>admin@yayika.com</strong>.</p>
+  <h2>🇬🇧 REINO UNIDO — UK GDPR + Data Protection Act 2018</h2>
 
-  <h2>3. Consentimiento</h2>
-  <ul>
-    <li><strong>Datos no sensibles:</strong> El consentimiento puede ser implícito cuando la titular proporciona sus datos directamente a través de formularios o al aceptar este aviso</li>
-    <li><strong>Datos sensibles (salud/ciclo):</strong> Requerimos <strong>consentimiento expreso y por escrito</strong>. Se obtiene mediante aceptación específica al momento de registrar datos de ciclo o salud</li>
-    <li><strong>Finalidades secundarias:</strong> Requerimos consentimiento expreso, el cual puedes otorgar o negar de forma independiente</li>
-  </ul>
-  <p>En cualquier momento puedes <strong>revocar tu consentimiento</strong> enviando un correo a <strong>admin@yayika.com</strong>. La revocación no tendrá efecto retroactivo sobre tratamientos ya realizados.</p>
+  <h3>8.22 Autoridad de Supervisión</h3>
+  <p>La autoridad competente es la <strong>Information Commissioner's Office (ICO)</strong>.</p>
 
-  <h2>4. Tabla de tratamiento de datos</h2>
-  <table>
-    <thead><tr><th>Finalidad</th><th>Base legal</th><th>Categorías de datos</th></tr></thead>
-    <tbody>
-      <tr><td>Gestión de cuenta y membresía</td><td>Ejecución de contrato</td><td>Identidad, Contacto</td></tr>
-      <tr><td>Procesamiento de pagos</td><td>Ejecución de contrato</td><td>Financieros, Identidad</td></tr>
-      <tr><td>Servicios de seguimiento de ciclo y bienestar</td><td>Consentimiento expreso</td><td>Salud / Ciclo</td></tr>
-      <tr><td>Recomendaciones personalizadas con IA</td><td>Consentimiento expreso</td><td>Comportamiento, Salud / Ciclo</td></tr>
-      <tr><td>Atención al cliente y soporte</td><td>Ejecución de contrato</td><td>Identidad, Contacto</td></tr>
-      <tr><td>Marketing y newsletters</td><td>Consentimiento expreso</td><td>Identidad, Contacto, Comportamiento</td></tr>
-      <tr><td>Obligaciones fiscales y legales</td><td>Obligación legal</td><td>Identidad, Financieros</td></tr>
-      <tr><td>Análisis estadísticos (datos agregados)</td><td>Interés legítimo</td><td>Comportamiento</td></tr>
-    </tbody>
-  </table>
+  <h3>8.23 Marco Legal Post-Brexit</h3>
+  <p>El UK GDPR es la versión del GDPR incorporada al derecho británico mediante la Data Protection Act 2018. Los derechos y obligaciones son sustancialmente equivalentes al GDPR de la UE.</p>
 
-  <h2>5. Derechos ARCO</h2>
-  <p>Conforme a la LFPDPPP, tienes los siguientes derechos respecto a tus datos personales:</p>
-  <ul>
-    <li><strong>Acceso:</strong> Conocer qué datos personales tenemos sobre ti y cómo los tratamos</li>
-    <li><strong>Rectificación:</strong> Solicitar la corrección de datos inexactos o incompletos</li>
-    <li><strong>Cancelación:</strong> Solicitar la eliminación de tus datos cuando no estén siendo tratados conforme a la ley</li>
-    <li><strong>Oposición:</strong> Oponerte al tratamiento de tus datos para finalidades específicas</li>
-  </ul>
-  <p><strong>Procedimiento:</strong></p>
-  <ul>
-    <li>Envía una solicitud a <strong>admin@yayika.com</strong> indicando el derecho que deseas ejercer</li>
-    <li>Incluye tu nombre completo, correo electrónico registrado y descripción clara</li>
-    <li>Adjunta copia de una identificación oficial (INE, pasaporte o cédula profesional)</li>
-    <li>Para datos sensibles, incluye la justificación de la solicitud</li>
-  </ul>
-  <p>Responderemos en un plazo máximo de <strong>20 días hábiles</strong> conforme al Art. 29 de la LFPDPPP. El ejercicio de derechos ARCO es <strong>gratuito</strong>.</p>
+  <h3>8.24 Decisiones de Adecuación</h3>
+  <p>El Reino Unido cuenta con decisiones de adecuación de la UE, lo que permite transferencias de datos desde la UE/EEE al Reino Unido sin garantías adicionales.</p>
 
-  <h2>6. Transferencias internacionales de datos</h2>
-  <p>Tus datos personales podrán ser transferidos a terceros países en los siguientes casos:</p>
-  <table>
-    <thead><tr><th>Proveedor</th><th>País</th><th>Finalidad</th><th>Garantía</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Stripe, Inc.</strong></td><td>Estados Unidos</td><td>Procesamiento de pagos</td><td>Cláusulas Contractuales Estándar (SCCs) · EU-U.S. Data Privacy Framework</td></tr>
-      <tr><td><strong>Supabase, Inc.</strong></td><td>Estados Unidos</td><td>Infraestructura de base de datos y alojamiento</td><td>Cláusulas Contractuales Estándar (SCCs)</td></tr>
-      <tr><td><strong>Resend, Inc.</strong></td><td>Estados Unidos</td><td>Correo electrónico transaccional</td><td>Cláusulas Contractuales Estándar (SCCs)</td></tr>
-      <tr><td><strong>Plausible Insights OÜ</strong></td><td>Unión Europea (Estonia)</td><td>Analítica web</td><td>Proveedor ubicado en la UE. No hay transferencia internacional</td></tr>
-    </tbody>
-  </table>
-  <p>Las transferencias se realizan conforme al Art. 37 de la LFPDPPP, asegurando medidas de seguridad adecuadas.</p>
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
 
-  <h2>7. Medidas de seguridad</h2>
-  <p>El responsable ha implementado medidas de seguridad administrativas, técnicas y físicas:</p>
-  <ul>
-    <li><strong>Cifrado SSL/TLS:</strong> Comunicaciones cifradas con TLS 1.3</li>
-    <li><strong>Autenticación segura:</strong> Tokens JWT con expiración y refresh tokens</li>
-    <li><strong>Row Level Security (RLS):</strong> Políticas de seguridad a nivel de fila</li>
-    <li><strong>Acceso restringido:</strong> Principio de mínimo privilegio</li>
-    <li><strong>Monitoreo:</strong> Registro de accesos y actividad del sistema</li>
-    <li><strong>Cifrado en reposo:</strong> Datos sensibles cifrados en la base de datos</li>
-  </ul>
+  <h2>🇨🇦 CANADÁ — PIPEDA</h2>
 
-  <h2>8. Retención de datos</h2>
-  <ul>
-    <li><strong>Datos de cuenta:</strong> Mientras mantengas una cuenta activa. Tras la eliminación, máximo 30 días por backup</li>
-    <li><strong>Datos de compra:</strong> 10 años desde la transacción (obligación fiscal CFF)</li>
-    <li><strong>Datos de marketing:</strong> Hasta que retires tu consentimiento</li>
-    <li><strong>Datos de soporte:</strong> 2 años desde la última interacción</li>
-    <li><strong>Datos de ciclo/salud:</strong> Mientras mantengas la cuenta activa o hasta que retires tu consentimiento expreso. Se eliminan de forma permanente e irreversible</li>
-    <li><strong>Datos de interacción con IA:</strong> Hasta 12 meses después de la última interacción</li>
-  </ul>
+  <h3>8.25 Autoridad de Supervisión</h3>
+  <p>La autoridad competente es el <strong>Office of the Privacy Commissioner (OPC)</strong>.</p>
 
-  <h2>9. Menores de edad</h2>
-  <p>El servicio está dirigido a personas mayores de <strong>18 años</strong>. No recabamos intencionalmente datos de menores. Si un padre o tutor tiene conocimiento de que su hijo menor de 18 años proporcionó datos sin consentimiento, puede contactar a <strong>admin@yayika.com</strong> para solicitar eliminación inmediata. Consulta nuestra <a href="politica-menores.html">Política de Protección de Menores</a>.</p>
+  <h3>8.26 Consentimiento Significativo</h3>
+  <p>PIPEDA requiere un consentimiento significativo para la recopilación, uso y divulgación de datos personales. El consentimiento debe ser informado y aplicarse únicamente a los fines comunicados.</p>
 
-  <h2>10. Cookies</h2>
-  <p>Yayika utiliza únicamente cookies esenciales (sesiones, preferencias). No utilizamos cookies de rastreo publicitario. Consulta nuestra <a href="politica-cookies.html">Política de Cookies</a>.</p>
+  <h3>8.27 Derechos de Acceso y Contestación</h3>
+  <p>Usted tiene derecho a acceder a sus datos personales y a impugnar su exactitud, completitud y actualización.</p>
 
-  <h2>11. Protección de datos para residentes de la UE (GDPR)</h2>
-  <p>Si eres residente del Espacio Económico Europeo (EEE), Reino Unido o Suiza, tienes derechos adicionales bajo el GDPR:</p>
-  <ul>
-    <li><strong>Base legal:</strong> Ejecución de contrato (Art. 6.1.b), consentimiento (Art. 6.1.a), interés legítimo (Art. 6.1.f), obligación legal (Art. 6.1.c)</li>
-    <li><strong>Derechos:</strong> Acceso, rectificación, supresión, restricción, portabilidad, oposición, no ser objeto de decisiones automatizadas</li>
-    <li><strong>Plazo de respuesta:</strong> Máximo 30 días naturales (extensible a 60)</li>
-    <li><strong>Notificación de brechas:</strong> Dentro de 72 horas conforme al Art. 33 del GDPR</li>
-    <li><strong>Quejas:</strong> Puedes presentar una queja ante la autoridad de protección de datos de tu país</li>
-  </ul>
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
 
-  <h2>12. Residentes de Latinoamérica</h2>
-  <p><strong>Brasil (LGPD):</strong> Derechos ARCO + portabilidad. Autoridad: ANPD. Brecha: ~2 días hábiles.</p>
-  <p><strong>Argentina (Ley 25.326):</strong> Derechos ARCO. Argentina tiene decisión de adecuación UE. Autoridad: AAIP.</p>
-  <p><strong>Colombia (Ley 1581/2012):</strong> Derechos ARCOP. Brecha: 15 días hábiles. Autoridad: SIC.</p>
-  <p><strong>Chile (Ley 21.719):</strong> Derechos ARCO + portabilidad. Notificación obligatoria de brechas. Autoridad: APDP.</p>
-  <p><strong>Perú (Ley 29733):</strong> Derechos ARCO. Autorización previa para datos sensibles. Brecha: 10 días hábiles.</p>
+  <h2>🇨🇭 SUIZA — nueva Ley Federal de Protección de Datos (nFADP)</h2>
 
-  <h2>13. Cambios en esta política</h2>
-  <p>Nos reservamos el derecho de modificar esta política en cualquier momento. Los cambios serán publicados en esta página con la fecha de última actualización. Te recomendamos revisar periódicamente esta página.</p>
+  <h3>8.28 Autoridad de Supervisión</h3>
+  <p>La autoridad competente es el <strong>Federal Data Protection and Information Commissioner (FDPIC)</strong>.</p>
 
-  <h2>14. Contacto</h2>
-  <ul>
-    <li><strong>Correo electrónico:</strong> admin@yayika.com</li>
-    <li><strong>Sitio web:</strong> <a href="https://yayika.com">yayika.com</a></li>
-  </ul>
+  <h3>8.29 Entrada en Vigor</h3>
+  <p>La nFADP entró en vigor el <strong>1 de septiembre de 2023</strong>, modernizando el marco de protección de datos suizo.</p>
 
-  <p style="margin-top:40px;font-size:13px;color:var(--suave);text-align:center">Este documento fue actualizado por última vez el 30 de julio de 2026.</p>
+  <h3>8.30 Evaluación de Impacto</h3>
+  <p>La nFADP requiere una Evaluación de Impacto de Protección de Datos para tratamientos que puedan resultar en un alto riesgo para la personalidad y los derechos fundamentales.</p>
+
+  <h3>8.31 Transferencias Transfronterizas</h3>
+  <p>Las transferencias internacionales de datos solo son permitidas si el país de destino figura en la lista de adecuación del Consejo Federal o si se establecen garantías adecuadas.</p>
+
+  <hr style="margin:40px 0;border-color:var(--lila-l)">
+
+  <h2>9. Ley Aplicable y Resolución de Controversias</h2>
+
+  <h3>9.1 Ley Aplicable</h3>
+  <p>El presente documento se regirá e interpretará de conformidad con las leyes de los Estados Unidos Mexicanos, específicamente el Código Civil Federal y la Ley Federal de Protección al Consumidor, sin consideración a sus principios de conflicto de leyes.</p>
+
+  <h3>9.2 Arbitraje Internacional Obligatorio</h3>
+  <p>Toda controversia, diferencia o reclamación que surja del presente documento, incluyendo su incumplimiento, terminación o nulidad, será resuelta definitivamente mediante arbitraje obligatorio administrado por el Centro Internacional de Resolución de Diferencias (ICDR) de acuerdo con sus Reglas de Arbitraje Internacional. El arbitraje se realizará en español. La sede del arbitraje será la Ciudad de México, México. El tribunal arbitral estará compuesto por un (1) árbitro. El laudo arbitral podrá ejecutarse ante cualquier tribunal de jurisdicción competente.</p>
+
+  <h3>9.3 Renuncia a Acciones Colectivas</h3>
+  <p>En la máxima medida permitida por la ley aplicable, usted acepta que cualquier procedimiento de resolución de disputas se llevará a cabo únicamente a título individual y no en una acción colectiva, consolidada o representativa.</p>
+
+  <h3>9.4 Protección al Consumidor — Unión Europea</h3>
+  <p>Si usted es consumidor en la Unión Europea, también puede utilizar la plataforma de Resolución de Litigios en Línea de la Comisión Europea en https://ec.europa.eu/consumers/odr. Esto no afecta sus derechos obligatorios de protección al consumidor bajo la legislación nacional aplicable.</p>
+
+  <h3>9.5 Protección al Consumidor — Brasil</h3>
+  <p>Si usted es consumidor en Brasil, también puede utilizar las Agencias de Protección al Consumidor (PROCON) o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo el Código de Defensa do Consumidor (CDC).</p>
+
+  <h3>9.6 Protección al Consumidor — Argentina</h3>
+  <p>Si usted es consumidor en Argentina, también puede utilizar la Dirección Nacional de Defensa del Consumidor o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley de Defensa del Consumidor No. 24.240.</p>
+
+  <h3>9.7 Protección al Consumidor — Chile</h3>
+  <p>Si usted es consumidor en Chile, también puede utilizar el Servicio Nacional del Consumidor (SERNAC) o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley No. 19.496 sobre Protección de los Derechos de los Consumidores.</p>
+
+  <h3>9.8 Protección al Consumidor — Colombia</h3>
+  <p>Si usted es consumidor en Colombia, también puede utilizar la Superintendencia de Industria y Comercio (SIC) o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley Estatutaria 1755 de 2015 y el Código de Consumo.</p>
+
+  <h3>9.9 Protección al Consumidor — Perú</h3>
+  <p>Si usted es consumidor en Perú, también puede utilizar INDECOPI o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley No. 29571 Código de Protección y Defensa del Consumidor.</p>
+
+  <h3>9.10 Protección al Consumidor — Ecuador</h3>
+  <p>Si usted es consumidor en Ecuador, también puede utilizar la Superintendencia de Control del Poder de Mercado o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley Orgánica de Defensa del Consumidor.</p>
+
+  <h3>9.11 Plazo de Prescripción</h3>
+  <p>Cualquier reclamación que surja del presente documento deberá iniciarse dentro de un (1) año después de que la acción haya nacido, o dicha acción quedará permanentemente prescrita.</p>
+
+  <h2>10. Cambios en esta Política</h2>
+  <p>Nos reservamos el derecho de actualizar esta política. Cualquier cambio será publicado en esta página con la fecha de última actualización.</p>
+
+  <h2>10. Contacto</h2>
+  <div class="info-box">
+    <p>Para ejercer sus derechos o realizar consultas sobre esta política:</p>
+    <p><strong>Correo:</strong> admin@yayika.com</p>
+    <p><strong>Sitio web:</strong> yayika.com</p>
+  </div>
 </div>
-
 <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="logo">Yay<span>ika</span></div>
-      <p data-i18n="footer_products_desc">Productos digitales para mujeres que quieren más.</p>
-    </div>
-    <div class="footer-col">
-      <h4 data-i18n="footer_heading_products">Productos</h4>
-      <a href="https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c">Ciclo Productiva</a>
-      <a href="https://buy.stripe.com/4gMbJ16qO5SidMQe17gA80d">Dinero Sin Pena</a>
-      <a href="https://buy.stripe.com/8x2eVd5mK94uaAE8GNgA80e">La Mujer Que Negocia</a>
-      <a href="https://yayika.com/#membresia">Membresía Yayika</a>
-    </div>
-    <div class="footer-col">
-      <h4 data-i18n="footer_legal">Legal</h4>
-      <a href="aviso-privacidad.html">Aviso de Privacidad</a>
-      <a href="terminos.html">Términos y Condiciones</a>
-      <a href="politica-pagos.html">Política de Pagos y Reembolsos</a>
-      <a href="politica-cookies.html">Política de Cookies</a>
-      <a href="politica-comunidad.html">Política de Comunidad</a>
-      <a href="politica-contenido.html">Política de Contenido</a>
-      <a href="politica-propiedad-intelectual.html">Propiedad Intelectual</a>
-      <a href="politica-ia.html">Uso de Inteligencia Artificial</a>
-      <a href="politica-menores.html">Protección de Menores</a>
-      <a href="proteccion-datos-personales.html">Protección de Datos Personales</a>
-      <a href="deslinde-responsabilidades.html">Deslinde de Responsabilidades</a>
-      <a href="aviso-legal.html">Aviso Legal</a>
-      <a href="guia-fiscal.html">Guía Fiscal</a>
-      <a href="guia-fiscal-vendedoras.html">Guía Fiscal Vendedoras</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span data-i18n="footer_rights">© 2026 Yayika · Todos los derechos reservados</span>
-    <span data-i18n="footer_payments">Pagos por Stripe · yayika.com</span>
-  </div>
+  <a href="aviso-privacidad.html">Aviso de Privacidad</a>
+  <a href="terminos.html">Términos</a>
+  <a href="politica-cookies.html">Cookies</a>
+  <a href="proteccion-datos-personales.html">Datos Personales</a>
+  <a href="politica-comunidad.html">Comunidad</a>
+  <a href="politica-menores.html">Menores</a>
+  <a href="politica-ia.html">IA</a>
+  <a href="mailto:admin@yayika.com">Contacto</a>
 </footer>
-
-<script src="/js/i18n.js"></script>
-<script>applyTranslations();</script>
 </body>
 </html>

@@ -1,217 +1,458 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Términos y Condiciones · Yayika</title>
-<meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/shared.css">
-<style>
-  .legal-page { max-width: 780px; margin: 0 auto; padding: 60px 24px 80px; }
-  .legal-page h1 { font-size: 2rem; margin-bottom: 8px; }
-  .legal-page .subtitle { color: var(--suave); font-size: 14px; margin-bottom: 36px; }
-  .legal-page h2 { font-size: 1.3rem; margin-top: 36px; margin-bottom: 12px; color: var(--lila-d); }
-  .legal-page h3 { font-size: 1.05rem; margin-top: 24px; margin-bottom: 8px; }
-  .legal-page p, .legal-page li { font-size: 14.5px; line-height: 1.8; color: var(--texto); margin-bottom: 12px; }
-  .legal-page ul { padding-left: 20px; margin-bottom: 16px; }
-  .legal-page li { margin-bottom: 6px; }
-  .legal-page strong { color: var(--lila-d); }
-  .legal-page .info-box { background: var(--lila-l); border-left: 3px solid var(--lila); border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
-  .legal-page .info-box p { margin-bottom: 4px; }
-  .legal-page .warning-box { background: #fff3cd; border-left: 3px solid #ffc107; border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
-  .legal-page .warning-box p { margin-bottom: 4px; color: #664d03; }
-  .legal-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--suave); margin-bottom: 24px; text-decoration: none; }
-  .legal-back:hover { color: var(--lila); text-decoration: none; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones — Yayika</title>
+    <meta name="description" content="Términos y Condiciones de uso de la plataforma Yayika para mujeres emprendedoras.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple-50: #faf5ff;
+            --purple-100: #f3e8ff;
+            --purple-200: #e9d5ff;
+            --purple-500: #a855f7;
+            --purple-600: #9333ea;
+            --purple-700: #7e22ce;
+            --purple-800: #6b21a8;
+            --purple-900: #581c87;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--gray-800);
+            background: var(--gray-50);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--purple-700);
+            text-decoration: none;
+        }
+
+        nav .logo span { color: var(--purple-500); }
+
+        nav .nav-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        nav .nav-links a:hover { color: var(--purple-600); }
+
+        .hero {
+            background: linear-gradient(135deg, var(--purple-700), var(--purple-900));
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .hero p { color: var(--purple-200); font-size: 1rem; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .toc {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .toc h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--purple-700);
+        }
+
+        .toc ol {
+            padding-left: 1.5rem;
+            color: var(--gray-700);
+        }
+
+        .toc ol li { margin-bottom: 0.4rem; }
+
+        .toc ol li a {
+            color: var(--purple-600);
+            text-decoration: none;
+        }
+
+        .toc ol li a:hover { text-decoration: underline; }
+
+        section {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        section h2 {
+            font-size: 1.3rem;
+            color: var(--purple-700);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--purple-100);
+        }
+
+        section h3 {
+            font-size: 1.05rem;
+            color: var(--gray-800);
+            margin: 1.2rem 0 0.5rem;
+        }
+
+        section p, section li {
+            color: var(--gray-700);
+            margin-bottom: 0.6rem;
+        }
+
+        section ul, section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: var(--purple-50);
+            border-left: 4px solid var(--purple-500);
+            padding: 1rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .highlight-box strong { color: var(--purple-700); }
+
+        footer {
+            background: var(--gray-900);
+            color: var(--gray-400);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer a { color: var(--purple-400); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.6rem; }
+            section { padding: 1.5rem; }
+            nav .nav-links a { margin-left: 0.8rem; font-size: 0.8rem; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="legal-page">
-  <a href="/" class="legal-back">← Volver a Yayika</a>
-  
-  <h1>Términos y Condiciones de Uso</h1>
-  <p class="subtitle">Última actualización: 30 de julio de 2026</p>
+<nav>
+    <div class="nav-inner">
+        <a href="https://yayika.com" class="logo">yayi<span>ka</span></a>
+        <div class="nav-links">
+            <a href="https://yayika.com">Inicio</a>
+            <a href="https://yayika.com/terminos.html">Términos</a>
+            <a href="https://yayika.com/privacidad.html">Privacidad</a>
+        </div>
+    </div>
+</nav>
 
-  <div class="info-box">
-    <p><strong>Responsable:</strong> RFC AOAE781008V98 (operando bajo la marca registrada <strong>YAYIKA</strong> · Reg. IMPI)</p>
-    <p><strong>Sitio web:</strong> <strong>yayika.com</strong></p>
-    <p><strong>Contacto:</strong> admin@yayika.com</p>
-  </div>
-
-  <p>Al acceder y utilizar el sitio web <strong>yayika.com</strong> y sus servicios asociados, el usuario acepta integralmente los presentes Términos y Condiciones. Si no estás de acuerdo con alguno de estos términos, te rogamos no utilices la plataforma.</p>
-
-  <h2>1. Definiciones</h2>
-  <ul>
-    <li><strong>"Yayika"</strong> se refiere a la plataforma de productos digitales y servicios de comunidad operada bajo la marca registrada YAYIKA</li>
-    <li><strong>"Usuario"</strong> o <strong>"Usuarios"</strong> se refiere a cualquier persona que acceda, navegue o utilice la plataforma</li>
-    <li><strong>"Productos digitales"</strong> incluye planners, guías, cursos, plantillas y cualquier contenido descargable o accesible en línea</li>
-    <li><strong>"Membresía"</strong> se refiere al acceso recurrente a productos, contenido y servicios premium de Yayika</li>
-    <li><strong>"Comunidad"</strong> se refiere a los espacios de interacción, foros y herramientas colaborativas disponibles para los miembros</li>
-    <li><strong>"Contenido"</strong> incluye textos, imágenes, diseños, código, audios, videos y cualquier material publicado en la plataforma</li>
-    <li><strong>"Agentes de IA"</strong> se refiere a las herramientas de inteligencia artificial proporcionadas en la plataforma, incluyendo asistentes de bienestar, seguimiento de ciclo, asesoría financiera y generación de contenido</li>
-  </ul>
-
-  <h2>2. Elegibilidad</h2>
-  <p>Para utilizar Yayika debes:</p>
-  <ul>
-    <li>Ser mayor de <strong>18 años</strong></li>
-    <li>Tener capacidad legal para celebrar contratos</li>
-    <li>Proporcionar información veraz y completa al registrarte</li>
-    <li>Mantener la confidencialidad de tu cuenta y contraseña</li>
-  </ul>
-
-  <h2>3. Productos y servicios</h2>
-
-  <h3>3.1 Productos digitales</h3>
-  <ul>
-    <li>Al comprar un producto digital, se te otorga una <strong>licencia de uso personal, no exclusiva e intransferible</strong></li>
-    <li>Los productos digitales son para tu uso personal y no pueden ser revendidos, compartidos o distribuidos</li>
-    <li>El acceso a los productos se entrega de forma instantánea tras la confirmación del pago</li>
-    <li>Los precios pueden incluir o no impuestos aplicables según tu jurisdicción</li>
-  </ul>
-
-  <h3>3.2 Membresías</h3>
-  <ul>
-    <li>Las membresías se facturan de forma recurrente (mensual o anual, según el plan elegido)</li>
-    <li>El cobro se realizará automáticamente a través de <strong>Stripe</strong> hasta que se cancele</li>
-    <li>Puedes cancelar tu membresía en cualquier momento desde tu dashboard o contactando a <strong>admin@yayika.com</strong></li>
-    <li>La cancelación será efectiva al finalizar el periodo de facturación actual</li>
-  </ul>
-
-  <h3>3.3 Comunidad Yayika</h3>
-  <ul>
-    <li>La sección de Comunidad está disponible para usuarios registrados</li>
-    <li>Los participantes son responsables de su propio contenido publicado</li>
-    <li>No se permite contenido ofensivo, spam, publicidad no autorizada ni acoso</li>
-  </ul>
-
-  <h3>3.4 Servicios de Inteligencia Artificial</h3>
-  <div class="warning-box">
-    <p><strong>⚠ IMPORTANTE — INTERACCIÓN CON IA:</strong> Yayika utiliza herramientas de inteligencia artificial para proporcionar ciertos servicios, incluyendo asistentes de bienestar, seguimiento de ciclo, asesoría financiera y generación de contenido. Al utilizar estos servicios, aceptas las siguientes condiciones:</p>
-  </div>
-  <ul>
-    <li><strong>Divulgación:</strong> Todos los servicios de IA en Yayika están claramente identificados. Los mensajes, recomendaciones y contenido generado por IA incluyen indicaciones visuales y/o textuales que identifican su origen artificial</li>
-    <li><strong>No asesoría profesional:</strong> Los servicios de IA de Yayika <strong>NO constituyen asesoría médica, financiera, legal ni de ningún tipo profesional</strong>. Son herramientas de apoyo informativo y no sustituyen el criterio de profesionales calificados</li>
-    <li><strong>Decisiones automatizadas:</strong> En la medida en que la plataforma utilice procesamiento automatizado para generar recomendaciones personalizadas, tienes derecho a solicitar intervención humana, expresar tu punto de vista y impugnar cualquier decisión automatizada que te afecte significativamente. Para ejercer estos derechos, contacta a <strong>admin@yayika.com</strong></li>
-    <li><strong>Contenido generado por IA:</strong> El contenido generado por IA (afirmaciones, consejos, planes) es producido por modelos de lenguaje y puede contener imprecisiones. No debes confiar en él como única fuente para decisiones importantes</li>
-    <li><strong>Responsabilidad:</strong> Yayika no es responsable por decisiones tomadas basándose exclusivamente en el contenido generado por IA. El usuario es el único responsable de evaluar la información y consultar profesionales cuando sea necesario</li>
-    <li><strong>Revisión humana:</strong> Si consideras que una recomendación de IA es inapropiada, inexacta o te afecta negativamente, puedes solicitar revisión humana contactando a <strong>admin@yayika.com</strong></li>
-  </ul>
-
-  <h2>4. Pagos y facturación</h2>
-  <ul>
-    <li>Todos los pagos se procesan a través de <strong>Stripe</strong>, un proveedor de servicios de pago seguro y certificado PCI DSS</li>
-    <li>No almacenamos datos de tarjetas de crédito o débito en nuestros servidores</li>
-    <li>Los precios pueden cambiar previo aviso razonable. Los cambios no afectarán pedidos ya confirmados</li>
-    <li>En caso de error en el precio de un producto, nos reservamos el derecho de cancelar el pedido y reembolsar el monto pagado</li>
-  </ul>
-
-  <h2>5. Impuestos</h2>
-  <p>Los precios mostrados pueden incluir o no impuestos aplicables según tu jurisdicción:</p>
-  <ul>
-    <li><strong>México:</strong> El IVA se cobra conforme a la legislación vigente. Los vendedores independientes en la plataforma son responsables de sus propias obligaciones fiscales</li>
-    <li><strong>Unión Europea:</strong> El IVA se calcula y cobra según la tasa del país del comprador. Puede aplicarse el mecanismo de "agente de retención" o "proveedor considerado" según la legislación local</li>
-    <li><strong>Reino Unido:</strong> El VAT del 20% se aplica a servicios digitales para consumidores finales</li>
-    <li><strong>Latinoamérica:</strong> Los impuestos aplicables (IVA, IGV, ITC, etc.) varían por país. Consulta la legislación fiscal de tu jurisdicción</li>
-    <li><strong>Estados Unidos:</strong> Los impuestos estatales sobre ventas digitales varían por estado. Puede aplicarse el "economic nexus" según la legislación local</li>
-    <li><strong>Suiza:</strong> La MWST del 8.1% se aplica a servicios digitales para consumidores finales cuando supera el umbral de CHF 100,000</li>
-  </ul>
-  <h3>5.2 Productos de vendedoras</h3>
-  <p>En el modelo de comunidad de Yayika, <strong>cada vendedora es responsable de sus propios impuestos</strong>. Yayika no procesa, retiene ni declara impuestos por las ventas de vendedoras independientes. Consulta la <a href="guia-fiscal-vendedoras.html">Guía Fiscal para Vendedoras</a> para más detalles.</p>
-
-  <h2>6. Devoluciones y reembolsos</h2>
-  <p>Debido a la naturaleza de los productos digitales:</p>
-  <ul>
-    <li><strong>Productos digitales descargables:</strong> No se ofrecen reembolsos una vez que el archivo haya sido descargado o accedido. Si el archivo presenta un defecto técnico, te enviaremos una versión corregida sin costo</li>
-    <li><strong>Membresías:</strong> Puedes solicitar un reembolso dentro de los primeros <strong>7 días</strong> de tu primera suscripción, siempre que no hayas descargado o utilizado significativamente el contenido premium</li>
-    <li>Para solicitar un reembolso, contacta a <strong>admin@yayika.com</strong> con tu nombre, correo electrónico y número de orden</li>
-    <li>Los reembolsos se procesarán en un plazo de <strong>5 a 10 días hábiles</strong></li>
-  </ul>
-  <p>Para información completa sobre derechos de devolución por región, consulta nuestra <a href="politica-pagos.html">Política de Pagos y Reembolsos</a>.</p>
-
-  <h2>7. Propiedad intelectual</h2>
-  <ul>
-    <li>Todo el contenido de Yayika (textos, diseños, código, imágenes, logotipos) es propiedad del responsable o de sus licenciantes y está protegido por las leyes de propiedad intelectual de México</li>
-    <li>No está permitido copiar, reproducir, modificar, distribuir, transmitir o crear trabajos derivados del contenido sin autorización expresa por escrito</li>
-    <li>El nombre <strong>"Yayika"</strong>, su logotipo y marcas asociadas son marcas registradas ante el IMPI</li>
-    <li><strong>Contenido generado por IA:</strong> El contenido generado por herramientas de IA en la plataforma se otorga bajo la misma licencia de uso personal descrita en la sección 3.1</li>
-  </ul>
-
-  <h2>8. Conducta del usuario</h2>
-  <p>Al utilizar Yayika, el usuario se compromete a:</p>
-  <ul>
-    <li>No utilizar la plataforma para fines ilegales o no autorizados</li>
-    <li>No intentar acceder a áreas restringidas del sistema sin autorización</li>
-    <li>No transmitir virus, malware o código malicioso</li>
-    <li>No recopilar datos de otros usuarios sin su consentimiento</li>
-    <li>No suplantar la identidad de otra persona</li>
-    <li>Respetar a otros miembros de la comunidad</li>
-    <li>No intentar manipular, explotar o evadir las herramientas de IA de la plataforma</li>
-  </ul>
-  <p>El incumplimiento de estas normas puede resultar en la suspensión o eliminación de tu cuenta sin previo aviso.</p>
-
-  <h2>9. Menores de edad</h2>
-  <p>El servicio de Yayika está dirigido a personas mayores de <strong>18 años</strong>. No recabamos intencionalmente datos personales de menores de edad. Si un padre o tutor tiene conocimiento de que su hijo menor de 16 años nos ha proporcionado datos personales sin su consentimiento, puede contactarnos a <strong>admin@yayika.com</strong> para solicitar su eliminación inmediata.</p>
-
-  <h2>10. Disponibilidad del servicio</h2>
-  <ul>
-    <li>Nos esforzamos por mantener Yayika disponible 24/7, pero no garantizamos disponibilidad ininterrumpida</li>
-    <li>Podemos realizar mantenimiento programado con aviso previo razonable</li>
-    <li>No seremos responsables por interrupciones debidas a causas fuera de nuestro control (fuerza mayor, fallos de terceros, etc.)</li>
-  </ul>
-
-  <h2>11. Limitación de responsabilidad</h2>
-  <p>En la máxima medida permitida por la ley aplicable:</p>
-  <ul>
-    <li>Yayika se proporciona "tal cual" y "según disponibilidad" sin garantías de ningún tipo</li>
-    <li>No garantizamos que los productos digitales satisfagan tus necesidades específicas</li>
-    <li>No seremos responsables por daños indirectos, incidentales, especiales o consecuentes derivados del uso de la plataforma</li>
-    <li>Nuestra responsabilidad total no excederá el monto pagado por el producto o servicio que dio origen al reclamo</li>
-    <li><strong>Contenido de IA:</strong> En la máxima medida permitida por la ley, Yayika no será responsable por decisiones tomadas basándose en contenido generado por inteligencia artificial. El usuario asume plena responsabilidad por el uso que haga de dicha información</li>
-  </ul>
-
-  <h2>12. Notificación de brechas de seguridad</h2>
-  <p>En caso de una brecha de seguridad que suponga un riesgo para tus datos personales, nos comprometemos a notificarte y, cuando aplique, a las autoridades competentes, dentro de los siguientes plazos:</p>
-  <ul>
-    <li><strong>Unión Europea / Reino Unido:</strong> Dentro de las <strong>72 horas</strong> posteriores a la toma de conocimiento (conforme al Art. 33 del GDPR)</li>
-    <li><strong>México:</strong> Dentro de las <strong>72 horas</strong> posteriores a la toma de conocimiento cuando involucre datos sensibles (conforme a la LFPDPPP)</li>
-    <li><strong>Brasil:</strong> Dentro de un plazo razonable, interpretado como <strong>2 días hábiles</strong> para notificación inicial (conforme a la LGPD)</li>
-    <li><strong>Colombia:</strong> Dentro de <strong>15 días hábiles</strong> desde la toma de conocimiento (conforme a la Ley 1581/2012)</li>
-    <li><strong>Perú:</strong> Dentro de <strong>10 días hábiles</strong> desde la toma de conocimiento (conforme a la Ley 29733)</li>
-    <li><strong>Otras jurisdicciones:</strong> En el plazo más breve posible conforme a la legislación aplicable</li>
-  </ul>
-  <p>La notificación incluirá: naturaleza de la brecha, categorías y número aproximado de afectados, medidas de contención tomadas, y recomendaciones para proteger tus datos.</p>
-
-  <h2>13. Enlaces a terceros</h2>
-  <p>Yayika puede contener enlaces a sitios web de terceros (Stripe, proveedores, redes sociales). No somos responsables por el contenido, prácticas de privacidad o políticas de estos sitios externos.</p>
-
-  <h2>14. Resolución de controversias</h2>
-  <ul>
-    <li>Estos términos se rigen por las leyes de los <strong>Estados Unidos Mexicanos</strong></li>
-    <li>Cualquier controversia será sometida a los tribunales competentes en la jurisdicción correspondiente al domicilio del responsable</li>
-    <li>Antes de iniciar un procedimiento legal, te invitamos a contactarnos a <strong>admin@yayika.com</strong> para buscar una solución amistosa</li>
-    <li><strong>Para residentes de la UE:</strong> Puedes presentar una queja ante la autoridad de protección de datos de tu país de residencia. Consulta la lista en <a href="https://edpb.europa.eu/about-edpb/about-edpb/members_en" target="_blank" rel="noopener">edpb.europa.eu</a></li>
-    <li><strong>Para residentes de Colombia:</strong> Puedes presentar una queja ante la Superintendencia de Industria y Comercio (SIC)</li>
-    <li><strong>Para residentes de Brasil:</strong> Puedes presentar una queja ante la Autoridad Nacional de Protección de Datos (ANPD)</li>
-  </ul>
-
-  <h2>15. Cambios en los términos</h2>
-  <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier momento. Los cambios serán publicados en esta página con la fecha de última actualización. El uso continuado de la plataforma después de los cambios constituye la aceptación de los mismos. Para cambios materiales, te notificaremos por correo electrónico con al menos 15 días de antelación.</p>
-
-  <h2>16. Contacto</h2>
-  <p>Para preguntas sobre estos Términos y Condiciones:</p>
-  <ul>
-    <li><strong>Correo electrónico:</strong> admin@yayika.com</li>
-    <li><strong>Sitio web:</strong> <a href="https://yayika.com">yayika.com</a></li>
-  </ul>
-
-  <p style="margin-top: 40px; font-size: 13px; color: var(--suave); text-align: center;">Este documento fue actualizado por última vez el 30 de julio de 2026.</p>
+<div class="hero">
+    <h1>Términos y Condiciones</h1>
+    <p>Última actualización: 1 de agosto de 2026</p>
 </div>
 
-<script src="/js/cookie-banner.js"></script>
+<div class="container">
+
+    <div class="toc">
+        <h2>Índice</h2>
+        <ol>
+            <li><a href="#aceptacion">Aceptación de los Términos</a></li>
+            <li><a href="#descripcion">Descripción del Servicio</a></li>
+            <li><a href="#registro">Registro y Elegibilidad</a></li>
+            <li><a href="#comunidad">Modelo Comunitario</a></li>
+            <li><a href="#planes">Planes de Membresía</a></li>
+            <li><a href="#pagos">Pagos y Suscripciones</a></li>
+            <li><a href="#vendedores">Responsabilidades de los Vendedores</a></li>
+            <li><a href="#conducta">Conducta del Usuario</a></li>
+            <li><a href="#propiedad">Propiedad Intelectual</a></li>
+            <li><a href="#limitacion">Limitación de Responsabilidad</a></li>
+            <li><a href="#indemnizacion">Indemnización</a></li>
+            <li><a href="#terminacion">Terminación</a></li>
+            <li><a href="#ley">Ley Aplicable y Resolución de Controversias</a></li>
+        </ol>
+    </div>
+
+    <section id="aceptacion">
+        <h2>1. Aceptación de los Términos</h2>
+        <p>Al acceder o utilizar la plataforma Yayika (yayika.com) ("Plataforma"), usted acepta obligatoriamente los presentes Términos y Condiciones. Si no está de acuerdo con alguno de estos términos, no debe utilizar la Plataforma.</p>
+        <p>Estos Términos constituyen un acuerdo legal vinculante entre usted ("Usuario") y Edgar Apolonio Aguilera, titular de la plataforma Yayika, con RFC: AOAE781008V98 ("Propietario", "nosotros", "nuestro").</p>
+        <p>El uso continuado de la Plataforma tras la publicación de modificaciones constituye la aceptación de dichos cambios. Nos reservamos el derecho de modificar estos Términos en cualquier momento, notificando a los usuarios a través de la Plataforma o por correo electrónico.</p>
+    </section>
+
+    <section id="descripcion">
+        <h2>2. Descripción del Servicio</h2>
+        <p>Yayika es una plataforma comunitaria diseñada para mujeres emprendedoras que ofrece:</p>
+        <ul>
+            <li><strong>Cursos en línea:</strong> Programas educativos como Ciclo Productiva, Dinero Sin Pena y La Mujer Que Negocia.</li>
+            <li><strong>Comunidad:</strong> Espacio de networking, apoyo y crecimiento profesional entre mujeres.</li>
+            <li><strong>Herramientas de negocio:</strong> Recursos, plantillas y metodologías para el emprendimiento femenino.</li>
+            <li><strong>Marketplace comunitario:</strong> Donde vendedores independientes ofrecen productos digitales a la comunidad.</li>
+        </ul>
+        <p>Yayika <strong>no es un marketplace</strong> en el sentido tradicional. La plataforma opera bajo un modelo comunitario donde las transacciones comerciales se gestionan directamente entre vendedores y compradores, sin intermediación de Yayika en los pagos de productos.</p>
+    </section>
+
+    <section id="registro">
+        <h2>3. Registro y Elegibilidad</h2>
+        <h3>Requisitos de edad</h3>
+        <p>Para utilizar Yayika, usted debe tener al menos <strong>18 años de edad</strong>. Al registrarse, usted declara y garantiza que cumple con este requisito. Yayika se reserva el derecho de cancelar cuentas de usuarios menores de edad.</p>
+
+        <h3>Información de registro</h3>
+        <p>Al crear una cuenta, usted se compromete a:</p>
+        <ul>
+            <li>Proporcionar información verdadera, precisa y completa.</li>
+            <li>Mantener y actualizar su información personal.</li>
+            <li>Mantener la confidencialidad de su contraseña y cuenta.</li>
+            <li>Notificar inmediatamente cualquier uso no autorizado de su cuenta.</li>
+        </ul>
+        <p>Usted es responsable de todas las actividades que ocurran bajo su cuenta, ya sea que las haya autorizado o no.</p>
+    </section>
+
+    <section id="comunidad">
+        <h2>4. Modelo Comunitario</h2>
+        <p>Yayika opera bajo un <strong>modelo comunitario</strong>, no bajo un modelo de marketplace tradicional. Esto implica:</p>
+        <div class="highlight-box">
+            <strong>Modelo de Marketplace (NO somos esto):</strong> La plataforma procesa pagos, retiene comisiones por venta y actúa como intermediario en las transacciones.
+        </div>
+        <div class="highlight-box">
+            <strong>Modelo Comunitario (Sí somos esto):</strong> Los vendedores son independientes y gestionan sus propios cobros. Yayika cobra únicamente por membresías que dan acceso a la plataforma y la comunidad.
+        </div>
+        <p>Los productos digitales vendidos a través de los vendedores son responsabilidad exclusiva de estos. Yayika no procesa, retiene ni garantiza dichas transacciones. El vínculo comercial es directamente entre el vendedor y el comprador.</p>
+    </section>
+
+    <section id="planes">
+        <h2>5. Planes de Membresía</h2>
+        <p>Yayika ofrece tres niveles de membresía que otorgan acceso a diferentes beneficios de la plataforma:</p>
+
+        <h3>Plan Básica</h3>
+        <p>Acceso a la comunidad general, foros de discusión y contenido público. Ideal para mujeres que están comenzando su camino emprendedor.</p>
+
+        <h3>Plan Profesional</h3>
+        <p>Incluye todo lo del plan Básica más acceso a cursos específicos, recursos descargables, mentorías grupales y networking exclusivo.</p>
+
+        <h3>Plan Premium</h3>
+        <p>Incluye todo lo del plan Profesional más acceso ilimitado a todos los cursos, mentorías 1:1, eventos exclusivos, comunidad VIP y soporte prioritario.</p>
+
+        <p>Los precios, beneficios específicos y condiciones de cada plan se detallan en la sección de planes de yayika.com. Yayika se reserva el derecho de modificar planes, precios y beneficios con previo aviso.</p>
+    </section>
+
+    <section id="pagos">
+        <h2>6. Pagos y Suscripciones</h2>
+        <h3>Procesamiento de pagos</h3>
+        <p>Todos los pagos de membresía se procesan a través de <strong>Stripe</strong>, un procesador de pagos seguro y certificado PCI DSS Level 1. Yayika no almacena datos de tarjetas de crédito en sus servidores.</p>
+
+        <h3>Suscripciones recurrentes</h3>
+        <p>Las membresías funcionan bajo un modelo de suscripción recurrente:</p>
+        <ul>
+            <li>El cobro se realiza automáticamente según la周期 seleccionada (mensual o anual).</li>
+            <li>Puede cancelar su suscripción en cualquier momento desde su panel de usuario.</li>
+            <li>La cancelación surtirá efecto al final del ciclo de facturación actual.</li>
+            <li>No se realizan reembolsos parciales por meses no utilizados.</li>
+        </ul>
+
+        <h3>Cambios de precio</h3>
+        <p>Yayika se reserva el derecho de ajustar los precios de las membresías. Se notificará a los usuarios con al menos 30 días de anticipación antes de cualquier cambio de precio. El uso continuado de la Plataforma tras el cambio de precio constituye la aceptación del nuevo precio.</p>
+
+        <h3>Exención de impuestos</h3>
+        <p>Los precios mostrados pueden no incluir impuestos aplicables. El Usuario es responsable del pago de cualquier impuesto requerido por su jurisdicción.</p>
+    </section>
+
+    <section id="vendedores">
+        <h2>7. Responsabilidades de los Vendedores</h2>
+        <p>Los vendedores que ofrecen productos digitales a través de Yayika aceptan las siguientes obligaciones:</p>
+        <ul>
+            <li><strong>Autogestión de cobros:</strong> Cada vendedor es responsable de establecer y gestionar sus propios enlaces de pago (Stripe, PayPal, transferencia, etc.). Yayika no interviene en estos procesos.</li>
+            <li><strong>Calidad del producto:</strong> Garantizar que los productos ofrecidos cumplan con la descripción publicada y sean de calidad aceptable.</li>
+            <li><strong>Servicio al cliente:</strong> Brindar soporte directo a los compradores de sus productos.</li>
+            <li><strong>Cumplimiento legal:</strong> Cumplir con todas las leyes aplicables, incluyendo protección al consumidor, derechos de devolución y emisión de facturas.</li>
+            <li><strong>Contenido:</strong> Asegurar que el contenido no infrinja derechos de terceros ni contenga material ilegal.</li>
+        </ul>
+        <p>Yayika actúa únicamente como facilitador del espacio comunitario y <strong>no es parte en las transacciones</strong> entre vendedores y compradores.</p>
+    </section>
+
+    <section id="conducta">
+        <h2>8. Conducta del Usuario</h2>
+        <p>Al utilizar Yayika, el Usuario se compromete a:</p>
+        <ul>
+            <li>Respetar a todos los miembros de la comunidad.</li>
+            <li>No publicar contenido ofensivo, discriminatorio, acosador o que incite al odio.</li>
+            <li>No intentar acceder a cuentas de otros usuarios.</li>
+            <li>No utilizar la Plataforma para fines ilegales o no autorizados.</li>
+            <li>No realizar spam, phishing o cualquier tipo de actividad maliciosa.</li>
+            <li>No reproducir, duplicar o revender el contenido de la Plataforma sin autorización.</li>
+            <li>Cumplir con todas las leyes y regulaciones aplicables.</li>
+        </ul>
+        <p>El incumplimiento de estas normas puede resultar en la suspensión o eliminación de la cuenta sin previo aviso y sin derecho a reembolso.</p>
+    </section>
+
+    <section id="propiedad">
+        <h2>9. Propiedad Intelectual</h2>
+        <h3>Contenido de Yayika</h3>
+        <p>Todo el contenido original de la Plataforma, incluyendo textos, gráficos, logotipos, iconos, imágenes, clipart, datos y software, es propiedad de Edgar Apolonio Aguilera y está protegido por las leyes de propiedad intelectual de México e internacionales.</p>
+
+        <h3>Contenido de usuarios y vendedores</h3>
+        <p>Al publicar contenido en Yayika, el usuario otorga a la Plataforma una licencia no exclusiva, transferible y libre de regalías para usar, reproducir y distribuir dicho contenido exclusivamente con fines de operación de la Plataforma.</p>
+
+        <h3>Contenido de cursos</h3>
+        <p>El contenido de los cursos (Ciclo Productiva, Dinero Sin Pena, La Mujer Que Negocia) es propiedad intelectual de Yayika y/o sus instructores. Queda prohibida la reproducción, distribución o compartición no autorizada de dicho material.</p>
+
+        <h3>DMCA y notificaciones de infracción</h3>
+        <p>Si usted considera que su propiedad intelectual ha sido infringida, puede contactarnos a través de <a href="mailto:legal@yayika.com">legal@yayika.com</a> con la información relevante para investigar la reclamación.</p>
+    </section>
+
+    <section id="limitacion">
+        <h2>10. Limitación de Responsabilidad</h2>
+        <p>En la máxima medida permitida por la legislación mexicana aplicable, Yayika y su Propietario:</p>
+        <ul>
+            <li>No garantizan que la Plataforma estará disponible de manera ininterrumpida o libre de errores.</li>
+            <li>No son responsables por pérdidas o daños que no sean consecuencia directa de nuestro incumplimiento.</li>
+            <li>No se hacen responsables por la calidad, seguridad o legalidad de los productos ofrecidos por vendedores independientes.</li>
+            <li>No responden por transacciones realizadas fuera de la Plataforma.</li>
+            <li>No garantizan resultados específicos del uso de cursos o herramientas ofrecidas.</li>
+        </ul>
+        <p>La responsabilidad total de Yayika por reclamaciones relacionadas con la Plataforma no excederá el monto pagado por el Usuario en los últimos 12 meses.</p>
+    </section>
+
+    <section id="indemnizacion">
+        <h2>11. Indemnización</h2>
+        <p>El Usuario acepta indemnizar, defender y mantener indemne a Edgar Apolonio Aguilera, Yayika y sus afiliados, directores, empleados y agentes de cualquier reclamación, demanda, daño, pérdida, responsabilidad, costo o gasto (incluyendo honorarios de abogados) que surja de:</p>
+        <ul>
+            <li>El uso de la Plataforma por parte del Usuario.</li>
+            <li>El incumplimiento de estos Términos.</li>
+            <li>La violación de derechos de terceros.</li>
+            <li>Cualquier contenido publicado por el Usuario en la Plataforma.</li>
+        </ul>
+    </section>
+
+    <section id="terminacion">
+        <h2>12. Terminación</h2>
+        <p>Yayika se reserva el derecho de suspender o terminar la cuenta de cualquier usuario en cualquier momento y por cualquier motivo, incluyendo pero no limitado a:</p>
+        <ul>
+            <li>Incumplimiento de estos Términos y Condiciones.</li>
+            <li>Conducta que consideremos perjudicial para la comunidad.</li>
+            <li>Solicitud de autoridades legales competentes.</li>
+            <li>Inactividad prolongada de la cuenta.</li>
+        </ul>
+        <p>En caso de terminación, el usuario perderá el acceso a la Plataforma, el contenido de la comunidad y los beneficios de su membresía. No se realizan reembolsos por terminación anticipada.</p>
+    </section>
+
+    <section id="ley">
+        <h2>13. Ley Aplicable y Resolución de Controversias</h2>
+
+        <h3>1. Ley Aplicable</h3>
+        <p>El presente Acuerdo se regirá e interpretará de conformidad con las leyes de los Estados Unidos Mexicanos, específicamente el Código Civil Federal y la Ley Federal de Protección al Consumidor, sin consideración a sus principios de conflicto de leyes.</p>
+
+        <h3>2. Arbitraje Internacional Obligatorio</h3>
+        <p>Toda controversia, diferencia o reclamación que surja del presente Acuerdo, incluyendo su incumplimiento, terminación o nulidad, será resuelta definitivamente mediante arbitraje obligatorio administrado por el Centro Internacional de Resolución de Diferencias (ICDR) de acuerdo con sus Reglas de Arbitraje Internacional. El arbitraje se realizará en español. La sede del arbitraje será la Ciudad de México, México. El tribunal arbitral estará compuesto por un (1) árbitro. El idioma del arbitraje será español. El laudo arbitral podrá ejecutarse ante cualquier tribunal de jurisdicción competente.</p>
+
+        <h3>3. Renuncia a Acciones Colectivas</h3>
+        <p>En la máxima medida permitida por la ley aplicable, usted acepta que cualquier procedimiento de resolución de disputas se llevará a cabo únicamente a título individual y no en una acción colectiva, consolidada o representativa. Si por alguna razón una reclamación se presenta ante un tribunal en lugar de arbitraje, usted y Yayika aceptan que cada uno ha renunciado a su derecho a un juicio con jurado.</p>
+
+        <h3>4. Excepción para Reclamaciones Menores</h3>
+        <p>Independientemente de lo anterior, cualquiera de las partes podrá solicitar medidas cautelares o de otra índole equitativa ante cualquier tribunal de jurisdicción competente para prevenir la infracción, apropiación indebida o violación de derechos de propiedad intelectual o información confidencial.</p>
+
+        <h3>5. Protección al Consumidor — Unión Europea</h3>
+        <p>Si usted es consumidor en la Unión Europea, también puede utilizar la plataforma de Resolución de Litigios en Línea de la Comisión Europea en https://ec.europa.eu/consumers/odr. Esto no afecta sus derechos obligatorios de protección al consumidor bajo la legislación nacional aplicable.</p>
+
+        <h3>6. Protección al Consumidor — Brasil</h3>
+        <p>Si usted es consumidor en Brasil, también puede utilizar las Agencias de Protección al Consumidor (PROCON) o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo el Código de Defensa do Consumidor (CDC).</p>
+
+        <h3>7. Protección al Consumidor — Argentina</h3>
+        <p>Si usted es consumidor en Argentina, también puede utilizar la Dirección Nacional de Defensa del Consumidor o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley de Defensa del Consumidor No. 24.240.</p>
+
+        <h3>8. Protección al Consumidor — Chile</h3>
+        <p>Si usted es consumidor en Chile, también puede utilizar el Servicio Nacional del Consumidor (SERNAC) o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley No. 19.496 sobre Protección de los Derechos de los Consumidores.</p>
+
+        <h3>9. Protección al Consumidor — Colombia</h3>
+        <p>Si usted es consumidor en Colombia, también puede utilizar la Superintendencia de Industria y Comercio (SIC) o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley Estatutaria 1755 de 2015 y el Código de Consumo.</p>
+
+        <h3>10. Protección al Consumidor — Perú</h3>
+        <p>Si usted es consumidor en Perú, también puede utilizar INDECOPI o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley No. 29571 Código de Protección y Defensa del Consumidor.</p>
+
+        <h3>11. Protección al Consumidor — Ecuador</h3>
+        <p>Si usted es consumidor en Ecuador, también puede utilizar la Superintendencia de Control del Poder de Mercado o el sistema judicial de su domicilio. Esto no afecta sus derechos bajo la Ley Orgánica de Defensa del Consumidor.</p>
+
+        <h3>12. Plazo de Prescripción</h3>
+        <p>Cualquier reclamación que surja del presente Acuerdo deberá iniciarse dentro de un (1) año después de que la acción haya nacido, o dicha acción quedará permanentemente prescrita.</p>
+    </section>
+
+    <section>
+        <h2>16. Disposiciones Generales</h2>
+        <ul>
+            <li><strong>Acuerdo completo:</strong> Estos Términos constituyen el acuerdo completo entre las partes y reemplazan cualquier acuerdo anterior.</li>
+            <li><strong>Divisibilidad:</strong> Si alguna disposición es declarada inválida, las demás disposiciones mantendrán su plena vigencia.</li>
+            <li><strong>Renuncia:</strong> La falta de ejercicio de cualquier derecho no constituye una renuncia al mismo.</li>
+            <li><strong>Asignación:</strong> El Usuario no puede asignar sus derechos bajo estos Términos sin nuestro consentimiento previo por escrito.</li>
+            <li><strong>Fuerza mayor:</strong> Yayika no será responsable por fallos o retrasos causados por eventos fuera de nuestro control razonable.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>17. Información de Contacto</h2>
+        <p>Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos:</p>
+        <ul>
+            <li><strong>Correo electrónico:</strong> <a href="mailto:legal@yayika.com">legal@yayika.com</a></li>
+            <li><strong>Sitio web:</strong> <a href="https://yayika.com" target="_blank">yayika.com</a></li>
+            <li><strong>Responsable:</strong> Edgar Apolonio Aguilera</li>
+        </ul>
+    </section>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Yayika — Edgar Apolonio Aguilera. Todos los derechos reservados.</p>
+    <p style="margin-top: 0.5rem;">
+        <a href="https://yayika.com">Inicio</a> &middot;
+        <a href="https://yayika.com/terminos.html">Términos</a> &middot;
+        <a href="https://yayika.com/privacidad.html">Privacidad</a> &middot;
+        <a href="https://yayika.com/contacto.html">Contacto</a>
+    </p>
+</footer>
+
 </body>
 </html>
