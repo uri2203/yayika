@@ -405,6 +405,28 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <input class="form-input" type="password" id="passInput" placeholder="••••••••" autocomplete="current-password">
         <a class="forgot" href="#" data-i18n="portal_forgot_pass">¿Olvidaste tu contraseña?</a>
       </div>
+
+      <!-- Registration fields (hidden by default, shown when isRegister=true) -->
+      <div id="registerFields" style="display:none">
+        <div class="form-group">
+          <label class="form-label" data-i18n="auth_full_name">Nombre completo</label>
+          <input class="form-input" type="text" id="nameInput" placeholder="Tu nombre" autocomplete="name">
+        </div>
+        
+        <!-- Legal acceptance checkboxes -->
+        <div class="legal-checkboxes" style="margin: 16px 0; font-size: 13px; color: #666;">
+          <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+            <input type="checkbox" id="acceptTerms" style="margin-top: 3px; min-width: 16px;">
+            <span data-i18n="auth_accept_terms">Acepto los <a href="../terminos.html" target="_blank" style="color: #9333ea;">Términos y Condiciones</a></span>
+          </label>
+          <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+            <input type="checkbox" id="acceptPrivacy" style="margin-top: 3px; min-width: 16px;">
+            <span data-i18n="auth_accept_privacy">Acepto el <a href="../aviso-privacidad.html" target="_blank" style="color: #9333ea;">Aviso de Privacidad</a></span>
+          </label>
+          <div id="legalError" style="color: #dc2626; font-size: 12px; display: none; margin-top: 4px;"></div>
+        </div>
+      </div>
+
       <button class="btn-login" onclick="doLogin()" data-i18n="portal_login_btn">Entrar a mi portal</button>
 
         <div class="login-divider"><span data-i18n="sidebar_or">o</span></div>
@@ -414,8 +436,13 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <span data-i18n="portal_google_btn">Continuar con Google</span>
       </button>
 
-      <div class="login-register">
-        <span data-i18n="portal_register">¿Aún no tienes cuenta?</span> <a href="../index.html#membresia" data-i18n="portal_register_link">Ver planes de membresía</a>
+      <div class="login-register" id="loginRegisterLink">
+        <span data-i18n="portal_register">¿Aún no tienes cuenta?</span> 
+        <a href="#" onclick="toggleToRegister()" data-i18n="auth_create_account">Crear cuenta</a>
+      </div>
+      <div class="login-register" id="registerLoginLink" style="display:none">
+        <span data-i18n="auth_has_account">Ya tienes cuenta?</span> 
+        <a href="#" onclick="toggleToLogin()" data-i18n="auth_login_here">Entrar aqui</a>
       </div>
     </div>
   </div>
@@ -957,28 +984,67 @@ async function doLogin() {
   }
 }
 
+let isRegister = false;
+
+function toggleToRegister() {
+  isRegister = true;
+  document.getElementById('registerFields').style.display = 'block';
+  document.getElementById('loginRegisterLink').style.display = 'none';
+  document.getElementById('registerLoginLink').style.display = 'block';
+  const btn = document.querySelector('.btn-login');
+  btn.textContent = getI18nText('auth_create_account') || 'Crear cuenta';
+  btn.setAttribute('onclick', 'doRegister()');
+}
+
+function toggleToLogin() {
+  isRegister = false;
+  document.getElementById('registerFields').style.display = 'none';
+  document.getElementById('loginRegisterLink').style.display = 'block';
+  document.getElementById('registerLoginLink').style.display = 'none';
+  const btn = document.querySelector('.btn-login');
+  btn.textContent = getI18nText('auth_login') || 'Entrar a mi portal';
+  btn.setAttribute('onclick', 'doLogin()');
+}
+
 async function doRegister() {
   const email = document.getElementById('emailInput').value.trim().toLowerCase();
   const pass = document.getElementById('passInput').value;
   const name = document.getElementById('nameInput')?.value.trim() || '';
   const err = document.getElementById('loginError');
 
+  const acceptTerms = document.getElementById('acceptTerms')?.checked;
+  const acceptPrivacy = document.getElementById('acceptPrivacy')?.checked;
+  const legalError = document.getElementById('legalError');
+  
+  if (!acceptTerms || !acceptPrivacy) {
+    legalError.style.display = 'block';
+    legalError.textContent = getI18nText('auth_legal_required') || 'Debes aceptar los Términos y el Aviso de Privacidad para continuar.';
+    return;
+  }
+  legalError.style.display = 'none';
+
   if (!email || !pass) { err.textContent = t('portal_login_error') || 'Please fill in all fields.'; err.style.display = 'block'; return; }
   if (pass.length < 6) { err.textContent = { es: 'La contraseña debe tener al menos 6 caracteres.', en: 'Password must be at least 6 characters.', pt: 'A senha deve ter pelo menos 6 caracteres.', fr: 'Le mot de passe doit contenir au moins 6 caractères.', de: 'Das Passwort muss mindestens 6 Zeichen lang sein.' }[currentLang || 'es']; err.style.display = 'block'; return; }
 
   try {
     err.style.display = 'none';
+    const btn = document.querySelector('.btn-login');
+    btn.disabled = true;
+    btn.textContent = getI18nText('auth_creating') || 'Creando cuenta...';
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password: pass,
-      options: { data: { full_name: name } }
+      options: { 
+        data: { full_name: name },
+        captchaToken: window.captchaToken
+      }
     });
     if (error) throw error;
 
-    // Process referral if exists
     const refCode = sessionStorage.getItem('yayika_ref');
-    if (refCode && data.user && typeof AffiliateSystem !== 'undefined') {
-      await AffiliateSystem.processReferralOnSignup(refCode);
+    if (refCode && data?.user && typeof AffiliateSystem !== 'undefined') {
+      try { await AffiliateSystem.processReferralOnSignup(refCode); } catch(e) {}
       sessionStorage.removeItem('yayika_ref');
     }
 
@@ -988,12 +1054,20 @@ async function doRegister() {
     err.style.background = '#E8F8F1';
     err.style.color = '#1F7A4E';
     err.style.borderColor = '#9EE8B8';
+    btn.textContent = getI18nText('auth_create_account') || 'Crear cuenta';
   } catch (e) {
-    err.textContent = e.message || 'Error al crear cuenta.';
+    let msg = 'Error al crear cuenta.';
+    if (e.message?.includes('already registered')) msg = { es: 'Este correo ya está registrado. Intenta con otro.', en: 'This email is already registered. Try another.', pt: 'Este e-mail já está registrado. Tente outro.', fr: 'Cet email est déjà utilisé. Essaie un autre.', de: 'Diese E-Mail ist bereits registriert. Versuche eine andere.' }[currentLang || 'es'];
+    else if (e.message?.includes('valid email')) msg = { es: 'El correo no es válido.', en: 'The email is not valid.', pt: 'O e-mail não é válido.', fr: 'L\'email n\'est pas valide.', de: 'Die E-Mail ist ungültig.' }[currentLang || 'es'];
+    else if (e.message?.includes('at least 6')) msg = { es: 'La contraseña debe tener al menos 6 caracteres.', en: 'Password must be at least 6 characters.', pt: 'A senha deve ter pelo menos 6 caracteres.', fr: 'Le mot de passe doit contenir au moins 6 caractères.', de: 'Das Passwort muss mindestens 6 Zeichen lang sein.' }[currentLang || 'es'];
+    err.textContent = msg;
     err.style.display = 'block';
     err.style.background = '#FEF2F2';
     err.style.color = '#DC2626';
     err.style.borderColor = '#FECACA';
+    const btn = document.querySelector('.btn-login');
+    btn.disabled = false;
+    btn.textContent = getI18nText('auth_create_account') || 'Crear cuenta';
   }
 }
 

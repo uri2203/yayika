@@ -148,6 +148,18 @@ footer a{color:rgba(255,255,255,.7)}
       <div id="affRegisterForm">
         <input type="email" id="affEmail" placeholder="Tu correo electrónico" style="width:100%;padding:12px 16px;border:1px solid var(--borde);border-radius:12px;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;background:var(--bg);color:var(--texto)">
         <input type="password" id="affPassword" placeholder="Contraseña (mín. 6 caracteres)" style="width:100%;padding:12px 16px;border:1px solid var(--borde);border-radius:12px;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;background:var(--bg);color:var(--texto)">
+        <!-- Legal acceptance checkboxes -->
+        <div style="margin: 16px 0; font-size: 13px; color: #666;">
+          <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+            <input type="checkbox" id="affAcceptTerms" style="margin-top: 3px; min-width: 16px;">
+            <span data-i18n="auth_accept_terms">Acepto los <a href="terminos.html" target="_blank" style="color: #9333ea;">Términos y Condiciones</a></span>
+          </label>
+          <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; cursor: pointer;">
+            <input type="checkbox" id="affAcceptPrivacy" style="margin-top: 3px; min-width: 16px;">
+            <span data-i18n="auth_accept_privacy">Acepto el <a href="aviso-privacidad.html" target="_blank" style="color: #9333ea;">Aviso de Privacidad</a></span>
+          </label>
+          <div id="affLegalError" style="color: #dc2626; font-size: 12px; display: none; margin-top: 4px;"></div>
+        </div>
         <div id="affError" style="display:none;padding:10px;border-radius:8px;font-size:13px;margin-bottom:12px"></div>
         <button onclick="doAffiliateRegister()" data-i18n="afiliadas_reg_button" style="width:100%;padding:14px;border-radius:50px;background:var(--oro);color:#2C2240;border:none;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Quiero ser afiliada</button>
       </div>
@@ -178,6 +190,18 @@ async function doAffiliateRegister() {
   const email = document.getElementById('affEmail').value.trim().toLowerCase();
   const pass = document.getElementById('affPassword').value;
   const err = document.getElementById('affError');
+  
+  // Validate checkboxes
+  const acceptTerms = document.getElementById('affAcceptTerms')?.checked;
+  const acceptPrivacy = document.getElementById('affAcceptPrivacy')?.checked;
+  const legalError = document.getElementById('affLegalError');
+
+  if (!acceptTerms || !acceptPrivacy) {
+    legalError.style.display = 'block';
+    legalError.textContent = getI18nText('auth_legal_required') || 'Debes aceptar los Términos y el Aviso de Privacidad para continuar.';
+    return;
+  }
+  legalError.style.display = 'none';
   
   if (!email || !pass) {
     err.textContent = t('afiliadas_err_empty_fields');
