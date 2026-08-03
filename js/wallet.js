@@ -184,6 +184,31 @@ async function loadPayouts(affiliateId) {
   }).join('');
 }
 
+function toggleWithdrawFields() {
+  const method = document.getElementById('withdrawMethod').value;
+  const allFields = ['speiFields', 'pixFields', 'mpFields', 'sepaFields', 'ukFields', 'wiseFields', 'paypalFields'];
+  allFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  
+  const fieldMap = {
+    spei: 'speiFields',
+    pix: 'pixFields',
+    mercadopago: 'mpFields',
+    sepa: 'sepaFields',
+    uk_bank: 'ukFields',
+    wise: 'wiseFields',
+    paypal: 'paypalFields'
+  };
+  
+  const showId = fieldMap[method];
+  if (showId) {
+    const el = document.getElementById(showId);
+    if (el) el.style.display = 'block';
+  }
+}
+
 // --- Withdraw Modal ---
 function openWithdrawModal() {
   document.getElementById('withdrawModal')?.classList.add('open');
@@ -200,53 +225,164 @@ function closeWithdrawModal() {
 }
 
 async function submitWithdraw() {
-  const amountInput = document.getElementById('withdrawAmount');
+  const amount = parseFloat(document.getElementById('withdrawAmount').value);
   const method = document.getElementById('withdrawMethod').value;
-  const amount = parseFloat(amountInput?.value || 0);
-
-  if (amount < 500) { alert(wt('wallet_withdraw_min_error')); return; }
-  if (amount > parseFloat(affiliateData?.pending_payout || 0)) { alert(wt('wallet_withdraw_insufficient')); return; }
-
-  const details = {};
-  if (method === 'bank') {
-    details.bank = document.getElementById('withdrawBank')?.value;
-    details.account = document.getElementById('withdrawAccount')?.value;
-    if (!details.bank || !details.account) { alert(wt('wallet_fill_bank_details')); return; }
-  } else {
-    details.paypal = document.getElementById('withdrawPaypal')?.value;
-    if (!details.paypal) { alert(wt('wallet_fill_paypal_email')); return; }
+  const minAmount = 500;
+  
+  if (!amount || amount < minAmount) {
+    alert(wt('wallet_withdraw_min_error') || 'El monto mínimo es $500 MXN');
+    return;
   }
-
+  
+  if (amount > (affiliateData?.pending_payout || 0)) {
+    alert(wt('wallet_withdraw_insufficient') || 'Saldo insuficiente');
+    return;
+  }
+  
+  let details = {};
+  
+  switch (method) {
+    case 'spei':
+      const bank = document.getElementById('withdrawBank')?.value.trim();
+      const clabe = document.getElementById('withdrawAccount')?.value.trim();
+      if (!bank || !clabe) {
+        alert(wt('wallet_fill_bank_details') || 'Completa los datos bancarios');
+        return;
+      }
+      details = { bank, clabe };
+      break;
+      
+    case 'pix':
+      const cpf = document.getElementById('withdrawCpf')?.value.trim();
+      const pixKey = document.getElementById('withdrawPixKey')?.value.trim();
+      if (!cpf || !pixKey) {
+        alert('Completa tu CPF y clave PIX');
+        return;
+      }
+      details = { cpf, pix_key: pixKey };
+      break;
+      
+    case 'mercadopago':
+      const mpEmail = document.getElementById('withdrawMpEmail')?.value.trim();
+      if (!mpEmail) {
+        alert('Completa tu email de Mercado Pago');
+        return;
+      }
+      details = { email: mpEmail };
+      break;
+      
+    case 'sepa':
+      const fullName = document.getElementById('withdrawFullName')?.value.trim();
+      const iban = document.getElementById('withdrawIban')?.value.trim().replace(/\s/g, '');
+      if (!fullName || !iban) {
+        alert('Completa tu nombre y IBAN');
+        return;
+      }
+      details = { full_name: fullName, iban };
+      break;
+      
+    case 'uk_bank':
+      const sortCode = document.getElementById('withdrawSortCode')?.value.trim();
+      const ukAccount = document.getElementById('withdrawUkAccount')?.value.trim();
+      if (!sortCode || !ukAccount) {
+        alert('Completa tu Sort Code y número de cuenta');
+        return;
+      }
+      details = { sort_code: sortCode, account_number: ukAccount };
+      break;
+      
+    case 'wise':
+      const wiseEmail = document.getElementById('withdrawWiseEmail')?.value.trim();
+      if (!wiseEmail) {
+        alert('Completa tu email de Wise');
+        return;
+      }
+      details = { email: wiseEmail };
+      break;
+      
+    case 'paypal':
+      const paypalEmail = document.getElementById('withdrawPaypal')?.value.trim();
+      if (!paypalEmail) {
+        alert(wt('wallet_fill_paypal_email') || 'Completa el email de PayPal');
+        return;
+      }
+      details = { email: paypalEmail };
+      break;
+      
+    default:
+      alert('Selecciona un método de pago');
+      return;
+  }
+  
+  // Confirm dialog
+  const methodNames = {
+    spei: 'SPEI/CLABE',
+    pix: 'PIX',
+    mercadopago: 'Mercado Pago',
+    sepa: 'SEPA/IBAN',
+    uk_bank: 'Bank Transfer UK',
+    wise: 'Wise',
+    paypal: 'PayPal'
+  };
+  
+  const confirmed = confirm(
+    `Confirmar retiro de $${amount.toFixed(2)} MXN\n\n` +
+    `Método: ${methodNames[method] || method}\n` +
+    `Destino: ${method === 'spei' ? details.clabe : details.email || details.iban || details.pix_key || details.account_number}\n\n` +
+    `¿Confirmar?`
+  );
+  
+  if (!confirmed) return;
+  
   const btn = document.getElementById('btnConfirmWithdraw');
-  btn.disabled = true;
-
+  if (btn) { btn.disabled = true; btn.textContent = 'Procesando...'; }
+  
   try {
-    const { error } = await walletSb.from('yayika_payouts').insert({
+    if (!walletUser) throw new Error('No autenticado');
+    
+    const { error: payoutError } = await walletSb.from('yayika_payouts').insert({
       affiliate_id: affiliateData.id,
-      amount: amount,
+      amount,
       currency: 'MXN',
       payout_method: method,
       payout_details: JSON.stringify(details),
       status: 'pending'
     });
-
-    if (error) throw error;
-
-    // Update affiliate balance
-    await walletSb.from('yayika_affiliates').update({
-      pending_payout: parseFloat(affiliateData.pending_payout) - amount,
-      updated_at: new Date().toISOString()
-    }).eq('id', affiliateData.id);
-
+    
+    if (payoutError) throw payoutError;
+    
+    const newPending = Math.max(0, (affiliateData.pending_payout || 0) - amount);
+    const { error: updateError } = await walletSb.from('yayika_affiliates')
+      .update({ pending_payout: newPending, updated_at: new Date().toISOString() })
+      .eq('id', affiliateData.id);
+    
+    if (updateError) throw updateError;
+    
+    affiliateData.pending_payout = newPending;
     closeWithdrawModal();
-    alert(wt('wallet_withdraw_success'));
-    await loadAffiliateData();
-  } catch (e) {
-    console.error('[Wallet] Withdraw error:', e);
-    alert(wt('wallet_withdraw_error'));
+    alert(wt('wallet_withdraw_success') || 'Solicitud de retiro enviada');
+    loadCommissions(affiliateData.id);
+    loadPayouts(affiliateData.id);
+    updateBalanceUI(affiliateData);
+  } catch (err) {
+    console.error('withdraw error', err);
+    alert(wt('wallet_withdraw_error') || 'Error al procesar retiro');
   } finally {
-    btn.disabled = false;
+    if (btn) { btn.disabled = false; btn.textContent = wt('wallet_confirm') || 'Confirmar Retiro'; }
   }
+}
+
+function getCurrencyInfo(method) {
+  const currencies = {
+    spei: { currency: 'MXN', flag: '🇲🇽', name: 'Peso mexicano' },
+    pix: { currency: 'BRL', flag: '🇧🇷', name: 'Real brasileño' },
+    mercadopago: { currency: 'Local', flag: '🌎', name: 'Moneda local' },
+    sepa: { currency: 'EUR', flag: '🇪🇺', name: 'Euro' },
+    uk_bank: { currency: 'GBP', flag: '🇬🇧', name: 'Libra esterlina' },
+    wise: { currency: 'Local', flag: '🌍', name: 'Según tu país' },
+    paypal: { currency: 'USD', flag: '🌐', name: 'Dólar americano' }
+  };
+  return currencies[method] || currencies.paypal;
 }
 
 // --- Tab switching ---

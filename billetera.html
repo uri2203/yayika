@@ -117,6 +117,10 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:700}
 .not-affiliate{text-align:center;padding:60px 20px}
 .not-affiliate h2{font-size:1.5rem;margin-bottom:12px}
 .not-affiliate p{color:var(--suave);margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
+
+.withdraw-fields{margin-top:12px}
+.withdraw-fee{font-size:12px;color:var(--suave);margin-top:4px;font-style:italic}
+.method-flag{font-size:14px;margin-right:4px}
 </style>
 
 <script type="application/ld+json">
@@ -208,19 +212,64 @@ h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:700}
     <input type="number" id="withdrawAmount" min="500" step="1" placeholder="500">
     <p style="font-size:0.8rem;color:var(--suave);margin-top:-12px;margin-bottom:16px" data-i18n="wallet_withdraw_min">Mínimo $500 MXN</p>
     <label data-i18n="wallet_withdraw_method">Método de pago</label>
-    <select id="withdrawMethod">
-      <option value="bank" data-i18n="wallet_method_bank">Transferencia bancaria</option>
-      <option value="paypal" data-i18n="wallet_method_paypal">PayPal</option>
+    <select id="withdrawMethod" onchange="toggleWithdrawFields()">
+      <option value="spei">🇲🇽 SPEI / CLABE (México)</option>
+      <option value="pix">🇧🇷 PIX (Brasil)</option>
+      <option value="mercadopago">🌎 Mercado Pago (LATAM)</option>
+      <option value="sepa">🇪🇺 Transferencia SEPA / IBAN (Europa)</option>
+      <option value="uk_bank">🇬🇧 Bank Transfer (Reino Unido)</option>
+      <option value="wise">🌍 Wise (Internacional)</option>
+      <option value="paypal">🌐 PayPal (Internacional)</option>
     </select>
-    <div id="bankFields">
-      <label data-i18n="wallet_withdraw_bank">Banco</label>
-      <input type="text" id="withdrawBank" placeholder="BBVA, Banorte, etc.">
-      <label data-i18n="wallet_withdraw_account">CLABE / Cuenta</label>
-      <input type="text" id="withdrawAccount" placeholder="000000000000000000">
+
+    <!-- SPEI/CLABE Fields -->
+    <div id="speiFields" class="withdraw-fields">
+      <label class="form-label" data-i18n="wallet_bank_name">Banco</label>
+      <input class="form-input" type="text" id="withdrawBank" placeholder="Nombre del banco">
+      <label class="form-label" data-i18n="wallet_clabe">CLABE / Cuenta</label>
+      <input class="form-input" type="text" id="withdrawAccount" placeholder="18 dígitos" maxlength="18">
     </div>
-    <div id="paypalFields" style="display:none">
-      <label>Email de PayPal</label>
-      <input type="email" id="withdrawPaypal" placeholder="tu@email.com">
+
+    <!-- PIX Fields -->
+    <div id="pixFields" class="withdraw-fields" style="display:none">
+      <label class="form-label">CPF</label>
+      <input class="form-input" type="text" id="withdrawCpf" placeholder="000.000.000-00" maxlength="14">
+      <label class="form-label">Chave PIX</label>
+      <input class="form-input" type="text" id="withdrawPixKey" placeholder="Email, teléfono o CPF">
+    </div>
+
+    <!-- Mercado Pago Fields -->
+    <div id="mpFields" class="withdraw-fields" style="display:none">
+      <label class="form-label">Email de Mercado Pago</label>
+      <input class="form-input" type="email" id="withdrawMpEmail" placeholder="tu@email.com">
+    </div>
+
+    <!-- SEPA/IBAN Fields -->
+    <div id="sepaFields" class="withdraw-fields" style="display:none">
+      <label class="form-label">Nombre completo (como aparece en tu cuenta)</label>
+      <input class="form-input" type="text" id="withdrawFullName" placeholder="María García">
+      <label class="form-label">IBAN</label>
+      <input class="form-input" type="text" id="withdrawIban" placeholder="ES91 2100 0418 4502 0005 1332" maxlength="34">
+    </div>
+
+    <!-- UK Bank Fields -->
+    <div id="ukFields" class="withdraw-fields" style="display:none">
+      <label class="form-label">Sort Code</label>
+      <input class="form-input" type="text" id="withdrawSortCode" placeholder="12-34-56" maxlength="8">
+      <label class="form-label">Account Number</label>
+      <input class="form-input" type="text" id="withdrawUkAccount" placeholder="12345678" maxlength="8">
+    </div>
+
+    <!-- Wise Fields -->
+    <div id="wiseFields" class="withdraw-fields" style="display:none">
+      <label class="form-label">Email de Wise</label>
+      <input class="form-input" type="email" id="withdrawWiseEmail" placeholder="tu@email.com">
+    </div>
+
+    <!-- PayPal Fields -->
+    <div id="paypalFields" class="withdraw-fields" style="display:none">
+      <label class="form-label">Email de PayPal</label>
+      <input class="form-input" type="email" id="withdrawPaypal" placeholder="tu@email.com">
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeWithdrawModal()" data-i18n="wallet_cancel">Cancelar</button>
