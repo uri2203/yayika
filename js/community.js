@@ -37,9 +37,7 @@ const Community = {
       await this.loadFeed();
       this._renderWidget();
       this._startAutoRefresh();
-    } catch (e) {
-      console.warn('Community init error:', e);
-    }
+    } catch (e) {}
   },
 
   // ============================================================
@@ -62,9 +60,7 @@ const Community = {
         const data = await res.json();
         this._categories = data.categories || [];
       }
-    } catch (e) {
-      console.warn('Load categories error:', e);
-    }
+    } catch (e) {}
   },
 
   async loadFeed(reset = false) {
@@ -98,9 +94,7 @@ const Community = {
         this._posts = [...this._posts, ...(data.posts || [])];
         this._page++;
       }
-    } catch (e) {
-      console.warn('Load feed error:', e);
-    } finally {
+    } catch (e) {} finally {
       this._loading = false;
     }
   },
@@ -146,7 +140,6 @@ const Community = {
         this._showToast(err.error || t.error, 'error');
       }
     } catch (e) {
-      console.warn('Create post error:', e);
       this._showToast(t.error, 'error');
     }
   },
@@ -181,9 +174,7 @@ const Community = {
         }
         this._renderFeed();
       }
-    } catch (e) {
-      console.warn('Toggle reaction error:', e);
-    }
+    } catch (e) {}
   },
 
   async addComment(postId) {
@@ -214,9 +205,7 @@ const Community = {
         await this.loadFeed(true);
         this._renderFeed();
       }
-    } catch (e) {
-      console.warn('Add comment error:', e);
-    }
+    } catch (e) {}
   },
 
   toggleComments(postId) {

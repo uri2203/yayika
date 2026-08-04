@@ -542,13 +542,15 @@
       const { data: products } = await sb.from('seller_products')
         .select('*').eq('seller_id', userId).order('created_at', { ascending: false });
 
-      renderCurrentView({
+      const sellerData = {
         plan: profile?.plan || 'basica',
         store_name: profile?.store_name || session.user.user_metadata?.full_name || 'Mi Tienda',
         store_description: profile?.store_description || 'Productos digitales para mujeres',
         products: products || [],
         payment_link: profile?.payment_link || '',
-      });
+      };
+      currentSellerData = sellerData;
+      renderCurrentView(sellerData);
     }catch(e){
       console.error('Seller data load error:',e);
       content.innerHTML=`<div class="sd-empty"><div class="sd-empty-icon">⚠️</div><div>${t('error_loading')}</div><div style="font-size:12px;margin-top:8px">${e.message}</div></div>`;
@@ -556,13 +558,15 @@
   }
 
   function showNoProducts(content) {
-    renderCurrentView({
+    const noData = {
       plan: 'basica',
       store_name: currentUser?.user_metadata?.full_name || 'Mi Tienda',
-      store_description: 'Productos digitales para mujeres',
+      store_description: '',
       products: [],
       payment_link: '',
-    });
+    };
+    currentSellerData = noData;
+    renderCurrentView(noData);
   }
 
   // ============================================================
@@ -788,10 +792,19 @@
   // ============================================================
   // ACTIONS
   // ============================================================
+  let currentSellerData = null;
+
   function copyPaymentLink(){
-    const link = 'https://tu-stripe-link.com'; // Would come from data
+    const link = currentSellerData?.payment_link || '';
+    if (!link) {
+      alert(t('payment_link') + ': ' + (currentSellerData?.store_url || t('store_url')));
+      return;
+    }
     navigator.clipboard.writeText(link).then(()=>{
       alert(t('link_copied'));
+    }).catch(()=>{
+      // Fallback: show the link for manual copy
+      prompt(t('payment_link') + ':', link);
     });
   }
 

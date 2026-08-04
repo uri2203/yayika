@@ -74,10 +74,7 @@ async function trackEvent(eventName, properties = {}) {
         properties: properties,
         session_id: getSessionId()
       });
-    } catch (e) {
-      // Silently fail — analytics shouldn't block UX
-      console.debug('[Analytics] Event:', eventName, properties);
-    }
+    } catch (e) {}
   }
 }
 

@@ -25,7 +25,6 @@ const FinancialCoach = {
       
       return response;
     } catch (e) {
-      console.warn('Financial Coach error:', e);
       return null;
     }
   },
@@ -210,9 +209,7 @@ const FinancialCoach = {
         
         content.innerHTML = `<div style="font-size:13px;color:white;line-height:1.7">${formatted}</div>`;
       }
-    } catch (e) {
-      console.warn('Financial coach load error:', e);
-    }
+    } catch (e) {}
   }
 };
 

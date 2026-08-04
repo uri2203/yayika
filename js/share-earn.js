@@ -19,9 +19,7 @@ const ShareEarn = {
       this._initialized = true;
       await this.loadData();
       this._renderWidget();
-    } catch (e) {
-      console.warn('ShareEarn init error:', e);
-    }
+    } catch (e) {}
   },
 
   // ============================================================
@@ -75,7 +73,6 @@ const ShareEarn = {
         this._cards = [];
       }
     } catch (e) {
-      console.warn('ShareEarn data error:', e);
       this._data = this._getFallback();
       this._templates = this._getFallbackTemplates();
       this._cards = [];
@@ -255,7 +252,6 @@ const ShareEarn = {
         this._showToast(t.toast_error_create || 'Error al crear tarjeta', 'error');
       }
     } catch (e) {
-      console.warn('Create card error:', e);
       this._showToast(t.toast_error_connection || 'Error de conexión', 'error');
     }
   },

@@ -72,9 +72,7 @@ async function generateAIResponse(message, cycleDay = null) {
         source: 'llm'
       };
     }
-  } catch (e) {
-    console.log('LLM unavailable, falling back to rule-based:', e.message);
-  }
+  } catch (e) {}
   
   // Fallback to rule-based responses
   const responses = generateContextualResponse(category, message, phaseContext, lang);

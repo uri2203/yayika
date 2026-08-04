@@ -284,9 +284,7 @@ async function calculateAndStorePredictions(userId) {
   
   try {
     await supabase.rpc('yayika_calculate_predictions', { p_user_id: userId });
-  } catch (e) {
-    console.warn('Prediction calculation error:', e);
-  }
+  } catch (e) {}
 }
 
 function getNextEvent(predictions) {

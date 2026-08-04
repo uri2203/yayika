@@ -23,16 +23,13 @@ const SmartPush = {
     if ('serviceWorker' in navigator) {
       try {
         const reg = await navigator.serviceWorker.register('/sw.js');
-        console.log('Service Worker registered for push');
         
         // Check for existing subscription
         const subscription = await reg.pushManager.getSubscription();
         if (subscription) {
           this._subscription = subscription;
         }
-      } catch (e) {
-        console.warn('SW registration failed:', e);
-      }
+      } catch (e) {}
     }
     
     // Show smart notification on dashboard load
@@ -96,16 +93,14 @@ const SmartPush = {
           created_at: new Date().toISOString()
         }, { onConflict: 'user_id' });
       }
-    } catch (e) {
-      console.warn('Push subscription error:', e);
-    }
+    } catch (e) {}
   },
   
   getVapidPublicKey() {
     // VAPID public key for Web Push
-    // In production, generate with: npx web-push generate-vapid-keys
-    // For now, using a placeholder - replace with real key
-    return 'BEl62iUYgUivxvkv9zs-dE3e_Hc0ALhKN3kBJvS7BUQ';
+    // Generate with: npx web-push generate-vapid-keys
+    // TODO: Set your VAPID public key here (base64url encoded, 65 bytes)
+    return null;
   },
 
   // ============================================================
@@ -157,9 +152,7 @@ const SmartPush = {
         this.showBrowserNotification(notification);
       }
       
-    } catch (e) {
-      console.warn('Smart notification error:', e);
-    }
+    } catch (e) {}
   },
   
   async getCycleContext() {
@@ -252,9 +245,7 @@ const SmartPush = {
       };
       
       setTimeout(() => notif.close(), 10000);
-    } catch (e) {
-      console.warn('Browser notification error:', e);
-    }
+    } catch (e) {}
   },
 
   // ============================================================
@@ -312,9 +303,7 @@ const SmartPush = {
       
       // Auto-close after 8 seconds
       setTimeout(() => notification.close(), 8000);
-    } catch (e) {
-      console.warn('Competitive push error:', e);
-    }
+    } catch (e) {}
   }
   
   showCompetitiveToast(message, type = 'competition') {

@@ -95,7 +95,6 @@ async function awardBadge(badgeKey) {
     
     return true;
   } catch (e) {
-    console.warn('Badge award error:', e);
     return false;
   }
 }
@@ -135,7 +134,7 @@ async function checkAndAwardBadges() {
         if (progress.streak_days >= days) {
           await awardBadge(`streak_${days}`);
         }
-      } catch (e) { console.warn(`Badge streak_${days} error:`, e); }
+      } catch (e) {}
     }
     
     // Check check-in count
@@ -148,7 +147,7 @@ async function checkAndAwardBadges() {
       if (checkinCount > 0) await awardBadge('first_checkin');
       if (checkinCount >= 7) await awardBadge('checkin_7');
       if (checkinCount >= 30) await awardBadge('checkin_30');
-    } catch (e) { console.warn('Badge checkin check error:', e); }
+    } catch (e) {}
     
     // Check cycle logs
     try {
@@ -160,7 +159,7 @@ async function checkAndAwardBadges() {
       if (cycleCount > 0) await awardBadge('first_cycle_log');
       if (cycleCount >= 30) await awardBadge('cycle_30');
       if (cycleCount >= 84) await awardBadge('cycle_master');
-    } catch (e) { console.warn('Badge cycle check error:', e); }
+    } catch (e) {}
     
     // Check challenges completed
     try {
@@ -183,7 +182,7 @@ async function checkAndAwardBadges() {
       if (totalChallengesCompleted > 0) await awardBadge('first_challenge');
       if (totalChallengesCompleted >= 10) await awardBadge('challenges_10');
       if (perfectWeekFound) await awardBadge('perfect_week');
-    } catch (e) { console.warn('Badge challenges check error:', e); }
+    } catch (e) {}
     
     // Check first transaction
     try {
@@ -193,7 +192,7 @@ async function checkAndAwardBadges() {
         .eq('user_id', currentUser.id);
       
       if (txCount > 0) await awardBadge('first_transaction');
-    } catch (e) { console.warn('Badge transaction check error:', e); }
+    } catch (e) {}
     
     // Check savings goals
     try {
@@ -203,7 +202,7 @@ async function checkAndAwardBadges() {
         .eq('user_id', currentUser.id);
       
       if (goalCount > 0) await awardBadge('savings_goal');
-    } catch (e) { console.warn('Badge savings check error:', e); }
+    } catch (e) {}
     
     // Check circles
     try {
@@ -213,18 +212,16 @@ async function checkAndAwardBadges() {
         .eq('user_id', currentUser.id);
       
       if (circleCount > 0) await awardBadge('first_circle');
-    } catch (e) { console.warn('Badge circles check error:', e); }
+    } catch (e) {}
     
     // Check time-based badges
     try {
       const hour = new Date().getHours();
       if (hour < 8) await awardBadge('early_bird');
       if (hour >= 22) await awardBadge('night_owl');
-    } catch (e) { console.warn('Badge time check error:', e); }
+    } catch (e) {}
     
-  } catch (e) {
-    console.warn('Badge check error:', e);
-  }
+  } catch (e) {}
 }
 
 // ============================================================
@@ -250,7 +247,6 @@ async function useFreezeToken() {
     
     return data;
   } catch (e) {
-    console.warn('Freeze error:', e);
     return 'ERROR';
   }
 }

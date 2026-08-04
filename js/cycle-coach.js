@@ -50,7 +50,6 @@ const CycleCoach = {
       
       return coaching;
     } catch (e) {
-      console.warn('Cycle Coach error:', e);
       return null;
     }
   },
@@ -135,7 +134,6 @@ const CycleCoach = {
     });
     
     if (!response.ok) {
-      console.warn(`Cycle Coach API error: ${response.status}`);
       return this.getFallbackCoaching(payload.lang || 'es');
     }
     
@@ -308,7 +306,6 @@ const CycleCoach = {
         `;
       }
     } catch (e) {
-      console.warn('Coach load error:', e);
       content.innerHTML = `
         <div style="text-align:center;padding:16px;color:var(--suave);font-size:13px">
           ${{
@@ -384,9 +381,7 @@ const CycleCoach = {
         </div>
       `;
       document.body.appendChild(modal);
-    } catch (e) {
-      console.warn('History error:', e);
-    }
+    } catch (e) {}
   }
 };
 

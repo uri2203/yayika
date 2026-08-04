@@ -128,7 +128,7 @@ async function signUp(email, password, fullName) {
         to: email,
         name: fullName || email.split('@')[0],
       }),
-    }).catch(e => console.log('Welcome email (non-blocking):', e));
+    }).catch(() => {});
   }
 
   // Analytics
@@ -207,7 +207,7 @@ async function updateStreak() {
   const { error } = await supabase.rpc('yayika_update_streak', {
     p_user_id: currentUser.id
   });
-  if (error) console.warn('Streak update error:', error);
+
 }
 
 // ============================================================
@@ -328,9 +328,7 @@ async function logActivity(type, detail, xp) {
         activity_detail: detail,
         xp_earned: xp || 0
       });
-  } catch (e) {
-    console.error('logActivity error:', e);
-  }
+  } catch (e) {}
 }
 
 async function getRecentActivity(limit = 20) {
@@ -378,13 +376,6 @@ const PRODUCT_TAX_CODES = {
 async function createCheckoutSession(planKey) {
   const plan = STRIPE_PLANS[planKey];
   if (!plan) throw new Error('Plan no válido');
-  
-  // Log tax configuration for debugging
-  if (typeof StripeTax !== 'undefined') {
-    console.log('[Yayika Tax] Checkout for:', planKey, '| Tax code:', plan.taxCode);
-    console.log('[Yayika Tax] Stripe Tax enabled:', StripeTax.config.enabled);
-    console.log('[Yayika Tax] Liability:', StripeTax.config.liabilityType);
-  }
   
   window.location.href = plan.link;
 }
@@ -455,14 +446,14 @@ function applyUserToModule() {
 
 async function moduleAddXP(pts, msg) {
   if (currentUser) {
-    try { await addXP(pts); } catch(e) { console.warn('XP save error:', e); }
+    try { await addXP(pts); } catch(e) {}
   }
   showToast(msg || '⭐ +' + pts + ' XP');
 }
 
 async function moduleCompleteAndNavigate(moduleNumber, xpEarned, nextPage) {
   if (currentUser) {
-    try { await completeModule(moduleNumber, xpEarned); } catch(e) { console.warn('Module complete error:', e); }
+    try { await completeModule(moduleNumber, xpEarned); } catch(e) {}
   }
   if (nextPage) {
     setTimeout(() => { window.location.href = nextPage; }, 600);
@@ -475,7 +466,6 @@ async function moduleCompleteAndNavigate(moduleNumber, xpEarned, nextPage) {
 
 async function initApp() {
   if (!initSupabase()) {
-    console.warn('Supabase no disponible. Modo offline.');
     return null;
   }
 

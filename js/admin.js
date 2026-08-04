@@ -3,7 +3,7 @@
    User management, revenue stats, affiliate oversight
    ============================================================ */
 
-const ADMIN_EMAILS = ['laura@yayika.com', 'admin@yayika.com'];
+const ADMIN_EMAILS = ['admin@yayika.com'];
 
 const ADMIN_I18N = {
   es: {

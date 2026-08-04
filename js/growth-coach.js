@@ -41,9 +41,7 @@ const GrowthCoach = {
       // Start periodic updates
       this._startPeriodicUpdates();
 
-    } catch (e) {
-      console.warn('GrowthCoach init error:', e);
-    }
+    } catch (e) {}
   },
 
   // ============================================================
@@ -79,7 +77,6 @@ const GrowthCoach = {
         this._data = this._getFallbackData();
       }
     } catch (e) {
-      console.warn('GrowthCoach data load error:', e);
       this._data = this._getFallbackData();
     }
   },

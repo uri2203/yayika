@@ -31,9 +31,7 @@ const Onboarding = {
       if (this._data?.showOnboarding && !this._dismissed) {
         this._renderWidget();
       }
-    } catch (e) {
-      console.warn('Onboarding init error:', e);
-    }
+    } catch (e) {}
   },
 
   // ============================================================
@@ -55,9 +53,7 @@ const Onboarding = {
       if (res.ok) {
         this._data = await res.json();
       }
-    } catch (e) {
-      console.warn('Onboarding data error:', e);
-    }
+    } catch (e) {}
   },
 
   // ============================================================
@@ -238,7 +234,6 @@ const Onboarding = {
         }
       }
     } catch (e) {
-      console.warn('Complete day error:', e);
       this._showToast(onbT('onb_error_day'), 'error');
     }
   },

@@ -30,7 +30,6 @@ const WellnessPlanner = {
       
       return response;
     } catch (e) {
-      console.warn('Wellness Planner error:', e);
       return null;
     }
   },
@@ -208,9 +207,7 @@ const WellnessPlanner = {
       }
       
       content.innerHTML = html;
-    } catch (e) {
-      console.warn('Wellness load error:', e);
-    }
+    } catch (e) {}
   },
   
   async getCycleDay() {

@@ -40,7 +40,6 @@ const DailyAffirmations = {
       
       return response;
     } catch (e) {
-      console.warn('Affirmations error:', e);
       return null;
     }
   },
@@ -236,7 +235,6 @@ const DailyAffirmations = {
         textEl.innerHTML = this.getFallback(null, lang);
       }
     } catch (e) {
-      console.warn('Affirmation load error:', e);
       textEl.innerHTML = this.getFallback(null, lang);
     }
   },

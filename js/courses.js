@@ -58,9 +58,7 @@ async function loadCourseTranslations(courseId) {
         }
       });
     });
-  } catch (e) {
-    console.error('Error loading translations for', courseId, e);
-  }
+  } catch (e) {}
 }
 
 const COURSES = {
@@ -408,7 +406,6 @@ async function completeAndNext(xp) {
     }
     nextLesson();
   } catch (e) {
-    console.error('Error completing lesson:', e);
     nextLesson();
   }
 }
