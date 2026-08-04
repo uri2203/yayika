@@ -20,57 +20,61 @@ const YayikaSecurity = (() => {
   };
 
   // ============ RATE LIMITING ============
-  const rateLimitStore = {};
-
   function checkRateLimit(key) {
     const now = Date.now();
     const windowStart = now - CONFIG.RATE_LIMIT_WINDOW;
+    const storeKey = 'yayika_rl_' + key;
     
-    if (!rateLimitStore[key]) {
-      rateLimitStore[key] = [];
+    let entries = [];
+    try { entries = JSON.parse(localStorage.getItem(storeKey) || '[]'); } catch(e) {}
+    
+    entries = entries.filter(t => t > windowStart);
+    
+    if (entries.length >= CONFIG.RATE_LIMIT_MAX) {
+      localStorage.setItem(storeKey, JSON.stringify(entries));
+      return false;
     }
     
-    // Remove old entries
-    rateLimitStore[key] = rateLimitStore[key].filter(t => t > windowStart);
-    
-    if (rateLimitStore[key].length >= CONFIG.RATE_LIMIT_MAX) {
-      return false; // Rate limited
-    }
-    
-    rateLimitStore[key].push(now);
-    return true; // Allowed
+    entries.push(now);
+    localStorage.setItem(storeKey, JSON.stringify(entries));
+    return true;
   }
 
   function getRateLimitRemaining(key) {
     const now = Date.now();
     const windowStart = now - CONFIG.RATE_LIMIT_WINDOW;
-    if (!rateLimitStore[key]) return CONFIG.RATE_LIMIT_MAX;
-    const recent = rateLimitStore[key].filter(t => t > windowStart);
-    return Math.max(0, CONFIG.RATE_LIMIT_MAX - recent.length);
+    const storeKey = 'yayika_rl_' + key;
+    
+    let entries = [];
+    try { entries = JSON.parse(localStorage.getItem(storeKey) || '[]'); } catch(e) {}
+    
+    entries = entries.filter(t => t > windowStart);
+    return Math.max(0, CONFIG.RATE_LIMIT_MAX - entries.length);
   }
 
   // ============ BRUTE FORCE PROTECTION ============
-  const bruteForceStore = {};
-
   function recordFailedAttempt(identifier) {
-    if (!bruteForceStore[identifier]) {
-      bruteForceStore[identifier] = { count: 0, firstAttempt: Date.now() };
-    }
-    bruteForceStore[identifier].count++;
-    bruteForceStore[identifier].lastAttempt = Date.now();
+    const storeKey = 'yayika_bf_' + identifier;
+    let data = { count: 0, firstAttempt: Date.now(), lastAttempt: Date.now() };
+    try { data = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch(e) {}
+    if (!data.count) data = { count: 0, firstAttempt: Date.now(), lastAttempt: Date.now() };
+    data.count++;
+    data.lastAttempt = Date.now();
+    localStorage.setItem(storeKey, JSON.stringify(data));
   }
 
   function isLocked(identifier) {
-    const data = bruteForceStore[identifier];
-    if (!data || data.count === 0) return false;
+    const storeKey = 'yayika_bf_' + identifier;
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch(e) {}
+    if (!data || !data.count) return false;
     
     if (data.count >= CONFIG.MAX_LOGIN_ATTEMPTS) {
       const elapsed = Date.now() - data.lastAttempt;
       if (elapsed < CONFIG.LOCKOUT_DURATION) {
         return true;
       } else {
-        // Reset after lockout period
-        bruteForceStore[identifier] = { count: 0, firstAttempt: null };
+        localStorage.removeItem(storeKey);
         return false;
       }
     }
@@ -78,7 +82,9 @@ const YayikaSecurity = (() => {
   }
 
   function getRemainingLockoutTime(identifier) {
-    const data = bruteForceStore[identifier];
+    const storeKey = 'yayika_bf_' + identifier;
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch(e) {}
     if (!data || data.count < CONFIG.MAX_LOGIN_ATTEMPTS) return 0;
     const elapsed = Date.now() - data.lastAttempt;
     const remaining = CONFIG.LOCKOUT_DURATION - elapsed;
@@ -86,7 +92,7 @@ const YayikaSecurity = (() => {
   }
 
   function resetAttempts(identifier) {
-    bruteForceStore[identifier] = { count: 0, firstAttempt: null };
+    localStorage.removeItem('yayika_bf_' + identifier);
   }
 
   // ============ CSRF TOKEN ============
@@ -108,6 +114,14 @@ const YayikaSecurity = (() => {
   function validateCSRFToken(token) {
     const stored = sessionStorage.getItem('yayika_csrf');
     return stored && stored === token;
+  }
+
+  // ============ CSRF FETCH WRAPPER ============
+  function secureFetch(url, options = {}) {
+    const token = sessionStorage.getItem('yayika_csrf');
+    if (!options.headers) options.headers = {};
+    options.headers['X-CSRF-Token'] = token;
+    return fetch(url, options);
   }
 
   // ============ INPUT SANITIZATION ============
@@ -314,7 +328,7 @@ const YayikaSecurity = (() => {
     CONFIG,
     rateLimit: { check: checkRateLimit, remaining: getRateLimitRemaining },
     bruteForce: { record: recordFailedAttempt, isLocked, getRemainingLockoutTime, reset: resetAttempts },
-    csrf: { generate: generateCSRFToken, set: setCSRFToken, validate: validateCSRFToken },
+    csrf: { generate: generateCSRFToken, set: setCSRFToken, validate: validateCSRFToken, secureFetch },
     sanitize: { input: sanitizeInput, html: sanitizeHTML },
     password: { validate: validatePasswordStrength, getStrengthScore, getStrengthLabel },
     session: { start: startSessionTimeout, stop: stopSessionTimeout },

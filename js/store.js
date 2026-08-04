@@ -74,7 +74,8 @@ function st(key) {
     footer_rights: { es: 'Todos los derechos reservados.', en: 'All rights reserved.', pt: 'Todos os direitos reservados.', fr: 'Tous droits reserves.', de: 'Alle Rechte vorbehalten.' },
     footer_terms: { es: 'Terminos', en: 'Terms', pt: 'Termos', fr: 'Conditions', de: 'Bedingungen' },
     footer_privacy: { es: 'Privacidad', en: 'Privacy', pt: 'Privacidade', fr: 'Confidentialite', de: 'Datenschutz' },
-    footer_support: { es: 'Soporte', en: 'Support', pt: 'Suporte', fr: 'Support', de: 'Support' }
+    footer_support: { es: 'Soporte', en: 'Support', pt: 'Suporte', fr: 'Support', de: 'Support' },
+    cart_one_product: { es: 'Compra un producto a la vez', en: 'Buy one product at a time', pt: 'Compre um produto por vez', fr: 'Achetez un produit à la fois', de: 'Kaufen Sie ein Produkt nach dem anderen' }
   };
   const langFallback = fallback[key];
   if (!langFallback) return key;
@@ -277,7 +278,7 @@ async function checkout() {
 
   // Multiple products — only single-product checkout supported for now
   if (cart.length > 1) {
-    alert('Compra un producto a la vez');
+    alert(st('cart_one_product') || 'Compra un producto a la vez');
     return;
   }
 

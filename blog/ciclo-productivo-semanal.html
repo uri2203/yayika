@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -47,6 +47,14 @@ p{margin-bottom:16px;font-size:15px}
 footer{background:#2C2240;color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px;margin-top:40px}
 </style>
 <script defer data-domain="yayika.com" src="https://plausible.io/js/script.js"></script>
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://fonts.googleapis.com https://fonts.gstatic.com https://js.stripe.com https://*.stripe.com https://*.github.io https://plausible.io; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com; img-src 'self' https://*.supabase.co data: blob: https://*.github.io; frame-src https://js.stripe.com https://*.stripe.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://cdn.jsdelivr.net;">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
 </head>
 <body>
 <nav>
@@ -109,5 +117,7 @@ footer{background:#2C2240;color:rgba(255,255,255,.5);text-align:center;padding:2
 </div> -->
 
 <footer>© 2026 Yayika · <a href="/" style="color:rgba(255,255,255,.7)">yayika.com</a></footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" integrity="sha256-wIRQlqfEpnQfNirFBslMHH0n3GA7zBv2Slh/dvLb46E=" crossorigin="anonymous"></script>
+  <script src="../js/security.js"></script>
 </body>
 </html>

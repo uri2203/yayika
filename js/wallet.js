@@ -46,6 +46,15 @@ function wt(key) {
     wallet_fill_paypal_email: 'Completa el email de PayPal',
     commission_sale: 'Comisión por venta',
     commission_member: 'Comisión por membresía',
+    wallet_withdraw_fill_pix: 'Completa tu CPF y clave PIX',
+    wallet_withdraw_fill_mp: 'Completa tu email de Mercado Pago',
+    wallet_withdraw_fill_sepa: 'Completa tu nombre y IBAN',
+    wallet_withdraw_fill_uk: 'Completa tu Sort Code y número de cuenta',
+    wallet_withdraw_fill_wise: 'Completa tu email de Wise',
+    wallet_withdraw_select_method: 'Selecciona un método de pago',
+    wallet_withdraw_confirm_title: 'Confirmar retiro',
+    wallet_withdraw_method: 'Método',
+    wallet_withdraw_to: 'Destino',
     payout_pending: 'Pendiente',
     payout_processing: 'Procesando',
     payout_completed: 'Completado',
@@ -256,7 +265,7 @@ async function submitWithdraw() {
       const cpf = document.getElementById('withdrawCpf')?.value.trim();
       const pixKey = document.getElementById('withdrawPixKey')?.value.trim();
       if (!cpf || !pixKey) {
-        alert('Completa tu CPF y clave PIX');
+        alert(wt('wallet_withdraw_fill_pix') || 'Completa tu CPF y clave PIX');
         return;
       }
       details = { cpf, pix_key: pixKey };
@@ -265,7 +274,7 @@ async function submitWithdraw() {
     case 'mercadopago':
       const mpEmail = document.getElementById('withdrawMpEmail')?.value.trim();
       if (!mpEmail) {
-        alert('Completa tu email de Mercado Pago');
+        alert(wt('wallet_withdraw_fill_mp') || 'Completa tu email de Mercado Pago');
         return;
       }
       details = { email: mpEmail };
@@ -275,7 +284,7 @@ async function submitWithdraw() {
       const fullName = document.getElementById('withdrawFullName')?.value.trim();
       const iban = document.getElementById('withdrawIban')?.value.trim().replace(/\s/g, '');
       if (!fullName || !iban) {
-        alert('Completa tu nombre y IBAN');
+        alert(wt('wallet_withdraw_fill_sepa') || 'Completa tu nombre y IBAN');
         return;
       }
       details = { full_name: fullName, iban };
@@ -285,7 +294,7 @@ async function submitWithdraw() {
       const sortCode = document.getElementById('withdrawSortCode')?.value.trim();
       const ukAccount = document.getElementById('withdrawUkAccount')?.value.trim();
       if (!sortCode || !ukAccount) {
-        alert('Completa tu Sort Code y número de cuenta');
+        alert(wt('wallet_withdraw_fill_uk') || 'Completa tu Sort Code y número de cuenta');
         return;
       }
       details = { sort_code: sortCode, account_number: ukAccount };
@@ -294,7 +303,7 @@ async function submitWithdraw() {
     case 'wise':
       const wiseEmail = document.getElementById('withdrawWiseEmail')?.value.trim();
       if (!wiseEmail) {
-        alert('Completa tu email de Wise');
+        alert(wt('wallet_withdraw_fill_wise') || 'Completa tu email de Wise');
         return;
       }
       details = { email: wiseEmail };
@@ -310,7 +319,7 @@ async function submitWithdraw() {
       break;
       
     default:
-      alert('Selecciona un método de pago');
+      alert(wt('wallet_withdraw_select_method') || 'Selecciona un método de pago');
       return;
   }
   
@@ -326,10 +335,10 @@ async function submitWithdraw() {
   };
   
   const confirmed = confirm(
-    `Confirmar retiro de $${amount.toFixed(2)} MXN\n\n` +
-    `Método: ${methodNames[method] || method}\n` +
-    `Destino: ${method === 'spei' ? details.clabe : details.email || details.iban || details.pix_key || details.account_number}\n\n` +
-    `¿Confirmar?`
+    (wt('wallet_withdraw_confirm_title') || 'Confirmar retiro') + ': $' + amount.toFixed(2) + ' MXN\n\n' +
+    (wt('wallet_withdraw_method') || 'Método') + ': ' + (methodNames[method] || method) + '\n' +
+    (wt('wallet_withdraw_to') || 'Destino') + ': ' + (method === 'spei' ? details.clabe : details.email || details.iban || details.pix_key || details.account_number) + '\n\n' +
+    (wt('wallet_confirm') || 'Confirmar')
   );
   
   if (!confirmed) return;
@@ -351,10 +360,23 @@ async function submitWithdraw() {
     
     if (payoutError) throw payoutError;
     
-    const newPending = Math.max(0, (affiliateData.pending_payout || 0) - amount);
+    // Atomic update: only update if balance hasn't changed
+    const { data: currentAff, error: fetchError } = await walletSb.from('yayika_affiliates')
+      .select('pending_payout')
+      .eq('id', affiliateData.id)
+      .single();
+
+    if (fetchError) throw fetchError;
+    if (currentAff.pending_payout < amount) {
+      alert(wt('wallet_withdraw_insufficient') || 'Saldo insuficiente');
+      return;
+    }
+
+    const newPending = Math.max(0, currentAff.pending_payout - amount);
     const { error: updateError } = await walletSb.from('yayika_affiliates')
       .update({ pending_payout: newPending, updated_at: new Date().toISOString() })
-      .eq('id', affiliateData.id);
+      .eq('id', affiliateData.id)
+      .eq('pending_payout', currentAff.pending_payout); // Optimistic lock
     
     if (updateError) throw updateError;
     

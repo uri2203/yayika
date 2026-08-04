@@ -1007,6 +1007,20 @@ const I18N = {
     wallet_withdraw_fill_uk: 'Completa tu Sort Code y número de cuenta',
     wallet_withdraw_fill_wise: 'Completa tu email de Wise',
     wallet_withdraw_select_method: 'Selecciona un método de pago',
+    // Auth flow
+    auth_welcome: '¡Bienvenida',
+    auth_loading: 'Cargando tu portal...',
+    auth_error_empty: 'Ingresa tu correo y contraseña.',
+    auth_error_generic: 'Error al iniciar sesión.',
+    auth_error_invalid: 'Correo o contraseña incorrectos.',
+    auth_error_unconfirmed: 'Confirma tu correo electrónico primero.',
+    auth_error_connection: 'Error de conexión. Intenta de nuevo.',
+    auth_rate_limited: 'Demasiados intentos',
+    auth_locked: 'Cuenta bloqueada',
+    auth_weak_password: 'Contraseña débil',
+    forgot_email_required: 'Ingresa tu correo electrónico.',
+    forgot_error_send: 'Error al enviar el correo.',
+    password_strength: 'Fortaleza',
   },
 
   en: {
@@ -1955,6 +1969,20 @@ const I18N = {
     wallet_withdraw_fill_uk: 'Enter your Sort Code and account number',
     wallet_withdraw_fill_wise: 'Enter your Wise email',
     wallet_withdraw_select_method: 'Select a payment method',
+    // Auth flow
+    auth_welcome: 'Welcome',
+    auth_loading: 'Loading your portal...',
+    auth_error_empty: 'Enter your email and password.',
+    auth_error_generic: 'Login error.',
+    auth_error_invalid: 'Incorrect email or password.',
+    auth_error_unconfirmed: 'Confirm your email first.',
+    auth_error_connection: 'Connection error. Try again.',
+    auth_rate_limited: 'Too many attempts',
+    auth_locked: 'Account locked',
+    auth_weak_password: 'Weak password',
+    forgot_email_required: 'Enter your email.',
+    forgot_error_send: 'Error sending email.',
+    password_strength: 'Strength',
   },
   pt: {
     nav_products: 'Produtos',
@@ -2900,6 +2928,20 @@ const I18N = {
     wallet_withdraw_fill_uk: 'Insira seu Sort Code e número da conta',
     wallet_withdraw_fill_wise: 'Insira seu email do Wise',
     wallet_withdraw_select_method: 'Selecione um método de pagamento',
+    // Auth flow
+    auth_welcome: 'Bem-vinda',
+    auth_loading: 'Carregando seu portal...',
+    auth_error_empty: 'Insira seu email e senha.',
+    auth_error_generic: 'Erro ao entrar.',
+    auth_error_invalid: 'Email ou senha incorretos.',
+    auth_error_unconfirmed: 'Confirme seu email primeiro.',
+    auth_error_connection: 'Erro de conexão. Tente novamente.',
+    auth_rate_limited: 'Muitas tentativas',
+    auth_locked: 'Conta bloqueada',
+    auth_weak_password: 'Senha fraca',
+    forgot_email_required: 'Insira seu email.',
+    forgot_error_send: 'Erro ao enviar email.',
+    password_strength: 'Força',
   },
   fr: {
     nav_products: 'Produits',
@@ -3845,6 +3887,20 @@ const I18N = {
     wallet_withdraw_fill_uk: 'Entrez votre Code Sort et numéro de compte',
     wallet_withdraw_fill_wise: 'Entrez votre email Wise',
     wallet_withdraw_select_method: 'Sélectionnez un mode de paiement',
+    // Auth flow
+    auth_welcome: 'Bienvenue',
+    auth_loading: 'Chargement de votre portail...',
+    auth_error_empty: 'Entrez votre email et mot de passe.',
+    auth_error_generic: 'Erreur de connexion.',
+    auth_error_invalid: 'Email ou mot de passe incorrect.',
+    auth_error_unconfirmed: 'Confirmez votre email d\'abord.',
+    auth_error_connection: 'Erreur de connexion. Réessayez.',
+    auth_rate_limited: 'Trop de tentatives',
+    auth_locked: 'Compte bloqué',
+    auth_weak_password: 'Mot de passe faible',
+    forgot_email_required: 'Entrez votre email.',
+    forgot_error_send: 'Erreur d\'envoi d\'email.',
+    password_strength: 'Force',
   },
   de: {
     nav_products: 'Produkte',
@@ -4790,6 +4846,20 @@ const I18N = {
     wallet_withdraw_fill_uk: 'Geben Sie Ihren Sort Code und Kontonummer ein',
     wallet_withdraw_fill_wise: 'Geben Sie Ihre Wise-E-Mail ein',
     wallet_withdraw_select_method: 'Zahlungsmethode auswählen',
+    // Auth flow
+    auth_welcome: 'Willkommen',
+    auth_loading: 'Portal wird geladen...',
+    auth_error_empty: 'Geben Sie Ihre E-Mail und Ihr Passwort ein.',
+    auth_error_generic: 'Anmeldefehler.',
+    auth_error_invalid: 'Falsche E-Mail oder Passwort.',
+    auth_error_unconfirmed: 'Bestätigen Sie zuerst Ihre E-Mail.',
+    auth_error_connection: 'Verbindungsfehler. Versuchen Sie es erneut.',
+    auth_rate_limited: 'Zu viele Versuche',
+    auth_locked: 'Konto gesperrt',
+    auth_weak_password: 'Schwaches Passwort',
+    forgot_email_required: 'Geben Sie Ihre E-Mail ein.',
+    forgot_error_send: 'Fehler beim Senden der E-Mail.',
+    password_strength: 'Stärke',
   }
 };
 
@@ -4817,7 +4887,13 @@ function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     const translated = t(key);
-    if (translated) el.textContent = translated;
+    if (translated) {
+      if (translated.includes('<a ') || translated.includes('<a>')) {
+        el.innerHTML = translated;
+      } else {
+        el.textContent = translated;
+      }
+    }
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.dataset.i18nPlaceholder;
