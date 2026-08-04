@@ -50,7 +50,7 @@
         'Herramientas de marketing',
         'API de integración',
         'Soporte dedicado',
-        'Sin comisiones por ventas'
+        'Sin costos adicionales'
       ],
       stripePriceId: 'price_seller_premium'
     }
@@ -141,7 +141,7 @@
       plan_name_profesional:'Profesional',plan_price_profesional:'$199 MXN/mes',
       plan_prof_f1:'Perfil de vendedora premium',plan_prof_f2:'Productos ilimitados',plan_prof_f3:'Enlace de pago personal',plan_prof_f4:'Dominio personalizado',plan_prof_f5:'Estadísticas de visitas',plan_prof_f6:'Soporte prioritario',
       plan_name_premium:'Premium',plan_price_premium:'$499 MXN/mes',
-      plan_prem_f1:'Todo lo del plan Profesional',plan_prem_f2:'Destacada en la comunidad',plan_prem_f3:'Herramientas de marketing',plan_prem_f4:'API de integración',plan_prem_f5:'Soporte dedicado',plan_prem_f6:'Sin comisiones por ventas',
+      plan_prem_f1:'Todo lo del plan Profesional',plan_prem_f2:'Destacada en la comunidad',plan_prem_f3:'Herramientas de marketing',plan_prem_f4:'API de integración',plan_prem_f5:'Soporte dedicado',plan_prem_f6:'Sin costos adicionales',
     },
     en:{
       title:'My Store on Yayika',
@@ -210,7 +210,7 @@
       plan_name_profesional:'Professional',plan_price_profesional:'$199/mo',
       plan_prof_f1:'Premium seller profile',plan_prof_f2:'Unlimited products',plan_prof_f3:'Personal payment link',plan_prof_f4:'Custom domain',plan_prof_f5:'Visit statistics',plan_prof_f6:'Priority support',
       plan_name_premium:'Premium',plan_price_premium:'$499/mo',
-      plan_prem_f1:'Everything in Professional',plan_prem_f2:'Featured in community',plan_prem_f3:'Marketing tools',plan_prem_f4:'API integration',plan_prem_f5:'Dedicated support',plan_prem_f6:'No sales commissions',
+      plan_prem_f1:'Everything in Professional',plan_prem_f2:'Featured in community',plan_prem_f3:'Marketing tools',plan_prem_f4:'API integration',plan_prem_f5:'Dedicated support',plan_prem_f6:'No additional costs',
     },
     pt:{
       title:'Minha Loja no Yayika',
@@ -279,7 +279,7 @@
       plan_name_profesional:'Profissional',plan_price_profesional:'$199/mês',
       plan_prof_f1:'Perfil premium de vendedora',plan_prof_f2:'Produtos ilimitados',plan_prof_f3:'Link de pagamento pessoal',plan_prof_f4:'Domínio personalizado',plan_prof_f5:'Estatísticas de visitas',plan_prof_f6:'Suporte prioritário',
       plan_name_premium:'Premium',plan_price_premium:'$499/mês',
-      plan_prem_f1:'Tudo do plano Profissional',plan_prem_f2:'Destacada na comunidade',plan_prem_f3:'Ferramentas de marketing',plan_prem_f4:'API de integração',plan_prem_f5:'Suporte dedicado',plan_prem_f6:'Sem comissões nas vendas',
+      plan_prem_f1:'Tudo do plano Profissional',plan_prem_f2:'Destacada na comunidade',plan_prem_f3:'Ferramentas de marketing',plan_prem_f4:'API de integração',plan_prem_f5:'Suporte dedicado',plan_prem_f6:'Sem custos adicionais',
     },
     fr:{
       title:'Ma Boutique sur Yayika',
@@ -348,7 +348,7 @@
       plan_name_profesional:'Professionnel',plan_price_profesional:'$199/mois',
       plan_prof_f1:'Profil vendeuse premium',plan_prof_f2:'Produits illimités',plan_prof_f3:'Lien de paiement personnel',plan_prof_f4:'Domaine personnalisé',plan_prof_f5:'Statistiques de visites',plan_prof_f6:'Support prioritaire',
       plan_name_premium:'Premium',plan_price_premium:'$499/mois',
-      plan_prem_f1:'Tout du plan Professionnel',plan_prem_f2:'Mise en avant dans la communauté',plan_prem_f3:'Outils marketing',plan_prem_f4:'API d\'intégration',plan_prem_f5:'Support dédié',plan_prem_f6:'Aucune commission sur les ventes',
+      plan_prem_f1:'Tout du plan Professionnel',plan_prem_f2:'Mise en avant dans la communauté',plan_prem_f3:'Outils marketing',plan_prem_f4:'API d\'intégration',plan_prem_f5:'Support dédié',plan_prem_f6:'Sans coûts supplémentaires',
     },
     de:{
       title:'Mein Shop bei Yayika',
@@ -417,7 +417,7 @@
       plan_name_profesional:'Professionell',plan_price_profesional:'$199/Monat',
       plan_prof_f1:'Premium-Verkäuferprofil',plan_prof_f2:'Unbegrenzte Produkte',plan_prof_f3:'Persönlicher Zahlungslink',plan_prof_f4:'Eigene Domain',plan_prof_f5:'Besucherstatistiken',plan_prof_f6:'Bevorzugter Support',
       plan_name_premium:'Premium',plan_price_premium:'$499/Monat',
-      plan_prem_f1:'Alles aus Professionell',plan_prem_f2:'Hervorgehoben in der Community',plan_prem_f3:'Marketing-Tools',plan_prem_f4:'API-Integration',plan_prem_f5:'Dedizierter Support',plan_prem_f6:'Keine Verkaufsprovisionen',
+      plan_prem_f1:'Alles aus Professionell',plan_prem_f2:'Hervorgehoben in der Community',plan_prem_f3:'Marketing-Tools',plan_prem_f4:'API-Integration',plan_prem_f5:'Dedizierter Support',plan_prem_f6:'Keine zusätzlichen Kosten',
     }
   };
 
