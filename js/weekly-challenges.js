@@ -75,6 +75,12 @@
 
   function t(k) { return (L[currentLang]||L.es)[k] || L.es[k] || k; }
 
+  function escHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
   const CAT_COLORS = { cycle:'#7B5EA7', fitness:'#3BAF7A', mindfulness:'#B8943A', finance:'#00B4D8', social:'#E91E63', streak:'#C96B7A' };
   const DIFF_COLORS = { easy:'#3BAF7A', medium:'#B8943A', hard:'#C96B7A' };
 
@@ -101,7 +107,7 @@
           <div style="display:flex;align-items:center;gap:10px">
             <span style="font-size:24px">${ch.icon || '🎯'}</span>
             <div style="flex:1">
-              <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${ch.name}</div>
+              <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${escHtml(ch.name)}</div>
               <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5">${daysLeft} ${tr.daysLeft} · ${ch.days_completed || 0}/${ch.xp_reward > 100 ? 7 : 7} días</div>
             </div>
             <span style="font-size:11px;color:${catColor};font-weight:600">${pct}%</span>
@@ -120,8 +126,8 @@
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-size:28px">${ch.icon || '🎯'}</span>
           <div style="flex:1">
-            <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${ch.name}</div>
-            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5;margin-top:2px">${ch.description || ''}</div>
+            <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${escHtml(ch.name)}</div>
+            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5;margin-top:2px">${escHtml(ch.description) || ''}</div>
             <div style="display:flex;gap:8px;margin-top:4px">
               <span style="font-size:9px;padding:2px 6px;border-radius:6px;background:${diffColor}22;color:${diffColor}">${t('difficulty')[ch.difficulty] || ch.difficulty}</span>
               <span style="font-size:9px;padding:2px 6px;border-radius:6px;background:${catColor}22;color:${catColor}">${t('categories')[ch.category] || ch.category}</span>
@@ -218,7 +224,7 @@
           data.completed.forEach(ch => {
             html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(59,175,122,0.06);border-radius:8px;margin-bottom:4px">
               <span style="font-size:16px">${ch.icon || '✅'}</span>
-              <span style="flex:1;font-size:11px;color:var(--texto,#E8E8E8)">${ch.name}</span>
+              <span style="flex:1;font-size:11px;color:var(--texto,#E8E8E8)">${escHtml(ch.name)}</span>
               <span style="font-size:11px;color:var(--oro,#B8943A);font-weight:600">+${ch.xp_reward} XP</span>
             </div>`;
           });

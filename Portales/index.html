@@ -980,7 +980,18 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/weekly-challenges.js" defer></script>
 <script src="../js/gana-con-yayika.js" defer></script>
 <script src="../js/seller-dashboard.js" defer></script>
-<script>
+  <script>
+// i18n helper - bridges to i18n.js t() function
+function getI18nText(key) {
+  try {
+    if (typeof t === 'function') return t(key);
+    // Fallback: try to get from I18N object directly
+    const lang = localStorage.getItem('yayika_lang') || 'es';
+    if (typeof I18N !== 'undefined' && I18N[lang] && I18N[lang][key]) return I18N[lang][key];
+    if (typeof I18N !== 'undefined' && I18N['es'] && I18N['es'][key]) return I18N['es'][key];
+    return null;
+  } catch(e) { return null; }
+}
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
 
@@ -1089,7 +1100,7 @@ async function doLogin() {
   
   const btn = document.querySelector('.btn-login');
   btn.disabled = true;
-  btn.textContent = 'Entrando...';
+  btn.textContent = getI18nText('auth_logging_in') || 'Entrando...';
   
   try {
     // Sanitize email
@@ -1125,7 +1136,7 @@ async function doLogin() {
     // Start session timeout
     YayikaSecurity.session.start(() => {
       signOut();
-      alert('Sesión expirada por inactividad.');
+      alert(getI18nText('auth_session_expired') || 'Sesión expirada por inactividad.');
     });
     
     // Load profile
@@ -1576,7 +1587,7 @@ function toggleReto(el) {
     document.getElementById('xpFill').style.width = (xp / 10) + '%';
     document.getElementById('xpVal').textContent = xp + ' / 1000 XP';
     document.getElementById('totalXP').textContent = xp;
-    showToast('✅ +20 XP — Reto completado');
+    showToast('✅ +20 XP — ' + (getI18nText('challenge_completed') || 'Reto completado'));
     addXP(20).catch(() => {});
   }
 }
@@ -1799,7 +1810,7 @@ async function completeWeeklyChallenge(index, el) {
       el.classList.add('done');
       el.textContent = '✓';
       el.nextElementSibling?.classList.add('done-text');
-      showToast('✅ +' + result.xp + ' XP — Reto completado');
+      showToast('✅ +' + result.xp + ' XP — ' + (getI18nText('challenge_completed') || 'Reto completado'));
       // Refresh XP
       const progress = await getProgress();
       if (progress) {
@@ -2230,6 +2241,8 @@ window.loadDashboard = async function() {
 setTheme(currentTheme);
 applyTranslations();
 </script>
-<script src="/js/cookie-banner.js"></script>
+  <script src="/js/cookie-banner.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" integrity="sha256-wIRQlqfEpnQfNirFBslMHH0n3GA7zBv2Slh/dvLb46E=" crossorigin="anonymous"></script>
+  <script src="../js/security.js"></script>
 </body>
 </html>

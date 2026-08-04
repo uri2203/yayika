@@ -1021,6 +1021,11 @@ const I18N = {
     forgot_email_required: 'Ingresa tu correo electrónico.',
     forgot_error_send: 'Error al enviar el correo.',
     password_strength: 'Fortaleza',
+    auth_session_expired: 'Sesión expirada por inactividad.',
+    auth_logging_in: 'Entrando...',
+    challenge_completed: 'Reto completado',
+    share_error_create: 'Error al crear tarjeta',
+    share_error_connection: 'Error de conexión',
   },
 
   en: {
@@ -1983,6 +1988,11 @@ const I18N = {
     forgot_email_required: 'Enter your email.',
     forgot_error_send: 'Error sending email.',
     password_strength: 'Strength',
+    auth_session_expired: 'Session expired due to inactivity.',
+    auth_logging_in: 'Logging in...',
+    challenge_completed: 'Challenge completed',
+    share_error_create: 'Error creating card',
+    share_error_connection: 'Connection error',
   },
   pt: {
     nav_products: 'Produtos',
@@ -2942,6 +2952,11 @@ const I18N = {
     forgot_email_required: 'Insira seu email.',
     forgot_error_send: 'Erro ao enviar email.',
     password_strength: 'Força',
+    auth_session_expired: 'Sessão expirada por inatividade.',
+    auth_logging_in: 'Entrando...',
+    challenge_completed: 'Desafio concluído',
+    share_error_create: 'Erro ao criar cartão',
+    share_error_connection: 'Erro de conexão',
   },
   fr: {
     nav_products: 'Produits',
@@ -3901,6 +3916,11 @@ const I18N = {
     forgot_email_required: 'Entrez votre email.',
     forgot_error_send: 'Erreur d\'envoi d\'email.',
     password_strength: 'Force',
+    auth_session_expired: 'Session expirée pour inactivité.',
+    auth_logging_in: 'Connexion...',
+    challenge_completed: 'Défi terminé',
+    share_error_create: 'Erreur de création de carte',
+    share_error_connection: 'Erreur de connexion',
   },
   de: {
     nav_products: 'Produkte',
@@ -4860,6 +4880,11 @@ const I18N = {
     forgot_email_required: 'Geben Sie Ihre E-Mail ein.',
     forgot_error_send: 'Fehler beim Senden der E-Mail.',
     password_strength: 'Stärke',
+    auth_session_expired: 'Sitzung wegen Inaktivität abgelaufen.',
+    auth_logging_in: 'Anmelden...',
+    challenge_completed: 'Herausforderung abgeschlossen',
+    share_error_create: 'Fehler beim Karten erstellen',
+    share_error_connection: 'Verbindungsfehler',
   }
 };
 

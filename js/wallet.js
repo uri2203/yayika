@@ -161,7 +161,7 @@ async function loadCommissions(affiliateId) {
     const list = document.getElementById('commissionsList');
     const empty = document.getElementById('commissionsEmpty');
     if (list) list.innerHTML = '';
-    if (empty) { empty.style.display = 'block'; empty.textContent = wt('wallet_no_commissions') || 'Aún no tienes comisiones.'; }
+    if (empty) { empty.style.display = 'block'; empty.textContent = wt('wallet_no_commissions'); }
   }
 }
 
@@ -205,7 +205,7 @@ async function loadPayouts(affiliateId) {
     const list = document.getElementById('payoutsList');
     const empty = document.getElementById('payoutsEmpty');
     if (list) list.innerHTML = '';
-    if (empty) { empty.style.display = 'block'; empty.textContent = wt('wallet_no_payouts') || 'No tienes retiros registrados aún.'; }
+    if (empty) { empty.style.display = 'block'; empty.textContent = wt('wallet_no_payouts'); }
   }
 }
 
@@ -255,12 +255,12 @@ async function submitWithdraw() {
   const minAmount = 500;
   
   if (!amount || amount < minAmount) {
-    alert(wt('wallet_withdraw_min_error') || 'El monto mínimo es $500 MXN');
+    alert(wt('wallet_withdraw_min_error'));
     return;
   }
   
   if (amount > (affiliateData?.pending_payout || 0)) {
-    alert(wt('wallet_withdraw_insufficient') || 'Saldo insuficiente');
+    alert(wt('wallet_withdraw_insufficient'));
     return;
   }
   
@@ -271,7 +271,7 @@ async function submitWithdraw() {
       const bank = document.getElementById('withdrawBank')?.value.trim();
       const clabe = document.getElementById('withdrawAccount')?.value.trim();
       if (!bank || !clabe) {
-        alert(wt('wallet_fill_bank_details') || 'Completa los datos bancarios');
+        alert(wt('wallet_fill_bank_details'));
         return;
       }
       details = { bank, clabe };
@@ -281,7 +281,7 @@ async function submitWithdraw() {
       const cpf = document.getElementById('withdrawCpf')?.value.trim();
       const pixKey = document.getElementById('withdrawPixKey')?.value.trim();
       if (!cpf || !pixKey) {
-        alert(wt('wallet_withdraw_fill_pix') || 'Completa tu CPF y clave PIX');
+        alert(wt('wallet_withdraw_fill_pix'));
         return;
       }
       details = { cpf, pix_key: pixKey };
@@ -290,7 +290,7 @@ async function submitWithdraw() {
     case 'mercadopago':
       const mpEmail = document.getElementById('withdrawMpEmail')?.value.trim();
       if (!mpEmail) {
-        alert(wt('wallet_withdraw_fill_mp') || 'Completa tu email de Mercado Pago');
+        alert(wt('wallet_withdraw_fill_mp'));
         return;
       }
       details = { email: mpEmail };
@@ -300,7 +300,7 @@ async function submitWithdraw() {
       const fullName = document.getElementById('withdrawFullName')?.value.trim();
       const iban = document.getElementById('withdrawIban')?.value.trim().replace(/\s/g, '');
       if (!fullName || !iban) {
-        alert(wt('wallet_withdraw_fill_sepa') || 'Completa tu nombre y IBAN');
+        alert(wt('wallet_withdraw_fill_sepa'));
         return;
       }
       details = { full_name: fullName, iban };
@@ -310,7 +310,7 @@ async function submitWithdraw() {
       const sortCode = document.getElementById('withdrawSortCode')?.value.trim();
       const ukAccount = document.getElementById('withdrawUkAccount')?.value.trim();
       if (!sortCode || !ukAccount) {
-        alert(wt('wallet_withdraw_fill_uk') || 'Completa tu Sort Code y número de cuenta');
+        alert(wt('wallet_withdraw_fill_uk'));
         return;
       }
       details = { sort_code: sortCode, account_number: ukAccount };
@@ -319,7 +319,7 @@ async function submitWithdraw() {
     case 'wise':
       const wiseEmail = document.getElementById('withdrawWiseEmail')?.value.trim();
       if (!wiseEmail) {
-        alert(wt('wallet_withdraw_fill_wise') || 'Completa tu email de Wise');
+        alert(wt('wallet_withdraw_fill_wise'));
         return;
       }
       details = { email: wiseEmail };
@@ -328,14 +328,14 @@ async function submitWithdraw() {
     case 'paypal':
       const paypalEmail = document.getElementById('withdrawPaypal')?.value.trim();
       if (!paypalEmail) {
-        alert(wt('wallet_fill_paypal_email') || 'Completa el email de PayPal');
+        alert(wt('wallet_fill_paypal_email'));
         return;
       }
       details = { email: paypalEmail };
       break;
       
     default:
-      alert(wt('wallet_withdraw_select_method') || 'Selecciona un método de pago');
+      alert(wt('wallet_withdraw_select_method'));
       return;
   }
   
@@ -351,10 +351,10 @@ async function submitWithdraw() {
   };
   
   const confirmed = confirm(
-    (wt('wallet_withdraw_confirm_title') || 'Confirmar retiro') + ': $' + amount.toFixed(2) + ' MXN\n\n' +
-    (wt('wallet_withdraw_method') || 'Método') + ': ' + (methodNames[method] || method) + '\n' +
-    (wt('wallet_withdraw_to') || 'Destino') + ': ' + (method === 'spei' ? details.clabe : details.email || details.iban || details.pix_key || details.account_number) + '\n\n' +
-    (wt('wallet_confirm') || 'Confirmar')
+    wt('wallet_withdraw_confirm_title') + ': $' + amount.toFixed(2) + ' MXN\n\n' +
+    wt('wallet_withdraw_method') + ': ' + (methodNames[method] || method) + '\n' +
+    wt('wallet_withdraw_to') + ': ' + (method === 'spei' ? details.clabe : details.email || details.iban || details.pix_key || details.account_number) + '\n\n' +
+    wt('wallet_confirm')
   );
   
   if (!confirmed) return;
@@ -384,7 +384,7 @@ async function submitWithdraw() {
 
     if (fetchError) throw fetchError;
     if (currentAff.pending_payout < amount) {
-      alert(wt('wallet_withdraw_insufficient') || 'Saldo insuficiente');
+      alert(wt('wallet_withdraw_insufficient'));
       return;
     }
 
@@ -398,15 +398,15 @@ async function submitWithdraw() {
     
     affiliateData.pending_payout = newPending;
     closeWithdrawModal();
-    alert(wt('wallet_withdraw_success') || 'Solicitud de retiro enviada');
+    alert(wt('wallet_withdraw_success'));
     loadCommissions(affiliateData.id);
     loadPayouts(affiliateData.id);
     updateBalanceUI(affiliateData);
   } catch (err) {
     console.error('withdraw error', err);
-    alert(wt('wallet_withdraw_error') || 'Error al procesar retiro');
+    alert(wt('wallet_withdraw_error'));
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = wt('wallet_confirm') || 'Confirmar Retiro'; }
+    if (btn) { btn.disabled = false; btn.textContent = wt('wallet_confirm'); }
   }
 }
 

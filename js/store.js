@@ -278,7 +278,7 @@ async function checkout() {
 
   // Multiple products — only single-product checkout supported for now
   if (cart.length > 1) {
-    alert(st('cart_one_product') || 'Compra un producto a la vez');
+    alert(st('cart_one_product'));
     return;
   }
 

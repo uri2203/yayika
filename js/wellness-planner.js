@@ -4,6 +4,11 @@
    ============================================================ */
 
 const WellnessPlanner = {
+  escHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  },
   // ============================================================
   // MAIN
   // ============================================================
@@ -177,8 +182,8 @@ const WellnessPlanner = {
         plan.meals.forEach(m => {
           html += `<div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--bg);border-radius:8px;margin-bottom:6px">
             <span style="font-size:20px">${m.icon || '🍽️'}</span>
-            <div><div style="font-size:13px;font-weight:500;color:var(--texto)">${m.name}</div>
-            <div style="font-size:11px;color:var(--suave)">${m.description || ''}</div></div>
+            <div><div style="font-size:13px;font-weight:500;color:var(--texto)">${this.escHtml(m.name)}</div>
+            <div style="font-size:11px;color:var(--suave)">${this.escHtml(m.description) || ''}</div></div>
           </div>`;
         });
         html += '</div>';
@@ -190,8 +195,8 @@ const WellnessPlanner = {
         plan.exercise.forEach(e => {
           html += `<div style="display:flex;align-items:center;gap:10px;padding:8px;background:var(--turquesa-l);border-radius:8px;margin-bottom:6px">
             <span style="font-size:16px;font-weight:600;color:var(--turquesa-d)">⏱ ${e.duration || ''}</span>
-            <div><div style="font-size:13px;font-weight:500;color:var(--texto)">${e.name}</div>
-            <div style="font-size:11px;color:var(--suave)">${e.why || ''}</div></div>
+            <div><div style="font-size:13px;font-weight:500;color:var(--texto)">${this.escHtml(e.name)}</div>
+            <div style="font-size:11px;color:var(--suave)">${this.escHtml(e.why) || ''}</div></div>
           </div>`;
         });
         html += '</div>';
@@ -199,7 +204,7 @@ const WellnessPlanner = {
       
       // Tip
       if (plan.tip) {
-        html += `<div style="padding:10px;background:var(--oro-l);border-radius:8px;font-size:12px;color:var(--texto);line-height:1.5">💡 ${plan.tip}</div>`;
+        html += `<div style="padding:10px;background:var(--oro-l);border-radius:8px;font-size:12px;color:var(--texto);line-height:1.5">💡 ${this.escHtml(plan.tip)}</div>`;
       }
       
       content.innerHTML = html;

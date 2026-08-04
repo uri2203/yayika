@@ -423,6 +423,12 @@
 
   function t(key){const lang=document.documentElement.lang||'es';return(T[lang]&&T[lang][key])||T.es[key]||key;}
 
+  function escHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
   function getLocalizedPlans(){return{
     basica:{
       name:t('plan_name_basica'),price:0,priceFormatted:t('plan_price_basica'),
@@ -611,11 +617,11 @@
           <div style="font-size:14px;font-weight:600;color:${C.text};margin-bottom:16px">🏪 ${t('my_store')}</div>
           <div style="margin-bottom:12px">
             <div class="sd-stat-label">${t('store_name')}</div>
-            <div style="font-size:16px;font-weight:600;color:${C.text};margin-top:4px">${data.store_name}</div>
+            <div style="font-size:16px;font-weight:600;color:${C.text};margin-top:4px">${escHtml(data.store_name)}</div>
           </div>
           <div style="margin-bottom:12px">
             <div class="sd-stat-label">${t('store_description')}</div>
-            <div style="font-size:14px;color:${C.sub};margin-top:4px">${data.store_description}</div>
+            <div style="font-size:14px;color:${C.sub};margin-top:4px">${escHtml(data.store_description)}</div>
           </div>
           <div style="margin-bottom:12px">
             <div class="sd-stat-label">${t('current_plan')}</div>
@@ -632,7 +638,7 @@
           <div style="font-size:14px;font-weight:600;color:${C.text};margin-bottom:16px">💳 ${t('payment_link')}</div>
           <div style="background:${C.bg};border:1px solid ${C.border};border-radius:8px;padding:12px;margin-bottom:12px">
             <div style="font-size:12px;color:${C.sub};margin-bottom:4px">Tu enlace de pago personal:</div>
-            <div style="font-size:14px;color:${C.turq};word-break:break-all;font-weight:500">${data.payment_link}</div>
+            <div style="font-size:14px;color:${C.turq};word-break:break-all;font-weight:500">${escHtml(data.payment_link)}</div>
           </div>
           <button onclick="sellerDash.copyPaymentLink()" class="sd-action-btn primary" style="width:100%">
             📋 ${t('copy_link')}
@@ -699,7 +705,7 @@
             <tbody>
               ${products.map(p=>`
                 <tr>
-                  <td style="padding:12px;border-bottom:1px solid ${C.border};font-weight:500">${p.name}</td>
+                  <td style="padding:12px;border-bottom:1px solid ${C.border};font-weight:500">${escHtml(p.name)}</td>
                   <td style="padding:12px;border-bottom:1px solid ${C.border}">$${(p.price/100).toFixed(2)} MXN</td>
                   <td style="padding:12px;border-bottom:1px solid ${C.border}">
                     <span class="sd-badge ${p.status==='active'?'success':'warning'}">${p.status==='active'?t('active'):t('inactive')}</span>

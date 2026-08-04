@@ -228,7 +228,8 @@ const ShareEarn = {
 
   async createCard(templateKey) {
     const lang = currentLang || 'es';
-    this._showToast('Creando tarjeta...', 'info');
+    const t = this._getTranslations(lang);
+    this._showToast(t.toast_creating || 'Creando tarjeta...', 'info');
 
     try {
       const supabaseUrl = typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : '';
@@ -249,22 +250,23 @@ const ShareEarn = {
         const result = await res.json();
         this._currentCard = result.card;
         this._renderCardPreview(result.card, result.gradient);
-        this._showToast('¡Tarjeta creada! Comparte con amigas 🎉', 'success');
+        this._showToast(t.toast_card_created || '¡Tarjeta creada! Comparte con amigas 🎉', 'success');
       } else {
-        this._showToast('Error al crear tarjeta', 'error');
+        this._showToast(t.toast_error_create || 'Error al crear tarjeta', 'error');
       }
     } catch (e) {
       console.warn('Create card error:', e);
-      this._showToast('Error de conexión', 'error');
+      this._showToast(t.toast_error_connection || 'Error de conexión', 'error');
     }
   },
 
   async createCustomCard() {
     const lang = currentLang || 'es';
+    const t = this._getTranslations(lang);
     const titleInput = document.getElementById('shareCustomTitle');
     const title = titleInput?.value?.trim();
     if (!title) {
-      this._showToast('Escribe un mensaje para tu tarjeta', 'info');
+      this._showToast(t.toast_enter_message || 'Escribe un mensaje para tu tarjeta', 'info');
       return;
     }
 
@@ -292,10 +294,10 @@ const ShareEarn = {
         this._currentCard = result.card;
         this._renderCardPreview(result.card, `linear-gradient(135deg, ${this._selectedColor || '#7B5EA7'} 0%, ${this._lightenColor(this._selectedColor || '#7B5EA7', 40)} 100%)`);
         titleInput.value = '';
-        this._showToast('¡Tarjeta creada! Comparte con amigas 🎉', 'success');
+        this._showToast(t.toast_card_created || '¡Tarjeta creada! Comparte con amigas 🎉', 'success');
       }
     } catch (e) {
-      this._showToast('Error de conexión', 'error');
+      this._showToast(t.toast_error_connection || 'Error de conexión', 'error');
     }
   },
 
@@ -380,6 +382,7 @@ const ShareEarn = {
   async shareTo(platform, cardId) {
     const card = this._currentCard || {};
     const lang = currentLang || 'es';
+    const t = this._getTranslations(lang);
     const title = typeof card.card_title === 'object' ? (card.card_title[lang] || card.card_title.es) : (card.card_title || 'Yayika');
     const shareUrl = card.share_url || 'https://yayika.com';
     const refCode = card.ref_code || '';
@@ -406,15 +409,15 @@ const ShareEarn = {
         // For Instagram/TikTok, copy to clipboard and open the app
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(shareText);
-          this._showToast('Texto copiado. Pega en tu historia 📱', 'success');
+          this._showToast(t.toast_text_copied || 'Texto copiado. Pega en tu historia 📱', 'success');
         }
         break;
       case 'copy':
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(shareText);
-          this._showToast('¡Copiado al portapapeles! 📋', 'success');
+          this._showToast(t.toast_copied_clipboard || '¡Copiado al portapapeles! 📋', 'success');
         } else {
-          prompt('Copia este texto:', shareText);
+          prompt(t.prompt_copy_text || 'Copia este texto:', shareText);
         }
         break;
       case 'download':
@@ -470,7 +473,9 @@ const ShareEarn = {
     a.download = `yayika-share-${Date.now()}.svg`;
     a.click();
     URL.revokeObjectURL(url);
-    this._showToast('¡Tarjeta descargada! 📥', 'success');
+    const lang = currentLang || 'es';
+    const t = this._getTranslations(lang);
+    this._showToast(t.toast_card_downloaded || '¡Tarjeta descargada! 📥', 'success');
   },
 
   // ============================================================
@@ -548,6 +553,15 @@ const ShareEarn = {
         generate: '✨ Generar tarjeta',
         preview: 'Vista previa',
         recent_cards: 'Tus tarjetas',
+        toast_creating: 'Creando tarjeta...',
+        toast_card_created: '¡Tarjeta creada! Comparte con amigas 🎉',
+        toast_error_create: 'Error al crear tarjeta',
+        toast_error_connection: 'Error de conexión',
+        toast_enter_message: 'Escribe un mensaje para tu tarjeta',
+        toast_copied_clipboard: '¡Copiado al portapapeles! 📋',
+        toast_text_copied: 'Texto copiado. Pega en tu historia 📱',
+        toast_card_downloaded: '¡Tarjeta descargada! 📥',
+        prompt_copy_text: 'Copia este texto:',
       },
       en: {
         title: 'Share & Earn',
@@ -565,6 +579,15 @@ const ShareEarn = {
         generate: '✨ Generate card',
         preview: 'Preview',
         recent_cards: 'Your cards',
+        toast_creating: 'Creating card...',
+        toast_card_created: 'Card created! Share with friends 🎉',
+        toast_error_create: 'Error creating card',
+        toast_error_connection: 'Connection error',
+        toast_enter_message: 'Enter a message for your card',
+        toast_copied_clipboard: 'Copied to clipboard! 📋',
+        toast_text_copied: 'Text copied. Paste in your story 📱',
+        toast_card_downloaded: 'Card downloaded! 📥',
+        prompt_copy_text: 'Copy this text:',
       },
       pt: {
         title: 'Compartilhar e Ganhar',
@@ -582,6 +605,15 @@ const ShareEarn = {
         generate: '✨ Gerar cartão',
         preview: 'Pré-visualização',
         recent_cards: 'Seus cartões',
+        toast_creating: 'Criando cartão...',
+        toast_card_created: 'Cartão criado! Compartilhe com amigas 🎉',
+        toast_error_create: 'Erro ao criar cartão',
+        toast_error_connection: 'Erro de conexão',
+        toast_enter_message: 'Escreva uma mensagem para seu cartão',
+        toast_copied_clipboard: 'Copiado para a área de transferência! 📋',
+        toast_text_copied: 'Texto copiado. Cole na sua história 📱',
+        toast_card_downloaded: 'Cartão baixado! 📥',
+        prompt_copy_text: 'Copie este texto:',
       },
       fr: {
         title: 'Partager et Gagner',
@@ -599,6 +631,15 @@ const ShareEarn = {
         generate: '✨ Générer la carte',
         preview: 'Aperçu',
         recent_cards: 'Vos cartes',
+        toast_creating: 'Création de la carte...',
+        toast_card_created: 'Carte créée ! Partage avec tes amies 🎉',
+        toast_error_create: 'Erreur de création de carte',
+        toast_error_connection: 'Erreur de connexion',
+        toast_enter_message: 'Écrivez un message pour votre carte',
+        toast_copied_clipboard: 'Copié dans le presse-papiers ! 📋',
+        toast_text_copied: 'Texte copié. Collez dans votre story 📱',
+        toast_card_downloaded: 'Carte téléchargée ! 📥',
+        prompt_copy_text: 'Copiez ce texte :',
       },
       de: {
         title: 'Teilen & Verdienen',
@@ -616,6 +657,15 @@ const ShareEarn = {
         generate: '✨ Karte erstellen',
         preview: 'Vorschau',
         recent_cards: 'Deine Karten',
+        toast_creating: 'Karte wird erstellt...',
+        toast_card_created: 'Karte erstellt! Teile mit Freundinnen 🎉',
+        toast_error_create: 'Fehler beim Erstellen der Karte',
+        toast_error_connection: 'Verbindungsfehler',
+        toast_enter_message: 'Schreibe eine Nachricht für deine Karte',
+        toast_copied_clipboard: 'In die Zwischenablage kopiert! 📋',
+        toast_text_copied: 'Text kopiert. Füge in deine Story ein 📱',
+        toast_card_downloaded: 'Karte heruntergeladen! 📥',
+        prompt_copy_text: 'Kopiere diesen Text:',
       }
     }[lang] || this._getTranslations('es');
   }

@@ -146,6 +146,12 @@
 
   function t(k) { return (L[currentLang]||L.es)[k] || L.es[k] || k; }
 
+  function escHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
   function fmtCents(cents, currency) {
     const sym = { USD:'$', EUR:'€', COP:'$', MXN:'$', BRL:'R$', GBP:'£', JPY:'¥', AUD:'$' };
     if (cents >= 100000) return `${sym[currency]||'$'}${(cents/100).toFixed(0)}`;
@@ -294,7 +300,7 @@
             html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
               <span style="font-size:14px">${srcIcon}</span>
               <div style="flex:1">
-                <div style="font-size:11px;color:var(--texto,#E8E8E8)">${r.description || srcLabel}</div>
+                <div style="font-size:11px;color:var(--texto,#E8E8E8)">${escHtml(r.description) || srcLabel}</div>
                 <div style="font-size:9px;color:var(--texto,#E8E8E8);opacity:0.4">${dateStr}</div>
               </div>
               <span style="font-size:12px;font-weight:600;color:var(--verde,#3BAF7A)">+${fmtCents(r.amount || 0, r.currency)}</span>
@@ -377,8 +383,8 @@
             const price = p.price_cents === 0 ? t('free') : `$${(p.price_cents/100).toFixed(0)}`;
             html += `<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.06)">
               <div style="font-size:24px;text-align:center;margin-bottom:6px">${p.category === 'template' ? '📋' : p.category === 'guide' ? '📘' : p.category === 'course' ? '📖' : '✨'}</div>
-              <div style="font-weight:600;font-size:12px;color:var(--texto,#E8E8E8);margin-bottom:4px;line-height:1.3">${p.name}</div>
-              <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5;margin-bottom:6px">${p.creator_name || 'Yayika'}</div>
+              <div style="font-weight:600;font-size:12px;color:var(--texto,#E8E8E8);margin-bottom:4px;line-height:1.3">${escHtml(p.name)}</div>
+              <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5;margin-bottom:6px">${escHtml(p.creator_name) || 'Yayika'}</div>
               <div style="display:flex;justify-content:space-between;align-items:center">
                 <span style="font-size:14px;font-weight:700;color:var(--rosa,#E91E63)">${price}</span>
                 <span style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4">⭐ ${p.rating_avg || 0} · ${p.total_sales || 0} ${t('sales')}</span>
@@ -422,7 +428,7 @@
               <div style="display:flex;align-items:center;gap:10px">
                 <div style="width:40px;height:40px;border-radius:50%;background:var(--lila,#7B5EA7);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">${(m.display_name||'M')[0]}</div>
                 <div style="flex:1">
-                  <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${m.display_name || 'Mentor'}</div>
+                  <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${escHtml(m.display_name) || 'Mentor'}</div>
                   <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5">${m.total_sessions || 0} ${t('sessions')} · ⭐ ${m.rating_avg || 0}</div>
                 </div>
                 <div style="text-align:right">
@@ -430,7 +436,7 @@
                   <div style="font-size:8px;color:var(--texto,#E8E8E8);opacity:0.4">${t('perHour')}</div>
                 </div>
               </div>
-              ${m.bio ? `<div style="margin-top:8px;font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6;line-height:1.4">${m.bio}</div>` : ''}
+              ${m.bio ? `<div style="margin-top:8px;font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6;line-height:1.4">${escHtml(m.bio)}</div>` : ''}
               <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
                 ${specs.map(s => `<span style="font-size:9px;padding:2px 8px;border-radius:6px;background:rgba(123,94,167,0.15);color:var(--lila,#7B5EA7)">${specLabels[s]||s}</span>`).join('')}
               </div>

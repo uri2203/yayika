@@ -71,6 +71,12 @@
 
   function t(k) { return (L[currentLang]||L.es)[k] || L.es[k] || k; }
 
+  function escHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
   const CATEGORY_ICONS = { course: '📖', guide: '📘', template: '📋', membership: '👑', bundle: '📦' };
   const CATEGORY_COLORS = { course: '#00B4D8', guide: '#3BAF7A', template: '#B8943A', membership: '#7B5EA7', bundle: '#E91E63' };
   const DIFFICULTY_COLORS = { beginner: '#3BAF7A', intermediate: '#B8943A', advanced: '#C96B7A' };
@@ -110,8 +116,8 @@
           <span style="position:absolute;bottom:8px;left:8px;background:${diffColor}22;color:${diffColor};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600">${t(p.difficulty)}</span>
         </div>
         <div style="padding:14px">
-          <div style="font-weight:700;font-size:14px;color:var(--texto,#E8E8E8);margin-bottom:6px;line-height:1.3">${p.name}</div>
-          <div style="font-size:12px;color:var(--texto,#E8E8E8);opacity:0.6;line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.description || ''}</div>
+          <div style="font-weight:700;font-size:14px;color:var(--texto,#E8E8E8);margin-bottom:6px;line-height:1.3">${escHtml(p.name)}</div>
+          <div style="font-size:12px;color:var(--texto,#E8E8E8);opacity:0.6;line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(p.description) || ''}</div>
           <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
             ${p.lesson_count > 0 ? `<span style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5">📝 ${p.lesson_count} ${t('lessons')}</span>` : ''}
             ${p.duration_hours > 0 ? `<span style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5">⏱️ ${p.duration_hours}h</span>` : ''}
@@ -134,7 +140,7 @@
         <div style="display:flex;align-items:center;gap:12px">
           <span style="font-size:28px">${CATEGORY_ICONS[p.category] || '📦'}</span>
           <div style="flex:1">
-            <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${p.name}</div>
+            <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8)">${escHtml(p.name)}</div>
             <div style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.5">${p.category}</div>
           </div>
           <span style="font-size:14px;font-weight:700;color:${catColor}">${pct}%</span>
@@ -268,8 +274,8 @@
 
             <div style="background:linear-gradient(135deg,${catColor}15,${catColor}05);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px">
               <span style="font-size:48px;display:block;margin-bottom:8px">${catIcon}</span>
-              <h3 style="color:var(--texto,#E8E8E8);margin:0 0 6px;font-size:18px">${p.name}</h3>
-              <p style="color:var(--texto,#E8E8E8);opacity:0.6;font-size:12px;margin:0 0 12px">${p.description || ''}</p>
+              <h3 style="color:var(--texto,#E8E8E8);margin:0 0 6px;font-size:18px">${escHtml(p.name)}</h3>
+              <p style="color:var(--texto,#E8E8E8);opacity:0.6;font-size:12px;margin:0 0 12px">${escHtml(p.description) || ''}</p>
               <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:12px">
                 ${p.lesson_count > 0 ? `<span style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.7">📝 ${p.lesson_count} ${tr.lessons}</span>` : ''}
                 ${p.duration_hours > 0 ? `<span style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.7">⏱️ ${p.duration_hours}h</span>` : ''}
@@ -284,7 +290,7 @@
             <div style="font-weight:600;font-size:13px;color:var(--texto,#E8E8E8);margin-bottom:8px">✨ ${t('included')}</div>
             <div style="display:flex;flex-direction:column;gap:6px">`;
           p.features.forEach(f => {
-            html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(59,175,122,0.08);border-radius:8px;font-size:12px;color:var(--texto,#E8E8E8)">✅ ${f}</div>`;
+            html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(59,175,122,0.08);border-radius:8px;font-size:12px;color:var(--texto,#E8E8E8)">✅ ${escHtml(f)}</div>`;
           });
           html += `</div></div>`;
         }
@@ -301,7 +307,7 @@
               <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.04);border-radius:8px;${hasAccess || isFree ? 'cursor:pointer' : 'opacity:0.6'}">
                 <span style="font-size:14px">${lockIcon}</span>
                 <div style="flex:1">
-                  <div style="font-size:12px;color:var(--texto,#E8E8E8);font-weight:${hasAccess||isFree?'600':'400'}">${i+1}. ${l.title}</div>
+                  <div style="font-size:12px;color:var(--texto,#E8E8E8);font-weight:${hasAccess||isFree?'600':'400'}">${i+1}. ${escHtml(l.title)}</div>
                   ${l.duration_minutes > 0 ? `<div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.5">⏱️ ${l.duration_minutes}min</div>` : ''}
                 </div>
                 <span style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4">${l.content_type}</span>
