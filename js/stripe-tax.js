@@ -3,6 +3,61 @@
    Automatic tax calculation and collection via Stripe
    ============================================================ */
 
+// Tax Configuration for Mexico (SAT)
+const TaxConfig = {
+  // SAT product/service codes
+  taxCodes: {
+    membership: '81112101',      // Servicios de suscripción digital
+    course: '81112200',          // Servicios educativos digitales
+    ebook: '81112101',           // Productos digitales
+    template: '81112101',        // Plantillas digitales
+    planner: '81112101',         // Planificadores digitales
+    coaching: '81112200',        // Servicios de coaching
+    mentoring: '81112200',       // Servicios de mentoría
+    digital_product: '81112101', // Productos digitales varios
+    physical_product: '53101500', // Productos físicos
+    service: '81112200',         // Servicios generales
+  },
+  
+  // VAT rates by country
+  vatRates: {
+    MX: 0.16,      // Mexico IVA 16%
+    BR: 0.17,      // Brazil ICMS 17%
+    AR: 0.21,      // Argentina IVA 21%
+    CL: 0.19,      // Chile IVA 19%
+    CO: 0.19,      // Colombia IVA 19%
+    PE: 0.18,      // Peru IGV 18%
+    EC: 0.15,      // Ecuador IVA 15%
+    EU: 0.21,      // EU average VAT 21%
+    DE: 0.19,      // Germany MwSt 19%
+    FR: 0.20,      // France TVA 20%
+    ES: 0.21,      // Spain IVA 21%
+    IT: 0.22,      // Italy IVA 22%
+    PT: 0.23,      // Portugal IVA 23%
+    UK: 0.20,      // UK VAT 20%
+    US: 0,         // US no federal VAT
+    CA: 0.05,      // Canada GST 5%
+    JP: 0.10,      // Japan consumption tax 10%
+    AU: 0.10,      // Australia GST 10%
+  },
+  
+  // Get tax code for product type
+  getTaxCode(productType) {
+    return this.taxCodes[productType] || '81112101';
+  },
+  
+  // Get VAT rate for country
+  getVatRate(countryCode) {
+    return this.vatRates[countryCode] || 0;
+  },
+  
+  // Calculate tax amount
+  calculateTax(amount, countryCode, productType) {
+    const rate = this.getVatRate(countryCode);
+    return Math.round(amount * rate * 100) / 100;
+  }
+};
+
 const StripeTax = {
   // ============================================================
   // CONFIGURATION

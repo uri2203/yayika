@@ -155,26 +155,34 @@ const YayikaSecurity = (() => {
   function validatePasswordStrength(password) {
     const issues = [];
     
+    // Common password check
+    const common = ['password','123456','12345678','qwerty','abc123','letmein','admin','welcome','yayika','contraseña','123456789','1234567890','iloveyou','princess','rockyou','1234567','trustno1','sunshine','master','hello','charlie','donald','login','passw0rd','michael','shadow','123123','654321','superman','qwerty123','jessica','pepper','000000','harley','hunter2','test','dragon','summer','qwerty1','access','flower','hottie','loveme','zaq1zaq1','password1','password123','admin123','root','toor','pass','guest','master123','changeme','secret','1234','12345','1234567890','abc','abcdef','abcdefg','abcdef123','password!','password1!','letmein1','welcome1','monkey','dragon1','baseball','soccer','hockey','batman','thomas','ashley','michael1','jordan','superman1','harley1','ranger','buster','thunder','falcon','eagle','society','pussy','fuck','love','sex','money','weed','nigger','ass','hello1','charlie1','donald1','login1','master1','passw0rd1','shadow1','qwerty1','dragon1','summer1','flower1','access1'];
+    const lang = document.documentElement.lang || 'es';
+    const msgs = {
+      es: { min: 'Mínimo', upper: 'Al menos 1 mayúscula', lower: 'Al menos 1 minúscula', digit: 'Al menos 1 número', special: 'Al menos 1 carácter especial', common: 'Contraseña demasiado común' },
+      en: { min: 'Minimum', upper: 'At least 1 uppercase', lower: 'At least 1 lowercase', digit: 'At least 1 number', special: 'At least 1 special character', common: 'Password too common' },
+      pt: { min: 'Mínimo', upper: 'Pelo menos 1 maiúscula', lower: 'Pelo menos 1 minúscula', digit: 'Pelo menos 1 número', special: 'Pelo menos 1 caractere especial', common: 'Senha muito comum' },
+      fr: { min: 'Minimum', upper: 'Au moins 1 majuscule', lower: 'Au moins 1 minuscule', digit: 'Au moins 1 chiffre', special: 'Au moins 1 caractère spécial', common: 'Mot de passe trop commun' },
+      de: { min: 'Minimum', upper: 'Mindestens 1 Großbuchstabe', lower: 'Mindestens 1 Kleinbuchstabe', digit: 'Mindestens 1 Ziffer', special: 'Mindestens 1 Sonderzeichen', common: 'Passwort zu häufig verwendet' }
+    };
+    const m = msgs[lang] || msgs.es;
     if (password.length < CONFIG.PASSWORD_MIN_LENGTH) {
-      issues.push(`Mínimo ${CONFIG.PASSWORD_MIN_LENGTH} caracteres`);
+      issues.push(m.min + ' ' + CONFIG.PASSWORD_MIN_LENGTH);
     }
     if ((password.match(/[A-Z]/g) || []).length < CONFIG.PASSWORD_MIN_UPPER) {
-      issues.push('Al menos 1 mayúscula');
+      issues.push(m.upper);
     }
     if ((password.match(/[a-z]/g) || []).length < CONFIG.PASSWORD_MIN_LOWER) {
-      issues.push('Al menos 1 minúscula');
+      issues.push(m.lower);
     }
     if ((password.match(/[0-9]/g) || []).length < CONFIG.PASSWORD_MIN_DIGIT) {
-      issues.push('Al menos 1 número');
+      issues.push(m.digit);
     }
     if ((password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g) || []).length < CONFIG.PASSWORD_MIN_SPECIAL) {
-      issues.push('Al menos 1 carácter especial (!@#$%^&*)');
+      issues.push(m.special);
     }
-    
-    // Common password check
-    const common = ['password', '123456', 'qwerty', 'abc123', 'letmein', 'admin', 'welcome', 'yayika'];
     if (common.some(c => password.toLowerCase().includes(c))) {
-      issues.push('Contraseña demasiado común');
+      issues.push(m.common);
     }
     
     return {
@@ -195,16 +203,28 @@ const YayikaSecurity = (() => {
   }
 
   function getStrengthLabel(score) {
-    const labels = ['Muy débil', 'Débil', 'Regular', 'Buena', 'Fuerte', 'Muy fuerte'];
+    const lang = document.documentElement.lang || 'es';
+    const labels = {
+      es: ['Muy débil', 'Débil', 'Regular', 'Buena', 'Fuerte', 'Muy fuerte'],
+      en: ['Very weak', 'Weak', 'Fair', 'Good', 'Strong', 'Very strong'],
+      pt: ['Muito fraca', 'Fraca', 'Regular', 'Boa', 'Forte', 'Muito forte'],
+      fr: ['Très faible', 'Faible', 'Passable', 'Bonne', 'Forte', 'Très forte'],
+      de: ['Sehr schwach', 'Schwach', 'Mäßig', 'Gut', 'Stark', 'Sehr stark']
+    };
     const colors = ['#dc2626', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#16a34a'];
-    return { label: labels[score] || labels[0], color: colors[score] || colors[0] };
+    const l = labels[lang] || labels.es;
+    return { label: l[score] || l[0], color: colors[score] || colors[0] };
   }
 
   // ============ SESSION TIMEOUT ============
   let sessionTimer = null;
   let lastActivity = Date.now();
+  let sessionListeners = [];
 
   function startSessionTimeout(onTimeout) {
+    // Clean up previous listeners
+    stopSessionTimeout();
+    
     lastActivity = Date.now();
     
     const resetTimer = () => {
@@ -219,8 +239,10 @@ const YayikaSecurity = (() => {
     };
 
     // Reset on user activity
+    sessionListeners = [];
     ['mousedown', 'keydown', 'touchstart', 'scroll'].forEach(event => {
       document.addEventListener(event, resetTimer, { passive: true });
+      sessionListeners.push({ event, handler: resetTimer });
     });
 
     resetTimer();
@@ -228,6 +250,10 @@ const YayikaSecurity = (() => {
 
   function stopSessionTimeout() {
     if (sessionTimer) clearTimeout(sessionTimer);
+    sessionListeners.forEach(({ event, handler }) => {
+      document.removeEventListener(event, handler);
+    });
+    sessionListeners = [];
   }
 
   // ============ AUDIT LOG ============

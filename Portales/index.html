@@ -1293,6 +1293,7 @@ async function doRegister() {
 }
 
 async function doLogout() {
+  try { YayikaSecurity.session.stop(); } catch(e) {}
   await supabase.auth.signOut();
   currentUser = null;
   sessionStorage.removeItem('yayika_user');

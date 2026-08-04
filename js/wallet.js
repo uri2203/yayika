@@ -115,82 +115,98 @@ function updateBalanceUI(aff) {
 }
 
 async function loadCommissions(affiliateId) {
-  if (!walletSb) return;
+  try {
+    if (!walletSb) return;
 
-  const { data: commissions } = await walletSb
-    .from('yayika_commissions')
-    .select('*')
-    .eq('affiliate_id', affiliateId)
-    .order('created_at', { ascending: false })
-    .limit(50);
+    const { data: commissions } = await walletSb
+      .from('yayika_commissions')
+      .select('*')
+      .eq('affiliate_id', affiliateId)
+      .order('created_at', { ascending: false })
+      .limit(50);
 
-  const list = document.getElementById('commissionsList');
-  const empty = document.getElementById('commissionsEmpty');
-  if (!commissions || commissions.length === 0) {
-    empty.style.display = 'block';
-    return;
+    const list = document.getElementById('commissionsList');
+    const empty = document.getElementById('commissionsEmpty');
+    if (!commissions || commissions.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    list.innerHTML = commissions.map(c => {
+      const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
+      const isPositive = c.status === 'approved' || c.status === 'paid';
+      const statusClass = c.status === 'pending' ? 'pending' : (c.status === 'paid' ? '' : '');
+      const amountClass = isPositive ? 'positive' : (c.status === 'pending' ? 'pending' : '');
+      const icon = c.product_type?.includes('membership') ? '⭐' : '💰';
+      const title = c.product_name || wt('commission_sale');
+      const date = new Date(c.created_at).toLocaleDateString({ es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' }[lang] || 'es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      return `
+        <div class="tx-item">
+          <div class="tx-icon ${statusClass}">${icon}</div>
+          <div class="tx-info">
+            <div class="tx-title">${escHtmlW(title)}</div>
+            <div class="tx-desc">${c.commission_pct}% de $${(c.sale_amount / 100).toFixed(0)} MXN</div>
+          </div>
+          <div style="text-align:right">
+            <div class="tx-amount ${amountClass}">+${formatWalletCurrency(parseFloat(c.commission_amount))}</div>
+            <div class="tx-date">${date}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('loadCommissions error', err);
+    const list = document.getElementById('commissionsList');
+    const empty = document.getElementById('commissionsEmpty');
+    if (list) list.innerHTML = '';
+    if (empty) { empty.style.display = 'block'; empty.textContent = wt('wallet_no_commissions') || 'Aún no tienes comisiones.'; }
   }
-  empty.style.display = 'none';
-
-  list.innerHTML = commissions.map(c => {
-    const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
-    const isPositive = c.status === 'approved' || c.status === 'paid';
-    const statusClass = c.status === 'pending' ? 'pending' : (c.status === 'paid' ? '' : '');
-    const amountClass = isPositive ? 'positive' : (c.status === 'pending' ? 'pending' : '');
-    const icon = c.product_type?.includes('membership') ? '⭐' : '💰';
-    const title = c.product_name || wt('commission_sale');
-    const date = new Date(c.created_at).toLocaleDateString({ es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' }[lang] || 'es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
-
-    return `
-      <div class="tx-item">
-        <div class="tx-icon ${statusClass}">${icon}</div>
-        <div class="tx-info">
-          <div class="tx-title">${escHtmlW(title)}</div>
-          <div class="tx-desc">${c.commission_pct}% de $${(c.sale_amount / 100).toFixed(0)} MXN</div>
-        </div>
-        <div style="text-align:right">
-          <div class="tx-amount ${amountClass}">+${formatWalletCurrency(parseFloat(c.commission_amount))}</div>
-          <div class="tx-date">${date}</div>
-        </div>
-      </div>
-    `;
-  }).join('');
 }
 
 async function loadPayouts(affiliateId) {
-  if (!walletSb) return;
+  try {
+    if (!walletSb) return;
 
-  const { data: payouts } = await walletSb
-    .from('yayika_payouts')
-    .select('*')
-    .eq('affiliate_id', affiliateId)
-    .order('created_at', { ascending: false })
-    .limit(20);
+    const { data: payouts } = await walletSb
+      .from('yayika_payouts')
+      .select('*')
+      .eq('affiliate_id', affiliateId)
+      .order('created_at', { ascending: false })
+      .limit(20);
 
-  const list = document.getElementById('payoutsList');
-  const empty = document.getElementById('payoutsEmpty');
-  if (!payouts || payouts.length === 0) {
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
+    const list = document.getElementById('payoutsList');
+    const empty = document.getElementById('payoutsEmpty');
+    if (!payouts || payouts.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
 
-  list.innerHTML = payouts.map(p => {
-    const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
-    const statusKey = `payout_${p.status}`;
-    const date = new Date(p.created_at).toLocaleDateString({ es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' }[lang] || 'es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    list.innerHTML = payouts.map(p => {
+      const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
+      const statusKey = `payout_${p.status}`;
+      const date = new Date(p.created_at).toLocaleDateString({ es: 'es-MX', en: 'en-US', pt: 'pt-BR', fr: 'fr-FR', de: 'de-DE' }[lang] || 'es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
 
-    return `
-      <div class="payout-item">
-        <div class="tx-icon debit">💸</div>
-        <div class="tx-info">
-          <div class="tx-title">${formatWalletCurrency(parseFloat(p.amount))}</div>
-          <div class="tx-desc">${date} — ${p.payout_method === 'paypal' ? 'PayPal' : wt('wallet_method_bank')}</div>
+      return `
+        <div class="payout-item">
+          <div class="tx-icon debit">💸</div>
+          <div class="tx-info">
+            <div class="tx-title">${formatWalletCurrency(parseFloat(p.amount))}</div>
+            <div class="tx-desc">${date} — ${p.payout_method === 'paypal' ? 'PayPal' : wt('wallet_method_bank')}</div>
+          </div>
+          <span class="payout-status ${p.status}">${wt(statusKey)}</span>
         </div>
-        <span class="payout-status ${p.status}">${wt(statusKey)}</span>
-      </div>
-    `;
-  }).join('');
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('loadPayouts error', err);
+    const list = document.getElementById('payoutsList');
+    const empty = document.getElementById('payoutsEmpty');
+    if (list) list.innerHTML = '';
+    if (empty) { empty.style.display = 'block'; empty.textContent = wt('wallet_no_payouts') || 'No tienes retiros registrados aún.'; }
+  }
 }
 
 function toggleWithdrawFields() {
