@@ -97,6 +97,10 @@
       ? '<p style="font-size:12px; color:#888; margin-top:8px;">' + ct('cookie_gpc_notice') + '</p>'
       : '';
 
+    const lang = (localStorage.getItem('yayika-lang') || 'es').split('-')[0];
+    const cookieUrl = lang === 'es' ? '/politica-cookies.html' : `/politica-cookies-${lang}.html`;
+    const cookieDesc = ct('cookie_desc').replace('/politica-cookies.html', cookieUrl);
+
     return `
     <div id="yayika-cookie-banner" role="dialog" aria-label="${ct('cookie_title')}" aria-modal="false" style="
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
@@ -110,7 +114,7 @@
           ${ct('cookie_title')}
         </p>
         <p style="margin: 0 0 16px 0; line-height: 1.6; font-size: 13px; color: #555;">
-          ${ct('cookie_desc')}
+          ${cookieDesc}
         </p>
         ${gpcNotice}
         

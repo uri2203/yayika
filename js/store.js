@@ -1,6 +1,6 @@
 /* ============================================================
    Yayika — Store / Tienda
-   Product catalog, cart, checkout via Stripe
+   Product catalog, cart, checkout via Supabase orders
    ============================================================ */
 
 const STORE_SUPABASE_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
@@ -266,55 +266,189 @@ function toggleCart() {
 async function checkout() {
   if (cart.length === 0) return;
 
-  // Single product — use Stripe Payment Link directly
-  if (cart.length === 1) {
-    const product = cart[0];
-    const link = findPaymentLink(product);
+  if (cart.length > 1) {
+    alert(st('cart_one_product'));
+    return;
+  }
+
+  await cartCheckout();
+}
+
+async function cartCheckout() {
+  if (cart.length === 0) return;
+
+  const product = cart[0];
+  const fullProduct = allProducts.find(p => p.id === product.id) || product;
+
+  track('Checkout', { product: fullProduct.name, category: fullProduct.category });
+
+  if (fullProduct.category === 'membership') {
+    const link = getMembershipLink(fullProduct);
     if (link) {
       window.location.href = link;
       return;
     }
   }
 
-  // Multiple products — only single-product checkout supported for now
-  if (cart.length > 1) {
-    alert(st('cart_one_product'));
-    return;
-  }
-
-  alert(st('cart_checkout'));
+  await createOrder(fullProduct);
 }
 
-function buyNow(productId) {
+async function buyNow(productId) {
   const product = allProducts.find(p => p.id === productId);
   if (!product) return;
 
-  const link = findPaymentLink(product);
-  if (link) {
-    track('Buy Now', { product: product.name });
-    window.location.href = link;
+  track('Buy Now', { product: product.name, category: product.category });
+
+  if (product.category === 'membership') {
+    const link = getMembershipLink(product);
+    if (link) {
+      window.location.href = link;
+      return;
+    }
+  }
+
+  if (product.price_cents === 0) {
+    await createOrder(product);
     return;
   }
 
-  // Fallback: add to cart and open it
-  addToCart(productId);
-  toggleCart();
+  showPurchaseOptions(product);
 }
 
-function findPaymentLink(product) {
+function getMembershipLink(product) {
   const nameSlug = slugify(product.name);
-  // Check direct match
+  if (nameSlug.includes('pro')) return STRIPE_PAYMENT_LINKS.semilla;
+  if (nameSlug.includes('mentoria')) return STRIPE_PAYMENT_LINKS.diamante;
   if (STRIPE_PAYMENT_LINKS[nameSlug]) return STRIPE_PAYMENT_LINKS[nameSlug];
-  // Check partial matches
   for (const [key, url] of Object.entries(STRIPE_PAYMENT_LINKS)) {
     if (nameSlug.includes(key) || key.includes(nameSlug)) return url;
   }
-  // Check membership category
-  if (product.category === 'membership') {
-    if (nameSlug.includes('pro')) return STRIPE_PAYMENT_LINKS.semilla;
-    if (nameSlug.includes('mentoria')) return STRIPE_PAYMENT_LINKS.diamante;
-  }
   return null;
+}
+
+function showPurchaseOptions(product) {
+  const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
+  const name = lang === 'en' && product.name_en ? product.name_en : product.name;
+  const price = formatPrice(product.price_cents, product.currency);
+
+  const categoryActions = {
+    cursos: { icon: '📚', action: () => createOrder(product) },
+    plantillas: { icon: '📋', action: () => createOrder(product) },
+    kits: { icon: '🎁', action: () => createOrder(product) },
+    bienvenida: { icon: '✨', action: () => createOrder(product) },
+    membership: { icon: '⭐', action: () => { const link = getMembershipLink(product); if (link) window.location.href = link; else createOrder(product); } }
+  };
+
+  const cat = categoryActions[product.category] || categoryActions.cursos;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'purchase-overlay';
+  overlay.innerHTML = `
+    <div class="purchase-modal">
+      <button class="purchase-close" onclick="this.closest('.purchase-overlay').remove()">&times;</button>
+      <div class="purchase-icon">${cat.icon}</div>
+      <h3>${escHtml(name)}</h3>
+      <p class="purchase-price">${price}</p>
+      <div class="purchase-actions">
+        <button class="btn-purchase-confirm" id="purchaseConfirmBtn">${st('btn_buy')}</button>
+        <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${st('cart_remove')}</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  overlay.querySelector('#purchaseConfirmBtn').addEventListener('click', async () => {
+    overlay.querySelector('#purchaseConfirmBtn').disabled = true;
+    overlay.querySelector('#purchaseConfirmBtn').textContent = '...';
+    await cat.action();
+    overlay.remove();
+  });
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+}
+
+async function createOrder(product) {
+  if (!storeSupabase) initStoreSupabase();
+  if (!storeSupabase) {
+    alert('No se pudo conectar. Intenta de nuevo.');
+    return;
+  }
+
+  const userId = typeof currentUser !== 'undefined' && currentUser?.id ? currentUser.id : null;
+
+  const orderData = {
+    product_id: product.id,
+    product_name: product.name,
+    product_category: product.category,
+    price_cents: product.price_cents,
+    currency: product.currency || 'MXN',
+    status: product.price_cents === 0 ? 'completed' : 'pending',
+    user_id: userId
+  };
+
+  try {
+    const { data, error } = await storeSupabase
+      .from('yayika_orders')
+      .insert(orderData)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    track('Order Created', { product: product.name, status: orderData.status });
+
+    if (product.price_cents === 0) {
+      showOrderConfirmation(product, data, true);
+    } else {
+      showOrderConfirmation(product, data, false);
+    }
+
+    cart = cart.filter(c => c.id !== product.id);
+    localStorage.setItem('yayika_cart', JSON.stringify(cart));
+    updateCartUI();
+    renderProducts(currentFilter === 'all' ? allProducts : allProducts.filter(p => p.category === currentFilter));
+  } catch (e) {
+    console.error('[Store] Order creation failed:', e);
+    alert('Error al crear la orden. Intenta de nuevo.');
+  }
+}
+
+function showOrderConfirmation(product, order, isFree) {
+  const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
+  const name = lang === 'en' && product.name_en ? product.name_en : product.name;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'purchase-overlay';
+
+  if (isFree) {
+    overlay.innerHTML = `
+      <div class="purchase-modal">
+        <button class="purchase-close" onclick="this.closest('.purchase-overlay').remove()">&times;</button>
+        <div class="purchase-icon">🎉</div>
+        <h3>${lang === 'en' ? 'Purchase Complete!' : '¡Compra completada!'}</h3>
+        <p>${lang === 'en' ? 'You now have access to' : 'Ahora tienes acceso a'} <strong>${escHtml(name)}</strong>.</p>
+        <div class="purchase-actions">
+          <button class="btn-purchase-confirm" onclick="window.location.href='portal.html'">${st('nav_portal')}</button>
+          <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${lang === 'en' ? 'Close' : 'Cerrar'}</button>
+        </div>
+      </div>
+    `;
+  } else {
+    overlay.innerHTML = `
+      <div class="purchase-modal">
+        <button class="purchase-close" onclick="this.closest('.purchase-overlay').remove()">&times;</button>
+        <div class="purchase-icon">📋</div>
+        <h3>${lang === 'en' ? 'Order Confirmed' : 'Orden confirmada'}</h3>
+        <p>${lang === 'en' ? 'Your order for' : 'Tu orden de'} <strong>${escHtml(name)}</strong> ${lang === 'en' ? 'has been created. We will contact you with payment details.' : 'ha sido creada. Te contactaremos con los detalles de pago.'}</p>
+        <p class="order-id">${lang === 'en' ? 'Order ID:' : 'ID de orden:'} ${order.id}</p>
+        <div class="purchase-actions">
+          <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${lang === 'en' ? 'Close' : 'Cerrar'}</button>
+        </div>
+      </div>
+    `;
+  }
+
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
 }
 
 function slugify(text) {

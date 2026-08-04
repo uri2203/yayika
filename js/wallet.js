@@ -52,9 +52,12 @@ function wt(key) {
     wallet_withdraw_fill_uk: 'Completa tu Sort Code y número de cuenta',
     wallet_withdraw_fill_wise: 'Completa tu email de Wise',
     wallet_withdraw_select_method: 'Selecciona un método de pago',
+    wallet_spei: 'SPEI/CLABE',
+    wallet_mercadopago: 'Mercado Pago',
     wallet_withdraw_confirm_title: 'Confirmar retiro',
     wallet_withdraw_method: 'Método',
     wallet_withdraw_to: 'Destino',
+    wallet_processing: 'Procesando...',
     payout_pending: 'Pendiente',
     payout_processing: 'Procesando',
     payout_completed: 'Completado',
@@ -360,23 +363,11 @@ async function submitWithdraw() {
   if (!confirmed) return;
   
   const btn = document.getElementById('btnConfirmWithdraw');
-  if (btn) { btn.disabled = true; btn.textContent = 'Procesando...'; }
+  if (btn) { btn.disabled = true; btn.textContent = wt('wallet_processing'); }
   
   try {
-    if (!walletUser) throw new Error('No autenticado');
+    if (!walletUser) throw new Error('Not authenticated');
     
-    const { error: payoutError } = await walletSb.from('yayika_payouts').insert({
-      affiliate_id: affiliateData.id,
-      amount,
-      currency: 'MXN',
-      payout_method: method,
-      payout_details: JSON.stringify(details),
-      status: 'pending'
-    });
-    
-    if (payoutError) throw payoutError;
-    
-    // Atomic update: only update if balance hasn't changed
     const { data: currentAff, error: fetchError } = await walletSb.from('yayika_affiliates')
       .select('pending_payout')
       .eq('id', affiliateData.id)
@@ -388,13 +379,31 @@ async function submitWithdraw() {
       return;
     }
 
-    const newPending = Math.max(0, currentAff.pending_payout - amount);
-    const { error: updateError } = await walletSb.from('yayika_affiliates')
+    const oldPending = currentAff.pending_payout;
+    const newPending = Math.max(0, oldPending - amount);
+
+    const { error: balanceError } = await walletSb.from('yayika_affiliates')
       .update({ pending_payout: newPending, updated_at: new Date().toISOString() })
       .eq('id', affiliateData.id)
-      .eq('pending_payout', currentAff.pending_payout); // Optimistic lock
+      .eq('pending_payout', oldPending);
     
-    if (updateError) throw updateError;
+    if (balanceError) throw balanceError;
+
+    const { error: payoutError } = await walletSb.from('yayika_payouts').insert({
+      affiliate_id: affiliateData.id,
+      amount,
+      currency: 'MXN',
+      payout_method: method,
+      payout_details: JSON.stringify(details),
+      status: 'pending'
+    });
+
+    if (payoutError) {
+      await walletSb.from('yayika_affiliates')
+        .update({ pending_payout: oldPending, updated_at: new Date().toISOString() })
+        .eq('id', affiliateData.id);
+      throw payoutError;
+    }
     
     affiliateData.pending_payout = newPending;
     closeWithdrawModal();

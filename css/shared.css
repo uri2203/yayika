@@ -356,6 +356,97 @@ textarea.form-input {
   background: var(--lila-l) !important;
 }
 
+/* --- Purchase Modal --- */
+.purchase-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+.purchase-modal {
+  background: var(--card, #fff);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.purchase-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--suave, #6B5F7A);
+  line-height: 1;
+}
+.purchase-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.purchase-modal h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--texto, #2C2240);
+}
+.purchase-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--lila, #7C5CBF);
+  margin-bottom: 20px;
+}
+.purchase-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.btn-purchase-confirm {
+  background: var(--turquesa, #1A9E8F);
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-purchase-confirm:hover {
+  background: var(--turquesa-d, #147A6E);
+}
+.btn-purchase-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-purchase-cancel {
+  background: transparent;
+  color: var(--suave, #6B5F7A);
+  border: 1px solid var(--borde, rgba(123,94,167,0.13));
+  padding: 10px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-purchase-cancel:hover {
+  border-color: var(--lila, #7C5CBF);
+  color: var(--lila, #7C5CBF);
+}
+.order-id {
+  font-size: 12px;
+  color: var(--suave, #6B5F7A);
+  margin-top: 8px;
+  word-break: break-all;
+}
+
 /* --- Dark mode modals --- */
 [data-theme="dark"] #checkinModal > div,
 [data-theme="dark"] #cycleModal > div {
