@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8">  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi Portal | Yayika</title>
 <meta name="description" content="Accede a tu portal Yayika: curso Ciclo Productiva, planeador de ciclo, tracker financiero, badges y más. Herramientas digitales para mujeres que quieren más.">
@@ -366,14 +366,6 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
   .dash-main{padding:16px}
 }
 </style>
-  <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://fonts.googleapis.com https://fonts.gstatic.com https://js.stripe.com https://*.stripe.com https://*.github.io https://plausible.io; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com; img-src 'self' https://*.supabase.co data: blob: https://*.github.io; frame-src https://js.stripe.com https://*.stripe.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://cdn.jsdelivr.net;">
-  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
 </head>
 <body>
 
@@ -391,7 +383,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <div class="ll-test-text">"<span data-i18n="portal_testimonial">Entro al portal cada mañana antes de arrancar el día. Me recuerda en qué fase estoy y qué tipo de trabajo hacer hoy.</span>"</div>
         <div class="ll-test-author">
           <div class="ll-test-av" data-i18n="portal_testimonial_avatar">YG</div>
-          <div class="ll-test-name" data-i18n="portal_testimonial_name">Miembro de Yayika</div>
+          <div class="ll-test-name" data-i18n="portal_testimonial_name">Miembro de Yayika · Miembra Guerrera</div>
         </div>
       </div>
     </div>
@@ -755,10 +747,12 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <div>
           <div class="dash-card" style="margin-bottom:14px">
             <div class="dc-title">🏆 <span data-i18n="ranking_title">Ranking semanal</span><span class="dc-see" data-i18n="ranking_ver">ver completo</span></div>
-            <div class="rank-list" id="rankList">
-              <div style="text-align:center;padding:16px;color:var(--suave);font-size:12px" data-i18n="ranking_loading">Cargando ranking...</div>
+            <div class="rank-list">
+              <div class="rank-item"><span class="rank-pos gold">🥇</span><div class="rank-av" style="background:#B8943A">VR</div><span class="rank-name">Valentina R.</span><span class="rank-pts">1,240</span></div>
+              <div class="rank-item"><span class="rank-pos silver">🥈</span><div class="rank-av" style="background:#C96B7A">ML</div><span class="rank-name">Miembro de Yayika</span><span class="rank-pts">1,105</span></div>
+              <div class="rank-item me"><span class="rank-pos" style="color:var(--lila-d)">#7</span><div class="rank-av" style="background:#7B5EA7">SL</div><span class="rank-name me-name">Tú — Sofía L.</span><span class="rank-pts" style="color:var(--lila-d)">680</span></div>
             </div>
-            <div style="margin-top:10px;font-size:11px;color:var(--suave);text-align:center;padding:8px;background:var(--lila-l);border-radius:8px" data-i18n="ranking_hint">Solo 40 XP para subir al puesto</div>
+            <div style="margin-top:10px;font-size:11px;color:var(--suave);text-align:center;padding:8px;background:var(--lila-l);border-radius:8px">Solo 40 XP para subir al puesto #6</div>
           </div>
 
           <div class="dash-card">
@@ -978,18 +972,7 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/weekly-challenges.js" defer></script>
 <script src="../js/gana-con-yayika.js" defer></script>
 <script src="../js/seller-dashboard.js" defer></script>
-  <script>
-// i18n helper - bridges to i18n.js t() function
-function getI18nText(key) {
-  try {
-    if (typeof t === 'function') return t(key);
-    // Fallback: try to get from I18N object directly
-    const lang = localStorage.getItem('yayika_lang') || 'es';
-    if (typeof I18N !== 'undefined' && I18N[lang] && I18N[lang][key]) return I18N[lang][key];
-    if (typeof I18N !== 'undefined' && I18N['es'] && I18N['es'][key]) return I18N['es'][key];
-    return null;
-  } catch(e) { return null; }
-}
+<script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
 
@@ -1016,7 +999,7 @@ async function doForgotPassword() {
   successEl.style.display = 'none';
 
   if (!email) {
-    errEl.textContent = getI18nText('forgot_email_required') || 'Ingresa tu correo electrónico.';
+    errEl.textContent = 'Ingresa tu correo electrónico.';
     errEl.style.display = 'block';
     return;
   }
@@ -1028,12 +1011,12 @@ async function doForgotPassword() {
 
     if (error) throw error;
 
-    successEl.textContent = getI18nText('forgot_success') || 'Te enviamos un correo con el enlace.';
+    successEl.textContent = 'Te enviamos un correo con el enlace para restablecer tu contraseña. Revisa tu bandeja de entrada.';
     successEl.style.display = 'block';
     document.getElementById('forgotEmail').value = '';
   } catch (error) {
-    let msg = getI18nText('forgot_error_send') || 'Error al enviar el correo.';
-    if (error.message?.includes('not found')) msg = getI18nText('forgot_error') || 'No encontramos una cuenta con este correo.';
+    let msg = 'Error al enviar el correo.';
+    if (error.message?.includes('not found')) msg = 'No encontramos una cuenta con este correo.';
     errEl.textContent = msg;
     errEl.style.display = 'block';
   }
@@ -1056,7 +1039,7 @@ document.getElementById('passInput')?.addEventListener('input', (e) => {
   
   const textEl = document.getElementById('passwordStrengthText');
   if (textEl) {
-    textEl.textContent = val.length > 0 ? (getI18nText('password_strength') || 'Fortaleza') + ': ' + label : '';
+    textEl.textContent = val.length > 0 ? `Fortaleza: ${label}` : '';
     textEl.style.color = color;
   }
 });
@@ -1072,7 +1055,7 @@ async function doLogin() {
   successEl.style.display = 'none';
   
   if (!email || !pass) {
-    errEl.textContent = getI18nText('auth_error_empty') || 'Ingresa tu correo y contraseña.';
+    errEl.textContent = 'Ingresa tu correo y contraseña.';
     errEl.style.display = 'block';
     return;
   }
@@ -1080,7 +1063,7 @@ async function doLogin() {
   // Rate limiting check
   if (!YayikaSecurity.rateLimit.check('login')) {
     const remaining = YayikaSecurity.rateLimit.remaining('login');
-    errEl.textContent = (getI18nText('auth_rate_limited') || 'Demasiados intentos') + '. (' + remaining + ')';
+    errEl.textContent = `Demasiados intentos. Espera un momento. (${remaining} restantes)`;
     errEl.style.display = 'block';
     YayikaSecurity.audit.log('login_rate_limited', { email });
     return;
@@ -1090,7 +1073,7 @@ async function doLogin() {
   if (YayikaSecurity.bruteForce.isLocked(email)) {
     const lockTime = YayikaSecurity.bruteForce.getRemainingLockoutTime(email);
     const minutes = Math.ceil(lockTime / 60000);
-    errEl.textContent = (getI18nText('auth_locked') || 'Cuenta bloqueada') + '. ' + minutes + ' min.';
+    errEl.textContent = `Cuenta bloqueada temporalmente. Intenta en ${minutes} minutos.`;
     errEl.style.display = 'block';
     YayikaSecurity.audit.log('login_locked', { email });
     return;
@@ -1098,7 +1081,7 @@ async function doLogin() {
   
   const btn = document.querySelector('.btn-login');
   btn.disabled = true;
-  btn.textContent = getI18nText('auth_logging_in') || 'Entrando...';
+  btn.textContent = 'Entrando...';
   
   try {
     // Sanitize email
@@ -1111,9 +1094,9 @@ async function doLogin() {
       YayikaSecurity.bruteForce.record(email);
       YayikaSecurity.audit.log('login_failed', { email: cleanEmail, error: error.message });
       
-      let msg = getI18nText('auth_error_generic') || 'Error al iniciar sesión.';
-      if (error.message?.includes('Invalid login')) msg = getI18nText('auth_error_invalid') || 'Correo o contraseña incorrectos.';
-      if (error.message?.includes('Email not confirmed')) msg = getI18nText('auth_error_unconfirmed') || 'Confirma tu correo electrónico primero.';
+      let msg = 'Error al iniciar sesión.';
+      if (error.message?.includes('Invalid login')) msg = 'Correo o contraseña incorrectos.';
+      if (error.message?.includes('Email not confirmed')) msg = 'Confirma tu correo electrónico primero.';
       
       const attempts = YayikaSecurity.bruteForce.isLocked(email) 
         ? ' Cuenta bloqueada temporalmente.' 
@@ -1134,7 +1117,7 @@ async function doLogin() {
     // Start session timeout
     YayikaSecurity.session.start(() => {
       signOut();
-      alert(getI18nText('auth_session_expired') || 'Sesión expirada por inactividad.');
+      alert('Sesión expirada por inactividad.');
     });
     
     // Load profile
@@ -1145,9 +1128,11 @@ async function doLogin() {
     const firstName = name.split(' ')[0];
     
     successEl.style.display = 'block';
-    const welcomeText = getI18nText('auth_welcome') || '¡Bienvenida';
-    const loadingText = getI18nText('auth_loading') || 'Cargando tu portal...';
-    successEl.textContent = '✅ ' + welcomeText + ', ' + YayikaSecurity.sanitize.input(firstName) + '! ' + loadingText;
+    successEl.innerHTML = `
+      <span style="font-size:14px;">✅</span>
+      <p style="font-size:14px;">¡Bienvenida, ${firstName}!</p>
+      <p style="font-size:13px; opacity:0.8; margin-top:4px;">Cargando tu portal...</p>
+    `;
     
     track('Login', { method: 'email' });
     
@@ -1160,13 +1145,7 @@ async function doLogin() {
         });
         if (resp.ok) {
           const setCookie = resp.headers.get('set-cookie');
-          if (setCookie) {
-            const cookieName = setCookie.split('=')[0];
-            const cookieValue = setCookie.split('=')[1]?.split(';')[0];
-            if (cookieName && cookieValue) {
-              document.cookie = `${cookieName}=${cookieValue}; path=/; Secure; SameSite=Strict; Max-Age=86400`;
-            }
-          }
+          if (setCookie) document.cookie = setCookie;
         }
       } catch(e) {}
       
@@ -1174,12 +1153,12 @@ async function doLogin() {
     }, 800);
     
   } catch (error) {
-    errEl.textContent = getI18nText('auth_error_connection') || 'Error de conexión. Intenta de nuevo.';
+    errEl.textContent = 'Error de conexión. Intenta de nuevo.';
     errEl.style.display = 'block';
     YayikaSecurity.audit.log('login_error', { email, error: error.message });
   } finally {
     btn.disabled = false;
-    btn.textContent = getI18nText('auth_login') || 'Entrar a mi portal';
+    btn.textContent = 'Entrar a mi portal';
   }
 }
 
@@ -1245,7 +1224,7 @@ async function doRegister() {
   // Password strength validation
   const passStrength = YayikaSecurity.password.validate(pass);
   if (!passStrength.valid) {
-    document.getElementById('loginError').textContent = (getI18nText('auth_weak_password') || 'Contraseña débil') + ': ' + passStrength.issues.join(', ');
+    document.getElementById('loginError').textContent = 'Contraseña débil: ' + passStrength.issues.join(', ');
     document.getElementById('loginError').style.display = 'block';
     return;
   }
@@ -1302,7 +1281,6 @@ async function doRegister() {
 }
 
 async function doLogout() {
-  try { YayikaSecurity.session.stop(); } catch(e) {}
   await supabase.auth.signOut();
   currentUser = null;
   sessionStorage.removeItem('yayika_user');
@@ -1369,8 +1347,8 @@ async function loadDashboard() {
           const item = document.createElement('div');
           item.className = 'rank-item' + (isMe ? ' me' : '');
           item.innerHTML = '<span class="rank-pos ' + posClass + '">' + posText + '</span>' +
-            '<div class="rank-av" style="background:' + color + '">' + YayikaSecurity.sanitize.input(initials) + '</div>' +
-            '<span class="rank-name' + (isMe ? ' me-name' : '') + '">' + (isMe ? 'Tú — ' : '') + YayikaSecurity.sanitize.input(fullName) + '</span>' +
+            '<div class="rank-av" style="background:' + color + '">' + initials + '</div>' +
+            '<span class="rank-name' + (isMe ? ' me-name' : '') + '">' + (isMe ? 'Tú — ' : '') + fullName + '</span>' +
             '<span class="rank-pts">' + pts.toLocaleString() + '</span>';
           rankList.appendChild(item);
         });
@@ -1395,8 +1373,8 @@ async function loadDashboard() {
           const detail = a.activity_detail || { es: 'Actividad reciente', en: 'Recent activity', pt: 'Atividade recente', fr: 'Activité récente', de: 'Letzte Aktivität' }[currentLang || 'es'];
           const item = document.createElement('div');
           item.className = 'feed-item';
-          item.innerHTML = '<div class="feed-av" style="background:' + color + '">' + YayikaSecurity.sanitize.input(initials) + '</div>' +
-            '<div><div class="feed-text"><strong>' + YayikaSecurity.sanitize.input(fullName) + '</strong> ' + YayikaSecurity.sanitize.input(detail) + '</div>' +
+          item.innerHTML = '<div class="feed-av" style="background:' + color + '">' + initials + '</div>' +
+            '<div><div class="feed-text"><strong>' + fullName + '</strong> ' + detail + '</div>' +
             '<div class="feed-time">' + timeAgo(a.created_at) + '</div></div>';
           feedList.appendChild(item);
         });
@@ -1419,7 +1397,7 @@ async function loadDashboard() {
         const item = document.createElement('div');
         item.className = 'reto-item';
         item.innerHTML = '<div class="reto-check ' + (isDone ? 'done' : '') + '" onclick="completeWeeklyChallenge(' + i + ', this)">' + (isDone ? '✓' : '') + '</div>' +
-          '<div class="reto-text ' + (isDone ? 'done-text' : '') + '">' + YayikaSecurity.sanitize.input(ch.name) + '</div>' +
+          '<div class="reto-text ' + (isDone ? 'done-text' : '') + '">' + ch.name + '</div>' +
           '<div class="reto-xp">+' + ch.xp + ' XP</div>';
         cList.appendChild(item);
       });
@@ -1447,8 +1425,8 @@ async function loadDashboard() {
         div.onclick = () => openCircleChat(c);
         const circleLabel = { es: 'Círculo', en: 'Circle', pt: 'Círculo', fr: 'Cercle', de: 'Kreis' }[currentLang || 'es'];
         const activeLabel = { es: 'activas', en: 'active', pt: 'ativas', fr: 'actifs', de: 'aktiv' }[currentLang || 'es'];
-        div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + YayikaSecurity.sanitize.input(c.name || circleLabel) + '</div>' +
-          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' ' + t('circle_members') + ' · ' + YayikaSecurity.sanitize.input(c.circle_type || 'general') + '</div>';
+        div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + (c.name || circleLabel) + '</div>' +
+          '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' ' + t('circle_members') + ' · ' + (c.circle_type || 'general') + '</div>';
         cList.appendChild(div);
       });
     } else {
@@ -1585,7 +1563,7 @@ function toggleReto(el) {
     document.getElementById('xpFill').style.width = (xp / 10) + '%';
     document.getElementById('xpVal').textContent = xp + ' / 1000 XP';
     document.getElementById('totalXP').textContent = xp;
-    showToast('✅ +20 XP — ' + (getI18nText('challenge_completed') || 'Reto completado'));
+    showToast('✅ +20 XP — Reto completado');
     addXP(20).catch(() => {});
   }
 }
@@ -1789,7 +1767,7 @@ async function loadWeeklyChallenges() {
         const item = document.createElement('div');
         item.className = 'reto-item';
         item.innerHTML = '<div class="reto-check ' + (isDone ? 'done' : '') + '" onclick="completeWeeklyChallenge(' + i + ', this)">' + (isDone ? '✓' : '') + '</div>' +
-          '<div class="reto-text ' + (isDone ? 'done-text' : '') + '">' + YayikaSecurity.sanitize.input(ch.name) + '</div>' +
+          '<div class="reto-text ' + (isDone ? 'done-text' : '') + '">' + ch.name + '</div>' +
           '<div class="reto-xp">+' + ch.xp + ' XP</div>';
         cList.appendChild(item);
       });
@@ -1808,7 +1786,7 @@ async function completeWeeklyChallenge(index, el) {
       el.classList.add('done');
       el.textContent = '✓';
       el.nextElementSibling?.classList.add('done-text');
-      showToast('✅ +' + result.xp + ' XP — ' + (getI18nText('challenge_completed') || 'Reto completado'));
+      showToast('✅ +' + result.xp + ' XP — Reto completado');
       // Refresh XP
       const progress = await getProgress();
       if (progress) {
@@ -1835,7 +1813,7 @@ async function showAvailableCircles() {
         const div = document.createElement('div');
         div.style.cssText = 'padding:10px;background:var(--bg);border-radius:12px;margin-bottom:8px;border:1.5px solid var(--borde)';
         div.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center">' +
-          '<div><div style="font-weight:500;font-size:13px;color:var(--texto)">' + YayikaSecurity.sanitize.input(c.name || 'Círculo') + '</div>' +
+          '<div><div style="font-weight:500;font-size:13px;color:var(--texto)">' + (c.name || 'Círculo') + '</div>' +
           '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + '/' + (c.max_members || 10) + ' ' + t('circle_members') + '</div></div>' +
           '<button onclick="joinCircleAction(' + c.id + ', this)" style="padding:6px 12px;border-radius:100px;background:var(--verde);color:white;border:none;font-size:11px;cursor:pointer;font-weight:500">' + { es: 'Unirse', en: 'Join', pt: 'Entrar', fr: 'Rejoindre', de: 'Beitreten' }[currentLang || 'es'] + '</button></div>';
         cList.appendChild(div);
@@ -1873,7 +1851,7 @@ async function loadMyCircles() {
         const div = document.createElement('div');
         div.style.cssText = 'padding:10px;background:var(--bg);border-radius:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid var(--borde)';
         div.onclick = () => openCircleChat(c);
-        div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + YayikaSecurity.sanitize.input(c.name || 'Círculo') + '</div>' +
+        div.innerHTML = '<div style="font-weight:500;font-size:13px;color:var(--texto);margin-bottom:2px">' + (c.name || 'Círculo') + '</div>' +
           '<div style="font-size:11px;color:var(--suave)">' + (c.member_count || 0) + ' ' + t('circle_members') + '</div>';
         cList.appendChild(div);
       });
@@ -2239,8 +2217,6 @@ window.loadDashboard = async function() {
 setTheme(currentTheme);
 applyTranslations();
 </script>
-  <script src="/js/cookie-banner.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js" integrity="sha256-wIRQlqfEpnQfNirFBslMHH0n3GA7zBv2Slh/dvLb46E=" crossorigin="anonymous"></script>
-  <script src="../js/security.js"></script>
+<script src="/js/cookie-banner.js"></script>
 </body>
 </html>
