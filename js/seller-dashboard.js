@@ -526,19 +526,43 @@
     content.innerHTML=`<div style="text-align:center;padding:48px;color:${C.sub}"><div style="font-size:24px;margin-bottom:8px">⏳</div>${t('loading')}</div>`;
 
     try{
-      // For now, show the dashboard with mock data
-      // In production, this would fetch from Supabase
+      if(!window.supabase || !window.supabase.createClient) {
+        showNoProducts(content);
+        return;
+      }
+      const sb = window.supabase.createClient(SB_URL, SB_KEY);
+      const session = sb.auth?.session;
+      if(!session) { showNoProducts(content); return; }
+
+      const userId = session.user.id;
+
+      const { data: profile } = await sb.from('seller_profiles')
+        .select('*').eq('user_id', userId).single();
+
+      const { data: products } = await sb.from('seller_products')
+        .select('*').eq('seller_id', userId).order('created_at', { ascending: false });
+
       renderCurrentView({
-        plan: 'basica',
-        store_name: currentUser?.user_metadata?.full_name || 'Mi Tienda',
-        store_description: 'Productos digitales para mujeres',
-        products: [],
-        payment_link: 'https://tu-stripe-link.com',
+        plan: profile?.plan || 'basica',
+        store_name: profile?.store_name || session.user.user_metadata?.full_name || 'Mi Tienda',
+        store_description: profile?.store_description || 'Productos digitales para mujeres',
+        products: products || [],
+        payment_link: profile?.payment_link || '',
       });
     }catch(e){
       console.error('Seller data load error:',e);
       content.innerHTML=`<div class="sd-empty"><div class="sd-empty-icon">⚠️</div><div>${t('error_loading')}</div><div style="font-size:12px;margin-top:8px">${e.message}</div></div>`;
     }
+  }
+
+  function showNoProducts(content) {
+    renderCurrentView({
+      plan: 'basica',
+      store_name: currentUser?.user_metadata?.full_name || 'Mi Tienda',
+      store_description: 'Productos digitales para mujeres',
+      products: [],
+      payment_link: '',
+    });
   }
 
   // ============================================================
@@ -637,7 +661,7 @@
         <div class="sd-card">
           <div style="font-size:14px;font-weight:600;color:${C.text};margin-bottom:16px">💳 ${t('payment_link')}</div>
           <div style="background:${C.bg};border:1px solid ${C.border};border-radius:8px;padding:12px;margin-bottom:12px">
-            <div style="font-size:12px;color:${C.sub};margin-bottom:4px">Tu enlace de pago personal:</div>
+            <div style="font-size:12px;color:${C.sub};margin-bottom:4px">${t('payment_link')}:</div>
             <div style="font-size:14px;color:${C.turq};word-break:break-all;font-weight:500">${escHtml(data.payment_link)}</div>
           </div>
           <button onclick="sellerDash.copyPaymentLink()" class="sd-action-btn primary" style="width:100%">
@@ -706,12 +730,13 @@
               ${products.map(p=>`
                 <tr>
                   <td style="padding:12px;border-bottom:1px solid ${C.border};font-weight:500">${escHtml(p.name)}</td>
-                  <td style="padding:12px;border-bottom:1px solid ${C.border}">$${(p.price/100).toFixed(2)} MXN</td>
+                  <td style="padding:12px;border-bottom:1px solid ${C.border}">$${(p.price_cents/100).toFixed(2)} MXN</td>
                   <td style="padding:12px;border-bottom:1px solid ${C.border}">
                     <span class="sd-badge ${p.status==='active'?'success':'warning'}">${p.status==='active'?t('active'):t('inactive')}</span>
                   </td>
                   <td style="padding:12px;border-bottom:1px solid ${C.border}">
                     <button onclick="sellerDash.editProduct('${p.id}')" style="font-size:12px;color:${C.turq};background:none;border:none;cursor:pointer">${t('edit')}</button>
+                    <button onclick="sellerDash.deleteProduct('${p.id}')" style="font-size:12px;color:${C.red};background:none;border:none;cursor:pointer;margin-left:8px">${t('delete')}</button>
                   </td>
                 </tr>
               `).join('')}
@@ -771,11 +796,182 @@
   }
 
   function addProduct(){
-    alert(t('add_product_alert'));
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center';
+    overlay.innerHTML = `
+      <div style="background:white;border-radius:16px;padding:28px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;margin:0 0 20px;color:#2C2C2C">${t('add_product')}</h3>
+        <form id="addProductForm" style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('product_name')} (ES)</label>
+            <input name="name" required style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('product_name')} (EN)</label>
+            <input name="name_en" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (ES)</label>
+            <textarea name="description" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical"></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (EN)</label>
+            <textarea name="description_en" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('product_price')} (MXN cents)</label>
+              <input name="price_cents" type="number" min="0" required style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Categoría</label>
+              <select name="category" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+                <option value="course">Curso</option>
+                <option value="guide">Guía</option>
+                <option value="template">Plantilla</option>
+                <option value="bundle">Pack</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button type="submit" style="flex:1;padding:10px 20px;border-radius:10px;background:#00B4D8;color:white;border:none;font-size:14px;font-weight:600;cursor:pointer">${t('add_product')}</button>
+            <button type="button" onclick="this.closest('div[style*=fixed]').remove()" style="padding:10px 20px;border-radius:10px;background:white;color:#2C2C2C;border:1px solid rgba(0,0,0,0.1);font-size:14px;cursor:pointer">${t('cancel') || 'Cancelar'}</button>
+          </div>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if(e.target === overlay) overlay.remove(); });
+
+    overlay.querySelector('#addProductForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      try {
+        if(!window.supabase || !window.supabase.createClient) throw new Error('No Supabase');
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const session = sb.auth?.session;
+        if(!session) throw new Error('No auth');
+
+        const productData = {
+          seller_id: session.user.id,
+          name: fd.get('name'),
+          name_en: fd.get('name_en') || null,
+          description: fd.get('description') || '',
+          description_en: fd.get('description_en') || null,
+          price_cents: parseInt(fd.get('price_cents')) || 0,
+          category: fd.get('category'),
+          status: 'active',
+          is_published: true,
+          created_at: new Date().toISOString()
+        };
+
+        const { error } = await sb.from('seller_products').insert(productData);
+        if(error) throw error;
+
+        overlay.remove();
+        loadSellerData();
+      } catch(err) {
+        console.error('Add product error:', err);
+        btn.disabled = false;
+        btn.textContent = t('add_product');
+        alert(t('error_loading') + ': ' + err.message);
+      }
+    });
   }
 
   function editProduct(id){
-    alert(t('edit_product_alert'));
+    (async () => {
+      try {
+        if(!window.supabase || !window.supabase.createClient) throw new Error('No Supabase');
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const { data: product, error } = await sb.from('seller_products').select('*').eq('id', id).single();
+        if(error) throw error;
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center';
+        overlay.innerHTML = `
+          <div style="background:white;border-radius:16px;padding:28px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto">
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;margin:0 0 20px;color:#2C2C2C">${t('edit')} — ${escHtml(product.name)}</h3>
+            <form id="editProductForm" style="display:flex;flex-direction:column;gap:14px">
+              <div>
+                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('product_name')} (ES)</label>
+                <input name="name" value="${escHtml(product.name || '')}" required style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+              </div>
+              <div>
+                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('product_name')} (EN)</label>
+                <input name="name_en" value="${escHtml(product.name_en || '')}" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+              </div>
+              <div>
+                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (ES)</label>
+                <textarea name="description" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical">${escHtml(product.description || '')}</textarea>
+              </div>
+              <div>
+                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (EN)</label>
+                <textarea name="description_en" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical">${escHtml(product.description_en || '')}</textarea>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div>
+                  <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('product_price')} (MXN cents)</label>
+                  <input name="price_cents" type="number" min="0" value="${product.price_cents || 0}" required style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+                </div>
+                <div>
+                  <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Estado</label>
+                  <select name="status" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
+                    <option value="active" ${product.status==='active'?'selected':''}>${t('active')}</option>
+                    <option value="inactive" ${product.status==='inactive'?'selected':''}>${t('inactive')}</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:8px">
+                <button type="submit" style="flex:1;padding:10px 20px;border-radius:10px;background:#00B4D8;color:white;border:none;font-size:14px;font-weight:600;cursor:pointer">${t('edit')}</button>
+                <button type="button" onclick="this.closest('div[style*=fixed]').remove()" style="padding:10px 20px;border-radius:10px;background:white;color:#2C2C2C;border:1px solid rgba(0,0,0,0.1);font-size:14px;cursor:pointer">${t('cancel') || 'Cancelar'}</button>
+              </div>
+            </form>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', e => { if(e.target === overlay) overlay.remove(); });
+
+        overlay.querySelector('#editProductForm').addEventListener('submit', async (e2) => {
+          e2.preventDefault();
+          const fd = new FormData(e2.target);
+          const btn = e2.target.querySelector('button[type=submit]');
+          btn.disabled = true;
+          btn.textContent = '...';
+
+          try {
+            const session = sb.auth?.session;
+            if(!session) throw new Error('No auth');
+
+            const updateData = {
+              name: fd.get('name'),
+              name_en: fd.get('name_en') || null,
+              description: fd.get('description') || '',
+              description_en: fd.get('description_en') || null,
+              price_cents: parseInt(fd.get('price_cents')) || 0,
+              status: fd.get('status'),
+            };
+
+            const { error } = await sb.from('seller_products').update(updateData).eq('id', id);
+            if(error) throw error;
+
+            overlay.remove();
+            loadSellerData();
+          } catch(err) {
+            console.error('Edit product error:', err);
+            btn.disabled = false;
+            btn.textContent = t('edit');
+            alert(t('error_loading') + ': ' + err.message);
+          }
+        });
+      } catch(err) {
+        alert(t('error_loading') + ': ' + err.message);
+      }
+    })();
   }
 
   function changePlan(planKey){
@@ -787,8 +983,22 @@
       return;
     }
     
-    // In production, this would create a Stripe Checkout Session
     alert(t('change_plan_redirect').replace('{name}', plan.name).replace('{price}', plan.priceFormatted));
+  }
+
+  function deleteProduct(id){
+    if(!confirm(t('delete') + '?')) return;
+    (async () => {
+      try {
+        if(!window.supabase || !window.supabase.createClient) throw new Error('No Supabase');
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const { error } = await sb.from('seller_products').delete().eq('id', id);
+        if(error) throw error;
+        loadSellerData();
+      } catch(err) {
+        alert(t('error_loading') + ': ' + err.message);
+      }
+    })();
   }
 
   // ============================================================
@@ -800,6 +1010,7 @@
     copyPaymentLink,
     addProduct,
     editProduct,
+    deleteProduct,
     changePlan,
   };
 

@@ -75,7 +75,15 @@ function st(key) {
     footer_terms: { es: 'Terminos', en: 'Terms', pt: 'Termos', fr: 'Conditions', de: 'Bedingungen' },
     footer_privacy: { es: 'Privacidad', en: 'Privacy', pt: 'Privacidade', fr: 'Confidentialite', de: 'Datenschutz' },
     footer_support: { es: 'Soporte', en: 'Support', pt: 'Suporte', fr: 'Support', de: 'Support' },
-    cart_one_product: { es: 'Compra un producto a la vez', en: 'Buy one product at a time', pt: 'Compre um produto por vez', fr: 'Achetez un produit à la fois', de: 'Kaufen Sie ein Produkt nach dem anderen' }
+    cart_one_product: { es: 'Compra un producto a la vez', en: 'Buy one product at a time', pt: 'Compre um produto por vez', fr: 'Achetez un produit à la fois', de: 'Kaufen Sie ein Produkt nach dem anderen' },
+    featured_badge: { es: 'Destacado', en: 'Featured', pt: 'Destaque', fr: 'En vedette', de: 'Empfohlen' },
+    purchase_complete: { es: '¡Compra completada!', en: 'Purchase Complete!', pt: 'Compra concluída!', fr: 'Achat terminé!', de: 'Kauf abgeschlossen!' },
+    purchase_has_access: { es: 'Ahora tienes acceso a', en: 'You now have access to', pt: 'Agora você tem acesso a', fr: 'Vous avez maintenant accès à', de: 'Du hast jetzt Zugang zu' },
+    order_confirmed: { es: 'Orden confirmada', en: 'Order Confirmed', pt: 'Pedido confirmado', fr: 'Commande confirmée', de: 'Bestellung bestätigt' },
+    order_your_order: { es: 'Tu orden de', en: 'Your order for', pt: 'Seu pedido de', fr: 'Votre commande de', de: 'Ihre Bestellung für' },
+    order_created: { es: 'ha sido creada. Te contactaremos con los detalles de pago.', en: 'has been created. We will contact you with payment details.', pt: 'foi criada. Entraremos em contato com os detalhes do pagamento.', fr: 'a été créée. Nous vous contacterons avec les détails de paiement.', de: 'wurde erstellt. Wir kontaktieren Sie mit Zahlungsdetails.' },
+    order_id: { es: 'ID de orden:', en: 'Order ID:', pt: 'ID do pedido:', fr: 'N° de commande:', de: 'Bestell-ID:' },
+    btn_close: { es: 'Cerrar', en: 'Close', pt: 'Fechar', fr: 'Fermer', de: 'Schließen' }
   };
   const langFallback = fallback[key];
   if (!langFallback) return key;
@@ -129,6 +137,44 @@ function getSeedProducts() {
   ];
 }
 
+// --- Product translation maps (for seed data that doesn't have per-language DB fields) ---
+const PRODUCT_NAMES = {
+  'Bienvenida a Yayika': { en:'Welcome to Yayika', pt:'Bem-vinda à Yayika', fr:'Bienvenue sur Yayika', de:'Willkommen bei Yayika' },
+  'Calculadora de Ciclo': { en:'Cycle Calculator', pt:'Calculadora de Ciclo', fr:'Calculatrice de Cycle', de:'Zyklus-Rechner' },
+  'Maestria en Finanzas Femeninas': { en:"Women's Financial Mastery", pt:'Maestria em Financas Femininas', fr:'Maitrise Financiere Feminine', de:'Frauenfinanz-Meisterschaft' },
+  'Mindfulness & Meditacion': { en:'Mindfulness & Meditation', pt:'Mindfulness e Meditacao', fr:'Mindfulness et Meditation', de:'Achtsamkeit & Meditation' },
+  'Nutricion Ciclistica': { en:'Cycle-Based Nutrition', pt:'Nutricao Ciclica', fr:'Nutrition Menstruelle', de:'Zyklusbasierte Ernährung' },
+  'Productividad con Proposito': { en:'Purposeful Productivity', pt:'Produtividade com Proposito', fr:'Productivite a Objectif', de:'Produktivität mit Sinn' },
+  'Yoga para Todas las Fases': { en:'Yoga for All Phases', pt:'Yoga para Todas as Fases', fr:'Yoga pour Toutes les Phases', de:'Yoga für Alle Phasen' },
+  'Guia de Sueno Reparador': { en:'Restful Sleep Guide', pt:'Guia de Sono Reparador', fr:'Guide Sommeil Reparateur', de:'Ruhe Schlaf Ratgeber' },
+  'Yayika Pro': { en:'Yayika Pro', pt:'Yayika Pro', fr:'Yayika Pro', de:'Yayika Pro' },
+  'Mentoria 1:1': { en:'1:1 Mentoring', pt:'Mentoria 1:1', fr:'Mentorat 1:1', de:'1:1 Mentoring' },
+  'Pack de Planner Digital': { en:'Digital Planner Pack', pt:'Pack de Planner Digital', fr:'Pack Planner Numerique', de:'Digitaler Planner-Paket' },
+  'Templates de Budget': { en:'Budget Templates', pt:'Templates de Orcamento', fr:'Modeles de Budget', de:'Budget-Vorlagen' },
+};
+const PRODUCT_DESCS = {
+  'Tu primer paso hacia una vida mas consciente.': { en:'Your first step towards a more conscious life.', pt:'Seu primeiro passo para uma vida mais consciente.', fr:'Votre premier pas vers une vie plus consciente.', de:'Dein erster Schritt zu einem bewussteren Leben.' },
+  'Aprende a usar tu tracker de ciclo para obtener predicciones precisas.': { en:'Learn to use your cycle tracker for accurate predictions.', pt:'Aprenda a usar seu rastreador de ciclo para previsoes precisas.', fr:'Apprenez a utiliser votre suivi de cycle pour des previsions precise.', de:'Lerne deinen Zyklus-Tracker fur genaue Vorhersagen zu nutzen.' },
+  'Transforma tu relacion con el dinero. Presupuestos, ahorro, inversiones y abundancia.': { en:'Transform your relationship with money.', pt:'Transforme seu relacionamento com o dinheiro.', fr:'Transformez votre relation avec l\'argent.', de:'Verwandle deine Beziehung zum Geld.' },
+  'Meditaciones guiadas especificas para cada fase de tu ciclo.': { en:'Guided meditations for each cycle phase.', pt:'Meditacoes guiadas especificas para cada fase do seu ciclo.', fr:'Meditations guidees pour chaque phase du cycle.', de:'Gefuhrte Meditationen fur jede Zyklusphase.' },
+  'Come segun tu ciclo. Recetas y planes adaptados a cada fase.': { en:'Eat according to your cycle.', pt:'Coma de acordo com seu ciclo.', fr:'Mangez selon votre cycle.', de:'Essen sie nach ihrem Zyklus.' },
+  'Sistema de productividad que se adapta a tu energia y ritmo natural.': { en:'Productivity that adapts to your energy.', pt:'Produtividade que se adapta a sua energia.', fr:'Productivite qui s\'adapte a votre energie.', de:'Produktivitat, die sich an deine Energie anpasst.' },
+  'Secuencias de yoga adaptadas a cada fase del ciclo.': { en:'Yoga sequences for each cycle phase.', pt:'Sequencias de yoga adaptadas para cada fase do ciclo.', fr:'Sequences de yoga adaptees a chaque phase du cycle.', de:'Yoga-Sequenzen fur jede Zyklusphase.' },
+  'Optimiza tu descanso segun tu fase del ciclo.': { en:'Optimize your rest based on your cycle phase.', pt:'Otimize seu descanso com base na fase do seu ciclo.', fr:'Optimisez votre repos selon votre phase de cycle.', de:'Optimiere deinen Ruhephase basierend auf deiner Zyklusphase.' },
+  'Acceso ilimitado a todos los cursos, plantillas y comunidad privada.': { en:'Unlimited access to all courses, templates, and private community.', pt:'Acesso ilimitado a todos os cursos, modelos e comunidade privada.', fr:'Acces illimite a tous les cours, modeles et communaute privee.', de:'Unbegrenzter Zugang zu allen Kursen, Vorlagen und der Privatgemeinschaft.' },
+  'Sesiones privadas con coaches certificadas para tu transformacion personal.': { en:'Private sessions with certified coaches.', pt:'Sessoes privadas com coaches certificadas.', fr:'Sessions privees avec des coaches certifiees.', de:'Private Sitzungen mit zertifizierten Coaches.' },
+  'Plantillas de planificacion para GoodNotes, Notability y mas.': { en:'Planning templates for GoodNotes, Notability, and more.', pt:'Modelos de planejamento para GoodNotes, Notability e mais.', fr:'Modeles de planification pour GoodNotes, Notability et plus.', de:'Planungsvorlagen fur GoodNotes, Notability und mehr.' },
+  'Hojas de calculo y plantillas para gestionar tus finanzas.': { en:'Spreadsheets and templates for finances.', pt:'Planilhas e modelos para gerenciar suas financas.', fr:'Tableurs et modeles pour gerer vos finances.', de:'Tabellenkalkulationen und Vorlagen fur deine Finanzen.' },
+};
+function getProductName(p, lang) {
+  if (lang !== 'es' && PRODUCT_NAMES[p.name] && PRODUCT_NAMES[p.name][lang]) return PRODUCT_NAMES[p.name][lang];
+  return p.name;
+}
+function getProductDesc(p, lang) {
+  if (lang !== 'es' && PRODUCT_DESCS[p.description] && PRODUCT_DESCS[p.description][lang]) return PRODUCT_DESCS[p.description][lang];
+  return p.description;
+}
+
 // --- Render products ---
 function renderProducts(products) {
   const grid = document.getElementById('storeGrid');
@@ -145,8 +191,8 @@ function renderProducts(products) {
   empty.style.display = 'none';
 
   grid.innerHTML = products.map(p => {
-    const name = lang === 'en' && p.name_en ? p.name_en : p.name;
-    const desc = lang === 'en' && p.description_en ? p.description_en : p.description;
+    const name = getProductName(p, lang);
+    const desc = getProductDesc(p, lang);
     const emoji = PRODUCT_EMOJIS[p.category] || PRODUCT_EMOJIS.default;
     const catLabel = (CATEGORY_LABELS[lang] || CATEGORY_LABELS.es)[p.category] || p.category;
     const tags = parseJsonField(p.tags);
@@ -159,7 +205,7 @@ function renderProducts(products) {
       <div class="product-card" data-id="${p.id}">
         <div class="product-img">
           <span class="emoji">${emoji}</span>
-          ${p.is_featured ? `<span class="product-badge badge-featured">${lang === 'en' ? 'Featured' : 'Destacado'}</span>` : ''}
+          ${p.is_featured ? `<span class="product-badge badge-featured">${st('featured_badge')}</span>` : ''}
           ${isFree ? `<span class="product-badge badge-free">${st('price_free')}</span>` : ''}
         </div>
         <div class="product-body">
@@ -238,7 +284,7 @@ function updateCartUI() {
 
   const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
   items.innerHTML = cart.map(c => {
-    const name = lang === 'en' && c.name_en ? c.name_en : c.name;
+    const name = getProductName(c, lang);
     const emoji = PRODUCT_EMOJIS[c.category] || PRODUCT_EMOJIS.default;
     return `
       <div class="cart-item">
@@ -328,7 +374,7 @@ function getMembershipLink(product) {
 
 function showPurchaseOptions(product) {
   const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
-  const name = lang === 'en' && product.name_en ? product.name_en : product.name;
+  const name = getProductName(product, lang);
   const price = formatPrice(product.price_cents, product.currency);
 
   const categoryActions = {
@@ -414,7 +460,7 @@ async function createOrder(product) {
 
 function showOrderConfirmation(product, order, isFree) {
   const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
-  const name = lang === 'en' && product.name_en ? product.name_en : product.name;
+  const name = getProductName(product, lang);
 
   const overlay = document.createElement('div');
   overlay.className = 'purchase-overlay';
@@ -424,11 +470,11 @@ function showOrderConfirmation(product, order, isFree) {
       <div class="purchase-modal">
         <button class="purchase-close" onclick="this.closest('.purchase-overlay').remove()">&times;</button>
         <div class="purchase-icon">🎉</div>
-        <h3>${lang === 'en' ? 'Purchase Complete!' : '¡Compra completada!'}</h3>
-        <p>${lang === 'en' ? 'You now have access to' : 'Ahora tienes acceso a'} <strong>${escHtml(name)}</strong>.</p>
+        <h3>${st('purchase_complete')}</h3>
+        <p>${st('purchase_has_access')} <strong>${escHtml(name)}</strong>.</p>
         <div class="purchase-actions">
           <button class="btn-purchase-confirm" onclick="window.location.href='portal.html'">${st('nav_portal')}</button>
-          <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${lang === 'en' ? 'Close' : 'Cerrar'}</button>
+          <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${st('btn_close')}</button>
         </div>
       </div>
     `;
@@ -437,11 +483,11 @@ function showOrderConfirmation(product, order, isFree) {
       <div class="purchase-modal">
         <button class="purchase-close" onclick="this.closest('.purchase-overlay').remove()">&times;</button>
         <div class="purchase-icon">📋</div>
-        <h3>${lang === 'en' ? 'Order Confirmed' : 'Orden confirmada'}</h3>
-        <p>${lang === 'en' ? 'Your order for' : 'Tu orden de'} <strong>${escHtml(name)}</strong> ${lang === 'en' ? 'has been created. We will contact you with payment details.' : 'ha sido creada. Te contactaremos con los detalles de pago.'}</p>
-        <p class="order-id">${lang === 'en' ? 'Order ID:' : 'ID de orden:'} ${order.id}</p>
+        <h3>${st('order_confirmed')}</h3>
+        <p>${st('order_your_order')} <strong>${escHtml(name)}</strong> ${st('order_created')}</p>
+        <p class="order-id">${st('order_id')} ${order.id}</p>
         <div class="purchase-actions">
-          <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${lang === 'en' ? 'Close' : 'Cerrar'}</button>
+          <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${st('btn_close')}</button>
         </div>
       </div>
     `;
