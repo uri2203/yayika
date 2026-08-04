@@ -120,8 +120,8 @@ const TaxConfig = {
   mexico: {
     ivaRate: 0.16,
     isrRetentionRate: 0.025, // 2.5% for digital services
-    ivaRetentionRate: 0.50,  // 50% of IVA for sellers with RFC
-    ivaRetentionNoRFC: 1.00, // 100% for sellers without RFC
+    // NOTE: Yayika does NOT retain IVA for sellers. Sellers handle their own taxes.
+    // ivaRetentionRate and ivaRetentionNoRFC removed — community model.
     regime: 'Actividades Empresariales y Profesionales',
     subRegime: 'Plataformas Tecnológicas',
     cfdiType: 'Servicios Plataformas Tecnológicas',

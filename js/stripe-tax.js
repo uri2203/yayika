@@ -1,6 +1,9 @@
 /* ============================================================
    Yayika — Stripe Tax Integration
-   Automatic tax calculation and collection via Stripe
+   Automatic tax calculation for Yayika's OWN products (memberships)
+   NOTE: Yayika does NOT process seller payments. Sellers handle
+   their own payments and taxes. This module is for Yayika's
+   membership subscriptions only.
    ============================================================ */
 
 // Tax Configuration for Mexico (SAT)
@@ -301,40 +304,35 @@ const StripeTax = {
         { step: 2, title: 'Configurar oficina principal', description: 'Settings → Tax → Business details → Head office → México' },
         { step: 3, title: 'Asignar códigos de impuesto a productos', description: 'Products → [Producto] → Tax codes → Seleccionar código appropriado' },
         { step: 4, title: 'Habilitar cobro de dirección', description: 'Settings → Tax → Customer information → Collect billing address' },
-        { step: 5, title: 'Configurar Connect para tax', description: 'Settings → Connect → Tax settings → Platform liability: Self' },
-        { step: 6, title: 'Verificar cálculos', description: 'Realizar una transacción de prueba y verificar que el IVA se calcula correctamente' }
+        { step: 5, title: 'Verificar cálculos', description: 'Realizar una transacción de prueba y verificar que el IVA se calcula correctamente' }
       ],
       en: [
         { step: 1, title: 'Enable Stripe Tax', description: 'Go to Stripe Dashboard → Settings → Tax → Activate' },
         { step: 2, title: 'Set up head office', description: 'Settings → Tax → Business details → Head office → Mexico' },
         { step: 3, title: 'Assign tax codes to products', description: 'Products → [Product] → Tax codes → Select appropriate code' },
         { step: 4, title: 'Enable address collection', description: 'Settings → Tax → Customer information → Collect billing address' },
-        { step: 5, title: 'Configure Connect for tax', description: 'Settings → Connect → Tax settings → Platform liability: Self' },
-        { step: 6, title: 'Verify calculations', description: 'Run a test transaction and verify that VAT is calculated correctly' }
+        { step: 5, title: 'Verify calculations', description: 'Run a test transaction and verify that VAT is calculated correctly' }
       ],
       pt: [
         { step: 1, title: 'Ativar Stripe Tax', description: 'Vá ao Stripe Dashboard → Settings → Tax → Activate' },
         { step: 2, title: 'Configurar escritório principal', description: 'Settings → Tax → Business details → Head office → México' },
         { step: 3, title: 'Atribuir códigos de imposto aos produtos', description: 'Products → [Produto] → Tax codes → Selecionar código apropriado' },
         { step: 4, title: 'Ativar cobrança de endereço', description: 'Settings → Tax → Customer information → Collect billing address' },
-        { step: 5, title: 'Configurar Connect para tax', description: 'Settings → Connect → Tax settings → Platform liability: Self' },
-        { step: 6, title: 'Verificar cálculos', description: 'Realize uma transação de teste e verifique se o IVA é calculado corretamente' }
+        { step: 5, title: 'Verificar cálculos', description: 'Realize uma transação de teste e verifique se o IVA é calculado corretamente' }
       ],
       fr: [
         { step: 1, title: 'Activer Stripe Tax', description: 'Allez dans Stripe Dashboard → Settings → Tax → Activate' },
         { step: 2, title: 'Configurer le siège social', description: 'Settings → Tax → Business details → Head office → Mexique' },
         { step: 3, title: 'Attribuer les codes fiscaux aux produits', description: 'Products → [Produit] → Tax codes → Sélectionner le code approprié' },
         { step: 4, title: "Activer la collecte d'adresse", description: 'Settings → Tax → Customer information → Collect billing address' },
-        { step: 5, title: 'Configurer Connect pour la taxe', description: 'Settings → Connect → Tax settings → Platform liability: Self' },
-        { step: 6, title: 'Vérifier les calculs', description: 'Effectuez une transaction test et vérifiez que la TVA est correctement calculée' }
+        { step: 5, title: 'Vérifier les calculs', description: 'Effectuez une transaction test et vérifiez que la TVA est correctement calculée' }
       ],
       de: [
         { step: 1, title: 'Stripe Tax aktivieren', description: 'Gehe zu Stripe Dashboard → Settings → Tax → Activate' },
         { step: 2, title: 'Hauptbüro einrichten', description: 'Settings → Tax → Business details → Head office → Mexiko' },
         { step: 3, title: 'Steuercodes Produkten zuweisen', description: 'Products → [Produkt] → Tax codes → Passenden Code auswählen' },
         { step: 4, title: 'Adresserhebung aktivieren', description: 'Settings → Tax → Customer information → Collect billing address' },
-        { step: 5, title: 'Connect für Steuern konfigurieren', description: 'Settings → Connect → Tax settings → Platform liability: Self' },
-        { step: 6, title: 'Berechnungen überprüfen', description: 'Führe eine Testtransaktion durch und überprüfe, ob die MwSt. korrekt berechnet wird' }
+        { step: 5, title: 'Berechnungen überprüfen', description: 'Führe eine Testtransaktion durch und überprüfe, ob die MwSt. korrekt berechnet wird' }
       ]
     };
     return (labels[l] || labels['es']).map((item, i) => ({

@@ -14,7 +14,7 @@
       inviteTitle: 'Invita y Gana', inviteDesc: 'Comparte tu código y gana comisiones por cada amiga que se una',
       myCode: 'Tu código', copyCode: 'Copiar código', copied: '¡Copiado!',
       shareNow: 'Compartir ahora', inviteLink: 'Link de invitación',
-      marketplaceTitle: 'Marketplace Entre Nosotras', sellTitle: 'Vende tu producto',
+      marketplaceTitle: 'Comunidad Entre Nosotras', sellTitle: 'Vende tu producto',
       sellDesc: 'Templates, guías, cursos — crea y vende a otras mujeres',
       mentoringTitle: 'Mentoring entre Nosotras', mentoringDesc: 'Encuentra mentoras o conviértete en una',
       roiTitle: 'Tu Valor en Yayika', roiDesc: 'Cuánto has ganado vs cuánto has invertido',
@@ -25,9 +25,9 @@
       mentors: 'Mentoras disponibles', specialties: 'Especialidades',
       commission: 'Comisión', roi: 'Tu ROI', invested: 'Invertido', earned: 'Ganado',
       loading: 'Cargando...', error: '⚠️ Error cargando datos',
-      back: '← Volver', viewMarketplace: 'Ver Marketplace →', viewMentors: 'Ver Mentoras →',
+      back: '← Volver', viewMarketplace: 'Ver Comunidad →', viewMentors: 'Ver Mentoras →',
       friends: 'amigas', lastEarnings: 'Últimas ganancias', referred: 'Referido',
-      sale: 'Venta', noProducts: 'Aún no hay productos en el marketplace. ¡Sé la primera en vender!',
+      sale: 'Venta', noProducts: 'Aún no hay productos en la comunidad. ¡Sé la primera en vender!',
       noMentors: 'Aún no hay mentoras disponibles. ¡Convirtete en la primera!',
       perHour: '/hora', linkCopied: 'Link copiado al portapapeles ✓',
       shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
@@ -41,7 +41,7 @@
       inviteTitle: 'Invite & Earn', inviteDesc: 'Share your code and earn commissions for each friend who joins',
       myCode: 'Your code', copyCode: 'Copy code', copied: 'Copied!',
       shareNow: 'Share now', inviteLink: 'Invite link',
-      marketplaceTitle: 'Entre Nosotras Marketplace', sellTitle: 'Sell your product',
+      marketplaceTitle: 'Entre Nosotras Community', sellTitle: 'Sell your product',
       sellDesc: 'Templates, guides, courses — create and sell to other women',
       mentoringTitle: 'Peer Mentoring', mentoringDesc: 'Find mentors or become one',
       roiTitle: 'Your Value in Yayika', roiDesc: 'How much you\'ve earned vs invested',
@@ -52,9 +52,9 @@
       mentors: 'Available mentors', specialties: 'Specialties',
       commission: 'Commission', roi: 'Your ROI', invested: 'Invested', earned: 'Earned',
       loading: 'Loading...', error: '⚠️ Error loading data',
-      back: '← Back', viewMarketplace: 'View Marketplace →', viewMentors: 'View Mentors →',
+      back: '← Back', viewMarketplace: 'View Community →', viewMentors: 'View Mentors →',
       friends: 'friends', lastEarnings: 'Recent earnings', referred: 'Referral',
-      sale: 'Sale', noProducts: 'No products in the marketplace yet. Be the first to sell!',
+      sale: 'Sale', noProducts: 'No products in the community yet. Be the first to sell!',
       noMentors: 'No mentors available yet. Become the first one!',
       perHour: '/hour', linkCopied: 'Link copied to clipboard ✓',
       shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
@@ -68,7 +68,7 @@
       inviteTitle: 'Indique e Ganhe', inviteDesc: 'Compartilhe seu código e ganhe comissões para cada amiga que entrar',
       myCode: 'Seu código', copyCode: 'Copiar código', copied: 'Copiado!',
       shareNow: 'Compartilhar agora', inviteLink: 'Link de convite',
-      marketplaceTitle: 'Marketplace Entre Nosotras', sellTitle: 'Venda seu produto',
+      marketplaceTitle: 'Comunidade Entre Nosotras', sellTitle: 'Venda seu produto',
       sellDesc: 'Modelos, guias, cursos — crie e venda para outras mulheres',
       mentoringTitle: 'Mentoring entre Nosotras', mentoringDesc: 'Encontre mentoras ou torne-se uma',
       roiTitle: 'Seu Valor no Yayika', roiDesc: 'Quanto você ganhou vs quanto investiu',
@@ -79,9 +79,9 @@
       mentors: 'Mentoras disponíveis', specialties: 'Especialidades',
       commission: 'Comissão', roi: 'Seu ROI', invested: 'Investido', earned: 'Ganho',
       loading: 'Carregando...', error: '⚠️ Erro ao carregar dados',
-      back: '← Voltar', viewMarketplace: 'Ver Marketplace →', viewMentors: 'Ver Mentorras →',
+      back: '← Voltar', viewMarketplace: 'Ver Comunidade →', viewMentors: 'Ver Mentorras →',
       friends: 'amigas', lastEarnings: 'Últimos ganhos', referred: 'Indicado',
-      sale: 'Venda', noProducts: 'Ainda não há produtos no marketplace. Seja a primeira a vender!',
+      sale: 'Venda', noProducts: 'Ainda não há produtos na comunidade. Seja a primeira a vender!',
       noMentors: 'Ainda não há mentoras disponíveis. Torne-se a primeira!',
       perHour: '/hora', linkCopied: 'Link copiado para a área de transferência ✓',
       shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
@@ -95,7 +95,7 @@
       inviteTitle: 'Parrainez et Gagnez', inviteDesc: 'Partagez votre code et gagnez des commissions pour chaque amie qui rejoint',
       myCode: 'Votre code', copyCode: 'Copier le code', copied: 'Copié !',
       shareNow: 'Partager maintenant', inviteLink: "Lien d'invitation",
-      marketplaceTitle: 'Marketplace Entre Nosotras', sellTitle: 'Vendez votre produit',
+      marketplaceTitle: 'Communauté Entre Nosotras', sellTitle: 'Vendez votre produit',
       sellDesc: 'Modèles, guides, cours — créez et vendez à d\'autres femmes',
       mentoringTitle: 'Mentorat entre Nous', mentoringDesc: 'Trouvez des mentors ou devenez-en un',
       roiTitle: 'Votre Valeur sur Yayika', roiDesc: 'Combien vous avez gagné vs investi',
@@ -106,9 +106,9 @@
       mentors: 'Mentors disponibles', specialties: 'Spécialités',
       commission: 'Commission', roi: 'Votre ROI', invested: 'Investi', earned: 'Gagné',
       loading: 'Chargement...', error: '⚠️ Erreur de chargement',
-      back: '← Retour', viewMarketplace: 'Voir le Marketplace →', viewMentors: 'Voir les Mentors →',
+      back: '← Retour', viewMarketplace: 'Voir la Communauté →', viewMentors: 'Voir les Mentors →',
       friends: 'amies', lastEarnings: 'Gains récents', referred: 'Parrainé',
-      sale: 'Vente', noProducts: 'Aucun produit sur le marketplace. Soyez la première à vendre !',
+      sale: 'Vente', noProducts: 'Aucun produit dans la communauté. Soyez la première à vendre !',
       noMentors: 'Aucun mentor disponible. Devenez le premier !',
       perHour: '/heure', linkCopied: 'Lien copié dans le presse-papiers ✓',
       shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
@@ -122,7 +122,7 @@
       inviteTitle: 'Empfehlen & Verdienen', inviteDesc: 'Teile deinen Code und verdiene Provisionen für jede Freundin, die beitritt',
       myCode: 'Dein Code', copyCode: 'Code kopieren', copied: 'Kopiert!',
       shareNow: 'Jetzt teilen', inviteLink: 'Einladungslink',
-      marketplaceTitle: 'Entre Nosotras Marketplace', sellTitle: 'Verkaufe dein Produkt',
+      marketplaceTitle: 'Entre Nosotras Community', sellTitle: 'Verkaufe dein Produkt',
       sellDesc: 'Vorlagen, Ratgeber, Kurse — erstelle und verkaufe an andere Frauen',
       mentoringTitle: 'Peer Mentoring', mentoringDesc: 'Finde Mentoren oder werde selbst eine',
       roiTitle: 'Dein Wert bei Yayika', roiDesc: 'Wie viel du verdient hast vs investiert hast',
@@ -133,9 +133,9 @@
       mentors: 'Verfügbare Mentoren', specialties: 'Spezialgebiete',
       commission: 'Provision', roi: 'Dein ROI', invested: 'Investiert', earned: 'Verdient',
       loading: 'Laden...', error: '⚠️ Fehler beim Laden',
-      back: '← Zurück', viewMarketplace: 'Marketplace ansehen →', viewMentors: 'Mentoren ansehen →',
+      back: '← Zurück', viewMarketplace: 'Community ansehen →', viewMentors: 'Mentoren ansehen →',
       friends: 'Freundinnen', lastEarnings: 'Letzte Einnahmen', referred: 'Empfohlen',
-      sale: 'Verkauf', noProducts: 'Noch keine Produkte im Marketplace. Sei die Erste zum Verkaufen!',
+      sale: 'Verkauf', noProducts: 'Noch keine Produkte in der Community. Sei die Erste zum Verkaufen!',
       noMentors: 'Noch keine Mentoren verfügbar. Werde die Erste!',
       perHour: '/Stunde', linkCopied: 'Link in Zwischenablage kopiert ✓',
       shareTextEs: '¡Únete a Yayika! 🌙 Soy parte de esta comunidad increíble. Usa mi código:',
@@ -294,8 +294,8 @@
           html += `<div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;margin-bottom:12px">
             <div style="font-weight:600;font-size:12px;color:var(--texto,#E8E8E8);margin-bottom:8px">📈 ${t('lastEarnings')}</div>`;
           d.recent.slice(0, 5).forEach(r => {
-            const srcIcon = r.source === 'referral_commission' ? '🌱' : r.source === 'marketplace_sale' ? '🛒' : '👩‍🏫';
-            const srcLabel = r.source === 'referral_commission' ? t('referred') : r.source === 'marketplace_sale' ? t('sale') : 'Mentoring';
+            const srcIcon = r.source === 'referral_commission' ? '🌱' : r.source === 'product_sale' ? '🛒' : '👩‍🏫';
+            const srcLabel = r.source === 'referral_commission' ? t('referred') : r.source === 'product_sale' ? t('sale') : 'Mentoring';
             const dateStr = new Date(r.created_at).toLocaleDateString(currentLang==='es'?'es':'en', { month:'short', day:'numeric' });
             html += `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
               <span style="font-size:14px">${srcIcon}</span>
@@ -315,7 +315,7 @@
           <span style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.5">${tr.region}: ${r.country || 'US'} · ${r.currency || 'USD'}</span>
         </div>`;
 
-        // --- Marketplace Preview ---
+        // --- Community Products Preview ---
         html += `<div style="background:rgba(233,30,99,0.06);border-radius:12px;padding:14px;margin-bottom:12px">
           <div style="font-weight:600;font-size:13px;color:var(--rosa,#E91E63);margin-bottom:6px">🛒 ${tr.marketplaceTitle}</div>
           <div style="font-size:11px;color:var(--texto,#E8E8E8);opacity:0.6;margin-bottom:10px">${tr.sellDesc}</div>

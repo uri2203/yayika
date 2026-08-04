@@ -1,6 +1,8 @@
 // ============================================================
 // Yayika — Stripe Webhook Edge Function
 // Deploy: Supabase Dashboard → Edge Functions → stripe-webhook
+// NOTE: Yayika is a community, NOT a marketplace.
+// Sellers handle their own payments. Marketplace code removed.
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -64,76 +66,10 @@ serve(async (req: Request) => {
       const metadata = data.metadata || {};
 
       // ============================================================
-      // MARKETPLACE PURCHASE (product_id in metadata = marketplace sale)
+      // MARKETPLACE PURCHASE — REMOVED
+      // Yayika is a community. Sellers handle their own payments.
+      // Marketplace checkout code has been removed.
       // ============================================================
-      if (metadata.product_id && metadata.seller_id) {
-        console.log(`Marketplace purchase: product=${metadata.product_id}, seller=${metadata.seller_id}`);
-
-        // Process marketplace sale via function
-        const { data: saleId, error: saleError } = await supabase.rpc("yayika_process_marketplace_sale", {
-          p_seller_id: metadata.seller_id,
-          p_product_id: metadata.product_id,
-          p_amount_cents: data.amount_total || 0,
-          p_stripe_session_id: data.id,
-          p_buyer_email: customerEmail || "",
-          p_buyer_name: data.customer_details?.name || null,
-          p_buyer_id: metadata.buyer_id !== "guest" ? metadata.buyer_id : null,
-          p_country_code: metadata.country_code || "MX",
-          p_affiliate_id: metadata.affiliate_id || null,
-        });
-
-        if (saleError) {
-          console.error("Marketplace sale error:", saleError);
-        } else {
-          console.log(`Marketplace sale processed: ${saleId}`);
-
-          // Record in activity log
-          if (metadata.buyer_id && metadata.buyer_id !== "guest") {
-            await supabase.from("yayika_activity_log").insert({
-              user_id: metadata.buyer_id,
-              action: "marketplace_purchase",
-              details: JSON.stringify({
-                product_id: metadata.product_id,
-                seller_id: metadata.seller_id,
-                amount: amountPaid,
-                stripe_session_id: data.id,
-              }),
-            });
-          }
-
-          // Send purchase email
-          try {
-            const { data: product } = await supabase
-              .from("yayika_marketplace_products_v2")
-              .select("name")
-              .eq("id", metadata.product_id)
-              .single();
-
-            await fetch(`${supabaseUrl}/functions/v1/send-email`, {
-              method: "POST",
-              headers: {
-                "Authorization": `Bearer ${supabaseServiceKey}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                type: "purchase",
-                to: customerEmail,
-                name: customerEmail?.split("@")[0] || "Compradora",
-                product: product?.name || "Producto del marketplace",
-                amount: `$${amountPaid.toFixed(2)}`,
-                plan: "marketplace",
-              }),
-            });
-          } catch (e) {
-            console.error("Email error (non-blocking):", e);
-          }
-        }
-
-        return new Response(JSON.stringify({ received: true, type: "marketplace" }), {
-          status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
 
       // ============================================================
       // MEMBERSHIP PURCHASE (existing logic)

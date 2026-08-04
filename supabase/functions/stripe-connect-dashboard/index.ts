@@ -1,6 +1,8 @@
 // ============================================================
 // Yayika — Stripe Connect Dashboard Edge Function
-// Returns seller financial dashboard data
+// ⚠️ DEPRECATED: Yayika is a community, NOT a marketplace.
+// Sellers handle their own payments. This function is unused.
+// Do NOT deploy. Kept for reference only.
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
