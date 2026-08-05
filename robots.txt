@@ -10,3 +10,4 @@ Disallow: /tests/
 Disallow: /node_modules/
 
 Sitemap: https://yayika.com/sitemap.xml
+Sitemap: https://yayika.com/sitemap_index.xml
