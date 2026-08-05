@@ -96,9 +96,9 @@ function purchaseTemplate(name: string, product: string, amount: string): string
 
 function subscriptionTemplate(name: string, plan: string): string {
   const planDetails: Record<string, { price: string; features: string }> = {
-    semilla: { price: "$9.99/mes", features: "3 productos, portal interactivo, sistema XP, círculo de amigas" },
-    guerrera: { price: "$19.99/mes", features: "Todos los productos, dashboard, Ciclo Productiva, círculos ilimitados" },
-    diamante: { price: "$29.99/mes", features: "Todo lo de Guerrera + sesión grupal, comisión 20%, soporte prioritario" },
+    semilla: { price: "$179 MXN/mes", features: "3 productos, portal interactivo, sistema XP, circulo de amigas" },
+    guerrera: { price: "$349 MXN/mes", features: "Todos los productos, dashboard, Ciclo Productiva, circulos ilimitados" },
+    diamante: { price: "$549 MXN/mes", features: "Todo lo de Guerrera + sesion grupal, comision 20%, soporte prioritario" },
   };
   const details = planDetails[plan] || planDetails.guerrera;
 

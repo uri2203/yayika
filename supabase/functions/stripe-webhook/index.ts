@@ -37,13 +37,66 @@ serve(async (req: Request) => {
       });
     }
 
-    // Verify webhook signature (basic check - in production use stripe.webhooks.constructEvent)
-    // For now, we trust the header and parse the event
+    // Verify webhook signature using HMAC-SHA256
     let event;
     try {
+      // Parse the stripe-signature header
+      const sigParts: Record<string, string> = {};
+      sig.split(',').forEach((part: string) => {
+        const [key, value] = part.split('=');
+        sigParts[key] = value;
+      });
+
+      const timestamp = sigParts['t'];
+      const signature = sigParts['v1'];
+
+      if (!timestamp || !signature) {
+        return new Response(JSON.stringify({ error: "Invalid signature format" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Reject events older than 5 minutes (replay protection)
+      const eventAge = Math.abs(Date.now() / 1000 - parseInt(timestamp));
+      if (eventAge > 300) {
+        return new Response(JSON.stringify({ error: "Event too old" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Verify HMAC signature
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(stripeWebhookSecret),
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["sign"]
+      );
+      const signedPayload = `${timestamp}.${body}`;
+      const signatureBuffer = await crypto.subtle.sign(
+        "HMAC",
+        key,
+        encoder.encode(signedPayload)
+      );
+      const expectedSignature = Array.from(new Uint8Array(signatureBuffer))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      if (signature !== expectedSignature) {
+        console.error("Signature mismatch:", { expected: expectedSignature, received: signature });
+        return new Response(JSON.stringify({ error: "Invalid signature" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      // Signature valid - parse the event
       event = JSON.parse(body);
     } catch (e) {
-      return new Response(JSON.stringify({ error: "Invalid JSON" }), {
+      return new Response(JSON.stringify({ error: "Invalid JSON or signature verification failed" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
