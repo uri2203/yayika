@@ -504,7 +504,7 @@
         .sd-plan-card:hover{border-color:${C.lila};transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
         .sd-plan-card.current{border-color:${C.green};background:#F0FFF4}
         .sd-plan-price{font-size:32px;font-weight:700;color:${C.lila};font-family:'Cormorant Garamond',serif}
-        .sd-plan-feature{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;color:${C.text);border-bottom:1px solid ${C.border}}
+        .sd-plan-feature{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px;color:${C.text};border-bottom:1px solid ${C.border}}
         .sd-plan-feature:last-child{border-bottom:none}
         @media(max-width:768px){
           .sd-tab{padding:6px 10px;font-size:11px}
@@ -544,8 +544,8 @@
 
       const sellerData = {
         plan: profile?.plan || 'basica',
-        store_name: profile?.store_name || session.user.user_metadata?.full_name || 'Mi Tienda',
-        store_description: profile?.store_description || 'Productos digitales para mujeres',
+        store_name: profile?.store_name || session.user.user_metadata?.full_name || t('my_store'),
+        store_description: profile?.store_description || t('subtitle'),
         products: products || [],
         payment_link: profile?.payment_link || '',
       };
@@ -560,7 +560,7 @@
   function showNoProducts(content) {
     const noData = {
       plan: 'basica',
-      store_name: currentUser?.user_metadata?.full_name || 'Mi Tienda',
+      store_name: currentUser?.user_metadata?.full_name || t('my_store'),
       store_description: '',
       products: [],
       payment_link: '',
@@ -724,10 +724,10 @@
           <table style="width:100%;border-collapse:collapse">
             <thead>
               <tr>
-                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">Producto</th>
-                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">Precio</th>
-                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">Estado</th>
-                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">Acciones</th>
+                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">${t('product_name')}</th>
+                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">${t('product_price')}</th>
+                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">${t('product_status')}</th>
+                <th style="text-align:left;padding:10px 12px;font-size:11px;color:${C.sub};text-transform:uppercase;border-bottom:1px solid ${C.border}">${t('actions_placeholder')}</th>
               </tr>
             </thead>
             <tbody>
@@ -824,11 +824,11 @@
             <input name="name_en" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
           </div>
           <div>
-            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (ES)</label>
+            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('store_description')} (ES)</label>
             <textarea name="description" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical"></textarea>
           </div>
           <div>
-            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (EN)</label>
+            <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('store_description')} (EN)</label>
             <textarea name="description_en" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical"></textarea>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -837,12 +837,12 @@
               <input name="price_cents" type="number" min="0" required style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
             </div>
             <div>
-              <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Categoría</label>
+              <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('category')}</label>
               <select name="category" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
-                <option value="course">Curso</option>
-                <option value="guide">Guía</option>
-                <option value="template">Plantilla</option>
-                <option value="bundle">Pack</option>
+                <option value="course">${t('cat_course')}</option>
+                <option value="guide">${t('cat_guide')}</option>
+                <option value="template">${t('cat_template')}</option>
+                <option value="bundle">${t('cat_bundle')}</option>
               </select>
             </div>
           </div>
@@ -919,11 +919,11 @@
                 <input name="name_en" value="${escHtml(product.name_en || '')}" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
               </div>
               <div>
-                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (ES)</label>
+                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('store_description')} (ES)</label>
                 <textarea name="description" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical">${escHtml(product.description || '')}</textarea>
               </div>
               <div>
-                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Descripción (EN)</label>
+                <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('store_description')} (EN)</label>
                 <textarea name="description_en" rows="3" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box;resize:vertical">${escHtml(product.description_en || '')}</textarea>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
@@ -932,7 +932,7 @@
                   <input name="price_cents" type="number" min="0" value="${product.price_cents || 0}" required style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
                 </div>
                 <div>
-                  <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">Estado</label>
+                  <label style="font-size:12px;font-weight:600;color:#888;display:block;margin-bottom:4px">${t('product_status')}</label>
                   <select name="status" style="width:100%;padding:10px 12px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:14px;box-sizing:border-box">
                     <option value="active" ${product.status==='active'?'selected':''}>${t('active')}</option>
                     <option value="inactive" ${product.status==='inactive'?'selected':''}>${t('inactive')}</option>

@@ -7,9 +7,20 @@ const STORE_SUPABASE_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
 const STORE_SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc';
 
 const STRIPE_PAYMENT_LINKS = {
+  // Product payment links (seller-configured)
   'ciclo-productiva': 'https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c',
   'dinero-sin-pena': 'https://buy.stripe.com/4gMbJ16qO5SidMQe17gA80d',
   'mujer-que-negocia': 'https://buy.stripe.com/8x2eVd5mK94uaAE8GNgA80e',
+  // Seed product links (mapped by product ID)
+  'product-3': 'https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c',
+  'product-4': 'https://buy.stripe.com/4gMbJ16qO5SidMQe17gA80d',
+  'product-5': 'https://buy.stripe.com/8x2eVd5mK94uaAE8GNgA80e',
+  'product-6': 'https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c',
+  'product-7': 'https://buy.stripe.com/4gMbJ16qO5SidMQe17gA80d',
+  'product-8': 'https://buy.stripe.com/8x2eVd5mK94uaAE8GNgA80e',
+  'product-11': 'https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c',
+  'product-12': 'https://buy.stripe.com/4gMbJ16qO5SidMQe17gA80d',
+  // Membership payment links
   'semilla': 'https://buy.stripe.com/00wcN502q0xY2481elgA80f',
   'guerrera': 'https://buy.stripe.com/14A4gzeXk0xY4cg3mtgA80g',
   'diamante': 'https://buy.stripe.com/cNi9ATdTgfsSbEI4qxgA80h'
@@ -328,6 +339,13 @@ async function cartCheckout() {
 
   track('Checkout', { product: fullProduct.name, category: fullProduct.category });
 
+  // Free products
+  if (fullProduct.price_cents === 0) {
+    await createOrder(fullProduct);
+    return;
+  }
+
+  // Membership
   if (fullProduct.category === 'membership') {
     const link = getMembershipLink(fullProduct);
     if (link) {
@@ -336,7 +354,18 @@ async function cartCheckout() {
     }
   }
 
-  await createOrder(fullProduct);
+  // Paid non-membership - check for product-specific Stripe link
+  const productLink = STRIPE_PAYMENT_LINKS['product-' + fullProduct.id] || STRIPE_PAYMENT_LINKS[slugify(fullProduct.name)];
+  if (productLink) {
+    cart = cart.filter(c => c.id !== fullProduct.id);
+    localStorage.setItem('yayika_cart', JSON.stringify(cart));
+    updateCartUI();
+    window.location.href = productLink;
+    return;
+  }
+
+  // No payment link - show seller contact modal
+  showSellerContactModal(fullProduct);
 }
 
 async function buyNow(productId) {
@@ -344,6 +373,11 @@ async function buyNow(productId) {
   if (!product) return;
 
   track('Buy Now', { product: product.name, category: product.category });
+
+  if (product.price_cents === 0) {
+    await createOrder(product);
+    return;
+  }
 
   if (product.category === 'membership') {
     const link = getMembershipLink(product);
@@ -353,22 +387,22 @@ async function buyNow(productId) {
     }
   }
 
-  if (product.price_cents === 0) {
-    await createOrder(product);
+  const productLink = STRIPE_PAYMENT_LINKS['product-' + product.id] || STRIPE_PAYMENT_LINKS[slugify(product.name)];
+  if (productLink) {
+    window.location.href = productLink;
     return;
   }
 
-  showPurchaseOptions(product);
+  showSellerContactModal(product);
 }
 
 function getMembershipLink(product) {
   const nameSlug = slugify(product.name);
-  if (nameSlug.includes('pro')) return STRIPE_PAYMENT_LINKS.semilla;
-  if (nameSlug.includes('mentoria')) return STRIPE_PAYMENT_LINKS.diamante;
   if (STRIPE_PAYMENT_LINKS[nameSlug]) return STRIPE_PAYMENT_LINKS[nameSlug];
-  for (const [key, url] of Object.entries(STRIPE_PAYMENT_LINKS)) {
-    if (nameSlug.includes(key) || key.includes(nameSlug)) return url;
-  }
+  if (STRIPE_PAYMENT_LINKS['product-' + product.id]) return STRIPE_PAYMENT_LINKS['product-' + product.id];
+  if (nameSlug.includes('pro') || nameSlug.includes('semilla')) return STRIPE_PAYMENT_LINKS.semilla;
+  if (nameSlug.includes('mentoria') || nameSlug.includes('diamante')) return STRIPE_PAYMENT_LINKS.diamante;
+  if (nameSlug.includes('guerrera')) return STRIPE_PAYMENT_LINKS.guerrera;
   return null;
 }
 
@@ -415,7 +449,7 @@ function showPurchaseOptions(product) {
 async function createOrder(product) {
   if (!storeSupabase) initStoreSupabase();
   if (!storeSupabase) {
-    alert('No se pudo conectar. Intenta de nuevo.');
+    alert(st('error_connection'));
     return;
   }
 
@@ -454,7 +488,7 @@ async function createOrder(product) {
     renderProducts(currentFilter === 'all' ? allProducts : allProducts.filter(p => p.category === currentFilter));
   } catch (e) {
     console.error('[Store] Order creation failed:', e);
-    alert('Error al crear la orden. Intenta de nuevo.');
+    alert(st('error_order'));
   }
 }
 

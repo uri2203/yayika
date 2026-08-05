@@ -290,20 +290,60 @@ const YayikaSecurity = (() => {
     }
   }
 
-  // ============ DATA ENCRYPTION ============
-  function encryptData(data, key) {
-    // Simple XOR encryption for client-side data obfuscation
-    // Note: For production, use AES-GCM via Web Crypto API
-    const str = JSON.stringify(data);
-    const encoded = btoa(str);
-    return encoded;
+  // ============ DATA ENCRYPTION (AES-256-GCM via Web Crypto API) ============
+  const ENCRYPTION_ALGO = 'AES-GCM';
+  const ENCRYPTION_KEY_LENGTH = 256;
+  const ENCRYPTION_IV_LENGTH = 12;
+
+  async function deriveKey(password) {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      'raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']
+    );
+    return crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: enc.encode('yayika-salt-v1'), iterations: 100000, hash: 'SHA-256' },
+      keyMaterial,
+      { name: ENCRYPTION_ALGO, length: ENCRYPTION_KEY_LENGTH },
+      false,
+      ['encrypt', 'decrypt']
+    );
   }
 
-  function decryptData(encrypted, key) {
+  async function encryptData(data, password) {
     try {
-      const decoded = atob(encrypted);
-      return JSON.parse(decoded);
+      const key = await deriveKey(password || 'yayika-default-key');
+      const iv = crypto.getRandomValues(new Uint8Array(ENCRYPTION_IV_LENGTH));
+      const enc = new TextEncoder();
+      const encrypted = await crypto.subtle.encrypt(
+        { name: ENCRYPTION_ALGO, iv },
+        key,
+        enc.encode(JSON.stringify(data))
+      );
+      // Combine IV + ciphertext and base64 encode
+      const combined = new Uint8Array(iv.length + encrypted.byteLength);
+      combined.set(iv, 0);
+      combined.set(new Uint8Array(encrypted), iv.length);
+      return btoa(String.fromCharCode(...combined));
     } catch (e) {
+      console.error('[Security] Encryption failed:', e);
+      return null;
+    }
+  }
+
+  async function decryptData(encrypted, password) {
+    try {
+      const key = await deriveKey(password || 'yayika-default-key');
+      const combined = Uint8Array.from(atob(encrypted), c => c.charCodeAt(0));
+      const iv = combined.slice(0, ENCRYPTION_IV_LENGTH);
+      const ciphertext = combined.slice(ENCRYPTION_IV_LENGTH);
+      const decrypted = await crypto.subtle.decrypt(
+        { name: ENCRYPTION_ALGO, iv },
+        key,
+        ciphertext
+      );
+      return JSON.parse(new TextDecoder().decode(decrypted));
+    } catch (e) {
+      console.error('[Security] Decryption failed:', e);
       return null;
     }
   }
@@ -359,7 +399,7 @@ const YayikaSecurity = (() => {
     password: { validate: validatePasswordStrength, getStrengthScore, getStrengthLabel },
     session: { start: startSessionTimeout, stop: stopSessionTimeout },
     audit: { log: logAction, get: getAuditLog },
-    encryption: { encrypt: encryptData, decrypt: decryptData },
+    encryption: { encrypt: encryptData, decrypt: decryptData, ENCRYPTION_ALGO },
     requestSize: { validate: validateRequestSize, sanitizeForm: sanitizeFormData, MAX: MAX_REQUEST_SIZE },
     cors: { validate: validateCORS, origins: ALLOWED_ORIGINS },
     safeQuerySelector

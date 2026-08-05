@@ -259,7 +259,7 @@ function renderAffiliateDashboard(data) {
     copy: { es: 'Copiar', en: 'Copy', pt: 'Copiar', fr: 'Copier', de: 'Kopieren' },
     copied: { es: '¡Copiado!', en: 'Copied!', pt: 'Copiado!', fr: 'Copié !', de: 'Kopiert!' },
     request_payout: { es: 'Solicitar pago', en: 'Request payout', pt: 'Solicitar pagamento', fr: 'Demander le paiement', de: 'Auszahlung anfordern' },
-    min_payout: { es: 'Mínimo $50 USD', en: 'Minimum $50 USD', pt: 'Mínimo $50 USD', fr: 'Minimum 50 $', de: 'Minimum 50 $' }
+    min_payout: { es: 'Mínimo $500 USD', en: 'Minimum $500 USD', pt: 'Mínimo $500 USD', fr: 'Minimum 500 $', de: 'Minimum 500 $' }
   };
   
   const t = (key) => (i18n[key] && i18n[key][lang]) || (i18n[key] && i18n[key]['es']) || key;
@@ -300,7 +300,7 @@ function renderAffiliateDashboard(data) {
       </div>
       
       <!-- Request Payout -->
-      ${parseFloat(affiliate.pending_payout || 0) >= 50 ? `
+      ${parseFloat(affiliate.pending_payout || 0) >= 500 ? `
       <div style="text-align:center;margin-bottom:16px">
         <button onclick="requestPayout()" style="padding:10px 24px;border-radius:100px;background:var(--verde);color:white;border:none;font-size:13px;font-weight:500;cursor:pointer">${t('request_payout')} ($${parseFloat(affiliate.pending_payout).toFixed(2)})</button>
         <div style="font-size:10px;color:var(--suave);margin-top:4px">${t('min_payout')}</div>
@@ -327,7 +327,7 @@ function renderAffiliateDashboard(data) {
             const statusColors = { pending: '#B8943A', approved: '#3BAF7A', paid: '#7B5EA7', rejected: '#E74C3C' };
             const sColor = statusColors[c.status] || '#95A5A6';
             return `<tr style="border-bottom:0.5px solid var(--borde)">
-              <td style="padding:8px;font-size:11px;color:var(--suave)">${new Date(c.created_at).toLocaleDateString('es-MX')}</td>
+              <td style="padding:8px;font-size:11px;color:var(--suave)">${new Date(c.created_at).toLocaleDateString({es:'es-MX',en:'en-US',pt:'pt-BR',fr:'fr-FR',de:'de-DE'}[currentLang||'es']||'es-MX')}</td>
               <td style="padding:8px;font-size:11px;color:var(--texto)">${c.product_name || c.product_type}</td>
               <td style="padding:8px;font-size:11px;color:var(--suave);text-align:right">$${parseFloat(c.sale_amount).toFixed(2)}</td>
               <td style="padding:8px;font-size:12px;font-weight:500;color:var(--verde);text-align:right">$${parseFloat(c.commission_amount).toFixed(2)}</td>
@@ -368,8 +368,8 @@ async function requestPayout() {
     .eq('user_id', currentUser.id)
     .maybeSingle();
   
-  if (!affiliate || affiliate.pending_payout < 50) {
-    const msg = { es: 'Mínimo $50 para solicitar pago', en: 'Minimum $50 to request payout', pt: 'Mínimo $50 para solicitar pagamento', fr: 'Minimum 50$ pour demander le paiement', de: 'Minimum 50$ für Auszahlung' }[lang];
+  if (!affiliate || affiliate.pending_payout < 500) {
+    const msg = { es: 'Mínimo $500 para solicitar pago', en: 'Minimum $500 to request payout', pt: 'Mínimo $500 para solicitar pagamento', fr: 'Minimum 500$ pour demander le paiement', de: 'Minimum 500$ für Auszahlung' }[lang];
     showToast(msg);
     return;
   }

@@ -455,7 +455,7 @@ function showNotAffiliate() {
   document.getElementById('walletContent').style.display = 'none';
 }
 
-function escHtmlW(str) {
+function escHtmlW(str) { if (str == null) return "";
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
