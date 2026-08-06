@@ -156,6 +156,8 @@ async function signIn(email, password) {
     .maybeSingle();
   if (profile) currentUser.profile = profile;
   track('Login', { method: 'email' });
+  // Check subscription status (grace period, suspended, etc.)
+  checkSubscriptionOnLogin().catch(() => {});
   return data;
 }
 
@@ -176,6 +178,8 @@ async function getSession() {
       .maybeSingle();
     if (profile) currentUser.profile = profile;
   }
+  // Check subscription status on session restore
+  if (currentUser) checkSubscriptionOnLogin().catch(() => {});
   return session;
 }
 
@@ -391,6 +395,180 @@ async function getSubscription() {
     .single();
   if (error && error.code !== 'PGRST116') throw error;
   return data;
+}
+
+// ============================================================
+// SUBSCRIPTION STATUS CHECK (with grace period support)
+// ============================================================
+
+async function getSubscriptionStatus() {
+  if (!currentUser || !supabase) return { status: 'none' };
+
+  const { data: sub, error } = await supabase
+    .from('yayika_subscriptions')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error || !sub) return { status: 'none' };
+
+  // Active subscription
+  if (sub.status === 'active') {
+    return { status: 'active', plan: sub.plan, subscription: sub };
+  }
+
+  // Past due - check grace period
+  if (sub.status === 'past_due') {
+    const graceEnd = sub.grace_period_end ? new Date(sub.grace_period_end) : null;
+    const now = new Date();
+
+    if (graceEnd && now < graceEnd) {
+      // Still in grace period
+      const daysLeft = Math.ceil((graceEnd - now) / (1000 * 60 * 60 * 24));
+      return {
+        status: 'grace_period',
+        plan: sub.plan,
+        daysLeft: daysLeft,
+        gracePeriodEnd: sub.grace_period_end,
+        subscription: sub,
+      };
+    } else {
+      // Grace period expired - suspended
+      return { status: 'suspended', plan: sub.plan, subscription: sub };
+    }
+  }
+
+  // Cancelled
+  if (sub.status === 'cancelled') {
+    return { status: 'cancelled', plan: sub.plan, subscription: sub };
+  }
+
+  return { status: sub.status, plan: sub.plan, subscription: sub };
+}
+
+function renderSuspensionNotice(statusData) {
+  if (!statusData || statusData.status === 'active' || statusData.status === 'none') return '';
+
+  const lang = currentLang || 'es';
+
+  const i18n = {
+    grace_title: {
+      es: 'Tu pago está pendiente',
+      en: 'Your payment is pending',
+      pt: 'Seu pagamento está pendente',
+      fr: 'Votre paiement est en attente',
+      de: 'Ihre Zahlung steht aus',
+    },
+    grace_message: {
+      es: 'Tu membresía {plan} tiene un pago pendiente. Tienes {days} días para actualizar tu método de pago antes de que se suspenda el acceso.',
+      en: 'Your {plan} membership has a pending payment. You have {days} days to update your payment method before access is suspended.',
+      pt: 'Sua assinatura {plan} tem um pagamento pendente. Você tem {days} dias para atualizar seu método de pagamento antes que o acesso seja suspenso.',
+      fr: 'Votre adhésion {plan} a un paiement en attente. Vous avez {days} jours pour mettre à jour votre moyen de paiement avant la suspension.',
+      de: 'Ihre {plan}-Mitgliedschaft hat eine ausstehende Zahlung. Sie haben {days} Tage, um Ihre Zahlungsmethode zu aktualisieren.',
+    },
+    grace_cta: {
+      es: 'Actualizar método de pago',
+      en: 'Update payment method',
+      pt: 'Atualizar método de pagamento',
+      fr: 'Mettre à jour le moyen de paiement',
+      de: 'Zahlungsmethode aktualisieren',
+    },
+    suspended_title: {
+      es: 'Membresía suspendida',
+      en: 'Membership suspended',
+      pt: 'Assinatura suspensa',
+      fr: 'Adhésion suspendue',
+      de: 'Mitgliedschaft suspendiert',
+    },
+    suspended_message: {
+      es: 'Tu acceso ha sido suspendido por falta de pago. Reactiva tu membresía para recuperar el acceso completo.',
+      en: 'Your access has been suspended due to non-payment. Reactivate your membership to restore full access.',
+      pt: 'Seu acesso foi suspenso por falta de pagamento. Reative sua assinatura para restaurar o acesso completo.',
+      fr: 'Votre accès a été suspendu pour non-paiement. Réactivez votre adhésion pour retrouver un accès complet.',
+      de: 'Ihr Zugang wurde wegen Zahlungsausfall gesperrt. Reaktivieren Sie Ihre Mitgliedschaft für vollen Zugang.',
+    },
+    suspended_cta: {
+      es: 'Reactivar membresía',
+      en: 'Reactivate membership',
+      pt: 'Reativar assinatura',
+      fr: 'Réactiver l\'adhésion',
+      de: 'Mitgliedschaft reaktivieren',
+    },
+    cancelled_title: {
+      es: 'Membresía cancelada',
+      en: 'Membership cancelled',
+      pt: 'Assinatura cancelada',
+      fr: 'Adhésion annulée',
+      de: 'Mitgliedschaft gekündigt',
+    },
+    cancelled_message: {
+      es: 'Tu membresía ha sido cancelada. Puedes reenrollarte en cualquier momento.',
+      en: 'Your membership has been cancelled. You can re-enroll at any time.',
+      pt: 'Sua assinatura foi cancelada. Você pode se reinscrever a qualquer momento.',
+      fr: 'Votre adhésion a été annulée. Vous pouvez vous réinscrire à tout moment.',
+      de: 'Ihre Mitgliedschaft wurde gekündigt. Sie können sich jederzeit erneut anmelden.',
+    },
+  };
+
+  const t = (key) => (i18n[key] && i18n[key][lang]) || (i18n[key] && i18n[key]['es']) || key;
+  const planNames = { semilla: 'Semilla', guerrera: 'Guerrera', diamante: 'Diamante' };
+  const planName = planNames[statusData.plan] || statusData.plan || '';
+
+  if (statusData.status === 'grace_period') {
+    const msg = t('grace_message').replace('{plan}', planName).replace('{days}', statusData.daysLeft);
+    return `
+      <div style="background:linear-gradient(135deg,#FFF3CD,#FFEAA7);border:1px solid #F0C040;border-radius:14px;padding:20px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="font-size:24px">⚠️</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#856404;margin:0">${t('grace_title')}</h3>
+        </div>
+        <p style="font-size:13px;color:#856404;margin:0 0 16px;line-height:1.5">${msg}</p>
+        <button onclick="window.location.href='#membresia'" style="padding:10px 24px;border-radius:100px;background:#F0C040;color:#856404;border:none;font-size:13px;font-weight:600;cursor:pointer">${t('grace_cta')}</button>
+      </div>
+    `;
+  }
+
+  if (statusData.status === 'suspended') {
+    return `
+      <div style="background:linear-gradient(135deg,#F8D7DA,#F5C6CB);border:1px solid #E74C3C;border-radius:14px;padding:20px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="font-size:24px">🔒</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#721C24;margin:0">${t('suspended_title')}</h3>
+        </div>
+        <p style="font-size:13px;color:#721C24;margin:0 0 16px;line-height:1.5">${t('suspended_message')}</p>
+        <button onclick="window.location.href='#membresia'" style="padding:10px 24px;border-radius:100px;background:#E74C3C;color:white;border:none;font-size:13px;font-weight:600;cursor:pointer">${t('suspended_cta')}</button>
+      </div>
+    `;
+  }
+
+  if (statusData.status === 'cancelled') {
+    return `
+      <div style="background:linear-gradient(135deg,#E2E3E5,#D6D8DB);border:1px solid #95A5A6;border-radius:14px;padding:20px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span style="font-size:24px">📋</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#383D41;margin:0">${t('cancelled_title')}</h3>
+        </div>
+        <p style="font-size:13px;color:#383D41;margin:0 0 16px;line-height:1.5">${t('cancelled_message')}</p>
+        <button onclick="window.location.href='#membresia'" style="padding:10px 24px;border-radius:100px;background:#7B5EA7;color:white;border:none;font-size:13px;font-weight:600;cursor:pointer">${t('cancelled_title')}</button>
+      </div>
+    `;
+  }
+
+  return '';
+}
+
+// Global variable for subscription status (set on login)
+let subscriptionStatus = null;
+
+// Check subscription status on login
+async function checkSubscriptionOnLogin() {
+  subscriptionStatus = await getSubscriptionStatus();
+  const noticeEl = document.getElementById('suspensionNotice');
+  if (noticeEl) {
+    noticeEl.innerHTML = renderSuspensionNotice(subscriptionStatus);
+  }
 }
 
 // ============================================================
