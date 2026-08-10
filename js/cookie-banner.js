@@ -21,7 +21,7 @@
   // Multi-language translations for cookie banner
   const COOKIE_I18N = {
     es: {
-      cookie_title: '🍪 Utilizamos cookies para mejorar tu experiencia',
+      cookie_title: 'Utilizamos cookies para mejorar tu experiencia',
       cookie_desc: 'Yayika utiliza cookies <strong>estrictamente necesarias</strong> para el funcionamiento de la plataforma (sesiones, preferencias). Opcionalmente, utilizamos <strong>Plausible Analytics</strong> para mejorar nuestro servicio — es un sistema de análisis respetuoso con la privacidad que no utiliza cookies de rastreo publicitario. Consulta nuestra <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para más detalles.',
       cookie_necessary: 'Necesarias — Siempre activas (sesiones, seguridad, preferencias)',
       cookie_analytics: 'Análisis — Plausible Analytics (privacidad, sin publicidad)',
@@ -34,7 +34,7 @@
       cookie_ccpa_alert: 'Se ha deshabilitado el rastreo de análisis. Yayika no vende ni comparte información personal con terceros.',
     },
     en: {
-      cookie_title: '🍪 We use cookies to improve your experience',
+      cookie_title: 'We use cookies to improve your experience',
       cookie_desc: 'Yayika uses <strong>strictly necessary</strong> cookies for platform functionality (sessions, preferences). Optionally, we use <strong>Plausible Analytics</strong> to improve our service — a privacy-respecting analytics system that does not use advertising tracking cookies. See our <a href="/politica-cookies-en.html" style="color: #7c3aed; text-decoration: underline;">Cookie Policy</a> for details.',
       cookie_necessary: 'Necessary — Always active (sessions, security, preferences)',
       cookie_analytics: 'Analytics — Plausible Analytics (privacy, no ads)',
@@ -47,7 +47,7 @@
       cookie_ccpa_alert: 'Analytics tracking has been disabled. Yayika does not sell or share personal information with third parties.',
     },
     pt: {
-      cookie_title: '🍪 Usamos cookies para melhorar sua experiência',
+      cookie_title: 'Usamos cookies para melhorar sua experiência',
       cookie_desc: 'Yayika usa cookies <strong>estritamente necessários</strong> para o funcionamento da plataforma (sessões, preferências). Opcionalmente, usamos <strong>Plausible Analytics</strong> para melhorar nosso serviço — um sistema de análise respeitoso com a privacidade que não usa cookies de rastreamento publicitário. Consulte nossa <a href="/politica-cookies-pt.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para mais detalhes.',
       cookie_necessary: 'Necessários — Sempre ativos (sessões, segurança, preferências)',
       cookie_analytics: 'Análise — Plausible Analytics (privacidade, sem anúncios)',
@@ -60,7 +60,7 @@
       cookie_ccpa_alert: 'O rastreamento de análise foi desativado. Yayika não vende nem compartilha informações pessoais com terceiros.',
     },
     fr: {
-      cookie_title: '🍪 Nous utilisons des cookies pour améliorer votre expérience',
+      cookie_title: 'Nous utilisons des cookies pour améliorer votre expérience',
       cookie_desc: 'Yayika utilise des cookies <strong>strictement nécessaires</strong> au fonctionnement de la plateforme (sessions, préférences). Nous utilisons optionnellement <strong>Plausible Analytics</strong> pour améliorer notre service — un système d\'analyse respectueux de la vie privée qui n\'utilise pas de cookies de suivi publicitaire. Consultez notre <a href="/politica-cookies-fr.html" style="color: #7c3aed; text-decoration: underline;">Politique de Cookies</a> pour plus de détails.',
       cookie_necessary: 'Nécessaires — Toujours actifs (sessions, sécurité, préférences)',
       cookie_analytics: 'Analyse — Plausible Analytics (confidentialité, sans publicité)',
@@ -73,7 +73,7 @@
       cookie_ccpa_alert: 'Le suivi analytique a été désactivé. Yayika ne vend ni ne partage d\'informations personnelles avec des tiers.',
     },
     de: {
-      cookie_title: '🍪 Wir verwenden Cookies, um Ihr Erlebnis zu verbessern',
+      cookie_title: 'Wir verwenden Cookies, um Ihr Erlebnis zu verbessern',
       cookie_desc: 'Yayika verwendet <strong>unbedingt notwendige</strong> Cookies für die Plattformfunktion (Sitzungen, Präferenzen). Optional nutzen wir <strong>Plausible Analytics</strong> zur Verbesserung unseres Services — ein datenschutzfreundliches Analyse-System ohne Werbe-Tracking-Cookies. Siehe unsere <a href="/politica-cookies-de.html" style="color: #7c3aed; text-decoration: underline;">Cookie-Richtlinie</a> für Details.',
       cookie_necessary: 'Notwendig — Immer aktiv (Sitzungen, Sicherheit, Präferenzen)',
       cookie_analytics: 'Analyse — Plausible Analytics (Datenschutz, keine Werbung)',
