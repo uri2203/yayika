@@ -1094,3 +1094,78 @@ async function getAvailableCircles() {
   if (error) throw error;
   return data;
 }
+
+// ============================================================
+// PWA INSTALL BANNER
+// ============================================================
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  var banner = document.getElementById('installBanner');
+  if (banner && !localStorage.getItem('yayika_install_dismissed')) {
+    banner.style.display = 'block';
+  }
+});
+
+function dismissInstallBanner() {
+  var banner = document.getElementById('installBanner');
+  if (banner) banner.style.display = 'none';
+  localStorage.setItem('yayika_install_dismissed', '1');
+}
+
+function installApp() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(function(choice) {
+      if (choice.outcome === 'accepted') {
+        dismissInstallBanner();
+        showToast('App instalada correctamente');
+      }
+      deferredInstallPrompt = null;
+    });
+  } else {
+    var modal = document.getElementById('iosInstallModal');
+    if (modal) modal.style.display = 'flex';
+  }
+}
+
+function closeIOSModal() {
+  var modal = document.getElementById('iosInstallModal');
+  if (modal) modal.style.display = 'none';
+}
+
+// ============================================================
+// PRODUCT BUY (Stripe Payment Links)
+// ============================================================
+function buyProduct(slug) {
+  var links = {
+    'ciclo-productiva': 'https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c',
+    'dinero-sin-pena': 'https://buy.stripe.com/4gMbJ16qO5SidMQe17gA80d',
+    'mujer-que-negocia': 'https://buy.stripe.com/8x2eVd5mK94uaAE8GNgA80e'
+  };
+  var link = links[slug];
+  if (link) {
+    window.location.href = link;
+  } else {
+    showToast('Producto no disponible');
+  }
+}
+
+// ============================================================
+// MEMBERSHIP CHECKOUT (Stripe Payment Links)
+// ============================================================
+function startCheckout(planKey) {
+  var plans = {
+    semilla: 'https://buy.stripe.com/00wcN502q0xY2481elgA80f',
+    guerrera: 'https://buy.stripe.com/14A4gzeXk0xY4cg3mtgA80g',
+    diamante: 'https://buy.stripe.com/cNi9ATdTgfsSbEI4qxgA80h'
+  };
+  var link = plans[planKey];
+  if (link) {
+    window.location.href = link;
+  } else {
+    showToast('Plan no disponible');
+  }
+}
