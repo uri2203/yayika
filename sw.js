@@ -3,9 +3,9 @@
 // Enhanced PWA: navigation preload, better offline, period sync
 // ============================================================
 
-const CACHE_VERSION = 'yayika-v4';
-const STATIC_CACHE = 'yayika-static-v4';
-const DYNAMIC_CACHE = 'yayika-dynamic-v4';
+const CACHE_VERSION = 'yayika-v5';
+const STATIC_CACHE = 'yayika-static-v5';
+const DYNAMIC_CACHE = 'yayika-dynamic-v5';
 const OFFLINE_URL = '/offline.html';
 
 function swT(key, lang) {
