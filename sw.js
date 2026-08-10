@@ -3,9 +3,9 @@
 // Enhanced PWA: navigation preload, better offline, period sync
 // ============================================================
 
-const CACHE_VERSION = 'yayika-v5';
-const STATIC_CACHE = 'yayika-static-v5';
-const DYNAMIC_CACHE = 'yayika-dynamic-v5';
+const CACHE_VERSION = 'yayika-v6';
+const STATIC_CACHE = 'yayika-static-v6';
+const DYNAMIC_CACHE = 'yayika-dynamic-v6';
 const OFFLINE_URL = '/offline.html';
 
 function swT(key, lang) {
@@ -31,6 +31,7 @@ function swT(key, lang) {
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
+  '/js/checkout.js',
   '/splash.html',
   '/offline.html',
   '/Portales/index.html',
