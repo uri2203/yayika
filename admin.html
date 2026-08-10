@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yayika — Panel de Administración</title>
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<style>
+  :root {
+    --lila: #7B5EA7; --lila-l: #F0EBF8; --lila-d: #4E3470;
+    --rosa: #C96B7A; --rosa-l: #FDF0F2;
+    --oro: #B8943A; --oro-l: #FBF6E8;
+    --turquesa: #1A9E8F; --turquesa-l: #E0F7F4; --turquesa-d: #0E7A6D;
+    --crema: #FAF7F2; --blanco: #FDFCFB;
+    --texto: #1E1528; --suave: #7A6E85;
+    --borde: rgba(123,94,167,0.12);
+    --verde: #3BAF7A; --verde-l: #E8F8F0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--crema); color:var(--texto); min-height:100vh; }
+
+  /* LOGIN */
+  #loginScreen { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; }
+  .login-card { background:var(--blanco); border:1px solid var(--borde); border-radius:20px; padding:40px; max-width:400px; width:100%; box-shadow:0 8px 40px rgba(78,52,112,0.08); }
+  .login-logo { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:700; color:var(--lila-d); text-align:center; margin-bottom:8px; }
+  .login-logo span { color:var(--rosa); }
+  .login-sub { text-align:center; font-size:13px; color:var(--suave); margin-bottom:28px; }
+  .login-field { margin-bottom:16px; }
+  .login-field label { display:block; font-size:12px; font-weight:500; color:var(--suave); margin-bottom:6px; }
+  .login-field input { width:100%; padding:12px 14px; border:1.5px solid var(--borde); border-radius:12px; font-size:14px; font-family:inherit; background:var(--crema); color:var(--texto); outline:none; transition:border .2s; }
+  .login-field input:focus { border-color:var(--lila); }
+  .login-btn { width:100%; padding:12px; border:none; border-radius:12px; background:var(--lila); color:white; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; transition:all .2s; }
+  .login-btn:hover { background:var(--lila-d); }
+  .login-btn:disabled { opacity:.5; cursor:not-allowed; }
+  .login-error { color:var(--rosa); font-size:12px; text-align:center; margin-top:12px; display:none; }
+  .login-footer { text-align:center; margin-top:20px; font-size:11px; color:var(--suave); }
+
+  /* DASHBOARD */
+  #dashScreen { display:none; }
+  .dash-header { background:var(--lila-d); color:white; padding:20px 28px; display:flex; justify-content:space-between; align-items:center; }
+  .dash-header h1 { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:700; }
+  .dash-header h1 span { color:var(--rosa); }
+  .dash-logout { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); color:white; padding:8px 16px; border-radius:10px; font-size:12px; cursor:pointer; font-family:inherit; }
+  .dash-logout:hover { background:rgba(255,255,255,0.25); }
+  .dash-body { padding:24px 28px; max-width:1200px; margin:0 auto; }
+
+  /* STATS */
+  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+  .stat-card { background:var(--blanco); border:1px solid var(--borde); border-radius:14px; padding:20px; text-align:center; }
+  .stat-num { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .stat-num.turquesa { color:var(--turquesa); }
+  .stat-num.verde { color:var(--verde); }
+  .stat-num.oro { color:var(--oro); }
+  .stat-num.lila { color:var(--lila); }
+  .stat-label { font-size:12px; color:var(--suave); }
+
+  /* TABS */
+  .tabs { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .tab-btn { padding:8px 16px; border-radius:100px; border:1.5px solid var(--borde); background:var(--crema); color:var(--suave); font-size:12px; font-weight:500; cursor:pointer; font-family:inherit; transition:all .2s; }
+  .tab-btn.active { border-color:var(--turquesa); background:var(--turquesa-l); color:var(--turquesa-d); }
+  .tab-btn:hover { border-color:var(--lila); }
+
+  /* TABLE */
+  .table-wrap { background:var(--blanco); border:1px solid var(--borde); border-radius:14px; padding:20px; overflow-x:auto; }
+  .table-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+  .table-header span { font-size:14px; font-weight:500; color:var(--texto); }
+  table { width:100%; border-collapse:collapse; }
+  th { padding:8px; font-size:11px; color:var(--suave); font-weight:500; text-align:left; border-bottom:1px solid var(--borde); }
+  td { padding:10px 8px; font-size:13px; color:var(--texto); border-bottom:0.5px solid var(--borde); }
+  .badge { font-size:10px; padding:3px 8px; border-radius:100px; font-weight:500; }
+  .badge-green { background:var(--verde-l); color:var(--verde); }
+  .badge-red { background:#FDE8EA; color:#E74C3C; }
+  .badge-gray { background:#F0F0F0; color:#95A5A6; }
+  .badge-lila { background:var(--lila-l); color:var(--lila-d); }
+  .badge-rosa { background:var(--rosa-l); color:var(--rosa); }
+  .badge-oro { background:var(--oro-l); color:var(--oro); }
+
+  .plan-counts { display:flex; gap:10px; font-size:12px; }
+  .plan-counts span { display:flex; align-items:center; gap:4px; }
+
+  .rev-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+  .rev-card { text-align:center; padding:20px; border-radius:12px; }
+  .rev-card.green { background:var(--verde-l); }
+  .rev-card.gold { background:var(--oro-l); }
+  .rev-card.purple { background:var(--lila-l); }
+  .rev-amount { font-size:28px; font-weight:700; }
+  .rev-label { font-size:12px; color:var(--suave); margin-top:4px; }
+
+  .plans-dist { padding:16px; background:var(--crema); border-radius:12px; }
+  .plans-dist h4 { font-size:14px; font-weight:500; color:var(--texto); margin-bottom:12px; }
+  .plans-row { display:flex; gap:16px; }
+  .plan-item { flex:1; text-align:center; padding:12px; border-radius:8px; }
+  .plan-item.green { background:var(--verde-l); }
+  .plan-item.rosa { background:var(--rosa-l); }
+  .plan-item.gold { background:var(--oro-l); }
+  .plan-num { font-size:20px; font-weight:600; }
+  .plan-label { font-size:11px; color:var(--suave); }
+
+  .empty-msg { text-align:center; padding:40px; color:var(--suave); font-size:13px; }
+
+  @media(max-width:768px) {
+    .stats-grid { grid-template-columns:repeat(2,1fr); }
+    .rev-grid { grid-template-columns:1fr; }
+    .plans-row { flex-direction:column; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">Yay<span>ika</span></div>
+    <div class="login-sub">Panel de Administración</div>
+    <div class="login-field">
+      <label>Contraseña de admin</label>
+      <input type="password" id="adminPass" placeholder="Ingresa la contraseña" autocomplete="off">
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="loginError">Contraseña incorrecta</div>
+    <div class="login-footer">Acceso restringido — Solo administradores</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashScreen">
+  <div class="dash-header">
+    <h1>Yay<span>ika</span> Admin</h1>
+    <button class="dash-logout" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+  <div class="dash-body">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num turquesa" id="sUsers">—</div><div class="stat-label">Usuarios</div></div>
+      <div class="stat-card"><div class="stat-num verde" id="sSubs">—</div><div class="stat-label">Suscripciones</div></div>
+      <div class="stat-card"><div class="stat-num oro" id="sRevenue">—</div><div class="stat-label">Revenue mensual</div></div>
+      <div class="stat-card"><div class="stat-num lila" id="sAff">—</div><div class="stat-label">Afiliadas activas</div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('users')">Usuarios</button>
+      <button class="tab-btn" onclick="showTab('subs')">Suscripciones</button>
+      <button class="tab-btn" onclick="showTab('aff')">Afiliadas</button>
+      <button class="tab-btn" onclick="showTab('rev')">Revenue</button>
+    </div>
+
+    <!-- Content -->
+    <div class="table-wrap" id="tabContent">
+      <div class="empty-msg">Cargando datos...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// ADMIN PASSWORD (SHA-256 hash of the actual password)
+// Change this hash by running: SHA256("tu contraseña")
+// ============================================================
+const ADMIN_PASS_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'; // SHA-256 of "admin"
+
+// Supabase
+const SB_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc';
+
+let statsCache = null;
+
+// SHA-256 helper
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Login
+async function doLogin() {
+  const pass = document.getElementById('adminPass').value;
+  if (!pass) return;
+  
+  document.getElementById('loginBtn').disabled = true;
+  document.getElementById('loginBtn').textContent = 'Verificando...';
+  
+  const hash = await sha256(pass);
+  
+  if (hash === ADMIN_PASS_HASH) {
+    sessionStorage.setItem('yayika_admin', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashScreen').style.display = 'block';
+    loadDashboard();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginBtn').disabled = false;
+    document.getElementById('loginBtn').textContent = 'Entrar';
+  }
+}
+
+// Enter key on password field
+document.getElementById('adminPass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+// Logout
+function doLogout() {
+  sessionStorage.removeItem('yayika_admin');
+  document.getElementById('dashScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminPass').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+// Check session on load
+if (sessionStorage.getItem('yayika_admin') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashScreen').style.display = 'block';
+  loadDashboard();
+}
+
+// Fetch data from Supabase
+async function sbQuery(table, select, filters) {
+  let url = `${SB_URL}/rest/v1/${table}?select=${select}`;
+  if (filters) url += '&' + filters;
+  const res = await fetch(url, {
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+  });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+// Load dashboard
+async function loadDashboard() {
+  try {
+    const [profiles, subs, affiliates, allSubs] = await Promise.all([
+      sbQuery('yayika_profiles', 'id, full_name, created_at, avatar_color, email:yayika_profiles_user_id_fkey(email)'),
+      sbQuery('yayika_subscriptions', '*', "status=neq.cancelled"),
+      sbQuery('yayika_affiliates', 'id, user_id, ref_code, total_earned, pending_payout, active_referrals, status'),
+      sbQuery('yayika_subscriptions', 'plan, status, created_at, current_period_end', 'order=created_at.desc')
+    ]);
+
+    // Revenue
+    const planPrices = { semilla: 5, guerrera: 10, diamante: 18 };
+    let monthlyRev = 0, totalRev = 0;
+    const thisMonth = new Date().toISOString().substring(0, 7);
+    const planCounts = { semilla: 0, guerrera: 0, diamante: 0 };
+
+    allSubs.forEach(s => {
+      const price = planPrices[s.plan] || 0;
+      totalRev += price;
+      if (s.created_at && s.created_at.startsWith(thisMonth)) monthlyRev += price;
+      if (subs.find(x => x.id === s.id)) planCounts[s.plan] = (planCounts[s.plan] || 0) + 1;
+    });
+
+    const activeAff = affiliates.filter(a => a.status === 'active');
+    const totalPayout = affiliates.reduce((s, a) => s + (parseFloat(a.total_earned) || 0), 0);
+
+    statsCache = { profiles, subs, affiliates, allSubs, planCounts, monthlyRev, totalRev, activeAff, totalPayout };
+
+    // Update stats
+    document.getElementById('sUsers').textContent = profiles.length;
+    document.getElementById('sSubs').textContent = subs.length;
+    document.getElementById('sRevenue').textContent = '$' + monthlyRev.toFixed(2);
+    document.getElementById('sAff').textContent = activeAff.length;
+
+    showTab('users');
+  } catch (e) {
+    document.getElementById('tabContent').innerHTML = `<div class="empty-msg">Error cargando datos: ${e.message}</div>`;
+  }
+}
+
+// Tabs
+function showTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const btns = document.querySelectorAll('.tab-btn');
+  const idx = { users: 0, subs: 1, aff: 2, rev: 3 }[tab];
+  if (btns[idx]) btns[idx].classList.add('active');
+
+  if (!statsCache) {
+    document.getElementById('tabContent').innerHTML = '<div class="empty-msg">Cargando datos...</div>';
+    return;
+  }
+
+  switch (tab) {
+    case 'users': renderUsers(); break;
+    case 'subs': renderSubs(); break;
+    case 'aff': renderAff(); break;
+    case 'rev': renderRev(); break;
+  }
+}
+
+function renderUsers() {
+  const { profiles } = statsCache;
+  if (profiles.length === 0) {
+    document.getElementById('tabContent').innerHTML = '<div class="empty-msg">No hay usuarios registrados aun</div>';
+    return;
+  }
+  const rows = profiles.map(p => {
+    const name = p.full_name || 'Sin nombre';
+    const initials = name.substring(0, 2).toUpperCase();
+    const color = p.avatar_color || '#7B5EA7';
+    const date = new Date(p.created_at).toLocaleDateString('es-MX');
+    const email = p.email?.email || 'N/A';
+    return `<tr>
+      <td><div style="width:30px;height:30px;border-radius:50%;background:${color};color:white;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">${initials}</div></td>
+      <td>${name}</td><td>${email}</td><td>${date}</td>
+      <td><span class="badge badge-green">Activo</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tabContent').innerHTML = `
+    <div class="table-header"><span>${profiles.length} usuarios registrados</span></div>
+    <table><thead><tr><th></th><th>Nombre</th><th>Email</th><th>Registro</th><th>Estado</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+function renderSubs() {
+  const { subs, planCounts } = statsCache;
+  if (subs.length === 0) {
+    document.getElementById('tabContent').innerHTML = '<div class="empty-msg">No hay suscripciones activas</div>';
+    return;
+  }
+  const priceMap = { semilla: '$5', guerrera: '$10', diamante: '$18' };
+  const badgeClass = { semilla: 'badge-green', guerrera: 'badge-rosa', diamante: 'badge-oro' };
+  const rows = subs.map(s => `<tr>
+    <td><span class="badge ${badgeClass[s.plan] || 'badge-lila'}">${s.plan}</span></td>
+    <td>${priceMap[s.plan] || '-'}<span style="color:var(--suave);font-size:11px">/mes</span></td>
+    <td><span class="badge badge-green">${s.status}</span></td>
+    <td style="color:var(--suave);font-size:12px">${new Date(s.created_at).toLocaleDateString('es-MX')}</td>
+  </tr>`).join('');
+  document.getElementById('tabContent').innerHTML = `
+    <div class="table-header">
+      <span>${subs.length} suscripciones activas</span>
+      <div class="plan-counts">
+        <span style="color:var(--verde)">Semilla: ${planCounts.semilla || 0}</span>
+        <span style="color:var(--rosa)">Guerrera: ${planCounts.guerrera || 0}</span>
+        <span style="color:var(--oro)">Diamante: ${planCounts.diamante || 0}</span>
+      </div>
+    </div>
+    <table><thead><tr><th>Plan</th><th>Precio</th><th>Estado</th><th>Desde</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+function renderAff() {
+  const { affiliates, activeAff, totalPayout } = statsCache;
+  if (affiliates.length === 0) {
+    document.getElementById('tabContent').innerHTML = '<div class="empty-msg">No hay afiliadas registradas</div>';
+    return;
+  }
+  const rows = affiliates.map(a => {
+    const sc = a.status === 'active' ? 'badge-green' : 'badge-red';
+    return `<tr>
+      <td style="font-family:monospace;color:var(--lila)">${a.ref_code}</td>
+      <td>${a.active_referrals || 0}</td>
+      <td style="font-weight:500;color:var(--verde)">$${(parseFloat(a.total_earned) || 0).toFixed(2)}</td>
+      <td style="color:var(--oro)">$${(parseFloat(a.pending_payout) || 0).toFixed(2)}</td>
+      <td><span class="badge ${sc}">${a.status}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tabContent').innerHTML = `
+    <div class="table-header"><span>${activeAff.length} afiliadas activas · Pago total: $${totalPayout.toFixed(2)}</span></div>
+    <table><thead><tr><th>Codigo</th><th>Referidos</th><th>Ganado</th><th>Pendiente</th><th>Estado</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+function renderRev() {
+  const { monthlyRev, totalRev, totalPayout, planCounts, subs } = statsCache;
+  document.getElementById('tabContent').innerHTML = `
+    <div class="rev-grid">
+      <div class="rev-card green"><div class="rev-amount" style="color:var(--verde)">$${monthlyRev.toFixed(2)}</div><div class="rev-label">Revenue este mes</div></div>
+      <div class="rev-card gold"><div class="rev-amount" style="color:var(--oro)">$${totalRev.toFixed(2)}</div><div class="rev-label">Revenue total</div></div>
+      <div class="rev-card purple"><div class="rev-amount" style="color:var(--lila)">$${totalPayout.toFixed(2)}</div><div class="rev-label">Pagado a afiliadas</div></div>
+    </div>
+    <div class="plans-dist">
+      <h4>Distribucion de planes</h4>
+      <div class="plans-row">
+        <div class="plan-item green"><div class="plan-num" style="color:var(--verde)">${planCounts.semilla || 0}</div><div class="plan-label">Semilla · $5/mes</div></div>
+        <div class="plan-item rosa"><div class="plan-num" style="color:var(--rosa)">${planCounts.guerrera || 0}</div><div class="plan-label">Guerrera · $10/mes</div></div>
+        <div class="plan-item gold"><div class="plan-num" style="color:var(--oro)">${planCounts.diamante || 0}</div><div class="plan-label">Diamante · $18/mes</div></div>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
