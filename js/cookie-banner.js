@@ -7,13 +7,20 @@
 (function() {
   'use strict';
 
-  // Helper: use i18n if available, otherwise fallback to Spanish
-  function ct(key) {
-    try {
-      if (typeof t === 'function') return t(key);
-    } catch(e) {}
-    // Fallback to ES
-    const es = {
+  // Detect language: localStorage > browser > fallback to Spanish
+  function detectLang() {
+    // 1. Check localStorage (user selected)
+    const stored = localStorage.getItem('yayika_lang') || localStorage.getItem('yayika-lang');
+    if (stored) return stored.split('-')[0];
+    // 2. Check browser language
+    const browserLang = (navigator.language || navigator.userLanguage || 'es').split('-')[0];
+    const supported = ['es', 'en', 'pt', 'fr', 'de'];
+    return supported.includes(browserLang) ? browserLang : 'es';
+  }
+
+  // Multi-language translations for cookie banner
+  const COOKIE_I18N = {
+    es: {
       cookie_title: '🍪 Utilizamos cookies para mejorar tu experiencia',
       cookie_desc: 'Yayika utiliza cookies <strong>estrictamente necesarias</strong> para el funcionamiento de la plataforma (sesiones, preferencias). Opcionalmente, utilizamos <strong>Plausible Analytics</strong> para mejorar nuestro servicio — es un sistema de análisis respetuoso con la privacidad que no utiliza cookies de rastreo publicitario. Consulta nuestra <a href="/politica-cookies.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para más detalles.',
       cookie_necessary: 'Necesarias — Siempre activas (sesiones, seguridad, preferencias)',
@@ -25,8 +32,64 @@
       cookie_ccpa_note: ' (CCPA/CPRA — California)',
       cookie_gpc_notice: '🔒 Se detectó Global Privacy Control (GPC) activo. Las cookies de análisis han sido deshabilitadas automáticamente.',
       cookie_ccpa_alert: 'Se ha deshabilitado el rastreo de análisis. Yayika no vende ni comparte información personal con terceros.',
-    };
-    return es[key] || key;
+    },
+    en: {
+      cookie_title: '🍪 We use cookies to improve your experience',
+      cookie_desc: 'Yayika uses <strong>strictly necessary</strong> cookies for platform functionality (sessions, preferences). Optionally, we use <strong>Plausible Analytics</strong> to improve our service — a privacy-respecting analytics system that does not use advertising tracking cookies. See our <a href="/politica-cookies-en.html" style="color: #7c3aed; text-decoration: underline;">Cookie Policy</a> for details.',
+      cookie_necessary: 'Necessary — Always active (sessions, security, preferences)',
+      cookie_analytics: 'Analytics — Plausible Analytics (privacy, no ads)',
+      cookie_reject: 'Reject all',
+      cookie_accept: 'Accept all',
+      cookie_save: 'Save selection',
+      cookie_ccpa: 'Do not sell or share my personal information',
+      cookie_ccpa_note: ' (CCPA/CPRA — California)',
+      cookie_gpc_notice: '🔒 Global Privacy Control (GPC) detected. Analytics cookies have been automatically disabled.',
+      cookie_ccpa_alert: 'Analytics tracking has been disabled. Yayika does not sell or share personal information with third parties.',
+    },
+    pt: {
+      cookie_title: '🍪 Usamos cookies para melhorar sua experiência',
+      cookie_desc: 'Yayika usa cookies <strong>estritamente necessários</strong> para o funcionamento da plataforma (sessões, preferências). Opcionalmente, usamos <strong>Plausible Analytics</strong> para melhorar nosso serviço — um sistema de análise respeitoso com a privacidade que não usa cookies de rastreamento publicitário. Consulte nossa <a href="/politica-cookies-pt.html" style="color: #7c3aed; text-decoration: underline;">Política de Cookies</a> para mais detalhes.',
+      cookie_necessary: 'Necessários — Sempre ativos (sessões, segurança, preferências)',
+      cookie_analytics: 'Análise — Plausible Analytics (privacidade, sem anúncios)',
+      cookie_reject: 'Rejeitar tudo',
+      cookie_accept: 'Aceitar tudo',
+      cookie_save: 'Salvar seleção',
+      cookie_ccpa: 'Não vender nem compartilhar minhas informações pessoais',
+      cookie_ccpa_note: ' (CCPA/CPRA — California)',
+      cookie_gpc_notice: '🔒 Controle de Privacidade Global (GPC) detectado. Cookies de análise foram desativados automaticamente.',
+      cookie_ccpa_alert: 'O rastreamento de análise foi desativado. Yayika não vende nem compartilha informações pessoais com terceiros.',
+    },
+    fr: {
+      cookie_title: '🍪 Nous utilisons des cookies pour améliorer votre expérience',
+      cookie_desc: 'Yayika utilise des cookies <strong>strictement nécessaires</strong> au fonctionnement de la plateforme (sessions, préférences). Nous utilisons optionnellement <strong>Plausible Analytics</strong> pour améliorer notre service — un système d\'analyse respectueux de la vie privée qui n\'utilise pas de cookies de suivi publicitaire. Consultez notre <a href="/politica-cookies-fr.html" style="color: #7c3aed; text-decoration: underline;">Politique de Cookies</a> pour plus de détails.',
+      cookie_necessary: 'Nécessaires — Toujours actifs (sessions, sécurité, préférences)',
+      cookie_analytics: 'Analyse — Plausible Analytics (confidentialité, sans publicité)',
+      cookie_reject: 'Tout refuser',
+      cookie_accept: 'Tout accepter',
+      cookie_save: 'Enregistrer la sélection',
+      cookie_ccpa: 'Ne pas vendre ni partager mes informations personnelles',
+      cookie_ccpa_note: ' (CCPA/CPRA — Californie)',
+      cookie_gpc_notice: '🔒 Contrôle mondial de la confidentialité (GPC) détecté. Les cookies d\'analyse ont été automatiquement désactivés.',
+      cookie_ccpa_alert: 'Le suivi analytique a été désactivé. Yayika ne vend ni ne partage d\'informations personnelles avec des tiers.',
+    },
+    de: {
+      cookie_title: '🍪 Wir verwenden Cookies, um Ihr Erlebnis zu verbessern',
+      cookie_desc: 'Yayika verwendet <strong>unbedingt notwendige</strong> Cookies für die Plattformfunktion (Sitzungen, Präferenzen). Optional nutzen wir <strong>Plausible Analytics</strong> zur Verbesserung unseres Services — ein datenschutzfreundliches Analyse-System ohne Werbe-Tracking-Cookies. Siehe unsere <a href="/politica-cookies-de.html" style="color: #7c3aed; text-decoration: underline;">Cookie-Richtlinie</a> für Details.',
+      cookie_necessary: 'Notwendig — Immer aktiv (Sitzungen, Sicherheit, Präferenzen)',
+      cookie_analytics: 'Analyse — Plausible Analytics (Datenschutz, keine Werbung)',
+      cookie_reject: 'Alle ablehnen',
+      cookie_accept: 'Alle akzeptieren',
+      cookie_save: 'Auswahl speichern',
+      cookie_ccpa: 'Persönliche Daten nicht verkaufen oder weitergeben',
+      cookie_ccpa_note: ' (CCPA/CPRA — Kalifornien)',
+      cookie_gpc_notice: '🔒 Global Privacy Control (GPC) erkannt. Analyse-Cookies wurden automatisch deaktiviert.',
+      cookie_ccpa_alert: 'Analyse-Tracking wurde deaktiviert. Yayika verkauft oder gibt keine persönlichen Daten an Dritte weiter.',
+    },
+  };
+
+  function ct(key) {
+    const lang = detectLang();
+    return (COOKIE_I18N[lang] && COOKIE_I18N[lang][key]) || COOKIE_I18N['es'][key] || key;
   }
 
   const STORAGE_KEY = 'yayika_cookie_consent';
@@ -97,7 +160,7 @@
       ? '<p style="font-size:12px; color:#888; margin-top:8px;">' + ct('cookie_gpc_notice') + '</p>'
       : '';
 
-    const lang = (localStorage.getItem('yayika-lang') || 'es').split('-')[0];
+    const lang = detectLang();
     const cookieUrl = lang === 'es' ? '/politica-cookies.html' : `/politica-cookies-${lang}.html`;
     const cookieDesc = ct('cookie_desc').replace('/politica-cookies.html', cookieUrl);
 
