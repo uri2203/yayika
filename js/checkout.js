@@ -1,7 +1,7 @@
 /* Yayika — Checkout Functions (loaded FIRST, global scope, no IIFE) */
 var PRODUCT_LINKS = {
   'ciclo-productiva': 'https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c',
-  'dinero-sin-pena': 'https://buy.stripe.com/4gMbJ6qO5SidMQe17gA80d',
+  'dinero-sin-pena': 'https://buy.stripe.com/4gMbJ16qO5SidMQe17gA80d',
   'mujer-que-negocia': 'https://buy.stripe.com/8x2eVd5mK94uaAE8GNgA80e',
   'semilla': 'https://buy.stripe.com/00wcN502q0xY2481elgA80f',
   'guerrera': 'https://buy.stripe.com/14A4gzeXk0xY4cg3mtgA80g',
