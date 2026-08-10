@@ -4,6 +4,7 @@
    ============================================================ */
 
 // Initialize Sentry with DSN
+if (typeof Sentry !== 'undefined' && Sentry.onLoad) {
 Sentry.onLoad(function() {
   Sentry.init({
     dsn: 'https://b329962098172a12b93f022823327d3a@o4509809189986304.ingest.us.sentry.io/4509809192609792',
@@ -54,6 +55,7 @@ Sentry.onLoad(function() {
     }
   });
 });
+} // end Sentry check
 
 // Manual error reporting function
 function reportError(error, context) {

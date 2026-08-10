@@ -386,11 +386,12 @@ async function getPersonalizedInsights(userId, cycleDay) {
   if (!phase) return insights;
   
   // Phase-based insight
-  const phaseTip = phase.tips[lang][Math.floor(Math.random() * phase.tips[lang].length)];
+  const tips = phase.tips && phase.tips[lang] ? phase.tips[lang] : (phase.tips && phase.tips['es']) || ['Cuida tu cuerpo hoy.'];
+  const phaseTip = tips[Math.floor(Math.random() * tips.length)];
   insights.push({
     type: 'phase_tip',
     icon: phase.icon,
-    title: phase.name[lang],
+    title: phase.name ? (phase.name[lang] || phase.name['es'] || 'Fase') : 'Fase',
     text: phaseTip,
     color: phase.color
   });
@@ -490,11 +491,12 @@ async function generateDailyInsight(cycleDay) {
   
   if (!phase) return null;
   
-  const tip = phase.tips[lang][Math.floor(Math.random() * phase.tips[lang].length)];
+  const tips2 = phase.tips && phase.tips[lang] ? phase.tips[lang] : (phase.tips && phase.tips['es']) || ['Cuida tu cuerpo hoy.'];
+  const tip = tips2[Math.floor(Math.random() * tips2.length)];
   const energy = getEnergyForecast(cycleDay);
   
   return {
-    phase: phase.name[lang],
+    phase: phase.name ? (phase.name[lang] || phase.name['es'] || 'Fase') : 'Fase',
     phaseIcon: phase.icon,
     phaseColor: phase.color,
     tip,
