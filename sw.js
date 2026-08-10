@@ -64,8 +64,7 @@ const PRECACHE_ASSETS = [
   '/manifest.json',
   '/icon.svg',
   '/assets/img/icon-192.png',
-  '/assets/img/icon-512.png',
-  'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyayika.com&color=4E3470&bgcolor=FFFFFF&margin=10&format=png'
+  '/assets/img/icon-512.png'
 ];
 
 // Install — pre-cache static assets

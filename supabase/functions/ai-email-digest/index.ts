@@ -174,7 +174,10 @@ serve(async (req: Request) => {
     }
 
     if (action === "getDigestHistory") {
-      const authHeader = req.headers.get("Authorization")!;
+      const authHeader = req.headers.get("Authorization");
+      if (!authHeader) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
       const token = authHeader.replace("Bearer ", "");
       const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
         global: { headers: { Authorization: `Bearer ${token}` } },

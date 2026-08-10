@@ -34,6 +34,20 @@ serve(async (req: Request) => {
 
     const { messages, lang } = await req.json();
 
+    if (!Array.isArray(messages)) {
+      return new Response(JSON.stringify({ error: "messages must be an array" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const MAX_MESSAGES = 50;
+    const MAX_MESSAGE_CHARS = 2000;
+    const validatedMessages = messages.slice(0, MAX_MESSAGES).map((msg: any) => ({
+      ...msg,
+      content: typeof msg.content === "string" ? msg.content.slice(0, MAX_MESSAGE_CHARS) : "",
+    }));
+
     // Use Groq if key available, else OpenAI
     const isGroq = !!groqKey;
     const baseUrl = isGroq ? "https://api.groq.com/openai" : "https://api.openai.com";
@@ -47,7 +61,7 @@ serve(async (req: Request) => {
       },
       body: JSON.stringify({
         model,
-        messages,
+        messages: validatedMessages,
         max_tokens: 500,
         temperature: 0.7,
       }),
