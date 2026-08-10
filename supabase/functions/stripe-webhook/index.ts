@@ -9,7 +9,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://yayika.com",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
@@ -86,7 +86,7 @@ serve(async (req: Request) => {
         .join("");
 
       if (signature !== expectedSignature) {
-        console.error("Signature mismatch:", { expected: expectedSignature, received: signature });
+        console.error("Signature mismatch: webhook rejected");
         return new Response(JSON.stringify({ error: "Invalid signature" }), {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -570,11 +570,20 @@ serve(async (req: Request) => {
         .single();
 
       if (payout) {
+        // Read current balance to calculate new lifetime_paid_out_cents
+        const { data: currentBalance } = await supabase
+          .from("yayika_seller_balances")
+          .select("lifetime_paid_out_cents")
+          .eq("seller_id", payout.seller_id)
+          .single();
+
+        const newLifetimePaid = (currentBalance?.lifetime_paid_out_cents || 0) + (payout.amount_cents || 0);
+
         await supabase
           .from("yayika_seller_balances")
           .update({
             reserved_cents: 0,
-            lifetime_paid_out_cents: supabase.rpc ? undefined : 0,
+            lifetime_paid_out_cents: newLifetimePaid,
             last_payout_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           })

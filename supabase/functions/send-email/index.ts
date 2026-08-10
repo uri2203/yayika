@@ -10,7 +10,7 @@ const FROM_EMAIL = "Yayika <hola@yayika.com>";
 const DOMAIN = "https://yayika.com";
 
 interface EmailPayload {
-  type: "welcome" | "purchase" | "subscription" | "commission" | "withdrawal" | "custom";
+  type: "welcome" | "purchase" | "subscription" | "commission" | "withdrawal" | "payment_failed" | "payment_recovered" | "custom";
   to: string;
   name?: string;
   product?: string;
@@ -18,6 +18,9 @@ interface EmailPayload {
   plan?: string;
   commission?: string;
   referralName?: string;
+  method?: string;
+  grace_period_days?: string;
+  next_retry?: string;
   customSubject?: string;
   customHtml?: string;
 }
@@ -216,6 +219,69 @@ function withdrawalTemplate(name: string, amount: string, method: string, status
 </html>`;
 }
 
+function paymentFailedTemplate(name: string, plan: string, graceDays: string, nextRetry: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF7F2;padding:40px 20px;color:#2C2240">
+  <div style="max-width:520px;margin:0 auto;background:white;border-radius:16px;padding:36px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+    <div style="text-align:center;margin-bottom:24px">
+      <h1 style="font-family:Georgia,serif;font-size:32px;color:#4E3470;margin:0">Yay<span style="color:#C96B7A">ika</span></h1>
+    </div>
+    <h2 style="font-size:22px;color:#2C2240;margin-bottom:12px">⚠️ Tu pago no pudo procesarse</h2>
+    <p style="font-size:15px;color:#6B7280;line-height:1.7;margin-bottom:20px">
+      Hola ${name}, tu pago de <strong>${plan}</strong> no se pudo procesar. No te preocupes, aún tienes acceso.
+    </p>
+    <div style="background:#FFF3CD;border-radius:12px;padding:20px;margin-bottom:24px;border:1px solid #F0C040">
+      <p style="font-size:14px;color:#856404;margin:0"><strong>Tienes ${graceDays} días</strong> para actualizar tu método de pago.</p>
+      <p style="font-size:13px;color:#856404;margin:8px 0 0">Próximo intento: ${nextRetry}</p>
+    </div>
+    <div style="text-align:center;margin-bottom:28px">
+      <a href="${DOMAIN}/#membresia" style="display:inline-block;background:#F0C040;color:#856404;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:600;text-decoration:none">
+        Actualizar método de pago →
+      </a>
+    </div>
+    <p style="font-size:13px;color:#999;line-height:1.6;border-top:1px solid #eee;padding-top:16px;margin:0">
+      Si el pago se resuelve automáticamente, no necesitas hacer nada.<br>
+      — El equipo de Yayika 💜
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
+function paymentRecoveredTemplate(name: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF7F2;padding:40px 20px;color:#2C2240">
+  <div style="max-width:520px;margin:0 auto;background:white;border-radius:16px;padding:36px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+    <div style="text-align:center;margin-bottom:24px">
+      <h1 style="font-family:Georgia,serif;font-size:32px;color:#4E3470;margin:0">Yay<span style="color:#C96B7A">ika</span></h1>
+    </div>
+    <h2 style="font-size:22px;color:#2C2240;margin-bottom:12px">✅ ¡Pago exitoso!</h2>
+    <p style="font-size:15px;color:#6B7280;line-height:1.7;margin-bottom:20px">
+      ¡Hola ${name}! Tu pago se procesó correctamente. Tu membresía está activa y puedes seguir disfrutando de todo Yayika.
+    </p>
+    <div style="background:#E8F8F1;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center">
+      <p style="font-size:14px;color:#3BAF7A;margin:0;font-weight:600">🎉 Bienvenida de vuelta</p>
+    </div>
+    <div style="text-align:center;margin-bottom:28px">
+      <a href="${DOMAIN}/Portales/" style="display:inline-block;background:#1A9E8F;color:white;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none">
+        Entrar al portal →
+      </a>
+    </div>
+    <p style="font-size:13px;color:#999;line-height:1.6;border-top:1px solid #eee;padding-top:16px;margin:0">
+      Gracias por seguir confiando en Yayika 💜<br>
+      — El equipo de Yayika
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
 // --- Main Handler ---
 
 serve(async (req) => {
@@ -235,8 +301,27 @@ serve(async (req) => {
       throw new Error("RESEND_API_KEY not configured");
     }
 
+    // Auth check: require internal secret or Supabase service role key
+    const authHeader = req.headers.get("Authorization") || "";
+    const internalSecret = Deno.env.get("INTERNAL_API_SECRET") || "";
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    
+    const isInternalCall = authHeader === `Bearer ${internalSecret}` || 
+                           authHeader === `Bearer ${serviceKey}`;
+    
+    // Also allow calls from same-origin (dashboard, forms)
+    const origin = req.headers.get("Origin") || "";
+    const isSameOrigin = origin.includes("yayika.com");
+
+    if (!isInternalCall && !isSameOrigin) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const payload: EmailPayload = await req.json();
-    const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, customSubject, customHtml } = payload;
+    const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, method, grace_period_days, next_retry, customSubject, customHtml } = payload;
 
     let subject: string;
     let html: string;
@@ -265,6 +350,16 @@ serve(async (req) => {
       case "withdrawal":
         subject = `💸 Solicitud de retiro — ${amount || "$0"} MXN`;
         html = withdrawalTemplate(name, amount || "$0", method || "Banco", "pending");
+        break;
+
+      case "payment_failed":
+        subject = `⚠️ Tu pago de Yayika no pudo procesarse`;
+        html = paymentFailedTemplate(name, plan || "tu membresía", grace_period_days || "7", next_retry || "próximamente");
+        break;
+
+      case "payment_recovered":
+        subject = `✅ ¡Pago recuperado! Tu membresía está activa`;
+        html = paymentRecoveredTemplate(name);
         break;
 
       case "custom":

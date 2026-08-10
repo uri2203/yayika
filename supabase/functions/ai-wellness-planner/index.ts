@@ -227,7 +227,7 @@ function getFallbackPlan(phase: string | null, energy: number | null, symptoms: 
 
   // Symptom adjustments
   if (symptoms && symptoms.includes('Cólicos')) {
-    phasePlan.tip += lang === ' es'
+    phasePlan.tip += lang === 'es'
       ? '\n\n🩺 Para cólicos: jengibre, cúrcuma y compresa caliente.'
       : '\n\n🩺 For cramps: ginger, turmeric, and heating pad.';
   }

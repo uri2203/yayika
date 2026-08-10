@@ -163,9 +163,16 @@ serve(async (req: Request) => {
 
       case "reportPost": {
         const { post_id } = body;
+        // Read current count then increment
+        const { data: post } = await supabase
+          .from("yayika_community_posts")
+          .select("reports_count")
+          .eq("id", post_id)
+          .single();
+        const newCount = (post?.reports_count || 0) + 1;
         const { error } = await supabase
           .from("yayika_community_posts")
-          .update({ reports_count: supabase.rpc ? 1 : 1 })
+          .update({ reports_count: newCount })
           .eq("id", post_id);
         if (error) throw error;
         return json({ success: true });

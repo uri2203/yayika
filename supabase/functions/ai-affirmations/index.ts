@@ -220,15 +220,15 @@ function getFallbackAffirmation(phase: string | null, energy: number | null, moo
         "🌙 Mi intuición está agudizada. Confío en lo que siento.",
         "🌙 Soy disciplinada y constante. Cada pequeño paso cuenta.",
         "🌙 Hoy simplifico mi vida. Lo que no sirve, lo suelto.",
-        "🌙 Merezco paz mental. Hoy organization mi mundo interior."
+        "🌙 Merezco paz mental. Hoy organizo mi mundo interior."
       ],
       general: [
-        "💜 Soy una mujer poderosa ymerecedora de todo lo bueno.",
+        "💜 Soy una mujer poderosa y merecedora de todo lo bueno.",
         "💜 Hoy elijo creer en mí misma más que nunca.",
         "💜 Mi camino es único y lo recorro con confianza.",
         "💜 Merezco amor, abundancia y alegría. Hoy los recibo.",
         "💜 Soy suficiente tal como soy. Eso nunca cambia.",
-        " Hoy creo la vida que quiero con cada decisión.",
+        "💜 Hoy creo la vida que quiero con cada decisión.",
         "💜 Mi potencial es ilimitado. Hoy doy un paso más."
       ]
     },
