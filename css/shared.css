@@ -53,14 +53,16 @@
 
 /* --- Reset --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
   color: var(--texto);
   font-size: 15px;
   line-height: 1.7;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* --- Tipografía --- */
@@ -121,6 +123,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   height: 60px;
+  will-change: transform;
 }
 .logo {
   font-family: 'Cormorant Garamond', serif;
@@ -250,6 +253,7 @@ textarea.form-input {
 .layout {
   display: grid;
   grid-template-columns: 220px 1fr;
+  min-height: calc(100dvh - 100px);
   min-height: calc(100vh - 100px);
 }
 .sidebar {

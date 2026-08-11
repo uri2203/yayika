@@ -1115,9 +1115,13 @@ window.addEventListener('beforeinstallprompt', function(e) {
 });
 
 function dismissInstallBanner() {
-  var banner = document.getElementById('installBanner');
-  if (banner) banner.style.display = 'none';
-  localStorage.setItem('yayika_install_dismissed', '1');
+  var b = document.getElementById('installBanner');
+  if (b) b.style.display = 'none';
+  try {
+    localStorage.setItem('yayika_install_dismissed', '1');
+    localStorage.setItem('yayika-ios-dismissed', '1');
+    localStorage.setItem('yayika-install-never-show', '1');
+  } catch(e) {}
 }
 
 function installApp() {
