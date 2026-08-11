@@ -32,7 +32,8 @@ function startCheckout(plan) {
   } catch(e) {}
   var link = PRODUCT_LINKS[plan];
   if (!link || link.indexOf('PLACEHOLDER') !== -1) {
-    alert('Pronto estaran disponibles los planes de membresia.');
+    var msg = typeof t === 'function' ? t('checkout_membership_coming_soon') : (typeof I18N !== 'undefined' && I18N[currentLang] && I18N[currentLang]['checkout_membership_coming_soon']) || 'Pronto estaran disponibles los planes de membresia.';
+    alert(msg);
     return;
   }
   window.location.href = link;

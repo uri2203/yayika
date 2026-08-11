@@ -115,43 +115,43 @@
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">Yay<span>ika</span></div>
-    <div class="login-sub">Panel de Administración</div>
+    <div class="login-sub" data-i18n="admin_title">Panel de Administración</div>
     <div class="login-field">
-      <label>Contraseña de admin</label>
-      <input type="password" id="adminPass" placeholder="Ingresa la contraseña" autocomplete="off">
+      <label data-i18n="admin_password_label">Contraseña de admin</label>
+      <input type="password" id="adminPass" placeholder="Ingresa la contraseña" data-i18n-placeholder="admin_password_placeholder" autocomplete="off">
     </div>
-    <button class="login-btn" id="loginBtn" onclick="doLogin()">Entrar</button>
-    <div class="login-error" id="loginError">Contraseña incorrecta</div>
-    <div class="login-footer">Acceso restringido — Solo administradores</div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()" data-i18n="admin_login_btn">Entrar</button>
+    <div class="login-error" id="loginError" data-i18n="admin_login_error">Contraseña incorrecta</div>
+    <div class="login-footer" data-i18n="admin_restricted">Acceso restringido — Solo administradores</div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashScreen">
   <div class="dash-header">
-    <h1>Yay<span>ika</span> Admin</h1>
-    <button class="dash-logout" onclick="doLogout()">Cerrar sesión</button>
+    <h1 data-i18n="admin_header">Yay<span>ika</span> Admin</h1>
+    <button class="dash-logout" onclick="doLogout()" data-i18n="admin_logout">Cerrar sesión</button>
   </div>
   <div class="dash-body">
     <!-- Stats -->
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-num turquesa" id="sUsers">—</div><div class="stat-label">Usuarios</div></div>
-      <div class="stat-card"><div class="stat-num verde" id="sSubs">—</div><div class="stat-label">Suscripciones</div></div>
-      <div class="stat-card"><div class="stat-num oro" id="sRevenue">—</div><div class="stat-label">Revenue mensual</div></div>
-      <div class="stat-card"><div class="stat-num lila" id="sAff">—</div><div class="stat-label">Afiliadas activas</div></div>
+      <div class="stat-card"><div class="stat-num turquesa" id="sUsers">—</div><div class="stat-label" data-i18n="admin_tab_users">Usuarios</div></div>
+      <div class="stat-card"><div class="stat-num verde" id="sSubs">—</div><div class="stat-label" data-i18n="admin_tab_subs">Suscripciones</div></div>
+      <div class="stat-card"><div class="stat-num oro" id="sRevenue">—</div><div class="stat-label" data-i18n="admin_tab_revenue">Revenue mensual</div></div>
+      <div class="stat-card"><div class="stat-num lila" id="sAff">—</div><div class="stat-label" data-i18n="admin_tab_affiliates">Afiliadas activas</div></div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
-      <button class="tab-btn active" onclick="showTab('users')">Usuarios</button>
-      <button class="tab-btn" onclick="showTab('subs')">Suscripciones</button>
-      <button class="tab-btn" onclick="showTab('aff')">Afiliadas</button>
-      <button class="tab-btn" onclick="showTab('rev')">Revenue</button>
+      <button class="tab-btn active" onclick="showTab('users')" data-i18n="admin_tab_users">Usuarios</button>
+      <button class="tab-btn" onclick="showTab('subs')" data-i18n="admin_tab_subs">Suscripciones</button>
+      <button class="tab-btn" onclick="showTab('aff')" data-i18n="admin_tab_affiliates">Afiliadas</button>
+      <button class="tab-btn" onclick="showTab('rev')" data-i18n="admin_tab_revenue">Revenue</button>
     </div>
 
     <!-- Content -->
     <div class="table-wrap" id="tabContent">
-      <div class="empty-msg">Cargando datos...</div>
+      <div class="empty-msg" data-i18n="admin_loading">Cargando datos...</div>
     </div>
   </div>
 </div>
@@ -373,7 +373,7 @@ function renderRev() {
       <div class="rev-card purple"><div class="rev-amount" style="color:var(--lila)">$${totalPayout.toFixed(2)}</div><div class="rev-label">Pagado a afiliadas</div></div>
     </div>
     <div class="plans-dist">
-      <h4>Distribucion de planes</h4>
+      <h4 data-i18n="admin_plan_distribution">Distribucion de planes</h4>
       <div class="plans-row">
         <div class="plan-item green"><div class="plan-num" style="color:var(--verde)">${planCounts.semilla || 0}</div><div class="plan-label">Semilla · $5/mes</div></div>
         <div class="plan-item rosa"><div class="plan-num" style="color:var(--rosa)">${planCounts.guerrera || 0}</div><div class="plan-label">Guerrera · $10/mes</div></div>

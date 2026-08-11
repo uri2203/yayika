@@ -83,6 +83,11 @@ function appT(key) {
     install_already: 'Ya la tienes ✨',
     install_already_sub: 'Tu app de bienestar para mujeres. Toca abrirla.',
     checkout_coming_soon: 'Pronto estarán disponibles los planes de membresía.',
+    error_plan_invalid: 'Plan no válido',
+    xp_label: 'XP',
+    install_success: 'App instalada correctamente',
+    error_product_unavailable: 'Producto no disponible',
+    error_plan_unavailable: 'Plan no disponible',
   };
   return fallback[key] || key;
 }
@@ -379,7 +384,7 @@ const PRODUCT_TAX_CODES = {
 
 async function createCheckoutSession(planKey) {
   const plan = STRIPE_PLANS[planKey];
-  if (!plan) throw new Error('Plan no válido');
+  if (!plan) throw new Error(appT('error_plan_invalid'));
   
   window.location.href = plan.link;
 }
@@ -626,7 +631,7 @@ async function moduleAddXP(pts, msg) {
   if (currentUser) {
     try { await addXP(pts); } catch(e) {}
   }
-  showToast(msg || '⭐ +' + pts + ' XP');
+  showToast(msg || ('⭐ +' + pts + ' ' + appT('xp_label')));
 }
 
 async function moduleCompleteAndNavigate(moduleNumber, xpEarned, nextPage) {
@@ -1121,7 +1126,7 @@ function installApp() {
     deferredInstallPrompt.userChoice.then(function(choice) {
       if (choice.outcome === 'accepted') {
         dismissInstallBanner();
-        showToast('App instalada correctamente');
+        showToast(appT('install_success'));
       }
       deferredInstallPrompt = null;
     });
@@ -1149,7 +1154,7 @@ function buyProduct(slug) {
   if (link) {
     window.location.href = link;
   } else {
-    showToast('Producto no disponible');
+    showToast(appT('error_product_unavailable'));
   }
 }
 
@@ -1166,6 +1171,6 @@ function startCheckout(planKey) {
   if (link) {
     window.location.href = link;
   } else {
-    showToast('Plan no disponible');
+    showToast(appT('error_plan_unavailable'));
   }
 }
