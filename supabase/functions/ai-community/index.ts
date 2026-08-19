@@ -1,6 +1,7 @@
 // ============================================================
 // Yayika — AI Community Edge Function
 // Handles community feed, posts, reactions, comments, moderation
+// Uses direct table queries (RPCs were never created in the DB)
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
@@ -30,14 +31,77 @@ serve(async (req: Request) => {
     switch (action) {
       case "getFeed": {
         const { category_slug = null, limit = 20, offset = 0 } = body;
-        const { data, error } = await supabase.rpc("yayika_get_community_feed", {
-          p_user_id: user_id || null,
-          p_category_slug: category_slug,
-          p_limit: limit,
-          p_offset: offset,
-        });
+
+        let query = supabase
+          .from("yayika_community_posts")
+          .select("id, content, category_id, user_id, created_at")
+          .eq("status", "active")
+          .order("created_at", { ascending: false })
+          .range(offset, offset + Math.min(limit, 50) - 1);
+
+        if (category_slug) {
+          const { data: cat } = await supabase
+            .from("yayika_community_categories")
+            .select("id")
+            .eq("slug", category_slug)
+            .maybeSingle();
+          if (cat) query = query.eq("category_id", cat.id);
+        }
+
+        const { data: posts, error } = await query;
         if (error) throw error;
-        return json({ posts: data || [] });
+
+        const all = posts || [];
+        if (all.length === 0) return json({ posts: [] });
+
+        const postIds = all.map((p) => p.id);
+        const catIds = [...new Set(all.map((p) => p.category_id).filter(Boolean))];
+        const userIds = all.map((p) => p.user_id).filter(Boolean);
+
+        const [{ data: cats }, { data: authors }, { data: reactions }, { data: comments }] = await Promise.all([
+          supabase.from("yayika_community_categories").select("id, slug, name").in("id", catIds),
+          supabase.from("yayika_affiliates").select("id, full_name").in("id", userIds),
+          supabase
+            .from("yayika_community_reactions")
+            .select("post_id, user_id")
+            .in("post_id", postIds)
+            .eq("reaction_type", "like"),
+          supabase
+            .from("yayika_community_comments")
+            .select("post_id")
+            .in("post_id", postIds)
+            .eq("status", "active"),
+        ]);
+
+        const catMap: Record<string, any> = {};
+        for (const c of cats || []) catMap[c.id] = c;
+
+        const authorMap: Record<string, any> = {};
+        for (const a of authors || []) authorMap[a.id] = a;
+
+        const likeCounts: Record<string, number> = {};
+        const likedByUser = new Set<string>();
+        for (const r of reactions || []) {
+          likeCounts[r.post_id] = (likeCounts[r.post_id] || 0) + 1;
+          if (r.user_id === user_id) likedByUser.add(r.post_id);
+        }
+
+        const commentCounts: Record<string, number> = {};
+        for (const c of comments || []) commentCounts[c.post_id] = (commentCounts[c.post_id] || 0) + 1;
+
+        const postsOut = all.map((p) => ({
+          id: p.id,
+          content: p.content,
+          user_name: authorMap[p.user_id]?.full_name || null,
+          category: catMap[p.category_id]?.name || null,
+          category_slug: catMap[p.category_id]?.slug || null,
+          created_at: p.created_at,
+          like_count: likeCounts[p.id] || 0,
+          comment_count: commentCounts[p.id] || 0,
+          user_has_liked: likedByUser.has(p.id),
+        }));
+
+        return json({ posts: postsOut });
       }
 
       case "createPost": {
@@ -49,33 +113,61 @@ serve(async (req: Request) => {
           return json({ error: "Content too long (max 1000 chars)" }, 400);
         }
 
-        // Basic moderation: check for spam/banned words
         const isClean = moderateContent(content);
         if (!isClean) {
           return json({ error: "Content flagged for review" }, 400);
         }
 
-        const { data, error } = await supabase.rpc("yayika_create_post", {
-          p_user_id: user_id,
-          p_content: content.trim(),
-          p_category_slug: category_slug,
-          p_post_type: post_type,
-          p_achievement_type: achievement_type,
-          p_achievement_data: achievement_data,
-        });
+        let categoryId: string | null = null;
+        if (category_slug) {
+          const { data: cat } = await supabase
+            .from("yayika_community_categories")
+            .select("id")
+            .eq("slug", category_slug)
+            .maybeSingle();
+          categoryId = cat?.id ?? null;
+        }
+
+        const { data, error } = await supabase
+          .from("yayika_community_posts")
+          .insert({
+            user_id,
+            content: content.trim(),
+            category_id: categoryId,
+            post_type,
+            achievement_type,
+            achievement_data,
+            status: "active",
+          })
+          .select("id")
+          .single();
         if (error) throw error;
-        return json({ post_id: data });
+        return json({ post_id: data.id });
       }
 
       case "toggleReaction": {
         const { post_id, reaction_type = "like" } = body;
-        const { data, error } = await supabase.rpc("yayika_toggle_reaction", {
-          p_user_id: user_id,
-          p_post_id: post_id,
-          p_reaction_type: reaction_type,
-        });
+        const { data: existing } = await supabase
+          .from("yayika_community_reactions")
+          .select("id")
+          .eq("user_id", user_id)
+          .eq("post_id", post_id)
+          .eq("reaction_type", reaction_type)
+          .maybeSingle();
+
+        if (existing) {
+          const { error } = await supabase.from("yayika_community_reactions").delete().eq("id", existing.id);
+          if (error) throw error;
+          return json({ status: "removed" });
+        }
+
+        const { data, error } = await supabase
+          .from("yayika_community_reactions")
+          .insert({ user_id, post_id, reaction_type })
+          .select("id")
+          .single();
         if (error) throw error;
-        return json({ status: data });
+        return json({ status: "added", reaction_id: data.id });
       }
 
       case "addComment": {
@@ -92,27 +184,51 @@ serve(async (req: Request) => {
           return json({ error: "Content flagged for review" }, 400);
         }
 
-        const { data, error } = await supabase.rpc("yayika_add_comment", {
-          p_user_id: user_id,
-          p_post_id: post_id,
-          p_content: content.trim(),
-          p_parent_id: parent_id,
-        });
+        const { data, error } = await supabase
+          .from("yayika_community_comments")
+          .insert({
+            user_id,
+            post_id,
+            content: content.trim(),
+            parent_id,
+            status: "active",
+          })
+          .select("id")
+          .single();
         if (error) throw error;
-        return json({ comment_id: data });
+        return json({ comment_id: data.id });
       }
 
       case "getComments": {
         const { post_id, limit = 20, offset = 0 } = body;
         const { data, error } = await supabase
           .from("yayika_community_comments")
-          .select("*, yayika_affiliates(full_name, email)")
+          .select("id, content, user_id, created_at")
           .eq("post_id", post_id)
           .eq("status", "active")
           .order("created_at", { ascending: true })
           .range(offset, offset + limit - 1);
         if (error) throw error;
-        return json({ comments: data || [] });
+
+        const rows = data || [];
+        const userIds = rows.map((c: any) => c.user_id).filter(Boolean);
+        const authorMap: Record<string, any> = {};
+        if (userIds.length > 0) {
+          const { data: authors } = await supabase
+            .from("yayika_affiliates")
+            .select("id, full_name, email")
+            .in("id", userIds);
+          for (const a of authors || []) authorMap[a.id] = a;
+        }
+
+        const comments = rows.map((c: any) => ({
+          id: c.id,
+          content: c.content,
+          user_name: authorMap[c.user_id]?.full_name || null,
+          user_email: authorMap[c.user_id]?.email || null,
+          created_at: c.created_at,
+        }));
+        return json({ comments });
       }
 
       case "getNotifications": {
@@ -134,9 +250,11 @@ serve(async (req: Request) => {
       }
 
       case "markRead": {
-        const { error } = await supabase.rpc("yayika_mark_notifications_read", {
-          p_user_id: user_id,
-        });
+        const { error } = await supabase
+          .from("yayika_community_notifications")
+          .update({ read: true })
+          .eq("user_id", user_id)
+          .eq("read", false);
         if (error) throw error;
         return json({ success: true });
       }
@@ -163,9 +281,14 @@ serve(async (req: Request) => {
 
       case "reportPost": {
         const { post_id } = body;
+        const { data: current } = await supabase
+          .from("yayika_community_posts")
+          .select("reports_count")
+          .eq("id", post_id)
+          .maybeSingle();
         const { error } = await supabase
           .from("yayika_community_posts")
-          .update({ reports_count: supabase.rpc ? 1 : 1 })
+          .update({ reports_count: (current?.reports_count || 0) + 1 })
           .eq("id", post_id);
         if (error) throw error;
         return json({ success: true });
@@ -176,7 +299,8 @@ serve(async (req: Request) => {
     }
   } catch (error) {
     console.error("Community error:", error);
-    return new Response(JSON.stringify({ error: "Internal error" }), {
+    const message = error instanceof Error ? error.message : "Internal error";
+    return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
