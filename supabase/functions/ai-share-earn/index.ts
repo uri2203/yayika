@@ -26,7 +26,8 @@ serve(async (req: Request) => {
     const { action, user_id, lang = "es" } = body;
 
     switch (action) {
-      // ===== GET STATS =====
+      case "getShareData":
+      // getShareData is an alias for getStats (app uses getShareData)
       case "getStats": {
         // Query stats + recent cards directly (avoid RPC issues with complex functions)
         const { data: stats } = await supabase

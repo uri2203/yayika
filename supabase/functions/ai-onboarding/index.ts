@@ -222,6 +222,18 @@ serve(async (req: Request) => {
         return json({ isNew });
       }
 
+      // ===== SAVE PREFERENCES =====
+      case "savePreferences": {
+        const { goals, cycle_phase, income_range, notifications } = body;
+        await supabase.from("yayika_profiles").update({
+          goals: goals || [],
+          cycle_phase: cycle_phase || null,
+          income_range: income_range || null,
+          notifications: notifications || { push: true, email: true },
+        }).eq("id", user_id);
+        return json({ success: true });
+      }
+
       default:
         return json({ error: "Unknown action" }, 400);
     }

@@ -65,7 +65,7 @@ serve(async (req: Request) => {
     };
     const t = (k: string) => (T[lang] || T.es)[k] || (T.es)[k] || k;
 
-    if (action === "getDashboard") {
+    if (action === "getAffiliateData" || action === "getDashboard") {
       // Get earnings dashboard
       const { data: earnings } = await supabase.rpc("yayika_get_earnings_dashboard", { p_user_id: user.id });
 
