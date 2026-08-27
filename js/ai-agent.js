@@ -52,7 +52,7 @@ async function generateAIResponse(message, cycleDay = null) {
     const phase = CycleTracker ? CycleTracker.detectCurrentPhase(cycleDay) : null;
     if (phase) {
       phaseContext = {
-        phase: phase.name[lang] || phase.name['es'],
+        phase: phase.name ? (phase.name[lang] || phase.name['es'] || 'Fase') : 'Fase',
         key: phase.key,
         energy: phase.energy.avg,
         tips: phase.tips[lang] || phase.tips['es']

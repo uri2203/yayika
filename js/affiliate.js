@@ -235,6 +235,75 @@ async function requestAffiliatePayout(amount) {
 }
 
 // ============================================================
+// AFFILIATE CANCELLATION
+// ============================================================
+
+async function cancelAffiliate() {
+  if (!currentUser || !supabase) return 'NO_USER';
+
+  const { data: affiliate, error } = await supabase
+    .from('yayika_affiliates')
+    .select('id, ref_code, pending_payout, status')
+    .eq('user_id', currentUser.id)
+    .maybeSingle();
+
+  if (error || !affiliate) return 'NOT_AFFILIATE';
+  if (affiliate.status === 'cancelled') return 'ALREADY_CANCELLED';
+
+  // Check if there's pending payout
+  if ((affiliate.pending_payout || 0) > 0) {
+    return 'HAS_PENDING_PAYOUT';
+  }
+
+  // Soft cancel: keep records but set status to cancelled
+  const { error: cancelError } = await supabase
+    .from('yayika_affiliates')
+    .update({
+      status: 'cancelled',
+      cancelled_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', affiliate.id);
+
+  if (cancelError) throw cancelError;
+
+  // Log activity
+  await supabase.from('yayika_activity_log').insert({
+    user_id: currentUser.id,
+    action: 'affiliate_cancelled',
+    details: JSON.stringify({ ref_code: affiliate.ref_code }),
+  });
+
+  return 'OK';
+}
+
+async function reactivateAffiliate() {
+  if (!currentUser || !supabase) return 'NO_USER';
+
+  const { data: affiliate, error } = await supabase
+    .from('yayika_affiliates')
+    .select('id, status')
+    .eq('user_id', currentUser.id)
+    .maybeSingle();
+
+  if (error || !affiliate) return 'NOT_AFFILIATE';
+  if (affiliate.status === 'active') return 'ALREADY_ACTIVE';
+
+  const { error: reactivateError } = await supabase
+    .from('yayika_affiliates')
+    .update({
+      status: 'active',
+      cancelled_at: null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', affiliate.id);
+
+  if (reactivateError) throw reactivateError;
+
+  return 'OK';
+}
+
+// ============================================================
 // AFFILIATE DASHBOARD UI
 // ============================================================
 
@@ -259,7 +328,13 @@ function renderAffiliateDashboard(data) {
     copy: { es: 'Copiar', en: 'Copy', pt: 'Copiar', fr: 'Copier', de: 'Kopieren' },
     copied: { es: '¡Copiado!', en: 'Copied!', pt: 'Copiado!', fr: 'Copié !', de: 'Kopiert!' },
     request_payout: { es: 'Solicitar pago', en: 'Request payout', pt: 'Solicitar pagamento', fr: 'Demander le paiement', de: 'Auszahlung anfordern' },
-    min_payout: { es: 'Mínimo $500 USD', en: 'Minimum $500 USD', pt: 'Mínimo $500 USD', fr: 'Minimum 500 $', de: 'Minimum 500 $' }
+    min_payout: { es: 'Mínimo $500 USD', en: 'Minimum $500 USD', pt: 'Mínimo $500 USD', fr: 'Minimum 500 $', de: 'Minimum 500 $' },
+    cancel_affiliate: { es: 'Cancelar afiliación', en: 'Cancel affiliation', pt: 'Cancelar afiliação', fr: 'Annuler affiliation', de: 'Mitgliedschaft kündigen' },
+    cancel_confirm: { es: '¿Estás segura? Perderás tu código de referido y las comisiones pendientes después de 30 días. Puedes reactivarte después.', en: 'Are you sure? You will lose your referral code and pending commissions after 30 days. You can reactivate later.', pt: 'Tem certeza? Você perderá seu código de referência e comissões pendentes após 30 dias. Pode reativar depois.', fr: 'Etes-vous sure? Vous perdrez votre code de parrainage et les commissions en attente apres 30 jours.', de: 'Sind Sie sicher? Sie verlieren Ihren Empfehlungscode und offene Provisionen nach 30 Tagen.' },
+    cancel_pending_msg: { es: 'Tienes un pago pendiente. Solicítalo antes de cancelar.', en: 'You have a pending payout. Request it before cancelling.', pt: 'Voce tem um pagamento pendente. Solicite antes de cancelar.', fr: 'Vous avez un paiement en attente. Demandez-le avant d\'annuler.', de: 'Sie haben eine offene Auszahlung. Fordern Sie sie vor der Kündigung an.' },
+    cancel_success: { es: 'Afiliación cancelada', en: 'Affiliation cancelled', pt: 'Afiliação cancelada', fr: 'Affiliation annulee', de: 'Mitgliedschaft gekuendigt' },
+    reactivate_aff: { es: 'Reactivar afiliación', en: 'Reactivate affiliation', pt: 'Reativar afiliação', fr: 'Reactiver l\'affiliation', de: 'Mitgliedschaft reaktivieren' },
+    member_since: { es: 'Miembro desde', en: 'Member since', pt: 'Membro desde', fr: 'Membre depuis', de: 'Mitglied seit' }
   };
   
   const t = (key) => (i18n[key] && i18n[key][lang]) || (i18n[key] && i18n[key]['es']) || key;
@@ -337,6 +412,16 @@ function renderAffiliateDashboard(data) {
         </tbody>
       </table>
       ` : `<p style="text-align:center;padding:16px;color:var(--suave);font-size:12px">${affT('aff_no_commissions')}</p>`}
+      
+      <!-- Member Since & Cancel -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:16px;border-top:0.5px solid var(--borde)">
+        <span style="font-size:11px;color:var(--suave)">${t('member_since')}: ${affiliate.created_at ? new Date(affiliate.created_at).toLocaleDateString({es:'es-MX',en:'en-US',pt:'pt-BR',fr:'fr-FR',de:'de-DE'}[lang]||'es-MX') : '--'}</span>
+        ${affiliate.status === 'active' ? `
+          <button onclick="handleCancelAffiliate()" style="padding:6px 14px;border-radius:100px;background:transparent;color:#E74C3C;border:1px solid #E74C3C;font-size:11px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.background='#E74C3C';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='#E74C3C'">${t('cancel_affiliate')}</button>
+        ` : affiliate.status === 'cancelled' ? `
+          <button onclick="handleReactivateAffiliate()" style="padding:6px 14px;border-radius:100px;background:var(--turquesa);color:white;border:none;font-size:11px;cursor:pointer">${t('reactivate_aff')}</button>
+        ` : ''}
+      </div>
     </div>
   `;
 }
@@ -357,6 +442,46 @@ function copyAffiliateLink() {
       const copyLabel = { es: 'Copiar', en: 'Copy', pt: 'Copiar', fr: 'Copier', de: 'Kopieren' }[lang] || 'Copiar';
       document.getElementById('copyBtn').textContent = copyLabel;
     }, 2000);
+  }
+}
+
+async function handleCancelAffiliate() {
+  const lang = currentLang || 'es';
+
+  // Check pending payout first
+  const { data: affiliate } = await supabase
+    .from('yayika_affiliates')
+    .select('pending_payout, status')
+    .eq('user_id', currentUser.id)
+    .maybeSingle();
+
+  if (!affiliate || affiliate.status !== 'active') return;
+
+  if ((affiliate.pending_payout || 0) > 0) {
+    const msg = { es: 'Tienes un pago pendiente de $' + parseFloat(affiliate.pending_payout).toFixed(2) + '. Solicítalo antes de cancelar.', en: 'You have a pending payout of $' + parseFloat(affiliate.pending_payout).toFixed(2) + '. Request it before cancelling.', pt: 'Voce tem um pagamento pendente de $' + parseFloat(affiliate.pending_payout).toFixed(2) + '. Solicite antes de cancelar.', fr: 'Vous avez un paiement en attente de $' + parseFloat(affiliate.pending_payout).toFixed(2) + '. Demandez-le avant d\'annuler.', de: 'Sie haben eine offene Auszahlung von $' + parseFloat(affiliate.pending_payout).toFixed(2) + '. Fordern Sie sie vor der Kündigung an.' }[lang];
+    showToast(msg);
+    return;
+  }
+
+  const confirmMsg = { es: '¿Estás segura? Perderás tu código de referido. Puedes reactivarte después.', en: 'Are you sure? You will lose your referral code. You can reactivate later.', pt: 'Tem certeza? Voce perdera seu codigo de referencia. Pode reativar depois.', fr: 'Etes-vous sure? Vous perdrez votre code de parrainage.', de: 'Sind Sie sicher? Sie verlieren Ihren Empfehlungscode.' }[lang];
+
+  if (confirm(confirmMsg)) {
+    const result = await cancelAffiliate();
+    if (result === 'OK') {
+      showToast({ es: 'Afiliación cancelada', en: 'Affiliation cancelled', pt: 'Afiliação cancelada', fr: 'Affiliation annulee', de: 'Mitgliedschaft gekuendigt' }[lang]);
+      loadAffiliateDashboard();
+    } else if (result === 'HAS_PENDING_PAYOUT') {
+      showToast({ es: 'Tienes pagos pendientes. Solicítalos primero.', en: 'You have pending payouts. Request them first.', pt: 'Voce tem pagamentos pendentes. Solicite-os primeiro.', fr: 'Vous avez des paiements en attente.', de: 'Sie haben offene Auszahlungen.' }[lang]);
+    }
+  }
+}
+
+async function handleReactivateAffiliate() {
+  const lang = currentLang || 'es';
+  const result = await reactivateAffiliate();
+  if (result === 'OK') {
+    showToast({ es: 'Afiliación reactivada', en: 'Affiliation reactivated', pt: 'Afiliação reativada', fr: 'Affiliation reactivee', de: 'Mitgliedschaft reaktiviert' }[lang]);
+    loadAffiliateDashboard();
   }
 }
 
@@ -409,8 +534,12 @@ window.AffiliateSystem = {
   processReferralOnSignup,
   processAffiliateCommission,
   requestAffiliatePayout,
+  cancelAffiliate,
+  reactivateAffiliate,
   renderAffiliateDashboard,
   loadAffiliateDashboard,
   copyAffiliateLink,
-  getRefCodeFromURL
+  getRefCodeFromURL,
+  handleCancelAffiliate,
+  handleReactivateAffiliate
 };

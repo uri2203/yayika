@@ -30,6 +30,19 @@ serve(async (req: Request) => {
       throw new Error("Unauthorized: Missing authorization header");
     }
 
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+    const token = authHeader.replace("Bearer ", "");
+    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? "", {
+      global: { headers: { Authorization: `Bearer ${token}` } },
+    });
+    const { data: { user } } = await userClient.auth.getUser();
+    if (!user) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+
     const body = await req.json();
     const { action, lang = "es" } = body;
 
@@ -42,6 +55,10 @@ serve(async (req: Request) => {
     }
     
     const user_id = user.id;
+
+    if (user_id !== user.id) {
+      return json({ error: "Unauthorized: user_id mismatch" }, 401);
+    }
 
     switch (action) {
       // ===== GET STATE =====

@@ -244,7 +244,7 @@ const GrowthCoach = {
           </div>
         </div>
         <div style="font-size:10px;color:rgba(255,255,255,0.3);text-align:center;margin-top:8px;position:relative;z-index:1">
-          🤖 Contenido generado por IA
+          ${t.ai_disclaimer || '🤖 Contenido generado por IA'}
         </div>
       </div>
     `;
@@ -382,7 +382,8 @@ const GrowthCoach = {
         phase_competition: '🔥 Modo competencia',
         phase_strategy: '🌱 Modo estrategia',
         phase_support: '💜 Modo descanso',
-        phase_urgency: '⏰ Modo cierre'
+        phase_urgency: '⏰ Modo cierre',
+        ai_disclaimer: '🤖 Contenido generado por IA'
       },
       en: {
         your_rank: 'Your rank',
@@ -405,7 +406,8 @@ const GrowthCoach = {
         phase_competition: '🔥 Competition mode',
         phase_strategy: '🌱 Strategy mode',
         phase_support: '💜 Rest mode',
-        phase_urgency: '⏰ Closing mode'
+        phase_urgency: '⏰ Closing mode',
+        ai_disclaimer: '🤖 AI-generated content'
       },
       pt: {
         your_rank: 'Sua posição',
@@ -428,7 +430,8 @@ const GrowthCoach = {
         phase_competition: '🔥 Modo competição',
         phase_strategy: '🌱 Modo estratégia',
         phase_support: '💜 Modo descanso',
-        phase_urgency: '⏰ Modo fechamento'
+        phase_urgency: '⏰ Modo fechamento',
+        ai_disclaimer: '🤖 Conteúdo gerado por IA'
       },
       fr: {
         your_rank: 'Ton rang',
@@ -451,7 +454,8 @@ const GrowthCoach = {
         phase_competition: '🔥 Mode compétition',
         phase_strategy: '🌱 Mode stratégie',
         phase_support: '💜 Mode repos',
-        phase_urgency: '⏰ Mode clôture'
+        phase_urgency: '⏰ Mode clôture',
+        ai_disclaimer: '🤖 Contenu généré par IA'
       },
       de: {
         your_rank: 'Dein Rang',
@@ -474,7 +478,8 @@ const GrowthCoach = {
         phase_competition: '🔥 Wettbewerbsmodus',
         phase_strategy: '🌱 Strategiemodus',
         phase_support: '💜 Erholungsmodus',
-        phase_urgency: '⏰ Abschlussmodus'
+        phase_urgency: '⏰ Abschlussmodus',
+        ai_disclaimer: '🤖 KI-generierter Inhalt'
       }
     }[lang] || {
       your_rank: 'Tu ranking',

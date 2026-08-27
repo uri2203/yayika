@@ -531,7 +531,7 @@
         return;
       }
       const sb = window.supabase.createClient(SB_URL, SB_KEY);
-      const session = sb.auth?.session;
+      const { data: { session } } = await sb.auth.getSession();
       if(!session) { showNoProducts(content); return; }
 
       const userId = session.user.id;
@@ -865,7 +865,7 @@
       try {
         if(!window.supabase || !window.supabase.createClient) throw new Error('No Supabase');
         const sb = window.supabase.createClient(SB_URL, SB_KEY);
-        const session = sb.auth?.session;
+        const { data: { session } } = await sb.auth.getSession();
         if(!session) throw new Error('No auth');
 
         const productData = {
@@ -955,7 +955,7 @@
           btn.textContent = '...';
 
           try {
-            const session = sb.auth?.session;
+            const { data: { session } } = await sb.auth.getSession();
             if(!session) throw new Error('No auth');
 
             const updateData = {

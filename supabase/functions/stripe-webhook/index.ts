@@ -9,7 +9,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://yayika.com",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
@@ -86,7 +86,7 @@ serve(async (req: Request) => {
         .join("");
 
       if (signature !== expectedSignature) {
-        console.error("Signature mismatch:", { expected: expectedSignature, received: signature });
+        console.error("Signature mismatch: webhook rejected");
         return new Response(JSON.stringify({ error: "Invalid signature" }), {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -242,12 +242,33 @@ serve(async (req: Request) => {
       const status = data.status; // active, past_due, canceled, etc.
       const currentPeriodEnd = new Date(data.current_period_end * 1000).toISOString();
 
+      const updateData: Record<string, unknown> = {
+        status: status === "active" ? "active" : status === "past_due" ? "past_due" : "cancelled",
+        current_period_end: currentPeriodEnd,
+      };
+
+      // If going to past_due, set grace period (only if not already set by invoice.payment_failed)
+      if (status === "past_due") {
+        const { data: existingSub } = await supabase
+          .from("yayika_subscriptions")
+          .select("grace_period_end")
+          .eq("stripe_subscription_id", subscriptionId)
+          .single();
+
+        if (!existingSub?.grace_period_end) {
+          updateData.grace_period_end = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+        }
+      }
+
+      // If recovering to active, clear grace period
+      if (status === "active") {
+        updateData.grace_period_end = null;
+        updateData.payment_fail_count = 0;
+      }
+
       await supabase
         .from("yayika_subscriptions")
-        .update({
-          status: status === "active" ? "active" : status === "past_due" ? "past_due" : "cancelled",
-          current_period_end: currentPeriodEnd,
-        })
+        .update(updateData)
         .eq("stripe_subscription_id", subscriptionId);
 
       console.log(`Subscription updated: ${subscriptionId} → ${status}`);
@@ -268,7 +289,88 @@ serve(async (req: Request) => {
     }
 
     // ============================================================
-    // INVOICE.PAID - Recurring payment
+    // INVOICE.PAYMENT_FAILED - Dunning / Grace Period
+    // ============================================================
+    if (eventType === "invoice.payment_failed") {
+      const customerId = data.customer;
+      const attemptCount = data.attempt_count || 1;
+      const nextRetryAt = data.next_payment_attempt
+        ? new Date(data.next_payment_attempt * 1000).toISOString()
+        : null;
+
+      // Grace period: 7 days from now
+      const gracePeriodEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+      // Find user by stripe_customer_id
+      const { data: sub } = await supabase
+        .from("yayika_subscriptions")
+        .select("user_id, email, plan")
+        .eq("stripe_customer_id", customerId)
+        .maybeSingle();
+
+      if (sub) {
+        // Update subscription: mark as past_due with grace period
+        await supabase
+          .from("yayika_subscriptions")
+          .update({
+            status: "past_due",
+            grace_period_end: gracePeriodEnd,
+            payment_fail_count: attemptCount,
+            last_payment_failure: new Date().toISOString(),
+          })
+          .eq("stripe_customer_id", customerId);
+
+        // Record activity
+        await supabase.from("yayika_activity_log").insert({
+          user_id: sub.user_id,
+          action: "payment_failed",
+          details: JSON.stringify({
+            attempt: attemptCount,
+            next_retry: nextRetryAt,
+            grace_period_end: gracePeriodEnd,
+          }),
+        });
+
+        // Send payment failure email with grace period warning
+        try {
+          const emailPayload = {
+            type: "payment_failed",
+            to: sub.email,
+            name: sub.email.split("@")[0],
+            plan: sub.plan || "unknown",
+            grace_period_days: "7",
+            next_retry: nextRetryAt
+              ? new Date(nextRetryAt).toLocaleDateString("es-MX")
+              : "en los próximos días",
+          };
+
+          const emailResponse = await fetch(
+            `${supabaseUrl}/functions/v1/send-email`,
+            {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${supabaseServiceKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(emailPayload),
+            }
+          );
+
+          if (emailResponse.ok) {
+            console.log(`Payment failure email sent to ${sub.email}`);
+          }
+        } catch (emailErr) {
+          console.error("Payment failure email error:", emailErr);
+        }
+
+        console.log(
+          `Payment failed for ${customerId}: attempt ${attemptCount}, grace period ends ${gracePeriodEnd}`
+        );
+      }
+    }
+
+    // ============================================================
+    // INVOICE.PAID - Recurring payment (including recovery from past_due)
     // ============================================================
     if (eventType === "invoice.paid") {
       const customerId = data.customer;
@@ -282,6 +384,53 @@ serve(async (req: Request) => {
         .single();
 
       if (sub) {
+        // Clear grace period if recovering from past_due
+        const { data: currentSub } = await supabase
+          .from("yayika_subscriptions")
+          .select("status")
+          .eq("stripe_customer_id", customerId)
+          .single();
+
+        if (currentSub && currentSub.status === "past_due") {
+          await supabase
+            .from("yayika_subscriptions")
+            .update({
+              status: "active",
+              grace_period_end: null,
+              payment_fail_count: 0,
+              last_payment_failure: null,
+            })
+            .eq("stripe_customer_id", customerId);
+
+          console.log(`Subscription recovered from past_due: ${customerId}`);
+
+          // Send recovery email
+          try {
+            const { data: userProfile } = await supabase
+              .from("yayika_profiles")
+              .select("email")
+              .eq("id", sub.user_id)
+              .single();
+
+            if (userProfile) {
+              await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${supabaseServiceKey}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  type: "payment_recovered",
+                  to: userProfile.email,
+                  name: userProfile.email.split("@")[0],
+                }),
+              });
+            }
+          } catch (e) {
+            console.error("Recovery email error:", e);
+          }
+        }
+
         // Record the recurring payment
         await supabase.from("yayika_activity_log").insert({
           user_id: sub.user_id,
@@ -421,11 +570,20 @@ serve(async (req: Request) => {
         .single();
 
       if (payout) {
+        // Read current balance to calculate new lifetime_paid_out_cents
+        const { data: currentBalance } = await supabase
+          .from("yayika_seller_balances")
+          .select("lifetime_paid_out_cents")
+          .eq("seller_id", payout.seller_id)
+          .single();
+
+        const newLifetimePaid = (currentBalance?.lifetime_paid_out_cents || 0) + (payout.amount_cents || 0);
+
         await supabase
           .from("yayika_seller_balances")
           .update({
             reserved_cents: 0,
-            lifetime_paid_out_cents: supabase.rpc ? undefined : 0,
+            lifetime_paid_out_cents: newLifetimePaid,
             last_payout_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           })

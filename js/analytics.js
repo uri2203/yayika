@@ -35,7 +35,7 @@ function initAnalytics() {
         trackEvent('scroll_depth', { depth: maxScroll });
       }
     }
-  });
+  }, { passive: true });
 }
 
 // --- Track page view ---

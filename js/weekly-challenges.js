@@ -170,7 +170,7 @@
       try {
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabase.auth.session?.access_token || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'getWeeklyChallenges', lang: currentLang || 'es' })
         });
         const data = await res.json();
@@ -241,7 +241,7 @@
       try {
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabase.auth.session?.access_token || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'enroll', challenge_id: challengeId })
         });
         const data = await res.json();
@@ -256,7 +256,7 @@
       try {
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabase.auth.session?.access_token || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'checkin', enrollment_id: enrollmentId })
         });
         const data = await res.json();

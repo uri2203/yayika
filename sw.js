@@ -3,9 +3,9 @@
 // Enhanced PWA: navigation preload, better offline, period sync
 // ============================================================
 
-const CACHE_VERSION = 'yayika-v4';
-const STATIC_CACHE = 'yayika-static-v4';
-const DYNAMIC_CACHE = 'yayika-dynamic-v4';
+const CACHE_VERSION = 'yayika-v6';
+const STATIC_CACHE = 'yayika-static-v6';
+const DYNAMIC_CACHE = 'yayika-dynamic-v6';
 const OFFLINE_URL = '/offline.html';
 
 function swT(key, lang) {
@@ -31,6 +31,7 @@ function swT(key, lang) {
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
+  '/js/checkout.js',
   '/splash.html',
   '/offline.html',
   '/Portales/index.html',
@@ -64,8 +65,7 @@ const PRECACHE_ASSETS = [
   '/manifest.json',
   '/icon.svg',
   '/assets/img/icon-192.png',
-  '/assets/img/icon-512.png',
-  'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyayika.com&color=4E3470&bgcolor=FFFFFF&margin=10&format=png'
+  '/assets/img/icon-512.png'
 ];
 
 // Install — pre-cache static assets

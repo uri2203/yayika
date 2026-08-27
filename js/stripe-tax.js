@@ -7,7 +7,7 @@
    ============================================================ */
 
 // Tax Configuration for Mexico (SAT)
-const TaxConfig = {
+const StripeTaxConfig = {
   // SAT product/service codes
   taxCodes: {
     membership: '81112101',      // Servicios de suscripción digital
@@ -101,7 +101,7 @@ const StripeTax = {
     successUrl,
     cancelUrl
   }) {
-    const taxCode = TaxConfig.getTaxCode(productType);
+    const taxCode = StripeTaxConfig.getTaxCode(productType);
     
     return {
       // Line items with tax code
@@ -127,7 +127,7 @@ const StripeTax = {
       
       // Collect shipping address (optional)
       shipping_address_collection: {
-        allowed_countries: Object.keys(TaxConfig.vatRates)
+        allowed_countries: Object.keys(StripeTaxConfig.vatRates)
       },
       
       // Metadata for tracking
@@ -190,7 +190,7 @@ const StripeTax = {
         user_id: userId,
         product_id: productId,
         product_type: productType,
-        tax_code: TaxConfig.getTaxCode(productType),
+        tax_code: StripeTaxConfig.getTaxCode(productType),
         platform: 'yayika'
       },
       

@@ -180,7 +180,7 @@
       try {
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabase.auth.session?.access_token || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'getCatalog', lang: currentLang || 'es' })
         });
         const data = await res.json();
@@ -194,7 +194,7 @@
         try {
           const myRes = await fetch(API, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabase.auth.session?.access_token || ''}`, 'apikey': SUPABASE_ANON_KEY },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
             body: JSON.stringify({ action: 'getMyProducts', lang: currentLang || 'es' })
           });
           const myData = await myRes.json();
@@ -255,7 +255,7 @@
       try {
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabase.auth.session?.access_token || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'getProductDetail', product_id: productId, lang: currentLang || 'es' })
         });
         const data = await res.json();
