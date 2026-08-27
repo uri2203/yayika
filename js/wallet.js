@@ -160,7 +160,6 @@ async function loadCommissions(affiliateId) {
       `;
     }).join('');
   } catch (err) {
-    console.error('loadCommissions error', err);
     const list = document.getElementById('commissionsList');
     const empty = document.getElementById('commissionsEmpty');
     if (list) list.innerHTML = '';
@@ -204,7 +203,6 @@ async function loadPayouts(affiliateId) {
       `;
     }).join('');
   } catch (err) {
-    console.error('loadPayouts error', err);
     const list = document.getElementById('payoutsList');
     const empty = document.getElementById('payoutsEmpty');
     if (list) list.innerHTML = '';
@@ -412,7 +410,6 @@ async function submitWithdraw() {
     loadPayouts(affiliateData.id);
     updateBalanceUI(affiliateData);
   } catch (err) {
-    console.error('withdraw error', err);
     alert(wt('wallet_withdraw_error'));
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = wt('wallet_confirm'); }

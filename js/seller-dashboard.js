@@ -552,7 +552,6 @@
       currentSellerData = sellerData;
       renderCurrentView(sellerData);
     }catch(e){
-      console.error('Seller data load error:',e);
       content.innerHTML=`<div class="sd-empty"><div class="sd-empty-icon">⚠️</div><div>${t('error_loading')}</div><div style="font-size:12px;margin-top:8px">${e.message}</div></div>`;
     }
   }
@@ -888,7 +887,6 @@
         overlay.remove();
         loadSellerData();
       } catch(err) {
-        console.error('Add product error:', err);
         btn.disabled = false;
         btn.textContent = t('add_product');
         alert(t('error_loading') + ': ' + err.message);
@@ -975,7 +973,6 @@
             overlay.remove();
             loadSellerData();
           } catch(err) {
-            console.error('Edit product error:', err);
             btn.disabled = false;
             btn.textContent = t('edit');
             alert(t('error_loading') + ': ' + err.message);

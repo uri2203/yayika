@@ -20,10 +20,28 @@ serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: { headers: { Authorization: req.headers.get("Authorization")! } },
+    });
+
+    // Verify user identity from JWT token
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      throw new Error("Unauthorized: Missing authorization header");
+    }
 
     const body = await req.json();
-    const { action, user_id, lang = "es" } = body;
+    const { action, lang = "es" } = body;
+
+    // Get user_id from JWT token, not from request body
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    
+    if (authError || !user) {
+      throw new Error("Unauthorized: Invalid token");
+    }
+    
+    const user_id = user.id;
 
     switch (action) {
       case "getShareData":

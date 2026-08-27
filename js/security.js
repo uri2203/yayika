@@ -325,7 +325,6 @@ const YayikaSecurity = (() => {
       combined.set(new Uint8Array(encrypted), iv.length);
       return btoa(String.fromCharCode(...combined));
     } catch (e) {
-      console.error('[Security] Encryption failed:', e);
       return null;
     }
   }
@@ -343,7 +342,6 @@ const YayikaSecurity = (() => {
       );
       return JSON.parse(new TextDecoder().decode(decrypted));
     } catch (e) {
-      console.error('[Security] Decryption failed:', e);
       return null;
     }
   }

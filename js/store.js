@@ -124,7 +124,6 @@ async function loadProducts() {
     allProducts = data || [];
     renderProducts(allProducts);
   } catch (e) {
-    console.warn('[Store] Supabase load failed, using seed data', e);
     allProducts = getSeedProducts();
     renderProducts(allProducts);
   }
@@ -487,7 +486,6 @@ async function createOrder(product) {
     updateCartUI();
     renderProducts(currentFilter === 'all' ? allProducts : allProducts.filter(p => p.category === currentFilter));
   } catch (e) {
-    console.error('[Store] Order creation failed:', e);
     alert(st('error_order'));
   }
 }

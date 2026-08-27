@@ -235,8 +235,25 @@ serve(async (req) => {
       throw new Error("RESEND_API_KEY not configured");
     }
 
+    // Auth validation - require valid JWT
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      throw new Error("Unauthorized: Missing or invalid authorization header");
+    }
+
     const payload: EmailPayload = await req.json();
     const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, customSubject, customHtml } = payload;
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!to || !emailRegex.test(to)) {
+      throw new Error("Invalid email address");
+    }
+
+    // Restrict custom email type - only allow predefined types
+    if (type === "custom") {
+      throw new Error("Custom email type is not allowed for security reasons");
+    }
 
     let subject: string;
     let html: string;

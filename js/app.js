@@ -12,12 +12,10 @@ function track(event, props = {}) {
 
 // --- Global Error Logging ---
 window.addEventListener('error', e => {
-  console.error('[Yayika Error]', e.message, e.filename, e.lineno);
   track('JS Error', { message: e.message, file: e.filename || 'unknown' });
 });
 
 window.addEventListener('unhandledrejection', e => {
-  console.error('[Yayika Unhandled]', e.reason);
   track('JS Error', { message: 'Unhandled: ' + (e.reason?.message || e.reason || 'unknown'), file: 'promise' });
 });
 

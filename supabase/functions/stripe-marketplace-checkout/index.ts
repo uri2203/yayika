@@ -73,10 +73,19 @@ serve(async (req: Request) => {
 
       if (error) throw error;
 
-      // Increment view count
-      await supabase.rpc("exec_sql", {
-        sql: `UPDATE yayika_marketplace_products_v2 SET view_count = view_count + 1 WHERE id = '${product_id}'`
-      }).catch(() => {});
+      // Increment view count safely
+      const { data: current } = await supabase
+        .from("yayika_marketplace_products_v2")
+        .select("view_count")
+        .eq("id", product_id)
+        .single();
+      
+      if (current) {
+        await supabase
+          .from("yayika_marketplace_products_v2")
+          .update({ view_count: (current.view_count || 0) + 1 })
+          .eq("id", product_id);
+      }
 
       return new Response(JSON.stringify({ product }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
