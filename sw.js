@@ -3,9 +3,9 @@
 // Enhanced PWA: navigation preload, better offline, period sync
 // ============================================================
 
-const CACHE_VERSION = 'yayika-v7';
-const STATIC_CACHE = 'yayika-static-v7';
-const DYNAMIC_CACHE = 'yayika-dynamic-v7';
+const CACHE_VERSION = 'yayika-v8';
+const STATIC_CACHE = 'yayika-static-v8';
+const DYNAMIC_CACHE = 'yayika-dynamic-v8';
 const OFFLINE_URL = '/offline.html';
 
 function swT(key, lang) {
@@ -106,15 +106,20 @@ self.addEventListener('fetch', event => {
   // Skip Supabase/Stripe/Plausible API calls (always go to network)
   if (url.hostname.includes('supabase.co') || 
       url.hostname.includes('api.stripe.com') ||
+      url.hostname.includes('buy.stripe.com') ||
       url.hostname.includes('plausible.io') ||
       url.hostname.includes('pagead2.googlesyndication.com') ||
       url.hostname.includes('resend.com')) {
-    event.respondWith(fetch(request).catch(() => new Response('Offline', { status: 503 })));
-    return;
+    return; // Let browser handle natively — no SW interception
   }
 
-  // Skip cross-origin requests (CDN scripts, fonts, etc.) — stale-while-revalidate
+  // Skip cross-origin navigations (Stripe checkout, external links)
   if (url.origin !== location.origin) {
+    // For navigations to external sites, let the browser handle it
+    if (request.mode === 'navigate') {
+      return;
+    }
+    // For other cross-origin requests (CDN scripts, fonts) — stale-while-revalidate
     event.respondWith(
       caches.open(DYNAMIC_CACHE).then(cache =>
         cache.match(request).then(cached => {

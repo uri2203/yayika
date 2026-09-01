@@ -23,6 +23,8 @@
 | `js/store.js` | Console.log eliminados | 2026-08-27 | `5dd5eac` |
 | `js/wallet.js` | Console.log eliminados | 2026-08-27 | `5dd5eac` |
 | `sw.js` | Cache version bump v6→v7 para forzar refresh | 2026-08-27 | `a0d9764` |
+| `sw.js` | **CRÍTICO**: SW interceptaba navegaciones a `buy.stripe.com` con stale-while-revalidate, bloqueando redirecciones a checkout. Fix: `buy.stripe.com` agregado a excluded hostnames + skip cross-origin navigations | 2026-08-28 | `8c3cd7c` |
+| `sw.js` | Cache version bump v7→v8 para forzar actualización del SW en browsers | 2026-08-28 | `8c3cd7c` |
 
 ### Archivos que SÍ se pueden modificar (con cuidado)
 
