@@ -25,6 +25,9 @@
 | `sw.js` | Cache version bump v6→v7 para forzar refresh | 2026-08-27 | `a0d9764` |
 | `sw.js` | **CRÍTICO**: SW interceptaba navegaciones a `buy.stripe.com` con stale-while-revalidate, bloqueando redirecciones a checkout. Fix: `buy.stripe.com` agregado a excluded hostnames + skip cross-origin navigations | 2026-08-28 | `8c3cd7c` |
 | `sw.js` | Cache version bump v7→v8 para forzar actualización del SW en browsers | 2026-08-28 | `8c3cd7c` |
+| `index.html` | **CRÍTICO**: `.plan-btn` tenía `color:white; background:transparent` — invisible en light mode. Fix: agregado `[data-theme="light"] .plan-btn{color:#2d2d2d;border-color:rgba(0,0,0,0.15)}` | 2026-08-31 | `pending` |
+| `index.html` | **CRÍTICO**: Fallback para `startCheckout` y `buyProduct` — si la función inline no carga, un script al final del body las define como respaldo | 2026-08-31 | `pending` |
+| `js/cookie-banner.js` | **CRÍTICO**: Banner `position:fixed; z-index:99999` tapaba botones de membresía. Fix: `body.style.paddingBottom` al mostrar banner, se elimina al cerrar | 2026-08-31 | `pending` |
 
 ### Archivos que SÍ se pueden modificar (con cuidado)
 

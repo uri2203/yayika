@@ -240,6 +240,12 @@
     // Show banner
     document.body.insertAdjacentHTML('beforeend', createBannerHTML());
 
+    // Add body padding so content isn't hidden behind the fixed banner
+    var bannerEl = document.getElementById('yayika-cookie-banner');
+    if (bannerEl) {
+      document.body.style.paddingBottom = bannerEl.offsetHeight + 20 + 'px';
+    }
+
     // Button handlers
     document.getElementById('yayika-cookie-reject').addEventListener('click', function() {
       saveConsent({ analytics: false, preferences: false });
@@ -272,7 +278,10 @@
       banner.style.transition = 'opacity 0.3s, transform 0.3s';
       banner.style.opacity = '0';
       banner.style.transform = 'translateY(100%)';
-      setTimeout(() => banner.remove(), 300);
+      setTimeout(() => {
+        banner.remove();
+        document.body.style.paddingBottom = '';
+      }, 300);
     }
   }
 
