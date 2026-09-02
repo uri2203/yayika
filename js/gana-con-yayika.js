@@ -332,7 +332,7 @@
         html += `</div>`;
         content.innerHTML = html;
       } catch (err) {
-        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">⚠️ Error cargando datos</div>`;
+        content.innerHTML = `<div style="padding:20px;text-align:center;color:var(--texto,#E8E8E8);opacity:0.5">${t('error')}</div>`;
       }
     },
 

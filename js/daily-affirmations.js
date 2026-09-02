@@ -169,6 +169,38 @@ const DailyAffirmations = {
       de: 'Kopieren'
     }[lang] || 'Copiar';
     
+    const loadingText = {
+      es: 'Preparando tu afirmación...',
+      en: 'Preparing your affirmation...',
+      pt: 'Preparando sua afirmação...',
+      fr: 'Préparation de votre affirmation...',
+      de: 'Bereite deine Bestätigung vor...'
+    }[lang] || 'Preparando tu afirmación...';
+    
+    const disclaimerText = {
+      es: '🤖 Generado por IA',
+      en: '🤖 AI generated',
+      pt: '🤖 Gerado por IA',
+      fr: '🤖 Généré par IA',
+      de: '🤖 KI-generiert'
+    }[lang] || '🤖 Generado por IA';
+    
+    const basedOnText = {
+      es: 'Basado en: ',
+      en: 'Based on: ',
+      pt: 'Baseado em: ',
+      fr: 'Basé sur : ',
+      de: 'Basierend auf: '
+    }[lang] || 'Basado en: ';
+    
+    const shareTitleText = {
+      es: 'Yayika — Mi afirmación del día',
+      en: 'Yayika — My daily affirmation',
+      pt: 'Yayika — Minha afirmação do dia',
+      fr: 'Yayika — Mon affirmation du jour',
+      de: 'Yayika — Meine Tages-Bestätigung'
+    }[lang] || 'Yayika — Mi afirmación del día';
+    
     return `
       <div id="affirmationWidget" style="background:linear-gradient(135deg,var(--lila-d) 0%,#2D2055 100%);border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden">
         <div style="position:absolute;top:-20px;right:-20px;font-size:80px;opacity:0.08;pointer-events:none">💜</div>
@@ -176,7 +208,7 @@ const DailyAffirmations = {
         <div id="affirmationText" style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:white;line-height:1.5;margin-bottom:8px;font-style:italic">
           <div style="text-align:center;padding:16px;color:rgba(255,255,255,0.5);font-size:13px;font-style:normal">
             <div style="margin-bottom:6px;animation:pulse 1.5s infinite"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 3z"/></svg></div>
-            Preparando tu afirmación...
+            ${loadingText}
           </div>
         </div>
         <div id="affirmationType" style="font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:14px"></div>
@@ -191,7 +223,7 @@ const DailyAffirmations = {
           </button>
         </div>
         <div style="margin-top:12px;font-size:10px;color:rgba(255,255,255,0.35);text-align:center">
-          🤖 Generado por IA
+          ${disclaimerText}
         </div>
       </div>
     `;
@@ -226,7 +258,7 @@ const DailyAffirmations = {
         
         if (typeEl && result.type) {
           const typeLabels = this.AFFIRMATION_TYPES[lang] || this.AFFIRMATION_TYPES['es'];
-          typeEl.textContent = `Basado en: ${typeLabels[result.type] || result.type}`;
+          typeEl.textContent = `${basedOnText}${typeLabels[result.type] || result.type}`;
         }
         
         // Store for copy/share
@@ -258,8 +290,16 @@ const DailyAffirmations = {
   
   shareAffirmation() {
     const text = this._currentAffirmation || '';
+    const lang = currentLang || 'es';
+    const shareTitleText = {
+      es: 'Yayika — Mi afirmación del día',
+      en: 'Yayika — My daily affirmation',
+      pt: 'Yayika — Minha afirmação do dia',
+      fr: 'Yayika — Mon affirmation du jour',
+      de: 'Yayika — Meine Tages-Bestätigung'
+    }[lang] || 'Yayika — Mi afirmación del día';
     const shareData = {
-      title: 'Yayika — Mi afirmación del día',
+      title: shareTitleText,
       text: `${text}\n\n— Yayika 💜`,
     };
     

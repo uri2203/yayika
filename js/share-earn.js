@@ -278,7 +278,7 @@ const ShareEarn = {
           user_id: currentUser.id,
           card_type: 'custom',
           card_title: { [lang]: title, es: title },
-          card_subtitle: { [lang]: 'En Yayika 🌸', es: 'En Yayika 🌸' },
+          card_subtitle: { [lang]: t.card_subtitle, es: t.card_subtitle },
           card_icon: '✨',
           card_color: this._selectedColor || '#7B5EA7',
           lang
@@ -335,13 +335,13 @@ const ShareEarn = {
         <div style="width:40px;height:2px;background:rgba(255,255,255,0.3);border-radius:2px;margin-bottom:20px"></div>
 
         <!-- CTA -->
-        <div style="font-size:12px;opacity:0.7;margin-bottom:4px">Únete a mí en</div>
+        <div style="font-size:12px;opacity:0.7;margin-bottom:4px">${t.join_me}</div>
         <div style="font-size:18px;font-weight:700;letter-spacing:1px">yayika.com</div>
 
         <!-- Ref code -->
         ${card.ref_code ? `
         <div style="margin-top:16px;padding:6px 16px;background:rgba(255,255,255,0.15);border-radius:100px;font-size:11px;letter-spacing:1px">
-          Código: ${card.ref_code}
+          ${t.code_label}${card.ref_code}
         </div>` : ''}
       </div>
     `;
@@ -383,7 +383,7 @@ const ShareEarn = {
     const shareUrl = card.share_url || 'https://yayika.com';
     const refCode = card.ref_code || '';
 
-    const shareText = `🌸 ${title}\n\nÚnete a Yayika y empieza tu camino: ${shareUrl}${refCode ? `\nCódigo: ${refCode}` : ''}`;
+    const shareText = `🌸 ${title}\n\n${t.share_text}${shareUrl}${refCode ? `\n${t.code_label}${refCode}` : ''}`;
 
     // Record the share event
     try {
@@ -456,9 +456,9 @@ const ShareEarn = {
         <text x="540" y="1000" text-anchor="middle" fill="white" font-family="Arial" font-size="72" font-weight="bold">${typeof this._currentCard?.card_title === 'object' ? (this._currentCard.card_title[currentLang] || this._currentCard.card_title.es || '') : (this._currentCard?.card_title || '')}</text>
         <text x="540" y="1120" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Arial" font-size="48">${typeof this._currentCard?.card_subtitle === 'object' ? (this._currentCard.card_subtitle[currentLang] || this._currentCard.card_subtitle.es || '') : (this._currentCard?.card_subtitle || '')}</text>
         <line x1="490" y1="1250" x2="590" y2="1250" stroke="rgba(255,255,255,0.3)" stroke-width="4"/>
-        <text x="540" y="1400" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Arial" font-size="40">Únete a mí en</text>
+        <text x="540" y="1400" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Arial" font-size="40">${this._getTranslations(currentLang).join_me}</text>
         <text x="540" y="1480" text-anchor="middle" fill="white" font-family="Arial" font-size="64" font-weight="bold">yayika.com</text>
-        ${this._currentCard?.ref_code ? `<rect x="390" y="1550" width="300" height="60" rx="30" fill="rgba(255,255,255,0.15)"/><text x="540" y="1592" text-anchor="middle" fill="white" font-family="Arial" font-size="36">Código: ${this._currentCard.ref_code}</text>` : ''}
+        ${this._currentCard?.ref_code ? `<rect x="390" y="1550" width="300" height="60" rx="30" fill="rgba(255,255,255,0.15)"/><text x="540" y="1592" text-anchor="middle" fill="white" font-family="Arial" font-size="36">${this._getTranslations(currentLang).code_label}${this._currentCard.ref_code}</text>` : ''}
       </svg>
     `;
 
@@ -549,6 +549,10 @@ const ShareEarn = {
         generate: '✨ Generar tarjeta',
         preview: 'Vista previa',
         recent_cards: 'Tus tarjetas',
+        join_me: 'Únete a mí en',
+        code_label: 'Código: ',
+        share_text: 'Únete a Yayika y empieza tu camino: ',
+        card_subtitle: 'En Yayika 🌸',
         toast_creating: 'Creando tarjeta...',
         toast_card_created: '¡Tarjeta creada! Comparte con amigas 🎉',
         toast_error_create: 'Error al crear tarjeta',
@@ -575,6 +579,10 @@ const ShareEarn = {
         generate: '✨ Generate card',
         preview: 'Preview',
         recent_cards: 'Your cards',
+        join_me: 'Join me on',
+        code_label: 'Code: ',
+        share_text: 'Join Yayika and start your journey: ',
+        card_subtitle: 'On Yayika 🌸',
         toast_creating: 'Creating card...',
         toast_card_created: 'Card created! Share with friends 🎉',
         toast_error_create: 'Error creating card',
@@ -601,6 +609,10 @@ const ShareEarn = {
         generate: '✨ Gerar cartão',
         preview: 'Pré-visualização',
         recent_cards: 'Seus cartões',
+        join_me: 'Junte-se a mim no',
+        code_label: 'Código: ',
+        share_text: 'Junte-se ao Yayika e comece sua jornada: ',
+        card_subtitle: 'No Yayika 🌸',
         toast_creating: 'Criando cartão...',
         toast_card_created: 'Cartão criado! Compartilhe com amigas 🎉',
         toast_error_create: 'Erro ao criar cartão',
@@ -627,6 +639,10 @@ const ShareEarn = {
         generate: '✨ Générer la carte',
         preview: 'Aperçu',
         recent_cards: 'Vos cartes',
+        join_me: 'Rejoins-moi sur',
+        code_label: 'Code : ',
+        share_text: 'Rejoins Yayika et commence ton chemin : ',
+        card_subtitle: 'Sur Yayika 🌸',
         toast_creating: 'Création de la carte...',
         toast_card_created: 'Carte créée ! Partage avec tes amies 🎉',
         toast_error_create: 'Erreur de création de carte',
@@ -653,6 +669,10 @@ const ShareEarn = {
         generate: '✨ Karte erstellen',
         preview: 'Vorschau',
         recent_cards: 'Deine Karten',
+        join_me: 'Tritt mir bei bei',
+        code_label: 'Code: ',
+        share_text: 'Tritt Yayika bei und beginne deine Reise: ',
+        card_subtitle: 'Bei Yayika 🌸',
         toast_creating: 'Karte wird erstellt...',
         toast_card_created: 'Karte erstellt! Teile mit Freundinnen 🎉',
         toast_error_create: 'Fehler beim Erstellen der Karte',

@@ -67,6 +67,26 @@ function appT(key) {
     challenge_give: 'Regala algo sin esperar nada',
     challenge_boundary: 'Di que no a algo que no quieres',
     challenge_save: 'Ahorra un porcentaje de hoy',
+    challenge_herbal_tea: 'Toma té caliente y respira 5 min',
+    challenge_sleep_8h: 'Duerme al menos 8 horas esta noche',
+    challenge_mirror_affirmation: 'Dite algo bonito al espejo',
+    challenge_music_dance: 'Escoge tu música favorita y baila 3 min',
+    challenge_walk_30min: 'Sal a caminar 30 min',
+    challenge_try_new: 'Prueba algo que nunca has hecho',
+    challenge_plan_week_goals: 'Planifica tus metas de la semana',
+    challenge_reconnect: 'Conecta con alguien que no habías visto en rato',
+    challenge_organize_workspace: 'Organiza tu espacio de trabajo',
+    challenge_important_convo: 'Ten una conversación importante hoy',
+    challenge_share_achievement: 'Comparte un logro en tu círculo',
+    challenge_negotiate: 'Negocia algo esta semana',
+    challenge_share_pride: 'Publica algo que te enorgullezca',
+    challenge_make_presentation: 'Haz una presentación o pitch',
+    challenge_invite_coffee: 'Invita a alguien a tomar café',
+    challenge_declutter: 'Organiza tu espacio y deshazte de lo que no sirve',
+    challenge_say_no: 'Di no a algo que no te sirve',
+    challenge_healthy_meal: 'Prepara comida saludable para mañana',
+    challenge_review_budget: 'Revisa tu presupuesto semanal',
+    challenge_creative_15min: 'Haz una actividad creativa 15 min',
     log_completed_module: 'Completó Módulo',
     log_registered_phase: 'Registró fase',
     log_energy_mood: 'con energía',
@@ -891,34 +911,34 @@ const CHALLENGES_BY_PHASE = {
   menstrual: [
     { text: appT('challenge_no_screens'), xp: 15, icon: '🛋️' },
     { text: appT('challenge_gratitude'), xp: 10, icon: '📝' },
-    { text: 'Toma té caliente y respira 5 min', xp: 10, icon: '🍵' },
-    { text: 'Duerme al menos 8 horas esta noche', xp: 20, icon: '😴' },
-    { text: 'Dite algo bonito al espejo', xp: 10, icon: '🪞' },
-    { text: 'Escoge tu música favorita y baila 3 min', xp: 10, icon: '🎵' }
+    { text: appT('challenge_herbal_tea'), xp: 10, icon: '🍵' },
+    { text: appT('challenge_sleep_8h'), xp: 20, icon: '😴' },
+    { text: appT('challenge_mirror_affirmation'), xp: 10, icon: '🪞' },
+    { text: appT('challenge_music_dance'), xp: 10, icon: '🎵' }
   ],
   follicular: [
     { text: appT('challenge_new_project'), xp: 25, icon: '🚀' },
-    { text: 'Sal a caminar 30 min', xp: 20, icon: '🚶‍♀️' },
-    { text: 'Prueba algo que nunca has hecho', xp: 30, icon: '✨' },
-    { text: 'Planifica tus metas de la semana', xp: 15, icon: '📋' },
-    { text: 'Conecta con alguien que no habías visto en rato', xp: 15, icon: '💬' },
-    { text: 'Organiza tu espacio de trabajo', xp: 15, icon: '🗂️' }
+    { text: appT('challenge_walk_30min'), xp: 20, icon: '🚶‍♀️' },
+    { text: appT('challenge_try_new'), xp: 30, icon: '✨' },
+    { text: appT('challenge_plan_week_goals'), xp: 15, icon: '📋' },
+    { text: appT('challenge_reconnect'), xp: 15, icon: '💬' },
+    { text: appT('challenge_organize_workspace'), xp: 15, icon: '🗂️' }
   ],
   ovulatory: [
-    { text: 'Ten una conversación importante hoy', xp: 25, icon: '🗣️' },
-    { text: 'Comparte un logro en tu círculo', xp: 20, icon: '👥' },
-    { text: 'Negocia algo esta semana', xp: 30, icon: '💼' },
-    { text: 'Publica algo que te enorgullezca', xp: 15, icon: '📱' },
-    { text: 'Haz una presentación o pitch', xp: 25, icon: '🎤' },
-    { text: 'Invita a alguien a tomar café', xp: 15, icon: '☕' }
+    { text: appT('challenge_important_convo'), xp: 25, icon: '🗣️' },
+    { text: appT('challenge_share_achievement'), xp: 20, icon: '👥' },
+    { text: appT('challenge_negotiate'), xp: 30, icon: '💼' },
+    { text: appT('challenge_share_pride'), xp: 15, icon: '📱' },
+    { text: appT('challenge_make_presentation'), xp: 25, icon: '🎤' },
+    { text: appT('challenge_invite_coffee'), xp: 15, icon: '☕' }
   ],
   luteal: [
     { text: appT('challenge_plan'), xp: 15, icon: '📅' },
-    { text: 'Organiza tu espacio y deshazte de lo que no sirve', xp: 20, icon: '🧹' },
-    { text: 'Di no a algo que no te sirve', xp: 25, icon: '🚫' },
-    { text: 'Prepara comida saludable para mañana', xp: 15, icon: '🥗' },
-    { text: 'Revisa tu presupuesto semanal', xp: 15, icon: '💰' },
-    { text: 'Haz una actividad creativa 15 min', xp: 15, icon: '🎨' }
+    { text: appT('challenge_declutter'), xp: 20, icon: '🧹' },
+    { text: appT('challenge_say_no'), xp: 25, icon: '🚫' },
+    { text: appT('challenge_healthy_meal'), xp: 15, icon: '🥗' },
+    { text: appT('challenge_review_budget'), xp: 15, icon: '💰' },
+    { text: appT('challenge_creative_15min'), xp: 15, icon: '🎨' }
   ]
 };
 

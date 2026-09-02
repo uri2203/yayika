@@ -163,6 +163,22 @@ const FinancialCoach = {
       de: `${svgIcon} Finanz-Tipp für heute`
     }[lang] || `${svgIcon} Consejo financiero de hoy`;
     
+    const loadingText = {
+      es: 'Analizando tus finanzas...',
+      en: 'Analyzing your finances...',
+      pt: 'Analisando suas finanças...',
+      fr: 'Analyse de vos finances...',
+      de: 'Analysiere deine Finanzen...'
+    }[lang] || 'Analizando tus finanzas...';
+    
+    const disclaimerText = {
+      es: '⚠️ Contenido generado por IA — No constituye asesoría financiera profesional',
+      en: '⚠️ AI-generated content — Does not constitute professional financial advice',
+      pt: '⚠️ Conteúdo gerado por IA — Não constitui aconselhamento financeiro profissional',
+      fr: '⚠️ Contenu généré par IA — Ne constitue pas un conseil financier professionnel',
+      de: '⚠️ KI-generierter Inhalt — Keine professionelle Finanzberatung'
+    }[lang] || '⚠️ Contenido generado por IA — No constituye asesoría financiera profesional';
+    
     return `
       <div id="financialCoachWidget" style="background:linear-gradient(135deg,var(--verde-d) 0%,#1A5E3A 100%);border-radius:14px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden">
         <div style="position:absolute;top:-15px;right:-15px;font-size:60px;opacity:0.08;pointer-events:none">💰</div>
@@ -170,11 +186,11 @@ const FinancialCoach = {
         <div id="financialCoachContent" style="font-size:13px;color:white;line-height:1.6">
           <div style="text-align:center;padding:12px;color:rgba(255,255,255,0.5)">
             <div style="margin-bottom:4px;animation:pulse 1.5s infinite"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-            Analizando tus finanzas...
+            ${loadingText}
           </div>
         </div>
         <div style="margin-top:10px;font-size:10px;color:rgba(255,255,255,0.35);text-align:center;line-height:1.4">
-          ⚠️ Contenido generado por IA — No constituye asesoría financiera profesional
+          ${disclaimerText}
         </div>
       </div>
     `;
