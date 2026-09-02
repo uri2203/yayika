@@ -1,7 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="100" fill="#4E3470"/>
-  <text x="256" y="200" font-family="Georgia,serif" font-size="180" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">Y</text>
-  <circle cx="256" cy="340" r="40" fill="#C96B7A"/>
-  <circle cx="196" cy="340" r="25" fill="#C96B7A" opacity="0.6"/>
-  <circle cx="316" cy="340" r="25" fill="#C96B7A" opacity="0.6"/>
+  <defs>
+    <clipPath id="scallop">
+      <path d="M256,10 C280,10 300,30 320,50 C340,30 360,10 380,30 C400,50 420,70 430,100 C450,80 470,90 490,110 C500,140 510,170 500,200 C520,220 530,250 520,280 C530,310 520,340 500,360 C510,390 500,420 480,440 C460,460 440,480 410,480 C390,500 360,510 330,500 C310,520 280,520 260,500 C240,520 210,520 190,500 C160,510 130,500 110,480 C80,480 60,460 40,440 C20,420 10,390 20,360 C0,340 -10,310 0,280 C-10,250 0,220 20,200 C10,170 20,140 30,110 C50,90 70,80 90,100 C100,70 120,50 140,30 C160,10 180,10 200,10 C220,0 240,0 256,10 Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#scallop)">
+    <circle cx="256" cy="256" r="250" fill="#7B5EA7"/>
+    <circle cx="256" cy="256" r="210" fill="#1A1030"/>
+    <text x="256" y="300" font-family="Georgia,'Cormorant Garamond',serif" font-size="280" font-style="italic" fill="white" text-anchor="middle" opacity="0.9">y</text>
+  </g>
 </svg>
