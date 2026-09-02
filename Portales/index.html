@@ -597,6 +597,9 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
         <span class="xp-val" id="xpVal">680 / 1000 XP</span>
       </div>
 
+      <!-- RETENTION WIDGETS -->
+      <div id="retention-widgets"></div>
+
       <!-- AI CYCLE COACH WIDGET -->
       <div id="cycleCoachContainer"></div>
 
@@ -992,7 +995,8 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
 <script src="../js/product-catalog.js" defer></script>
 <script src="../js/weekly-challenges.js" defer></script>
 <script src="../js/gana-con-yayika.js" defer></script>
-<script src="../js/seller-dashboard.js" defer></script>
+  <script src="../js/seller-dashboard.js" defer></script>
+  <script src="../js/retention.js" defer></script>
 <script>
 // ===== SUPABASE INIT (ensure it's ready before auth) =====
 if (!supabase) { initSupabase(); }
@@ -2232,6 +2236,10 @@ window.loadDashboard = async function() {
   if (originalLoadDashboard) await originalLoadDashboard();
   // Initialize enhanced features after dashboard loads
   setTimeout(() => initAllWidgets(), 500);
+  // Initialize retention system
+  if (window.RetentionSystem) {
+    setTimeout(() => window.RetentionSystem.init(), 1000);
+  }
 };
 </script>
 <script>

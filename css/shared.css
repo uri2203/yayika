@@ -507,9 +507,11 @@ textarea.form-input {
 /* Turquesa accent on specific landing elements */
 .proof-bar { border-bottom: 2px solid var(--turquesa-l); }
 .cta-section { background: linear-gradient(135deg, var(--turquesa-l) 0%, var(--lila-l) 100%); }
+.plan-card:not(.featured) .plan-btn { background: rgba(255,255,255,0.95) !important; color: var(--lila-d) !important; border-color: rgba(255,255,255,0.95) !important; font-weight: 600; }
+.plan-card:not(.featured) .plan-btn:hover { background: #fff !important; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
 .plan-card.featured { border: 2px solid var(--turquesa); }
-.plan-card.featured .plan-btn { background: var(--turquesa); }
-.plan-card.featured .plan-btn:hover { background: var(--turquesa-d); }
+.plan-card.featured .plan-btn { background: var(--turquesa) !important; color: #fff !important; border-color: var(--turquesa) !important; }
+.plan-card.featured .plan-btn:hover { background: var(--turquesa-d) !important; border-color: var(--turquesa-d) !important; }
 .btn-buy { background: var(--turquesa); }
 .btn-buy:hover { background: var(--turquesa-d); }
 .urgency-bar { background: var(--turquesa); }
