@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Pago Exitoso! - Yayika</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--texto); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .success-container { max-width: 480px; width: 90%; text-align: center; padding: 40px 20px; }
+    .success-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #2dd4bf, #0d9488); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 40px; animation: popIn 0.5s ease; }
+    @keyframes popIn { 0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+    h1 { font-size: 24px; margin-bottom: 12px; color: var(--texto); }
+    .subtitle { font-size: 15px; color: #888; margin-bottom: 32px; line-height: 1.6; }
+    .plan-badge { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--rosa), var(--rosa-oscuro)); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; margin-bottom: 32px; }
+    .next-steps { text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 32px; }
+    .next-steps h3 { font-size: 14px; color: var(--rosa); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .step { display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start; }
+    .step-num { width: 28px; height: 28px; background: var(--rosa); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+    .step-text { font-size: 14px; line-height: 1.5; color: var(--texto); }
+    .step-text strong { color: var(--rosa); }
+    .cta-btn { display: block; width: 100%; padding: 16px; background: linear-gradient(135deg, var(--rosa), var(--rosa-oscuro)); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; text-align: center; transition: transform 0.2s; }
+    .cta-btn:hover { transform: scale(1.02); }
+    .secondary-link { display: block; margin-top: 16px; color: var(--rosa); font-size: 14px; text-decoration: none; }
+    .secondary-link:hover { text-decoration: underline; }
+    .confetti { position: fixed; top: -10px; width: 10px; height: 10px; border-radius: 2px; animation: fall linear forwards; pointer-events: none; z-index: 1000; }
+    @keyframes fall { to { top: 110vh; transform: rotate(720deg); } }
+  </style>
+</head>
+<body>
+  <div class="success-container">
+    <div class="success-icon">✓</div>
+    <h1>¡Bienvenida, Guerrera!</h1>
+    <p class="subtitle">Tu pago fue procesado exitosamente.<br>Tu acceso premium ya está activo.</p>
+    
+    <div class="plan-badge" id="planBadge">
+      <span id="planIcon">🛡️</span>
+      <span id="planName">Plan Guerrera</span>
+    </div>
+
+    <div class="next-steps">
+      <h3>Próximos pasos</h3>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Abre la app Yayika</strong> para acceder a todo el contenido premium.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Completa tu primer check-in</strong> para empezar a ganar XP y construir tu racha.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Explora los retos semanales</strong> diseñados para tu fase del ciclo.</div>
+      </div>
+    </div>
+
+    <a href="Portales/index.html" class="cta-btn" id="ctaBtn">Ir al Portal</a>
+    <a href="index.html" class="secondary-link">Volver al inicio</a>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script>
+    // Confetti animation
+    function createConfetti() {
+      const colors = ['#f472b6', '#ec4899', '#2dd4bf', '#fbbf24', '#a78bfa'];
+      for (let i = 0; i < 50; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        el.style.animationDelay = Math.random() * 1 + 's';
+        el.style.width = (Math.random() * 8 + 5) + 'px';
+        el.style.height = (Math.random() * 8 + 5) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 5000);
+      }
+    }
+    createConfetti();
+
+    // Detect plan from URL params
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get('plan') || 'guerrera';
+    const planNames = { semilla: 'Plan Semilla 🌱', guerrera: 'Plan Guerrera 🛡️', diamante: 'Plan Diamante 💎' };
+    const planIcons = { semilla: '🌱', guerrera: '🛡️', diamante: '💎' };
+    
+    document.getElementById('planName').textContent = planNames[plan] || planNames.guerrera;
+    document.getElementById('planIcon').textContent = planIcons[plan] || planIcons.guerrera;
+  </script>
+</body>
+</html>
