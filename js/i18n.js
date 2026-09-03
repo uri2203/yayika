@@ -5994,7 +5994,7 @@ const I18N = {
     retention_social_top: 'Top aktive:',
     retention_loss_title: 'Wir VermiÃŸen Dich',
     retention_loss_message: 'Wir haben dich seit {days} Tagen nicht gesehen',
-    retention_loss_return: 'Komm zurÃ¼ck! Wir vermischen dich',
+    retention_loss_return: 'Komm zurÃ¼ck! Wir vermissen dich',
     retention_loss_keep_going: 'Deine Serie bleibt {days} Tage erhalten',
     retention_phase_menstrual: 'Menstruationsphase',
     retention_phase_follicular: 'Follikelphase',

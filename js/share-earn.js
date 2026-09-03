@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Yayika — Share & Earn Widget
    Generate & share achievement cards on social media
    ============================================================ */
@@ -535,7 +535,7 @@ const ShareEarn = {
     return {
       es: {
         title: 'Compartir y Ganar',
-        shares: 'Shares',
+        shares: 'Compartidas',
         views: 'Vistas',
         clicks: 'Clics',
         signups: 'Registros',
@@ -595,7 +595,7 @@ const ShareEarn = {
       },
       pt: {
         title: 'Compartilhar e Ganhar',
-        shares: 'Shares',
+        shares: 'Compartilhamentos',
         views: 'Visualizações',
         clicks: 'Cliques',
         signups: 'Cadastros',
@@ -625,7 +625,7 @@ const ShareEarn = {
       },
       fr: {
         title: 'Partager et Gagner',
-        shares: 'Parts',
+        shares: 'Partages',
         views: 'Vues',
         clicks: 'Clics',
         signups: 'Inscriptions',
@@ -655,7 +655,7 @@ const ShareEarn = {
       },
       de: {
         title: 'Teilen & Verdienen',
-        shares: 'Shares',
+        shares: 'Freigaben',
         views: 'Aufrufe',
         clicks: 'Klicks',
         signups: 'Registrierungen',
@@ -669,7 +669,7 @@ const ShareEarn = {
         generate: '✨ Karte erstellen',
         preview: 'Vorschau',
         recent_cards: 'Deine Karten',
-        join_me: 'Tritt mir bei bei',
+        join_me: 'Tritt mir bei',
         code_label: 'Code: ',
         share_text: 'Tritt Yayika bei und beginne deine Reise: ',
         card_subtitle: 'Bei Yayika 🌸',

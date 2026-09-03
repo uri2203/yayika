@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Yayika — Daily Affirmations Widget
    Shows personalized daily affirmation in the dashboard
    ============================================================ */
@@ -12,7 +12,7 @@ const DailyAffirmations = {
     es: { phase: 'Fase del ciclo', energy: 'Energía', mood: 'Ánimo', intention: 'Intención' },
     en: { phase: 'Cycle phase', energy: 'Energy', mood: 'Mood', intention: 'Intention' },
     pt: { phase: 'Fase do ciclo', energy: 'Energia', mood: 'Humor', intention: 'Intenção' },
-    fr: { phase: 'Phase du cycle', energy: 'Énergie', mood: 'Humeur', intention: ' intention' },
+    fr: { phase: 'Phase du cycle', energy: 'Énergie', mood: 'Humeur', intention: 'Intention' },
     de: { phase: 'Zyklusphase', energy: 'Energie', mood: 'Stimmung', intention: 'Absicht' }
   },
 
@@ -148,7 +148,7 @@ const DailyAffirmations = {
     const title = {
       es: `${svgIcon} Afirmación del día`,
       en: `${svgIcon} Daily affirmation`,
-      pt: `${svgIcon} Afirmção do dia`,
+      pt: `${svgIcon} Afirmação do dia`,
       fr: `${svgIcon} Affirmation du jour`,
       de: `${svgIcon} Tages-Bestätigung`
     }[lang] || `${svgIcon} Afirmación del día`;
@@ -275,7 +275,7 @@ const DailyAffirmations = {
     const text = this._currentAffirmation || '';
     navigator.clipboard.writeText(text).then(() => {
       const lang = currentLang || 'es';
-      const msg = {es:'¡Afirmación copiada!',en:'Affirmation copied!',pt:'Afirmção copiada!',fr:'Affirmation copiée!',de:'Affirmation kopiert!'}[lang]||'¡Copiado!';
+      const msg = {es:'¡Afirmación copiada!',en:'Affirmation copied!',pt:'Afirmação copiada!',fr:'Affirmation copiée!',de:'Affirmation kopiert!'}[lang]||'¡Copiado!';
       showToast(`📋 ${msg}`);
     }).catch(() => {
       // Fallback

@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Yayika — "Gana con Yayika" Client
    Earnings dashboard, marketplace, mentoring, ROI
    ============================================================ */
@@ -79,7 +79,7 @@
       mentors: 'Mentoras disponíveis', specialties: 'Especialidades',
       commission: 'Comissão', roi: 'Seu ROI', invested: 'Investido', earned: 'Ganho',
       loading: 'Carregando...', error: '⚠️ Erro ao carregar dados',
-      back: '← Voltar', viewMarketplace: 'Ver Comunidade →', viewMentors: 'Ver Mentorras →',
+      back: '← Voltar', viewMarketplace: 'Ver Comunidade →', viewMentors: 'Ver Mentoras →',
       friends: 'amigas', lastEarnings: 'Últimos ganhos', referred: 'Indicado',
       sale: 'Venda', noProducts: 'Ainda não há produtos na comunidade. Seja a primeira a vender!',
       noMentors: 'Ainda não há mentoras disponíveis. Torne-se a primeira!',

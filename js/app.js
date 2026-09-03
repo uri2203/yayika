@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Yayika — app.js
    Core: Supabase Auth + DB + XP system + Stripe + Analytics
    ============================================================ */
@@ -489,7 +489,7 @@ function renderSuspensionNotice(statusData) {
       en: 'Your {plan} membership has a pending payment. You have {days} days to update your payment method before access is suspended.',
       pt: 'Sua assinatura {plan} tem um pagamento pendente. Você tem {days} dias para atualizar seu método de pagamento antes que o acesso seja suspenso.',
       fr: 'Votre adhésion {plan} a un paiement en attente. Vous avez {days} jours pour mettre à jour votre moyen de paiement avant la suspension.',
-      de: 'Ihre {plan}-Mitgliedschaft hat eine ausstehende Zahlung. Sie haben {days} Tage, um Ihre Zahlungsmethode zu aktualisieren.',
+      de: 'Ihre {plan}-Mitgliedschaft hat eine ausstehende Zahlung. Sie haben {days} Tage, um Ihre Zahlungsmethode zu aktualisieren, bevor der Zugang gesperrt wird.',
     },
     grace_cta: {
       es: 'Actualizar método de pago',
