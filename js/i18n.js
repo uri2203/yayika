@@ -1,4 +1,4 @@
-﻿?/* ============================================================
+﻿/* ============================================================
    Yayika — i18n (Multi-language)
    Supported: ES, EN, PT, FR, DE
    ============================================================ */
@@ -143,6 +143,13 @@ const I18N = {
     footer_deslinde: 'Deslinde de Responsabilidades',
     footer_aviso_legal: 'Aviso Legal',
     footer_accesibilidad: 'Accesibilidad',
+    // Retention widget    common_copy: 'Copiar',
+    common_download: 'Descargar',
+    retention_loading_projection: 'Cargando tu proyección...',
+    retention_already_spun: '¡Ya giraste hoy. ¡Vuelve mañana!',
+    retention_already_checked_in: 'Ya hiciste check-in hoy. ¡Vuelve mañana!',
+    retention_transform_need_month: 'Necesitas al menos 1 mes de uso para ver tu transformación.',
+    common_error_retry: 'Error. Intenta de nuevo.',
     footer_rights: '© 2026 Yayika · Todos los derechos reservados',
     footer_payments: 'Pagos por Stripe · yayika.com',
     // Install banner
@@ -1368,6 +1375,13 @@ const I18N = {
     footer_deslinde: 'Disclaimer',
     footer_aviso_legal: 'Legal Notice',
     footer_accesibilidad: 'Accessibility',
+    // Retention widget    common_copy: 'Copy',
+    common_download: 'Download',
+    retention_loading_projection: 'Loading your projection...',
+    retention_already_spun: 'You already spun today. Come back tomorrow!',
+    retention_already_checked_in: 'You already checked in today. Come back tomorrow!',
+    retention_transform_need_month: 'You need at least 1 month of use to see your transformation.',
+    common_error_retry: 'Error. Try again.',
     footer_rights: '© 2026 Yayika · All rights reserved',
     footer_payments: 'Payments by Stripe · yayika.com',
     install_title: 'Install Yayika on your phone',

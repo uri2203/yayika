@@ -258,6 +258,13 @@ const DailyAffirmations = {
         
         if (typeEl && result.type) {
           const typeLabels = this.AFFIRMATION_TYPES[lang] || this.AFFIRMATION_TYPES['es'];
+          const basedOnText = {
+            es: 'Basado en: ',
+            en: 'Based on: ',
+            pt: 'Baseado em: ',
+            fr: 'Basé sur : ',
+            de: 'Basierend auf: '
+          }[lang] || 'Basado en: ';
           typeEl.textContent = `${basedOnText}${typeLabels[result.type] || result.type}`;
         }
         

@@ -68,7 +68,7 @@ const FinancialCoach = {
       const expenses = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + (t.amount || 0), 0);
       
       // Top categories
-      const catTotals: Record<string, { total: number; name: string; icon: string }> = {};
+      const catTotals = {};
       transactions.filter(t => t.type === 'expense').forEach(t => {
         const cat = t.category || 'other';
         if (!catTotals[cat]) catTotals[cat] = { total: 0, name: cat, icon: '📦' };

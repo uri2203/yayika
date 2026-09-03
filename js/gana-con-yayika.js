@@ -194,9 +194,10 @@
       const content = $('#ganaContent');
       if (!content) return;
       try {
+        const { data: { session } } = await supabase.auth.getSession(); const token = session?.access_token || "";
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(token}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'getDashboard', lang: currentLang || 'es' })
         });
         const data = await res.json();
@@ -362,9 +363,10 @@
       if (!content) return;
       content.innerHTML = renderLoading();
       try {
+        const { data: { session } } = await supabase.auth.getSession(); const token = session?.access_token || "";
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(token}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'getMarketplace', lang: currentLang || 'es' })
         });
         const data = await res.json();
@@ -405,9 +407,10 @@
       if (!content) return;
       content.innerHTML = renderLoading();
       try {
+        const { data: { session } } = await supabase.auth.getSession(); const token = session?.access_token || "";
         const res = await fetch(API, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(supabase.auth.session && supabase.auth.session.access_token) || ''}`, 'apikey': SUPABASE_ANON_KEY },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(token}`, 'apikey': SUPABASE_ANON_KEY },
           body: JSON.stringify({ action: 'getMentors', lang: currentLang || 'es' })
         });
         const data = await res.json();

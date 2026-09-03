@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Yayika — Retention Psychology System (Web)
    7 mechanisms for psychological retention
    ============================================================ */
@@ -221,7 +221,7 @@ function renderTransformMirror(history) {
       ">
         <div style="font-weight: 600; color: #1A1A2E; margin-bottom: 12px;">${rt('retention_mirror_title')}</div>
         <div style="text-align: center; color: #999; padding: 20px;">
-          Necesitas al menos 1 mes de uso para ver tu transformación.
+          t('retention_transform_need_month')
         </div>
       </div>
     `;
@@ -342,7 +342,7 @@ function renderFutureSelf(projection) {
       ">
         <div style="font-weight: 600; color: #1A1A2E; margin-bottom: 12px;">${rt('retention_future_title')}</div>
         <div style="text-align: center; color: #999; padding: 20px;">
-          Cargando tu proyección...
+          t('retention_loading_projection')
         </div>
       </div>
     `;
@@ -422,7 +422,7 @@ async function handleRetentionCheckin() {
 
     if (result.error) {
       if (result.error === 'Already checked in today') {
-        showRetentionToast('Ya hiciste check-in hoy. ¡Vuelve mañana!');
+        showRetentionToast('t('retention_already_checked_in')');
       }
       return;
     }
@@ -456,7 +456,7 @@ async function spinRewardWheel() {
     });
 
     if (result.already_spun) {
-      resultDiv.innerHTML = '<span style="color: #999;">Ya giraste hoy. ¡Vuelve mañana!</span>';
+      resultDiv.innerHTML = '<span style="color: #999;">'<span style="color: #999;">' + t('retention_already_spun') + '</span>'</span>';
       return;
     }
 
@@ -504,7 +504,7 @@ async function spinRewardWheel() {
 
   } catch (error) {
     console.error('Wheel error:', error);
-    resultDiv.innerHTML = '<span style="color: #999;">Error. Intenta de nuevo.</span>';
+    resultDiv.innerHTML = '<span style="color: #999;">t('common_error_retry')</span>';
   }
 }
 
