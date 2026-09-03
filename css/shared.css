@@ -46,7 +46,7 @@
 }
 [data-theme="dark"] .card { background: var(--card); border-color: var(--borde); }
 [data-theme="dark"] nav { background: rgba(26,16,48,0.95); }
-[data-theme="dark"] .logo img { filter: brightness(1.6) contrast(1.1); }
+[data-theme="dark"] .logo img { filter: none; }
 [data-theme="dark"] .sidebar { background: var(--card); border-color: var(--borde); }
 [data-theme="dark"] a { color: var(--lila); }
 [data-theme="dark"] .form-input { background: var(--card); color: var(--texto); border-color: var(--borde); }
@@ -132,6 +132,9 @@ nav {
   font-weight: 700;
   color: var(--lila-d);
   letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .logo span { color: var(--rosa); }
 
