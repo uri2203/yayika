@@ -6172,3 +6172,18 @@ function updatePrices() {
     } catch(e) {}
   });
 }
+// Initialize language on page load
+(function() {
+  var saved = localStorage.getItem('yayika_lang') || navigator.language?.split('-')[0] || 'es';
+  var supported = ['es','en','pt','fr','de'];
+  if (supported.indexOf(saved) === -1) saved = 'es';
+  setLanguage(saved);
+})();
+
+// Initialize language on page load
+(function() {
+  var saved = localStorage.getItem('yayika_lang') || navigator.language?.split('-')[0] || 'es';
+  var supported = ['es','en','pt','fr','de'];
+  if (supported.indexOf(saved) === -1) saved = 'es';
+  setLanguage(saved);
+})();
