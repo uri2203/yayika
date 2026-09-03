@@ -221,7 +221,7 @@ function renderTransformMirror(history) {
       ">
         <div style="font-weight: 600; color: #1A1A2E; margin-bottom: 12px;">${rt('retention_mirror_title')}</div>
         <div style="text-align: center; color: #999; padding: 20px;">
-          t('retention_transform_need_month')
+          ${rt('retention_transform_need_month')}
         </div>
       </div>
     `;
@@ -342,7 +342,7 @@ function renderFutureSelf(projection) {
       ">
         <div style="font-weight: 600; color: #1A1A2E; margin-bottom: 12px;">${rt('retention_future_title')}</div>
         <div style="text-align: center; color: #999; padding: 20px;">
-          t('retention_loading_projection')
+          ${rt('retention_loading_projection')}
         </div>
       </div>
     `;
@@ -422,7 +422,7 @@ async function handleRetentionCheckin() {
 
     if (result.error) {
       if (result.error === 'Already checked in today') {
-        showRetentionToast('t('retention_already_checked_in')');
+        showRetentionToast(rt('retention_already_checked_in'));
       }
       return;
     }
@@ -456,7 +456,7 @@ async function spinRewardWheel() {
     });
 
     if (result.already_spun) {
-      resultDiv.innerHTML = '<span style="color: #999;">'<span style="color: #999;">' + t('retention_already_spun') + '</span>'</span>';
+      resultDiv.innerHTML = '<span style="color: #999;">' + rt('retention_already_spun') + '</span>';
       return;
     }
 
@@ -504,7 +504,7 @@ async function spinRewardWheel() {
 
   } catch (error) {
     console.error('Wheel error:', error);
-    resultDiv.innerHTML = '<span style="color: #999;">t('common_error_retry')</span>';
+    resultDiv.innerHTML = '<span style="color: #999;">' + rt('common_error_retry') + '</span>';
   }
 }
 
