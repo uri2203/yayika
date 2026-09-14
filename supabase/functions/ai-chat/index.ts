@@ -51,7 +51,7 @@ serve(async (req: Request) => {
     // Use Groq if key available, else OpenAI
     const isGroq = !!groqKey;
     const baseUrl = isGroq ? "https://api.groq.com/openai" : "https://api.openai.com";
-    const model = isGroq ? "llama-3.3-70b-versatile" : "gpt-4o-mini";
+    const model = isGroq ? "llama-3.1-8b-instant" : "gpt-4o-mini";
 
     const response = await fetch(`${baseUrl}/v1/chat/completions`, {
       method: "POST",
