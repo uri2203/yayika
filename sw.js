@@ -51,6 +51,7 @@ const PRECACHE_ASSETS = [
   '/js/badges.js',
   '/js/ai-agent.js',
   '/js/admin.js',
+  '/js/feature-flags.js',
   '/js/affiliate.js',
   '/js/theme.js',
   '/js/courses.js',
