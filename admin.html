@@ -246,6 +246,7 @@
       <button class="tab-btn" onclick="showTab('push')">Notificaciones</button>
       <button class="tab-btn" onclick="showTab('settings')">Configuración</button>
       <button class="tab-btn" onclick="showTab('flags')">Feature Flags</button>
+      <button class="tab-btn" onclick="showTab('logs')">Logs</button>
     </div>
 
     <!-- Content -->
@@ -410,7 +411,7 @@ function showTab(tab) {
   filterStatus = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const btns = document.querySelectorAll('.tab-btn');
-  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5, push: 6, settings: 7, flags: 8 }[tab];
+  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5, push: 6, settings: 7, flags: 8, logs: 9 }[tab];
   if (btns[idx]) btns[idx].classList.add('active');
 
   if (!statsCache) {
@@ -428,6 +429,7 @@ function showTab(tab) {
     case 'push': renderPush(); break;
     case 'settings': renderSettings(); break;
     case 'flags': renderFlags(); break;
+    case 'logs': renderLogs(); break;
   }
 }
 
@@ -1514,6 +1516,74 @@ async function toggleFlag(id, enabled) {
     await sbUpdate('yayika_feature_flags', { is_enabled: enabled }, `id=eq.${id}`);
     showToast(enabled ? 'Feature activado' : 'Feature desactivado', 'success');
     renderFlags();
+  } catch (e) {
+    showToast('Error: ' + e.message, 'error');
+  }
+}
+
+// ACTIVITY LOGS
+async function renderLogs() {
+  const container = document.getElementById('tabContent');
+  container.innerHTML = '<div class="empty-msg">Cargando logs...</div>';
+  try {
+    const logs = await sbQuery('yayika_admin_logs', 'id, action, detail, admin_email, created_at', 'order=created_at.desc&limit=100');
+    if (logs.length === 0) {
+      container.innerHTML = '<div class="empty-msg">No hay actividad registrada aún</div>';
+      return;
+    }
+    const actionIcons = {
+      edit_user: '👤', ban_user: '🚫', unban_user: '✅',
+      toggle_product: '📦', toggle_challenge: '🏆', send_push: '🔔',
+      edit_plan: '💰', export_data: '📊'
+    };
+    const actionColors = {
+      edit_user: 'var(--lila)', ban_user: '#E74C3C', unban_user: 'var(--verde)',
+      toggle_product: 'var(--turquesa)', toggle_challenge: 'var(--oro)', send_push: 'var(--rosa)',
+      edit_plan: 'var(--verde)', export_data: 'var(--turquesa)'
+    };
+    const rows = logs.map(l => {
+      const icon = actionIcons[l.action] || '📋';
+      const color = actionColors[l.action] || 'var(--suave)';
+      const date = l.created_at ? new Date(l.created_at).toLocaleString('es-MX') : '-';
+      return `<tr style="border-bottom:0.5px solid var(--borde)">
+        <td style="padding:10px 12px;font-size:16px">${icon}</td>
+        <td style="padding:10px 12px">
+          <div style="font-weight:500;font-size:13px;color:${color}">${l.action}</div>
+          <div style="font-size:12px;color:var(--suave)">${l.detail || ''}</div>
+        </td>
+        <td style="padding:10px 12px;font-size:12px;color:var(--suave)">${l.admin_email || 'system'}</td>
+        <td style="padding:10px 12px;font-size:12px;color:var(--suave);white-space:nowrap">${date}</td>
+      </tr>`;
+    }).join('');
+    container.innerHTML = `
+      <div class="table-header">
+        <span>${logs.length} registros de actividad</span>
+        <button class="action-btn danger" onclick="clearLogs()">Limpiar logs</button>
+      </div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="border-bottom:1px solid var(--borde);text-align:left">
+          <th style="padding:10px 12px;font-size:11px;color:var(--suave);font-weight:500;width:40px"></th>
+          <th style="padding:10px 12px;font-size:11px;color:var(--suave);font-weight:500">Acción</th>
+          <th style="padding:10px 12px;font-size:11px;color:var(--suave);font-weight:500">Admin</th>
+          <th style="padding:10px 12px;font-size:11px;color:var(--suave);font-weight:500">Fecha</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  } catch (e) {
+    container.innerHTML = `<div class="empty-msg">Error: ${e.message}</div>`;
+  }
+}
+
+async function clearLogs() {
+  if (!confirm('¿Eliminar todos los logs de actividad?')) return;
+  try {
+    await fetch(`${SB_URL}/rest/v1/yayika_admin_logs?id=not.is.null`, {
+      method: 'DELETE',
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    showToast('Logs eliminados', 'success');
+    renderLogs();
   } catch (e) {
     showToast('Error: ' + e.message, 'error');
   }
