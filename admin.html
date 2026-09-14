@@ -244,6 +244,7 @@
       <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
       <button class="tab-btn" onclick="showTab('content')">Contenido</button>
       <button class="tab-btn" onclick="showTab('push')">Notificaciones</button>
+      <button class="tab-btn" onclick="showTab('settings')">Configuración</button>
     </div>
 
     <!-- Content -->
@@ -408,7 +409,7 @@ function showTab(tab) {
   filterStatus = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const btns = document.querySelectorAll('.tab-btn');
-  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5, push: 6 }[tab];
+  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5, push: 6, settings: 7 }[tab];
   if (btns[idx]) btns[idx].classList.add('active');
 
   if (!statsCache) {
@@ -424,6 +425,7 @@ function showTab(tab) {
     case 'analytics': renderAnalytics(); break;
     case 'content': renderContent(); break;
     case 'push': renderPush(); break;
+    case 'settings': renderSettings(); break;
   }
 }
 
@@ -1331,6 +1333,126 @@ async function sendPush() {
     showToast('Error: ' + e.message, 'error');
   }
 }
-</script>
+
+// SETTINGS
+const PLAN_CONFIG = {
+  semilla: { name: 'Semilla', price: 5, color: 'var(--verde)', features: ['Ciclo tracking básico', '1 curso', 'Badges'] },
+  guerrera: { name: 'Guerrera', price: 10, color: 'var(--rosa)', features: ['Todo en Semilla', 'Chat IA ilimitado', 'Coach de crecimiento', 'Planner wellness', 'Cursos completos', 'Círculos comunitarios'] },
+  diamante: { name: 'Diamante', price: 18, color: 'var(--oro)', features: ['Todo en Guerrera', 'Analíticas avanzadas', 'Retos exclusivos', 'Soporte prioritario', 'Badges premium', 'Eventos VIP'] }
+};
+
+function renderSettings() {
+  const { planCounts, subs } = statsCache;
+  const container = document.getElementById('tabContent');
+
+  container.innerHTML = `
+    <!-- Planes -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+      ${Object.entries(PLAN_CONFIG).map(([key, plan]) => `
+        <div class="chart-card" style="border-top:3px solid ${plan.color}">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <h4 style="margin:0">${plan.name}</h4>
+            <span style="font-size:20px;font-weight:700;color:${plan.color}">$${plan.price}<span style="font-size:12px;font-weight:400;color:var(--suave)">/mes</span></span>
+          </div>
+          <div style="font-size:12px;color:var(--suave);margin-bottom:12px">${planCounts[key] || 0} suscriptores activos</div>
+          <ul style="list-style:none;padding:0;margin:0">
+            ${plan.features.map(f => `<li style="font-size:12px;padding:4px 0;color:var(--texto)">✓ ${f}</li>`).join('')}
+          </ul>
+          <div style="margin-top:16px">
+            <button class="action-btn edit" onclick="editPlan('${key}')">Editar precio</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="chart-card" style="margin-bottom:16px">
+      <h4>Acciones rápidas</h4>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="action-btn primary" onclick="exportUsers()">Exportar usuarios (CSV)</button>
+        <button class="action-btn primary" onclick="exportRevenue()">Exportar revenue (CSV)</button>
+        <button class="action-btn secondary" onclick="refreshDashboard()">Recargar datos</button>
+      </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="chart-card">
+      <h4>Información del sistema</h4>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <div class="detail-field"><div class="detail-label">Versión app</div><div class="detail-value">1.5.0</div></div>
+        <div class="detail-field"><div class="detail-label">Runtime</div><div class="detail-value">1.5.0</div></div>
+        <div class="detail-field"><div class="detail-label">Supabase</div><div class="detail-value" style="font-size:11px;font-family:monospace">odbhxiymteppgaqqdsoy</div></div>
+        <div class="detail-field"><div class="detail-label">Edge Functions</div><div class="detail-value">38 activas</div></div>
+        <div class="detail-field"><div class="detail-label">Idiomas</div><div class="detail-value">ES, EN, PT, FR, DE</div></div>
+        <div class="detail-field"><div class="detail-label">Última actualización</div><div class="detail-value">${new Date().toLocaleDateString('es-MX')}</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function editPlan(key) {
+  const plan = PLAN_CONFIG[key];
+  document.getElementById('editModalBody').innerHTML = `
+    <div style="margin-bottom:16px;padding:12px;background:${plan.color}20;border-radius:10px">
+      <div style="font-weight:600;font-size:16px;color:${plan.color}">${plan.name}</div>
+      <div style="font-size:12px;color:var(--suave)">${statsCache.planCounts[key] || 0} suscriptores actuales</div>
+    </div>
+    <div class="form-group">
+      <label>Precio mensual ($)</label>
+      <input type="number" id="newPlanPrice" value="${plan.price}" min="0" step="0.5">
+    </div>
+    <div style="padding:10px;background:var(--crema);border-radius:10px;font-size:12px;color:var(--suave)">
+      Cambiar el precio afectará a los nuevos suscriptores. Los existentes mantienen su precio hasta el próximo ciclo.
+    </div>`;
+  document.getElementById('editModalFooter').innerHTML = `
+    <button class="action-btn secondary" onclick="closeEditModal()">Cancelar</button>
+    <button class="action-btn primary" onclick="savePlanPrice('${key}')">Guardar precio</button>`;
+  document.getElementById('editModal').classList.add('active');
+}
+
+async function savePlanPrice(key) {
+  const price = parseFloat(document.getElementById('newPlanPrice').value);
+  if (isNaN(price) || price < 0) { showToast('Precio inválido', 'error'); return; }
+  PLAN_CONFIG[key].price = price;
+  showToast(`Precio de ${PLAN_CONFIG[key].name} actualizado a $${price}`, 'success');
+  closeEditModal();
+  renderSettings();
+}
+
+function exportUsers() {
+  const { profiles, subs } = statsCache;
+  const rows = [['Nombre', 'Email', 'Plan', 'Registro', 'Estado']];
+  profiles.forEach(p => {
+    const sub = subs.find(s => s.user_id === p.id);
+    rows.push([p.full_name || '', p.email || '', sub?.plan || 'free', p.created_at || '', p.is_banned ? 'Baneado' : 'Activo']);
+  });
+  downloadCSV(rows, 'usuarios_yayika.csv');
+  showToast('CSV de usuarios descargado', 'success');
+}
+
+function exportRevenue() {
+  const { allSubs } = statsCache;
+  const rows = [['Plan', 'Estado', 'Fecha', 'Precio']];
+  const planPrices = { semilla: 5, guerrera: 10, diamante: 18 };
+  allSubs.forEach(s => {
+    rows.push([s.plan || '', s.status || '', s.created_at || '', planPrices[s.plan] || 0]);
+  });
+  downloadCSV(rows, 'revenue_yayika.csv');
+  showToast('CSV de revenue descargado', 'success');
+}
+
+function downloadCSV(rows, filename) {
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function refreshDashboard() {
+  showToast('Recargando datos...', 'success');
+  loadDashboard();
+}
 </body>
 </html>
