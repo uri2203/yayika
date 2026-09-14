@@ -235,7 +235,7 @@ async function getAdminStats() {
   if (!supabase || !isAdmin()) return null;
 
   const [usersResult, subsResult, affiliatesResult, revenueResult] = await Promise.all([
-    supabase.from('yayika_profiles').select('id, full_name, email:auth.users!inner(email), created_at, avatar_color').order('created_at', { ascending: false }),
+    supabase.from('yayika_profiles').select('id, full_name, email, created_at, avatar_color, is_banned').order('created_at', { ascending: false }),
     supabase.from('yayika_subscriptions').select('*').neq('status', 'cancelled'),
     supabase.from('yayika_affiliates').select('id, user_id, ref_code, total_earned, pending_payout, active_referrals, status'),
     supabase.from('yayika_subscriptions').select('plan, status, created_at, current_period_end').order('created_at', { ascending: false })
@@ -350,7 +350,7 @@ async function renderAdminUsers(container) {
   if (!stats) { container.innerHTML = `<p>${adminT('error')}</p>`; return; }
 
   const rows = stats.profiles.map(p => {
-    const email = p.email?.email || 'N/A';
+    const email = p.email || 'N/A';
     const name = p.full_name || email.split('@')[0];
     const initials = name.substring(0, 2).toUpperCase();
     const color = p.avatar_color || '#7B5EA7';
