@@ -157,11 +157,38 @@
   tbody tr { cursor:pointer; transition:background .15s; }
   tbody tr:hover { background:var(--lila-l); }
 
+  /* CHARTS */
+  .chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .chart-card { background:var(--blanco); border:1px solid var(--borde); border-radius:14px; padding:20px; }
+  .chart-card h4 { font-size:14px; font-weight:600; color:var(--texto); margin-bottom:16px; }
+  .chart-bar { display:flex; align-items:flex-end; gap:6px; height:120px; padding-top:8px; }
+  .bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .bar { width:100%; border-radius:6px 6px 0 0; transition:height .5s ease; min-height:2px; }
+  .bar-label { font-size:9px; color:var(--suave); writing-mode:vertical-rl; text-orientation:mixed; max-height:60px; overflow:hidden; }
+  .bar-value { font-size:10px; font-weight:600; color:var(--texto); }
+  .metric-row { display:flex; gap:12px; margin-bottom:16px; }
+  .metric-card { flex:1; background:var(--crema); border-radius:12px; padding:16px; text-align:center; }
+  .metric-num { font-size:24px; font-weight:700; }
+  .metric-label { font-size:11px; color:var(--suave); margin-top:4px; }
+  .metric-change { font-size:11px; margin-top:4px; font-weight:500; }
+  .metric-change.up { color:var(--verde); }
+  .metric-change.down { color:#E74C3C; }
+  .funnel { display:flex; flex-direction:column; gap:8px; }
+  .funnel-step { display:flex; align-items:center; gap:12px; }
+  .funnel-bar { height:32px; border-radius:8px; display:flex; align-items:center; padding:0 12px; color:white; font-size:12px; font-weight:600; transition:width .5s ease; }
+  .funnel-label { font-size:12px; color:var(--suave); min-width:120px; }
+  .funnel-pct { font-size:12px; font-weight:600; min-width:40px; text-align:right; }
+  .retention-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .retention-cell { padding:8px 4px; border-radius:6px; text-align:center; font-size:10px; font-weight:500; }
+  .retention-header { font-size:9px; color:var(--suave); font-weight:500; }
+
   @media(max-width:768px) {
     .stats-grid { grid-template-columns:repeat(2,1fr); }
     .rev-grid { grid-template-columns:1fr; }
     .plans-row { flex-direction:column; }
     .user-detail-grid { grid-template-columns:1fr; }
+    .chart-grid { grid-template-columns:1fr; }
+    .metric-row { flex-direction:column; }
   }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -205,6 +232,7 @@
       <button class="tab-btn" onclick="showTab('subs')" data-i18n="admin_tab_subs">Suscripciones</button>
       <button class="tab-btn" onclick="showTab('aff')" data-i18n="admin_tab_affiliates">Afiliadas</button>
       <button class="tab-btn" onclick="showTab('rev')" data-i18n="admin_tab_revenue">Revenue</button>
+      <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
     </div>
 
     <!-- Content -->
@@ -369,7 +397,7 @@ function showTab(tab) {
   filterStatus = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const btns = document.querySelectorAll('.tab-btn');
-  const idx = { users: 0, subs: 1, aff: 2, rev: 3 }[tab];
+  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4 }[tab];
   if (btns[idx]) btns[idx].classList.add('active');
 
   if (!statsCache) {
@@ -382,6 +410,7 @@ function showTab(tab) {
     case 'subs': renderSubs(); break;
     case 'aff': renderAff(); break;
     case 'rev': renderRev(); break;
+    case 'analytics': renderAnalytics(); break;
   }
 }
 
@@ -700,6 +729,197 @@ function renderRev() {
         <div class="plan-item gold"><div class="plan-num" style="color:var(--oro)">${planCounts.diamante || 0}</div><div class="plan-label">Diamante · $18/mes</div></div>
       </div>
     </div>`;
+}
+
+function renderAnalytics() {
+  const { profiles, subs, affiliates, allSubs, planCounts } = statsCache;
+  const now = new Date();
+
+  // --- Users by month (last 6 months) ---
+  const months = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = d.toISOString().substring(0, 7);
+    const label = d.toLocaleDateString('es-MX', { month: 'short' });
+    const count = profiles.filter(p => p.created_at && p.created_at.startsWith(key)).length;
+    months.push({ key, label, count });
+  }
+  const maxUsers = Math.max(...months.map(m => m.count), 1);
+
+  // --- Revenue by month ---
+  const revMonths = [];
+  const planPrices = { semilla: 5, guerrera: 10, diamante: 18 };
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const key = d.toISOString().substring(0, 7);
+    const label = d.toLocaleDateString('es-MX', { month: 'short' });
+    let rev = 0;
+    allSubs.forEach(s => {
+      if (s.created_at && s.created_at.startsWith(key)) rev += planPrices[s.plan] || 0;
+    });
+    revMonths.push({ key, label, rev });
+  }
+  const maxRev = Math.max(...revMonths.map(m => m.rev), 1);
+
+  // --- Conversion funnel ---
+  const totalUsers = profiles.length;
+  const withSub = subs.length;
+  const premium = subs.filter(s => s.plan === 'guerrera' || s.plan === 'diamante').length;
+  const withAff = affiliates.length;
+  const funnel = [
+    { label: 'Usuarios totales', value: totalUsers, color: 'var(--turquesa)' },
+    { label: 'Con suscripción', value: withSub, color: 'var(--lila)' },
+    { label: 'Premium (Guerrera+)', value: premium, color: 'var(--rosa)' },
+    { label: 'Afiliadas', value: withAff, color: 'var(--oro)' },
+  ];
+  const funnelMax = Math.max(...funnel.map(f => f.value), 1);
+
+  // --- Conversion rates ---
+  const convSub = totalUsers > 0 ? ((withSub / totalUsers) * 100).toFixed(1) : 0;
+  const convPrem = totalUsers > 0 ? ((premium / totalUsers) * 100).toFixed(1) : 0;
+  const convAff = totalUsers > 0 ? ((withAff / totalUsers) * 100).toFixed(1) : 0;
+
+  // --- Retention (users per day of week) ---
+  const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  const dayCounts = new Array(7).fill(0);
+  profiles.forEach(p => {
+    if (p.created_at) {
+      const d = new Date(p.created_at);
+      dayCounts[d.getDay()]++;
+    }
+  });
+  const maxDay = Math.max(...dayCounts, 1);
+
+  // --- Active vs Free ---
+  const activeSubs = subs.filter(s => s.status === 'active').length;
+  const freeUsers = totalUsers - withSub;
+
+  // Build HTML
+  document.getElementById('tabContent').innerHTML = `
+    <!-- Key Metrics -->
+    <div class="metric-row">
+      <div class="metric-card">
+        <div class="metric-num" style="color:var(--turquesa)">${totalUsers}</div>
+        <div class="metric-label">Usuarios totales</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" style="color:var(--verde)">${convSub}%</div>
+        <div class="metric-label">Conversión a pago</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" style="color:var(--rosa)">${convPrem}%</div>
+        <div class="metric-label">Conversión premium</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num" style="color:var(--oro)">${convAff}%</div>
+        <div class="metric-label">Tasa afiliación</div>
+      </div>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="chart-grid">
+      <!-- Users Growth -->
+      <div class="chart-card">
+        <h4>Crecimiento de usuarios (6 meses)</h4>
+        <div class="chart-bar">
+          ${months.map(m => {
+            const h = Math.max((m.count / maxUsers) * 100, 4);
+            return `<div class="bar-col">
+              <div class="bar-value">${m.count}</div>
+              <div class="bar" style="height:${h}%;background:var(--turquesa)"></div>
+              <div class="bar-label">${m.label}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Revenue -->
+      <div class="chart-card">
+        <h4>Revenue mensual (6 meses)</h4>
+        <div class="chart-bar">
+          ${revMonths.map(m => {
+            const h = Math.max((m.rev / maxRev) * 100, 4);
+            return `<div class="bar-col">
+              <div class="bar-value">$${m.rev}</div>
+              <div class="bar" style="height:${h}%;background:var(--verde)"></div>
+              <div class="bar-label">${m.label}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Funnel -->
+      <div class="chart-card">
+        <h4>Embudo de conversión</h4>
+        <div class="funnel">
+          ${funnel.map(f => {
+            const w = Math.max((f.value / funnelMax) * 100, 8);
+            return `<div class="funnel-step">
+              <div class="funnel-label">${f.label}</div>
+              <div class="funnel-bar" style="width:${w}%;background:${f.color}">${f.value}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Day of Week -->
+      <div class="chart-card">
+        <h4>Registros por día de semana</h4>
+        <div class="chart-bar">
+          ${dayCounts.map((c, i) => {
+            const h = Math.max((c / maxDay) * 100, 4);
+            return `<div class="bar-col">
+              <div class="bar-value">${c}</div>
+              <div class="bar" style="height:${h}%;background:var(--lila)"></div>
+              <div class="bar-label">${dayNames[i]}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Distribution -->
+    <div class="chart-card" style="margin-bottom:16px">
+      <h4>Distribución de planes</h4>
+      <div style="display:flex;gap:16px;align-items:center">
+        <div style="flex:1">
+          <div style="display:flex;height:24px;border-radius:12px;overflow:hidden">
+            ${totalUsers > 0 ? `
+              <div style="width:${(freeUsers/totalUsers)*100}%;background:#F0F0F0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#95A5A6">${freeUsers} Free</div>
+              <div style="width:${(planCounts.semilla||0)/totalUsers*100}%;background:var(--verde-l);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--verde)">${planCounts.semilla||0}</div>
+              <div style="width:${(planCounts.guerrera||0)/totalUsers*100}%;background:var(--rosa-l);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--rosa)">${planCounts.guerrera||0}</div>
+              <div style="width:${(planCounts.diamante||0)/totalUsers*100}%;background:var(--oro-l);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--oro)">${planCounts.diamante||0}</div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px">
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:3px;background:#F0F0F0;display:inline-block"></span> Free (${freeUsers})</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:3px;background:var(--verde-l);display:inline-block"></span> Semilla (${planCounts.semilla||0})</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:3px;background:var(--rosa-l);display:inline-block"></span> Guerrera (${planCounts.guerrera||0})</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border-radius:3px;background:var(--oro-l);display:inline-block"></span> Diamante (${planCounts.diamante||0})</span>
+      </div>
+    </div>
+
+    <!-- Retention Note -->
+    <div class="chart-card">
+      <h4>Resumen rápido</h4>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div style="padding:12px;background:var(--turquesa-l);border-radius:10px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:var(--turquesa)">${activeSubs}</div>
+          <div style="font-size:11px;color:var(--suave)">Suscripciones activas</div>
+        </div>
+        <div style="padding:12px;background:var(--verde-l);border-radius:10px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:var(--verde)">$${(planCounts.semilla*5 + planCounts.guerrera*10 + planCounts.diamante*18).toFixed(0)}</div>
+          <div style="font-size:11px;color:var(--suave)">MRR estimado</div>
+        </div>
+        <div style="padding:12px;background:var(--oro-l);border-radius:10px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:var(--oro)">${affiliates.filter(a=>a.status==='active').length}</div>
+          <div style="font-size:11px;color:var(--suave)">Afiliadas activas</div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 </script>
 </body>
