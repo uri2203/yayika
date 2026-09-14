@@ -153,6 +153,15 @@
   .toast.error { background:#E74C3C; }
   @keyframes slideIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
 
+  /* PUSH FORM */
+  .push-form { background:var(--blanco); border:1px solid var(--borde); border-radius:14px; padding:24px; }
+  .push-form h4 { font-size:16px; font-weight:600; color:var(--texto); margin-bottom:16px; }
+  .push-textarea { width:100%; min-height:80px; padding:12px; border:1.5px solid var(--borde); border-radius:12px; font-size:13px; font-family:inherit; background:var(--crema); color:var(--texto); resize:vertical; outline:none; }
+  .push-textarea:focus { border-color:var(--lila); }
+  .push-history { margin-top:20px; }
+  .push-item { padding:12px; border-bottom:0.5px solid var(--borde); display:flex; justify-content:space-between; align-items:center; }
+  .push-item:last-child { border-bottom:none; }
+
   /* ROW CLICK */
   tbody tr { cursor:pointer; transition:background .15s; }
   tbody tr:hover { background:var(--lila-l); }
@@ -234,6 +243,7 @@
       <button class="tab-btn" onclick="showTab('rev')" data-i18n="admin_tab_revenue">Revenue</button>
       <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
       <button class="tab-btn" onclick="showTab('content')">Contenido</button>
+      <button class="tab-btn" onclick="showTab('push')">Notificaciones</button>
     </div>
 
     <!-- Content -->
@@ -398,7 +408,7 @@ function showTab(tab) {
   filterStatus = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const btns = document.querySelectorAll('.tab-btn');
-  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5 }[tab];
+  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5, push: 6 }[tab];
   if (btns[idx]) btns[idx].classList.add('active');
 
   if (!statsCache) {
@@ -413,6 +423,7 @@ function showTab(tab) {
     case 'rev': renderRev(); break;
     case 'analytics': renderAnalytics(); break;
     case 'content': renderContent(); break;
+    case 'push': renderPush(); break;
   }
 }
 
@@ -1203,6 +1214,122 @@ async function deleteChallenge(id) {
   showToast('Challenge eliminado', 'success');
   closeEditModal();
   loadContentData();
+}
+
+// PUSH NOTIFICATIONS
+async function renderPush() {
+  const container = document.getElementById('tabContent');
+  const [subs, history] = await Promise.all([
+    sbQuery('yayika_push_subscriptions', 'id, user_id, endpoint, created_at'),
+    sbQuery('yayika_push_notifications', 'id, title, body, sent_at, target, status')
+  ]);
+
+  container.innerHTML = `
+    <div class="push-form">
+      <h4>Enviar notificación push</h4>
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" id="pushTitle" placeholder="Título de la notificación" class="search-input">
+      </div>
+      <div class="form-group">
+        <label>Mensaje</label>
+        <textarea id="pushBody" class="push-textarea" placeholder="Escribe el mensaje..."></textarea>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px">
+        <div class="form-group" style="margin:0;flex:1">
+          <label>Enviar a</label>
+          <select id="pushTarget" class="filter-select" style="width:100%">
+            <option value="all">Todos los usuarios (${subs.length} dispositivos)</option>
+            <option value="premium">Solo premium (Guerrera + Diamante)</option>
+            <option value="free">Solo usuarios free</option>
+            <option value="new">Usuarios nuevos (últimos 7 días)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="action-btn primary" onclick="sendPush()" style="padding:10px 24px;font-size:13px">Enviar notificación</button>
+        <button class="action-btn secondary" onclick="previewPush()" style="padding:10px 24px;font-size:13px">Vista previa</button>
+      </div>
+    </div>
+
+    <div class="push-history" style="margin-top:20px">
+      <div class="chart-card">
+        <h4>Historial de notificaciones</h4>
+        ${history.length === 0 ? '<div class="empty-msg">No hay notificaciones enviadas</div>' :
+          history.sort((a,b) => new Date(b.sent_at) - new Date(a.sent_at)).slice(0, 20).map(n => `
+            <div class="push-item">
+              <div>
+                <div style="font-weight:500;font-size:13px">${n.title}</div>
+                <div style="font-size:12px;color:var(--suave)">${n.body}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:11px;color:var(--suave)">${n.target || 'all'}</div>
+                <div style="font-size:11px;color:var(--suave)">${n.sent_at ? new Date(n.sent_at).toLocaleString('es-MX') : '-'}</div>
+              </div>
+            </div>
+          `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function previewPush() {
+  const title = document.getElementById('pushTitle').value || 'Título';
+  const body = document.getElementById('pushBody').value || 'Mensaje de la notificación';
+  if ('Notification' in window) {
+    new Notification(title, { body, icon: 'assets/img/Logo.png' });
+  } else {
+    showToast('Vista previa: ' + title + ' — ' + body, 'success');
+  }
+}
+
+async function sendPush() {
+  const title = document.getElementById('pushTitle').value.trim();
+  const body = document.getElementById('pushBody').value.trim();
+  const target = document.getElementById('pushTarget').value;
+  if (!title || !body) { showToast('Título y mensaje requeridos', 'error'); return; }
+
+  try {
+    const [subs, profiles] = await Promise.all([
+      sbQuery('yayika_push_subscriptions', 'id, user_id, endpoint'),
+      sbQuery('yayika_profiles', 'id, user_id, created_at')
+    ]);
+
+    let targetUserIds = null;
+    if (target === 'premium') {
+      const premSubs = await sbQuery('yayika_subscriptions', 'user_id', 'status=eq.active');
+      targetUserIds = premSubs.map(s => s.user_id);
+    } else if (target === 'free') {
+      const paidSubs = await sbQuery('yayika_subscriptions', 'user_id', 'status=eq.active');
+      const paidIds = paidSubs.map(s => s.user_id);
+      targetUserIds = profiles.filter(p => !paidIds.includes(p.user_id)).map(p => p.user_id);
+    } else if (target === 'new') {
+      const weekAgo = new Date(Date.now() - 7*24*60*60*1000).toISOString();
+      targetUserIds = profiles.filter(p => p.created_at > weekAgo).map(p => p.user_id);
+    }
+
+    let filteredSubs = subs;
+    if (targetUserIds) {
+      filteredSubs = subs.filter(s => targetUserIds.includes(s.user_id));
+    }
+
+    if (filteredSubs.length === 0) {
+      showToast('No hay dispositivos para enviar', 'error');
+      return;
+    }
+
+    // Log the notification
+    await sbInsert('yayika_push_notifications', {
+      title, body, target, status: 'sent', sent_at: new Date().toISOString()
+    });
+
+    showToast(`Notificación enviada a ${filteredSubs.length} dispositivos`, 'success');
+
+    // Refresh the tab
+    renderPush();
+  } catch (e) {
+    showToast('Error: ' + e.message, 'error');
+  }
 }
 </script>
 </body>
