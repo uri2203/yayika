@@ -233,6 +233,7 @@
       <button class="tab-btn" onclick="showTab('aff')" data-i18n="admin_tab_affiliates">Afiliadas</button>
       <button class="tab-btn" onclick="showTab('rev')" data-i18n="admin_tab_revenue">Revenue</button>
       <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+      <button class="tab-btn" onclick="showTab('content')">Contenido</button>
     </div>
 
     <!-- Content -->
@@ -397,7 +398,7 @@ function showTab(tab) {
   filterStatus = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const btns = document.querySelectorAll('.tab-btn');
-  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4 }[tab];
+  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5 }[tab];
   if (btns[idx]) btns[idx].classList.add('active');
 
   if (!statsCache) {
@@ -411,6 +412,7 @@ function showTab(tab) {
     case 'aff': renderAff(); break;
     case 'rev': renderRev(); break;
     case 'analytics': renderAnalytics(); break;
+    case 'content': renderContent(); break;
   }
 }
 
@@ -920,6 +922,287 @@ function renderAnalytics() {
       </div>
     </div>
   `;
+}
+
+// CONTENT MANAGEMENT
+let contentTab = 'courses';
+
+function renderContent() {
+  const container = document.getElementById('tabContent');
+  container.innerHTML = `
+    <div class="tabs" style="margin-bottom:16px">
+      <button class="tab-btn ${contentTab==='courses'?'active':''}" onclick="contentTab='courses';renderContent()">Cursos</button>
+      <button class="tab-btn ${contentTab==='badges'?'active':''}" onclick="contentTab='badges';renderContent()">Badges</button>
+      <button class="tab-btn ${contentTab==='challenges'?'active':''}" onclick="contentTab='challenges';renderContent()">Challenges</button>
+    </div>
+    <div id="contentArea"><div class="empty-msg">Cargando...</div></div>
+  `;
+  loadContentData();
+}
+
+async function loadContentData() {
+  const area = document.getElementById('contentArea');
+  try {
+    if (contentTab === 'courses') {
+      const [products, lessons] = await Promise.all([
+        sbQuery('yayika_products', 'id, name, description, price, category, image_url, is_active, created_at'),
+        sbQuery('yayika_product_lessons', 'id, product_id, title, content, sort_order, duration_minutes')
+      ]);
+      renderCourses(area, products, lessons);
+    } else if (contentTab === 'badges') {
+      const badges = await sbQuery('yayika_badges', 'id, user_id, badge_key, badge_name, badge_desc, badge_icon, badge_tier, earned_at');
+      renderBadges(area, badges);
+    } else if (contentTab === 'challenges') {
+      const challenges = await sbQuery('yayika_weekly_challenges', 'id, title, description, category, xp_reward, difficulty, is_active, week_start, week_end, created_at');
+      renderChallenges(area, challenges);
+    }
+  } catch (e) {
+    area.innerHTML = `<div class="empty-msg">Error: ${e.message}</div>`;
+  }
+}
+
+function renderCourses(area, products, lessons) {
+  if (products.length === 0) {
+    area.innerHTML = '<div class="empty-msg">No hay cursos creados</div>';
+    return;
+  }
+  const rows = products.map(p => {
+    const lessonCount = lessons.filter(l => l.product_id === p.id).length;
+    const totalMin = lessons.filter(l => l.product_id === p.id).reduce((s, l) => s + (l.duration_minutes || 0), 0);
+    return `<tr onclick="viewCourse('${p.id}')" style="cursor:pointer">
+      <td><div style="width:40px;height:40px;border-radius:10px;background:var(--lila-l);display:flex;align-items:center;justify-content:center;font-size:18px">${p.icon || '📚'}</div></td>
+      <td style="font-weight:500">${p.name}</td>
+      <td style="color:var(--suave);font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.description || '-'}</td>
+      <td><span class="badge ${p.is_active ? 'badge-green' : 'badge-gray'}">${p.is_active ? 'Activo' : 'Inactivo'}</span></td>
+      <td style="font-size:12px">${lessonCount} lecciones · ${totalMin}min</td>
+      <td style="font-size:12px;color:var(--suave)">${p.price ? '$' + p.price : 'Gratis'}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="action-btn edit" onclick="editCourse('${p.id}')">Editar</button>
+        <button class="action-btn ${p.is_active ? 'ban' : 'unban'}" onclick="toggleCourseActive('${p.id}',${!p.is_active})">${p.is_active ? 'Desactivar' : 'Activar'}</button>
+      </td>
+    </tr>`;
+  }).join('');
+  area.innerHTML = `
+    <div class="table-header">
+      <span>${products.length} cursos</span>
+      <button class="action-btn primary" onclick="showAddCourseModal()">+ Nuevo curso</button>
+    </div>
+    <table><thead><tr><th></th><th>Nombre</th><th>Descripción</th><th>Estado</th><th>Contenido</th><th>Precio</th><th>Acciones</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+function renderBadges(area, badges) {
+  if (badges.length === 0) {
+    area.innerHTML = '<div class="empty-msg">No hay badges otorgados</div>';
+    return;
+  }
+  const tierColors = { common: 'badge-gray', rare: 'badge-lila', epic: 'badge-rosa', legendary: 'badge-oro' };
+  const grouped = {};
+  badges.forEach(b => { grouped[b.badge_key] = (grouped[b.badge_key] || 0) + 1; });
+  const rows = Object.entries(grouped).map(([key, count]) => {
+    const sample = badges.find(b => b.badge_key === key);
+    return `<tr>
+      <td style="font-size:20px">${sample?.badge_icon || '🏆'}</td>
+      <td style="font-weight:500">${sample?.badge_name || key}</td>
+      <td style="color:var(--suave);font-size:12px">${sample?.badge_desc || '-'}</td>
+      <td><span class="badge ${tierColors[sample?.badge_tier] || 'badge-gray'}">${sample?.badge_tier || 'common'}</span></td>
+      <td style="font-weight:600;color:var(--lila)">${count} earned</td>
+    </tr>`;
+  }).join('');
+  area.innerHTML = `
+    <div class="table-header"><span>${badges.length} badges otorgados · ${Object.keys(grouped).length} tipos</span></div>
+    <table><thead><tr><th></th><th>Nombre</th><th>Descripción</th><th>Tier</th><th>Veces ganado</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+function renderChallenges(area, challenges) {
+  if (challenges.length === 0) {
+    area.innerHTML = '<div class="empty-msg">No hay challenges creados</div>';
+    return;
+  }
+  const diffColors = { easy: 'badge-green', medium: 'badge-rosa', hard: 'badge-oro' };
+  const rows = challenges.map(c => `<tr>
+    <td style="font-weight:500">${c.title}</td>
+    <td style="color:var(--suave);font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.description || '-'}</td>
+    <td><span class="badge ${diffColors[c.difficulty] || 'badge-gray'}">${c.difficulty || '-'}</span></td>
+    <td style="color:var(--lila);font-weight:500">${c.xp_reward || 0} XP</td>
+    <td><span class="badge ${c.is_active ? 'badge-green' : 'badge-gray'}">${c.is_active ? 'Activo' : 'Inactivo'}</span></td>
+    <td style="font-size:12px;color:var(--suave)">${c.category || '-'}</td>
+    <td onclick="event.stopPropagation()">
+      <button class="action-btn edit" onclick="editChallenge('${c.id}')">Editar</button>
+      <button class="action-btn ${c.is_active ? 'ban' : 'unban'}" onclick="toggleChallengeActive('${c.id}',${!c.is_active})">${c.is_active ? 'Desactivar' : 'Activar'}</button>
+    </td>
+  </tr>`).join('');
+  area.innerHTML = `
+    <div class="table-header">
+      <span>${challenges.length} challenges</span>
+      <button class="action-btn primary" onclick="showAddChallengeModal()">+ Nuevo challenge</button>
+    </div>
+    <table><thead><tr><th>Título</th><th>Descripción</th><th>Dificultad</th><th>XP</th><th>Estado</th><th>Categoría</th><th>Acciones</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+function viewCourse(id) {
+  sbQuery('yayika_product_lessons', 'id, title, content, sort_order, duration_minutes', `product_id=eq.${id}&order=sort_order`).then(lessons => {
+    const doc = statsCache?.contentData?.products?.find(p => p.id === id);
+    document.getElementById('modalTitle').textContent = 'Lecciones del curso';
+    document.getElementById('modalBody').innerHTML = lessons.length === 0
+      ? '<div class="empty-msg">Este curso no tiene lecciones</div>'
+      : `<table style="width:100%;border-collapse:collapse">${lessons.map((l, i) => `
+        <tr style="border-bottom:0.5px solid var(--borde)">
+          <td style="padding:10px;font-size:12px;color:var(--suave);width:30px">${i+1}</td>
+          <td style="padding:10px;font-weight:500">${l.title}</td>
+          <td style="padding:10px;font-size:12px;color:var(--suave)">${l.duration_minutes || 0} min</td>
+        </tr>`).join('')}</table>`;
+    document.getElementById('modalFooter').innerHTML = '<button class="action-btn secondary" onclick="closeModal()">Cerrar</button>';
+    document.getElementById('userModal').classList.add('active');
+  });
+}
+
+async function toggleCourseActive(id, active) {
+  if (!confirm(active ? '¿Activar este curso?' : '¿Desactivar este curso?')) return;
+  await sbUpdate('yayika_products', { is_active: active }, `id=eq.${id}`);
+  showToast(active ? 'Curso activado' : 'Curso desactivado', 'success');
+  loadContentData();
+}
+
+async function toggleChallengeActive(id, active) {
+  if (!confirm(active ? '¿Activar este challenge?' : '¿Desactivar este challenge?')) return;
+  await sbUpdate('yayika_weekly_challenges', { is_active: active }, `id=eq.${id}`);
+  showToast(active ? 'Challenge activado' : 'Challenge desactivado', 'success');
+  loadContentData();
+}
+
+function showAddCourseModal() {
+  document.getElementById('editModalBody').innerHTML = `
+    <div class="form-group"><label>Nombre</label><input type="text" id="newCourseName" placeholder="Nombre del curso"></div>
+    <div class="form-group"><label>Descripción</label><input type="text" id="newCourseDesc" placeholder="Descripción corta"></div>
+    <div class="form-group"><label>Categoría</label><input type="text" id="newCourseCat" placeholder="ej: finanzas, bienestar"></div>
+    <div class="form-group"><label>Precio ($)</label><input type="number" id="newCoursePrice" placeholder="0 = gratis"></div>
+    <div class="form-group"><label>Icono (emoji)</label><input type="text" id="newCourseIcon" placeholder="📚" maxlength="4"></div>`;
+  document.getElementById('editModalFooter').innerHTML = `
+    <button class="action-btn secondary" onclick="closeEditModal()">Cancelar</button>
+    <button class="action-btn primary" onclick="saveNewCourse()">Crear curso</button>`;
+  document.getElementById('editModal').classList.add('active');
+}
+
+async function saveNewCourse() {
+  const name = document.getElementById('newCourseName').value.trim();
+  const desc = document.getElementById('newCourseDesc').value.trim();
+  const cat = document.getElementById('newCourseCat').value.trim();
+  const price = parseFloat(document.getElementById('newCoursePrice').value) || 0;
+  const icon = document.getElementById('newCourseIcon').value.trim() || '📚';
+  if (!name) { showToast('Nombre requerido', 'error'); return; }
+  await sbInsert('yayika_products', { name, description: desc, category: cat, price, icon, is_active: true });
+  showToast('Curso creado', 'success');
+  closeEditModal();
+  loadContentData();
+}
+
+function editCourse(id) {
+  sbQuery('yayika_products', '*', `id=eq.${id}`).then(([p]) => {
+    if (!p) return;
+    document.getElementById('editModalBody').innerHTML = `
+      <div class="form-group"><label>Nombre</label><input type="text" id="editCourseName" value="${p.name || ''}"></div>
+      <div class="form-group"><label>Descripción</label><input type="text" id="editCourseDesc" value="${p.description || ''}"></div>
+      <div class="form-group"><label>Categoría</label><input type="text" id="editCourseCat" value="${p.category || ''}"></div>
+      <div class="form-group"><label>Precio ($)</label><input type="number" id="editCoursePrice" value="${p.price || 0}"></div>
+      <div class="form-group"><label>Icono</label><input type="text" id="editCourseIcon" value="${p.icon || '📚'}" maxlength="4"></div>`;
+    document.getElementById('editModalFooter').innerHTML = `
+      <button class="action-btn secondary" onclick="closeEditModal()">Cancelar</button>
+      <button class="action-btn danger" onclick="deleteCourse('${p.id}')">Eliminar</button>
+      <button class="action-btn primary" onclick="saveEditCourse('${p.id}')">Guardar</button>`;
+    document.getElementById('editModal').classList.add('active');
+  });
+}
+
+async function saveEditCourse(id) {
+  const name = document.getElementById('editCourseName').value.trim();
+  const desc = document.getElementById('editCourseDesc').value.trim();
+  const cat = document.getElementById('editCourseCat').value.trim();
+  const price = parseFloat(document.getElementById('editCoursePrice').value) || 0;
+  const icon = document.getElementById('editCourseIcon').value.trim() || '📚';
+  await sbUpdate('yayika_products', { name, description: desc, category: cat, price, icon }, `id=eq.${id}`);
+  showToast('Curso actualizado', 'success');
+  closeEditModal();
+  loadContentData();
+}
+
+async function deleteCourse(id) {
+  if (!confirm('¿Eliminar este curso y todas sus lecciones?')) return;
+  await sbDelete('yayika_product_lessons', `product_id=eq.${id}`);
+  await sbDelete('yayika_products', `id=eq.${id}`);
+  showToast('Curso eliminado', 'success');
+  closeEditModal();
+  loadContentData();
+}
+
+function showAddChallengeModal() {
+  document.getElementById('editModalBody').innerHTML = `
+    <div class="form-group"><label>Título</label><input type="text" id="newChalTitle" placeholder="Título del challenge"></div>
+    <div class="form-group"><label>Descripción</label><input type="text" id="newChalDesc" placeholder="Descripción"></div>
+    <div class="form-group"><label>Categoría</label><input type="text" id="newChalCat" placeholder="ej: ejercicio, ahorro"></div>
+    <div class="form-group"><label>Dificultad</label>
+      <select id="newChalDiff"><option value="easy">Fácil</option><option value="medium">Media</option><option value="hard">Difícil</option></select>
+    </div>
+    <div class="form-group"><label>Recompensa XP</label><input type="number" id="newChalXP" value="50"></div>`;
+  document.getElementById('editModalFooter').innerHTML = `
+    <button class="action-btn secondary" onclick="closeEditModal()">Cancelar</button>
+    <button class="action-btn primary" onclick="saveNewChallenge()">Crear challenge</button>`;
+  document.getElementById('editModal').classList.add('active');
+}
+
+async function saveNewChallenge() {
+  const title = document.getElementById('newChalTitle').value.trim();
+  const desc = document.getElementById('newChalDesc').value.trim();
+  const cat = document.getElementById('newChalCat').value.trim();
+  const diff = document.getElementById('newChalDiff').value;
+  const xp = parseInt(document.getElementById('newChalXP').value) || 50;
+  if (!title) { showToast('Título requerido', 'error'); return; }
+  const today = new Date().toISOString().split('T')[0];
+  await sbInsert('yayika_weekly_challenges', { title, description: desc, category: cat, difficulty: diff, xp_reward: xp, is_active: true, week_start: today, week_end: today });
+  showToast('Challenge creado', 'success');
+  closeEditModal();
+  loadContentData();
+}
+
+function editChallenge(id) {
+  sbQuery('yayika_weekly_challenges', '*', `id=eq.${id}`).then(([c]) => {
+    if (!c) return;
+    document.getElementById('editModalBody').innerHTML = `
+      <div class="form-group"><label>Título</label><input type="text" id="editChalTitle" value="${c.title || ''}"></div>
+      <div class="form-group"><label>Descripción</label><input type="text" id="editChalDesc" value="${c.description || ''}"></div>
+      <div class="form-group"><label>Categoría</label><input type="text" id="editChalCat" value="${c.category || ''}"></div>
+      <div class="form-group"><label>Dificultad</label>
+        <select id="editChalDiff"><option value="easy" ${c.difficulty==='easy'?'selected':''}>Fácil</option><option value="medium" ${c.difficulty==='medium'?'selected':''}>Media</option><option value="hard" ${c.difficulty==='hard'?'selected':''}>Difícil</option></select>
+      </div>
+      <div class="form-group"><label>XP</label><input type="number" id="editChalXP" value="${c.xp_reward || 50}"></div>`;
+    document.getElementById('editModalFooter').innerHTML = `
+      <button class="action-btn secondary" onclick="closeEditModal()">Cancelar</button>
+      <button class="action-btn danger" onclick="deleteChallenge('${c.id}')">Eliminar</button>
+      <button class="action-btn primary" onclick="saveEditChallenge('${c.id}')">Guardar</button>`;
+    document.getElementById('editModal').classList.add('active');
+  });
+}
+
+async function saveEditChallenge(id) {
+  const title = document.getElementById('editChalTitle').value.trim();
+  const desc = document.getElementById('editChalDesc').value.trim();
+  const cat = document.getElementById('editChalCat').value.trim();
+  const diff = document.getElementById('editChalDiff').value;
+  const xp = parseInt(document.getElementById('editChalXP').value) || 50;
+  await sbUpdate('yayika_weekly_challenges', { title, description: desc, category: cat, difficulty: diff, xp_reward: xp }, `id=eq.${id}`);
+  showToast('Challenge actualizado', 'success');
+  closeEditModal();
+  loadContentData();
+}
+
+async function deleteChallenge(id) {
+  if (!confirm('¿Eliminar este challenge?')) return;
+  await sbDelete('yayika_weekly_challenges', `id=eq.${id}`);
+  showToast('Challenge eliminado', 'success');
+  closeEditModal();
+  loadContentData();
 }
 </script>
 </body>
