@@ -117,7 +117,7 @@ ESTRUCTURA de respuesta:
     // Use Groq if available, else OpenAI
     const isGroq = !!groqKey;
     const baseUrl = isGroq ? "https://api.groq.com/openai" : "https://api.openai.com";
-    const model = isGroq ? "llama-3.1-8b-instant" : "gpt-4o-mini";
+    const model = isGroq ? "qwen/qwen3.8-27b" : "gpt-4o-mini";
 
     const response = await fetch(`${baseUrl}/v1/chat/completions`, {
       method: "POST",
