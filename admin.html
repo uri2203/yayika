@@ -245,6 +245,7 @@
       <button class="tab-btn" onclick="showTab('content')">Contenido</button>
       <button class="tab-btn" onclick="showTab('push')">Notificaciones</button>
       <button class="tab-btn" onclick="showTab('settings')">Configuración</button>
+      <button class="tab-btn" onclick="showTab('flags')">Feature Flags</button>
     </div>
 
     <!-- Content -->
@@ -409,7 +410,7 @@ function showTab(tab) {
   filterStatus = 'all';
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const btns = document.querySelectorAll('.tab-btn');
-  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5, push: 6, settings: 7 }[tab];
+  const idx = { users: 0, subs: 1, aff: 2, rev: 3, analytics: 4, content: 5, push: 6, settings: 7, flags: 8 }[tab];
   if (btns[idx]) btns[idx].classList.add('active');
 
   if (!statsCache) {
@@ -426,6 +427,7 @@ function showTab(tab) {
     case 'content': renderContent(); break;
     case 'push': renderPush(); break;
     case 'settings': renderSettings(); break;
+    case 'flags': renderFlags(); break;
   }
 }
 
@@ -1453,6 +1455,68 @@ function downloadCSV(rows, filename) {
 function refreshDashboard() {
   showToast('Recargando datos...', 'success');
   loadDashboard();
+}
+
+// FEATURE FLAGS
+async function renderFlags() {
+  const container = document.getElementById('tabContent');
+  container.innerHTML = '<div class="empty-msg">Cargando feature flags...</div>';
+  try {
+    const flags = await sbQuery('yayika_feature_flags', 'id, flag_key, label, description, is_enabled, created_at', 'order=flag_key');
+    if (flags.length === 0) {
+      container.innerHTML = '<div class="empty-msg">No hay feature flags configurados</div>';
+      return;
+    }
+    const rows = flags.map(f => `
+      <tr style="border-bottom:0.5px solid var(--borde)">
+        <td style="padding:12px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer">
+              <input type="checkbox" ${f.is_enabled ? 'checked' : ''} onchange="toggleFlag('${f.id}', this.checked)" style="opacity:0;width:0;height:0">
+              <span style="position:absolute;inset:0;background:${f.is_enabled ? 'var(--verde)' : '#ccc'};border-radius:12px;transition:.3s">
+                <span style="position:absolute;left:${f.is_enabled ? '22px' : '2px'};top:2px;width:20px;height:20px;background:white;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,0.2)"></span>
+              </span>
+            </label>
+            <div>
+              <div style="font-weight:500;font-size:14px">${f.label || f.flag_key}</div>
+              <div style="font-size:12px;color:var(--suave)">${f.description || ''}</div>
+              <div style="font-size:10px;color:var(--suave);margin-top:2px;font-family:monospace">${f.flag_key}</div>
+            </div>
+          </div>
+        </td>
+        <td style="padding:12px">
+          <span class="badge ${f.is_enabled ? 'badge-green' : 'badge-gray'}">${f.is_enabled ? 'Activo' : 'Inactivo'}</span>
+        </td>
+      </tr>
+    `).join('');
+    container.innerHTML = `
+      <div class="table-header">
+        <span>${flags.length} feature flags · ${flags.filter(f=>f.is_enabled).length} activos</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="border-bottom:1px solid var(--borde);text-align:left">
+          <th style="padding:12px;font-size:11px;color:var(--suave);font-weight:500">Feature</th>
+          <th style="padding:12px;font-size:11px;color:var(--suave);font-weight:500">Estado</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div style="margin-top:16px;padding:12px;background:var(--crema);border-radius:10px;font-size:12px;color:var(--suave)">
+        <strong>Nota:</strong> Los cambios se aplican inmediatamente. Los usuarios verán los cambios al recargar la app o abrir una nueva sesión.
+      </div>
+    `;
+  } catch (e) {
+    container.innerHTML = `<div class="empty-msg">Error: ${e.message}</div>`;
+  }
+}
+
+async function toggleFlag(id, enabled) {
+  try {
+    await sbUpdate('yayika_feature_flags', { is_enabled: enabled }, `id=eq.${id}`);
+    showToast(enabled ? 'Feature activado' : 'Feature desactivado', 'success');
+    renderFlags();
+  } catch (e) {
+    showToast('Error: ' + e.message, 'error');
+  }
 }
 </script>
 </body>
