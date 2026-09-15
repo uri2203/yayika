@@ -450,6 +450,10 @@ nav{background:#2C2240;padding:0 24px;display:flex;align-items:center;justify-co
           <input class="form-input" type="date" id="dobInput" max="2008-01-01" style="color: #333;">
           <small data-i18n="auth_dob_hint" style="color: #999; font-size: 11px;">Debes ser mayor de 18 años para registrarte</small>
         </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="auth_confirm_password">Confirmar contraseña</label>
+          <input class="form-input" type="password" id="confirmPassInput" placeholder="Repite tu contraseña" autocomplete="new-password">
+        </div>
         
         <!-- Legal acceptance checkboxes -->
         <div class="legal-checkboxes" style="margin: 16px 0; font-size: 13px; color: #666;">
@@ -1086,6 +1090,12 @@ async function doLogin() {
     return;
   }
   
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = { es: 'Ingresa un email válido.', en: 'Enter a valid email.', pt: 'Insira um email válido.', fr: 'Entrez un email valide.', de: 'Gib eine gültige E-Mail-Adresse ein.' }[currentLang || 'es'];
+    errEl.style.display = 'block';
+    return;
+  }
+  
   // Rate limiting check
   if (!YayikaSecurity.rateLimit.check('login')) {
     const remaining = YayikaSecurity.rateLimit.remaining('login');
@@ -1255,8 +1265,19 @@ async function doRegister() {
     return;
   }
 
+  const confirmPass = document.getElementById('confirmPassInput')?.value || '';
+  if (pass !== confirmPass) {
+    document.getElementById('loginError').textContent = { es: 'Las contraseñas no coinciden.', en: 'Passwords do not match.', pt: 'As senhas não coincidem.', fr: 'Les mots de passe ne correspondent pas.', de: 'Passwörter stimmen nicht überein.' }[currentLang || 'es'];
+    document.getElementById('loginError').style.display = 'block';
+    return;
+  }
+
   if (!email || !pass) { err.textContent = t('portal_login_error') || 'Please fill in all fields.'; err.style.display = 'block'; return; }
-  if (pass.length < 6) { err.textContent = { es: 'La contraseña debe tener al menos 6 caracteres.', en: 'Password must be at least 6 characters.', pt: 'A senha deve ter pelo menos 6 caracteres.', fr: 'Le mot de passe doit contenir au moins 6 caractères.', de: 'Das Passwort muss mindestens 6 Zeichen lang sein.' }[currentLang || 'es']; err.style.display = 'block'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    err.textContent = { es: 'Ingresa un email válido.', en: 'Enter a valid email.', pt: 'Insira um email válido.', fr: 'Entrez un email valide.', de: 'Gib eine gültige E-Mail-Adresse ein.' }[currentLang || 'es'];
+    err.style.display = 'block'; return;
+  }
+  if (pass.length < 8) { err.textContent = { es: 'La contraseña debe tener al menos 8 caracteres.', en: 'Password must be at least 8 characters.', pt: 'A senha deve ter pelo menos 8 caracteres.', fr: 'Le mot de passe doit contenir au moins 8 caractères.', de: 'Passwort muss mindestens 8 Zeichen lang sein.' }[currentLang || 'es']; err.style.display = 'block'; return; }
 
   try {
     err.style.display = 'none';
@@ -1294,7 +1315,7 @@ async function doRegister() {
     let msg = 'Error al crear cuenta.';
     if (e.message?.includes('already registered')) msg = { es: 'Este correo ya está registrado. Intenta con otro.', en: 'This email is already registered. Try another.', pt: 'Este e-mail já está registrado. Tente outro.', fr: 'Cet email est déjà utilisé. Essaie un autre.', de: 'Diese E-Mail ist bereits registriert. Versuche eine andere.' }[currentLang || 'es'];
     else if (e.message?.includes('valid email')) msg = { es: 'El correo no es válido.', en: 'The email is not valid.', pt: 'O e-mail não é válido.', fr: 'L\'email n\'est pas valide.', de: 'Die E-Mail ist ungültig.' }[currentLang || 'es'];
-    else if (e.message?.includes('at least 6')) msg = { es: 'La contraseña debe tener al menos 6 caracteres.', en: 'Password must be at least 6 characters.', pt: 'A senha deve ter pelo menos 6 caracteres.', fr: 'Le mot de passe doit contenir au moins 6 caractères.', de: 'Das Passwort muss mindestens 6 Zeichen lang sein.' }[currentLang || 'es'];
+    else if (e.message?.includes('at least 6') || e.message?.includes('at least 8')) msg = { es: 'La contraseña debe tener al menos 8 caracteres.', en: 'Password must be at least 8 characters.', pt: 'A senha deve ter pelo menos 8 caracteres.', fr: 'Le mot de passe doit contenir au moins 8 caractères.', de: 'Passwort muss mindestens 8 Zeichen lang sein.' }[currentLang || 'es'];
     err.textContent = msg;
     err.style.display = 'block';
     err.style.background = '#FEF2F2';
