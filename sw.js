@@ -3,9 +3,9 @@
 // Enhanced PWA: navigation preload, better offline, period sync
 // ============================================================
 
-const CACHE_VERSION = 'yayika-v9';
-const STATIC_CACHE = 'yayika-static-v9';
-const DYNAMIC_CACHE = 'yayika-dynamic-v9';
+const CACHE_VERSION = 'yayika-v10';
+const STATIC_CACHE = 'yayika-static-v10';
+const DYNAMIC_CACHE = 'yayika-dynamic-v10';
 const OFFLINE_URL = '/offline.html';
 
 function swT(key, lang) {
@@ -103,6 +103,9 @@ self.addEventListener('fetch', event => {
 
   // Skip non-GET requests
   if (request.method !== 'GET') return;
+
+  // Skip admin page — always fresh
+  if (url.pathname.includes('admin')) return;
 
   // Skip Supabase/Stripe/Plausible API calls (always go to network)
   if (url.hostname.includes('supabase.co') || 
