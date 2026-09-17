@@ -1523,44 +1523,47 @@ async function loadDashboard() {
     console.warn('Financial Coach init error:', e);
   }
 
-  // ===== WELLNESS PLANNER =====
+  // ===== FEATURE FLAGS — Independent initialization =====
   try {
-    if (typeof WellnessPlanner !== 'undefined' && YayikaFlags.isEnabled('wellness_planner')) {
-      WellnessPlanner.init();
+    if (typeof WellnessPlanner !== 'undefined' && YayikaFlags.isEnabled('wellness_planner')) WellnessPlanner.init();
+  } catch (e) { console.warn('Wellness Planner init error:', e); }
 
-      // Initialize Share & Earn
-      if (typeof ShareEarn !== 'undefined' && YayikaFlags.isEnabled('affiliates')) ShareEarn.init();
+  try {
+    if (typeof ShareEarn !== 'undefined' && YayikaFlags.isEnabled('affiliates')) ShareEarn.init();
+  } catch (e) { console.warn('ShareEarn init error:', e); }
 
-      // Initialize Onboarding
-      if (typeof Onboarding !== 'undefined') Onboarding.init();
+  try {
+    if (typeof Onboarding !== 'undefined') Onboarding.init();
+  } catch (e) { console.warn('Onboarding init error:', e); }
 
-      // Initialize Growth Coach (Impulso)
-      if (typeof GrowthCoach !== 'undefined' && YayikaFlags.isEnabled('growth_coach')) GrowthCoach.init();
+  try {
+    if (typeof GrowthCoach !== 'undefined' && YayikaFlags.isEnabled('growth_coach')) GrowthCoach.init();
+  } catch (e) { console.warn('GrowthCoach init error:', e); }
 
-      // Initialize Community (Círculos)
-      if (typeof Community !== 'undefined' && YayikaFlags.isEnabled('community')) Community.init();
+  try {
+    if (typeof Community !== 'undefined' && YayikaFlags.isEnabled('community')) Community.init();
+  } catch (e) { console.warn('Community init error:', e); }
 
-      // Initialize Cycle Intelligence Dashboard
-      if (typeof CycleIntelligence !== 'undefined' && YayikaFlags.isEnabled('courses')) CycleIntelligence.init();
+  try {
+    if (typeof CycleIntelligence !== 'undefined' && YayikaFlags.isEnabled('courses')) CycleIntelligence.init();
+  } catch (e) { console.warn('CycleIntelligence init error:', e); }
 
-      // Initialize Product Catalog
-      if (typeof ProductCatalog !== 'undefined' && YayikaFlags.isEnabled('courses')) ProductCatalog.init();
+  try {
+    if (typeof ProductCatalog !== 'undefined' && YayikaFlags.isEnabled('courses')) ProductCatalog.init();
+  } catch (e) { console.warn('ProductCatalog init error:', e); }
 
-      // Initialize Weekly Challenges
-      if (typeof WeeklyChallenges !== 'undefined' && YayikaFlags.isEnabled('weekly_challenges')) WeeklyChallenges.init();
+  try {
+    if (typeof WeeklyChallenges !== 'undefined' && YayikaFlags.isEnabled('weekly_challenges')) WeeklyChallenges.init();
+  } catch (e) { console.warn('WeeklyChallenges init error:', e); }
 
-      // Initialize Gana con Yayika
-      if (typeof GanaConYayika !== 'undefined' && YayikaFlags.isEnabled('affiliates')) GanaConYayika.init();
+  try {
+    if (typeof GanaConYayika !== 'undefined' && YayikaFlags.isEnabled('affiliates')) GanaConYayika.init();
+  } catch (e) { console.warn('GanaConYayika init error:', e); }
 
-      // Initialize Seller Financial Dashboard
-      const sellerDashEl = document.getElementById('sellerDashboardContainer');
-      if (sellerDashEl && typeof sellerDash !== 'undefined') {
-        sellerDash.render(sellerDashEl);
-      }
-    }
-  } catch (e) {
-    console.warn('Wellness Planner init error:', e);
-  }
+  try {
+    const sellerDashEl = document.getElementById('sellerDashboardContainer');
+    if (sellerDashEl && typeof sellerDash !== 'undefined') sellerDash.render(sellerDashEl);
+  } catch (e) { console.warn('SellerDashboard init error:', e); }
 
   // Check subscription status
   try {
