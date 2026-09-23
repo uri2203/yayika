@@ -76,7 +76,7 @@ serve(async (req: Request) => {
 
         const [{ data: cats }, { data: authors }, { data: reactions }, { data: comments }] = await Promise.all([
           supabase.from("yayika_community_categories").select("id, slug, name").in("id", catIds),
-          supabase.from("yayika_affiliates").select("id, full_name").in("id", userIds),
+          supabase.from("yayika_profiles").select("id, full_name").in("id", userIds),
           supabase
             .from("yayika_community_reactions")
             .select("post_id, user_id")
@@ -231,7 +231,7 @@ serve(async (req: Request) => {
         const authorMap: Record<string, any> = {};
         if (userIds.length > 0) {
           const { data: authors } = await supabase
-            .from("yayika_affiliates")
+            .from("yayika_profiles")
             .select("id, full_name, email")
             .in("id", userIds);
           for (const a of authors || []) authorMap[a.id] = a;
@@ -250,7 +250,7 @@ serve(async (req: Request) => {
       case "getNotifications": {
         const { data, error } = await supabase
           .from("yayika_community_notifications")
-          .select("*, yayika_community_posts(content), yayika_community_comments(content)")
+          .select("*")
           .eq("user_id", user_id)
           .order("created_at", { ascending: false })
           .limit(30);
@@ -290,9 +290,9 @@ serve(async (req: Request) => {
           .from("yayika_community_user_stats")
           .select("*")
           .eq("user_id", user_id)
-          .single();
+          .maybeSingle();
         if (error) throw error;
-        return json({ stats: data });
+        return json({ stats: data ?? { posts_count: 0, comments_count: 0, reactions_received: 0 } });
       }
 
       case "reportPost": {
@@ -315,7 +315,12 @@ serve(async (req: Request) => {
     }
   } catch (error) {
     console.error("Community error:", error);
-    const message = error instanceof Error ? error.message : "Internal error";
+    const message =
+      error instanceof Error
+        ? error.message
+        : typeof error === "object" && error !== null && "message" in error
+        ? String((error as any).message)
+        : "Internal error";
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
