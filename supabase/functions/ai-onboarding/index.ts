@@ -20,45 +20,29 @@ serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
-    const supabase = createClient(supabaseUrl, supabaseKey, {
-      global: { headers: { Authorization: req.headers.get("Authorization")! } },
-    });
+    // Service client: must NOT inherit the caller's Authorization header,
+    // otherwise PostgREST runs as the user role and RLS blocks catalog tables.
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Verify user identity from JWT token
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      throw new Error("Unauthorized: Missing authorization header");
-    }
-
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
       return json({ error: "Unauthorized" }, 401);
     }
+
     const token = authHeader.replace("Bearer ", "");
     const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? "", {
       global: { headers: { Authorization: `Bearer ${token}` } },
     });
-    const { data: { user } } = await userClient.auth.getUser();
-    if (!user) {
+    const { data: { user }, error: authError } = await userClient.auth.getUser();
+    if (authError || !user) {
       return json({ error: "Unauthorized" }, 401);
     }
 
     const body = await req.json();
     const { action, lang = "es" } = body;
 
-    // Get user_id from JWT token, not from request body
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
-    if (authError || !user) {
-      throw new Error("Unauthorized: Invalid token");
-    }
-    
     const user_id = user.id;
-
-    if (user_id !== user.id) {
-      return json({ error: "Unauthorized: user_id mismatch" }, 401);
-    }
 
     switch (action) {
       // ===== GET STATE =====
@@ -77,23 +61,34 @@ serve(async (req: Request) => {
             current_day: 1,
             started_at: new Date().toISOString(),
           });
+        }
 
-          // Pre-create day records
-          const { data: tasks } = await supabase
-            .from("yayika_onboarding_tasks")
-            .select("day_number, task_key")
-            .eq("is_active", true)
-            .order("sort_order");
+        // Idempotent: ensure day progress rows exist (users created before the
+        // fix have an onboarding record but no day rows - pre-create only ran
+        // when the record was missing).
+        const { data: tasks } = await supabase
+          .from("yayika_onboarding_tasks")
+          .select("day_number, task_key")
+          .eq("is_active", true)
+          .order("sort_order");
 
-          if (tasks) {
-            const dayRecords = tasks.map((t: any) => ({
+        if (tasks && tasks.length) {
+          const { data: existingDays } = await supabase
+            .from("yayika_onboarding_days")
+            .select("day_number")
+            .eq("user_id", user_id);
+          const have = new Set((existingDays || []).map((d: any) => d.day_number));
+          const missing = tasks
+            .filter((t: any) => !have.has(t.day_number))
+            .map((t: any) => ({
               user_id: user_id,
               day_number: t.day_number,
               task_key: t.task_key,
               completed: false,
               xp_earned: 0,
             }));
-            await supabase.from("yayika_onboarding_days").insert(dayRecords);
+          if (missing.length) {
+            await supabase.from("yayika_onboarding_days").insert(missing);
           }
         }
 

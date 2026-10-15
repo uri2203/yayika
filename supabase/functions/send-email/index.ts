@@ -6,11 +6,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const FROM_EMAIL = "Yayika <hola@yayika.com>";
 const DOMAIN = "https://yayika.com";
 
 interface EmailPayload {
-  type: "welcome" | "purchase" | "subscription" | "commission" | "withdrawal" | "custom";
+  type: "welcome" | "purchase" | "subscription" | "commission" | "withdrawal" | "payment_failed" | "payment_recovered" | "support" | "custom";
   to: string;
   name?: string;
   product?: string;
@@ -18,6 +20,12 @@ interface EmailPayload {
   plan?: string;
   commission?: string;
   referralName?: string;
+  method?: string;
+  grace_period_days?: string;
+  next_retry?: string;
+  subject?: string;
+  message?: string;
+  user_email?: string;
   customSubject?: string;
   customHtml?: string;
 }
@@ -216,6 +224,97 @@ function withdrawalTemplate(name: string, amount: string, method: string, status
 </html>`;
 }
 
+function paymentFailedTemplate(name: string, plan: string, graceDays: string, nextRetry: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF7F2;padding:40px 20px;color:#2C2240">
+  <div style="max-width:520px;margin:0 auto;background:white;border-radius:16px;padding:36px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+    <div style="text-align:center;margin-bottom:24px">
+      <h1 style="font-family:Georgia,serif;font-size:32px;color:#4E3470;margin:0">Yay<span style="color:#C96B7A">ika</span></h1>
+    </div>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:60px;height:60px;background:#FDF0E8;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:28px">⚠️</div>
+    </div>
+    <h2 style="font-size:22px;color:#2C2240;margin-bottom:12px;text-align:center">Tu pago no se pudo procesar</h2>
+    <p style="font-size:15px;color:#6B7280;line-height:1.7;margin-bottom:20px;text-align:center">
+      Hola ${name}, el pago de tu membresía <strong>${plan}</strong> fue rechazado. No te preocupes: tienes un período de gracia de <strong>${graceDays} días</strong> para actualizar tu método de pago.
+    </p>
+    <div style="background:#FDF0E8;border-radius:12px;padding:20px;margin-bottom:24px">
+      <div style="font-size:11px;font-weight:600;color:#C96B7A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Próximo intento de cobro</div>
+      <p style="font-size:15px;color:#2C2240;margin:0;font-weight:600">${nextRetry}</p>
+      <p style="font-size:13px;color:#6B7280;margin:8px 0 0">Si el pago falla de nuevo después del período de gracia, tu membresía se pausará hasta que se resuelva.</p>
+    </div>
+    <div style="text-align:center;margin-bottom:28px">
+      <a href="${DOMAIN}/Portales/" style="display:inline-block;background:#C96B7A;color:white;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none">
+        Actualizar mi método de pago →
+      </a>
+    </div>
+    <p style="font-size:13px;color:#999;line-height:1.6;border-top:1px solid #eee;padding-top:16px;margin:0">
+      Este es un correo automático de tu membresía Yayika.<br>
+      — El equipo de Yayika 💜
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
+function paymentRecoveredTemplate(name: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF7F2;padding:40px 20px;color:#2C2240">
+  <div style="max-width:520px;margin:0 auto;background:white;border-radius:16px;padding:36px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+    <div style="text-align:center;margin-bottom:24px">
+      <h1 style="font-family:Georgia,serif;font-size:32px;color:#4E3470;margin:0">Yay<span style="color:#C96B7A">ika</span></h1>
+    </div>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:60px;height:60px;background:#E8F8F1;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:28px">✅</div>
+    </div>
+    <h2 style="font-size:22px;color:#2C2240;margin-bottom:12px;text-align:center">¡Pago recuperado!</h2>
+    <p style="font-size:15px;color:#6B7280;line-height:1.7;margin-bottom:20px;text-align:center">
+      Hola ${name}, recibimos tu pago y tu membresía sigue <strong>activa</strong>. Todo está en orden.
+    </p>
+    <div style="text-align:center;margin-bottom:28px">
+      <a href="${DOMAIN}/Portales/" style="display:inline-block;background:#1A9E8F;color:white;padding:14px 32px;border-radius:100px;font-size:15px;font-weight:500;text-decoration:none">
+        Volver a mi portal →
+      </a>
+    </div>
+    <p style="font-size:13px;color:#999;line-height:1.6;border-top:1px solid #eee;padding-top:16px;margin:0">
+      Este es un correo automático de tu membresía Yayika.<br>
+      — El equipo de Yayika 💜
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
+function supportTemplate(name: string, email: string, subjectText: string, message: string): string {
+  return `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:'Helvetica Neue',Arial,sans-serif;background:#FAF7F2;padding:40px 20px;color:#2C2240">
+  <div style="max-width:520px;margin:0 auto;background:white;border-radius:16px;padding:36px;box-shadow:0 4px 20px rgba(0,0,0,0.06)">
+    <div style="text-align:center;margin-bottom:24px">
+      <h1 style="font-family:Georgia,serif;font-size:32px;color:#4E3470;margin:0">Yay<span style="color:#C96B7A">ika</span></h1>
+    </div>
+    <div style="background:#F0EBF8;border-radius:12px;padding:20px;margin-bottom:20px">
+      <div style="font-size:11px;font-weight:600;color:#7B5EA7;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">De: ${name} &lt;${email}&gt;</div>
+      <div style="font-size:15px;font-weight:600;color:#2C2240;margin-bottom:10px">${subjectText}</div>
+      <div style="font-size:14px;color:#6B7280;line-height:1.7;white-space:pre-wrap">${message}</div>
+    </div>
+    <p style="font-size:13px;color:#999;line-height:1.6;border-top:1px solid #eee;padding-top:16px;margin:0">
+      Mensaje enviado desde el formulario de soporte de Yayika.<br>
+      — El equipo de Yayika 💜
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
 // --- Main Handler ---
 
 serve(async (req) => {
@@ -235,14 +334,27 @@ serve(async (req) => {
       throw new Error("RESEND_API_KEY not configured");
     }
 
-    // Auth validation - require valid JWT
+    // Auth validation:
+    // - Deployed WITH verify-jwt: gateway validates JWT signature before reaching us.
+    // - Function additionally accepts: project keys (new-style sb_publishable_/sb_secret_,
+    //   used by internal callers like stripe-webhook) or a legacy project-signed JWT
+    //   (browser callers send the legacy anon JWT).
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      throw new Error("Unauthorized: Missing or invalid authorization header");
+    const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : "";
+    let allowed = !!bearer && (bearer === ANON_KEY || bearer === SERVICE_ROLE_KEY);
+    if (!allowed && bearer.split(".").length === 3) {
+      try {
+        const payload = JSON.parse(atob(bearer.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+        allowed = ["anon", "authenticated", "service_role"].includes(payload.role) &&
+          String(payload.iss || "").includes("supabase");
+      } catch { allowed = false; }
+    }
+    if (!allowed) {
+      throw new Error("Unauthorized: invalid bearer token");
     }
 
     const payload: EmailPayload = await req.json();
-    const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, customSubject, customHtml } = payload;
+    const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, method = "Banco", grace_period_days, next_retry, subject: supportSubject, message: supportMessage, user_email, customSubject, customHtml } = payload;
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -281,8 +393,29 @@ serve(async (req) => {
 
       case "withdrawal":
         subject = `💸 Solicitud de retiro — ${amount || "$0"} MXN`;
-        html = withdrawalTemplate(name, amount || "$0", method || "Banco", "pending");
+        html = withdrawalTemplate(name, amount || "$0", method, "pending");
         break;
+
+      case "payment_failed":
+        subject = `⚠️ Pago fallido — ${plan || "tu membresía"} está en período de gracia`;
+        html = paymentFailedTemplate(name, plan || "tu membresía", grace_period_days || "7", next_retry || "en los próximos días");
+        break;
+
+      case "payment_recovered":
+        subject = `✅ Pago recuperado — tu membresía sigue activa`;
+        html = paymentRecoveredTemplate(name);
+        break;
+
+      case "support": {
+        const esc = (c: string) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c] as string);
+        const cleanSubject = (supportSubject || "Mensaje de soporte").replace(/[<>&"]/g, esc);
+        const cleanMessage = (supportMessage || "").replace(/[<>&"]/g, esc);
+        const cleanName = name.replace(/[<>&"]/g, esc);
+        const cleanUserEmail = (user_email || "").replace(/[<>&"]/g, esc);
+        subject = `📨 Soporte: ${cleanSubject}`;
+        html = supportTemplate(cleanName, cleanUserEmail, cleanSubject, cleanMessage);
+        break;
+      }
 
       case "custom":
         subject = customSubject || "Mensaje de Yayika";

@@ -51,24 +51,12 @@ async function submitContact(e) {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc'
       },
       body: JSON.stringify({
-        type: 'custom',
+        type: 'support',
         to: 'hola@yayika.com',
         name: data.name,
-        customSubject: `[Soporte] ${data.subject} — ${data.name}`,
-        customHtml: `
-          <div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:20px">
-            <h2 style="color:#4E3470">Nuevo mensaje de soporte</h2>
-            <table style="width:100%;font-size:14px;margin:16px 0">
-              <tr><td style="color:#666;padding:4px 0">Nombre:</td><td style="font-weight:600">${data.name}</td></tr>
-              <tr><td style="color:#666;padding:4px 0">Email:</td><td style="font-weight:600">${data.email}</td></tr>
-              <tr><td style="color:#666;padding:4px 0">Asunto:</td><td style="font-weight:600">${data.subject}</td></tr>
-            </table>
-            <div style="background:#F8F5FF;border-radius:12px;padding:16px;margin:16px 0">
-              <p style="font-size:14px;color:#2C2240;line-height:1.6;margin:0">${data.message}</p>
-            </div>
-            <p style="font-size:12px;color:#999;margin:0">Enviado desde yayika.com/soporte</p>
-          </div>
-        `
+        user_email: data.email,
+        subject: data.subject,
+        message: data.message
       })
     });
     
