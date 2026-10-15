@@ -275,7 +275,7 @@ const SmartPush = {
         <button onclick="SmartPush.requestPermission().then(()=>{document.getElementById('pushPermBanner').remove()})" style="padding:6px 16px;border-radius:100px;background:var(--turquesa);color:white;border:none;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap">${t.btn}</button>
       </div>
     `;
-  }
+  },
 
   // ============================================================
   // COMPETITIVE NOTIFICATIONS (Growth Coach integration)
@@ -304,7 +304,7 @@ const SmartPush = {
       // Auto-close after 8 seconds
       setTimeout(() => notification.close(), 8000);
     } catch (e) {}
-  }
+  },
   
   showCompetitiveToast(message, type = 'competition') {
     const existing = document.getElementById('growthToast');
