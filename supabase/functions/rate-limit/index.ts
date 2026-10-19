@@ -1,5 +1,14 @@
 // ============================================================
 // Yayika — Server-side Rate Limiting Edge Function
+// Contract:
+//   POST { mode: "check" | "record", action: "<bucket e.g. login>",
+//          identifier: "<who e.g. email or ip>", type?: "auth"|"api"|"checkout"|"email" }
+//   check  -> reads the window count, never writes (allowed?)
+//   record -> counts, enforces 429, writes the entry
+//   Both modes use the SAME (identifier, action) bucket, so counts match.
+// verify_jwt stays false on purpose: rate limiting must be callable
+// before authentication (login brute force). Inputs are tightly
+// validated so it cannot be abused as a storage hole.
 // Deploy: supabase functions deploy rate-limit
 // ============================================================
 
@@ -19,6 +28,15 @@ const RATE_LIMITS: Record<string, { maxRequests: number; windowMs: number }> = {
   email: { maxRequests: 5, windowMs: 60 * 1000 },           // 5 per min
 };
 
+const SAFE_KEY = /^[a-zA-Z0-9._@:\-]{1,128}$/;
+
+function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -29,19 +47,33 @@ serve(async (req: Request) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { action, identifier, type = "api" } = await req.json();
-
-    if (!action || !identifier) {
-      return new Response(
-        JSON.stringify({ error: "Missing action or identifier" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    let payload: Record<string, unknown>;
+    try {
+      payload = await req.json();
+    } catch {
+      return json({ error: "Invalid JSON body" }, 400);
     }
 
-    const limit = RATE_LIMITS[type] || RATE_LIMITS.api;
+    const { action, identifier, type = "api" } = payload ?? {};
+    // mode defaults to "record": a bare call must still be counted/enforced,
+    // otherwise unlimited "check"-only traffic would never consume budget.
+    const mode = payload?.mode ?? "record";
+
+    if (typeof action !== "string" || !action || typeof identifier !== "string" || !identifier) {
+      return json({ error: "Missing action or identifier" }, 400);
+    }
+    if (!SAFE_KEY.test(action) || !SAFE_KEY.test(identifier)) {
+      return json({ error: "Invalid action or identifier format" }, 400);
+    }
+    if (mode !== "check" && mode !== "record") {
+      return json({ error: "mode must be 'check' or 'record'" }, 400);
+    }
+    const typeKey = typeof type === "string" && RATE_LIMITS[type] ? type : "api";
+
+    const limit = RATE_LIMITS[typeKey];
     const windowStart = Date.now() - limit.windowMs;
 
-    // Query rate limit table
+    // Count entries for THIS bucket inside the window (same query for both modes)
     const { data: entries, error } = await supabase
       .from("yayika_rate_limits")
       .select("created_at")
@@ -50,73 +82,60 @@ serve(async (req: Request) => {
       .gt("created_at", new Date(windowStart).toISOString());
 
     if (error) {
-      // Table might not exist - allow the request
+      // Table missing or transient failure - fail open but flag it
       console.error("Rate limit query error:", error);
-      return new Response(
-        JSON.stringify({ allowed: true, remaining: limit.maxRequests }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return json({ allowed: true, remaining: limit.maxRequests, degraded: true });
     }
 
     const currentCount = entries?.length || 0;
 
-    if (action === "check") {
-      return new Response(
-        JSON.stringify({
-          allowed: currentCount < limit.maxRequests,
-          remaining: Math.max(0, limit.maxRequests - currentCount),
-          limit: limit.maxRequests,
-          windowMs: limit.windowMs,
-        }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    if (action === "record") {
-      if (currentCount >= limit.maxRequests) {
-        return new Response(
-          JSON.stringify({
-            allowed: false,
-            remaining: 0,
-            retryAfterMs: limit.windowMs - (Date.now() - windowStart),
-          }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      // Record this request
-      await supabase.from("yayika_rate_limits").insert({
-        identifier,
-        action: action,
-        created_at: new Date().toISOString(),
+    if (mode === "check") {
+      return json({
+        allowed: currentCount < limit.maxRequests,
+        remaining: Math.max(0, limit.maxRequests - currentCount),
+        limit: limit.maxRequests,
+        windowMs: limit.windowMs,
       });
-
-      // Cleanup old entries (every 100th request)
-      if (Math.random() < 0.01) {
-        await supabase
-          .from("yayika_rate_limits")
-          .delete()
-          .lt("created_at", new Date(Date.now() - limit.windowMs * 2).toISOString());
-      }
-
-      return new Response(
-        JSON.stringify({
-          allowed: true,
-          remaining: limit.maxRequests - currentCount - 1,
-        }),
-        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
     }
 
-    return new Response(
-      JSON.stringify({ error: "Unknown action" }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    // mode === "record"
+    if (currentCount >= limit.maxRequests) {
+      // The slot frees when the OLDEST entry in the window expires
+      const oldestMs = Math.min(
+        ...(entries ?? []).map((e: { created_at: string }) => new Date(e.created_at).getTime()),
+      );
+      const retryAfterMs = Number.isFinite(oldestMs)
+        ? Math.max(1000, oldestMs + limit.windowMs - Date.now())
+        : limit.windowMs;
+      return json({ allowed: false, remaining: 0, retryAfterMs }, 429);
+    }
+
+    const { error: insertError } = await supabase.from("yayika_rate_limits").insert({
+      identifier,
+      action,
+      created_at: new Date().toISOString(),
+    });
+
+    if (insertError) {
+      // Fail open on write errors so auth flows never brick, but flag it
+      console.error("Rate limit insert error:", insertError);
+      return json({ allowed: true, remaining: limit.maxRequests - currentCount, degraded: true });
+    }
+
+    // Opportunistic cleanup (~1 in 100 records) of expired rows
+    if (Math.random() < 0.01) {
+      await supabase
+        .from("yayika_rate_limits")
+        .delete()
+        .lt("created_at", new Date(Date.now() - limit.windowMs * 2).toISOString());
+    }
+
+    return json({
+      allowed: true,
+      remaining: Math.max(0, limit.maxRequests - currentCount - 1),
+    });
   } catch (error) {
     console.error("Rate limit error:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return json({ error: error instanceof Error ? error.message : "Unknown error" }, 500);
   }
 });
