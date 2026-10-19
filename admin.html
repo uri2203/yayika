@@ -290,45 +290,56 @@
 
 <script>
 // ============================================================
-// ADMIN PASSWORD (SHA-256 hash of the actual password)
-// Change this hash by running: SHA256("tu contraseña")
+// ADMIN AUTH — verified server-side (edge function admin-login).
+// The password lives ONLY in the ADMIN_PASSWORD env var; this
+// page stores neither password nor hash. Sessions are
+// HMAC-signed tokens validated by the server.
 // ============================================================
-const ADMIN_PASS_HASH = '3d29fb8fd3fc0be3d033547622d9795c1a13f9a134552d4e495595dce5b9989b'; // SHA-256 of "Yayika!Admin2026#"
 
 // Supabase
 const SB_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc';
 
+const ADMIN_FN = `${SB_URL}/functions/v1/admin-login`;
+
 let statsCache = null;
 
-// SHA-256 helper
-async function sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-// Login
+// Login (password verified server-side, rate-limited, never stored in client)
 async function doLogin() {
   const pass = document.getElementById('adminPass').value;
   if (!pass) return;
-  
+
   document.getElementById('loginBtn').disabled = true;
   document.getElementById('loginBtn').textContent = 'Verificando...';
-  
-  const hash = await sha256(pass);
-  
-  if (hash === ADMIN_PASS_HASH) {
-    sessionStorage.setItem('yayika_admin', '1');
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('dashScreen').style.display = 'block';
-    loadDashboard();
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-    document.getElementById('loginBtn').disabled = false;
-    document.getElementById('loginBtn').textContent = 'Entrar';
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  try {
+    const res = await fetch(ADMIN_FN, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY },
+      body: JSON.stringify({ action: 'login', password: pass })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      sessionStorage.setItem('yayika_admin', data.token);
+      document.getElementById('adminPass').value = '';
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashScreen').style.display = 'block';
+      loadDashboard();
+      return;
+    }
+    const err = await res.json().catch(() => ({}));
+    errEl.textContent = res.status === 429
+      ? (err.error || 'Demasiados intentos. Espera 15 minutos.')
+      : (err.error || 'Error al verificar la contraseña');
+    errEl.style.display = 'block';
+  } catch (e) {
+    errEl.textContent = 'Error de conexión con el servidor';
+    errEl.style.display = 'block';
   }
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('loginBtn').textContent = 'Entrar';
 }
 
 // Enter key on password field
@@ -345,12 +356,25 @@ function doLogout() {
   document.getElementById('loginError').style.display = 'none';
 }
 
-// Check session on load
-if (sessionStorage.getItem('yayika_admin') === '1') {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashScreen').style.display = 'block';
-  loadDashboard();
-}
+// Check session on load — token verified server-side (forged tokens rejected)
+(async function restoreSession() {
+  const token = sessionStorage.getItem('yayika_admin');
+  if (!token) return;
+  try {
+    const res = await fetch(ADMIN_FN, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY },
+      body: JSON.stringify({ action: 'verify', token })
+    });
+    if (res.ok) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashScreen').style.display = 'block';
+      loadDashboard();
+      return;
+    }
+  } catch (e) { /* offline: fall through to login screen */ }
+  sessionStorage.removeItem('yayika_admin');
+})();
 
 // Fetch data from Supabase
 async function sbQuery(table, select, filters) {

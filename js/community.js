@@ -239,7 +239,7 @@ const Community = {
 
         <!-- Create post -->
         <div style="display:flex;gap:10px;margin-bottom:16px;align-items:flex-start">
-          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lila),var(--turquesa));display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:600;flex-shrink:0">${(currentUser?.email || 'U').charAt(0).toUpperCase()}</div>
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--lila),var(--turquesa));display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:600;flex-shrink:0">${this._escapeHtml((currentUser?.email || 'U').charAt(0).toUpperCase())}</div>
           <div style="flex:1">
             <textarea id="communityPostInput" placeholder="${t.placeholder}" maxlength="1000"
               style="width:100%;min-height:60px;padding:10px 14px;border-radius:12px;border:1px solid var(--borde);background:var(--crema);color:var(--texto);font-family:inherit;font-size:13px;resize:vertical;outline:none"
@@ -278,9 +278,9 @@ const Community = {
       const isActive = this._currentCategory === cat.slug;
       const name = cat.name?.[lang] || cat.name?.es || cat.slug;
       return `
-        <button onclick="Community.filterCategory('${cat.slug}')"
+        <button onclick="Community.filterCategory('${this._safeSlug(cat.slug)}')"
           style="display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid ${isActive ? cat.color : 'var(--borde)'};background:${isActive ? cat.color + '15' : 'transparent'};color:${isActive ? cat.color : 'var(--suave)'};font-family:inherit;transition:all 0.2s">
-          ${cat.icon} ${name}
+          ${this._escapeHtml(cat.icon)} ${this._escapeHtml(name)}
         </button>
       `;
     }).join('');
@@ -318,11 +318,11 @@ const Community = {
       <div style="background:var(--crema);border-radius:14px;padding:16px;margin-bottom:10px;border:1px solid var(--borde)">
         <!-- Header -->
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,${post.user_avatar_color || '#7B5EA7'},${post.user_avatar_color || '#4E3470'});display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:600;flex-shrink:0">${(post.user_name || 'U').charAt(0).toUpperCase()}</div>
+          <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,${this._hex(post.user_avatar_color)},${this._hex(post.user_avatar_color, '#4E3470')});display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:600;flex-shrink:0">${this._escapeHtml((post.user_name || 'U').charAt(0).toUpperCase())}</div>
           <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:500;color:var(--texto);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${post.user_name}</div>
+            <div style="font-size:13px;font-weight:500;color:var(--texto);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escapeHtml(post.user_name || 'U')}</div>
             <div style="font-size:11px;color:var(--suave);display:flex;align-items:center;gap:6px">
-              <span>${post.category_icon || '💬'}</span>
+              <span>${this._escapeHtml(post.category_icon || '💬')}</span>
               <span>${timeAgo}</span>
               ${post.is_pinned ? '<span style="color:var(--oro)">📌</span>' : ''}
             </div>
@@ -335,7 +335,7 @@ const Community = {
         <!-- Achievement badge -->
         ${post.achievement_type ? `
           <div style="display:inline-flex;align-items:center;gap:6px;background:var(--oro-l);border:1px solid rgba(184,148,58,0.2);border-radius:10px;padding:6px 12px;margin-bottom:10px;font-size:11px;color:#8A6D1F">
-            🏆 ${post.achievement_type.replace(/_/g, ' ')}
+            🏆 ${this._escapeHtml(post.achievement_type.replace(/_/g, ' '))}
           </div>
         ` : ''}
 
@@ -367,9 +367,9 @@ const Community = {
         <!-- Existing comments -->
         ${comments.map(c => `
           <div style="display:flex;gap:8px;margin-bottom:8px;padding:8px;background:var(--blanco);border-radius:10px">
-            <div style="width:24px;height:24px;border-radius:50%;background:var(--lila-l);display:flex;align-items:center;justify-content:center;color:var(--lila-d);font-size:10px;font-weight:600;flex-shrink:0">${(c.user_name || 'U').charAt(0).toUpperCase()}</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--lila-l);display:flex;align-items:center;justify-content:center;color:var(--lila-d);font-size:10px;font-weight:600;flex-shrink:0">${this._escapeHtml((c.user_name || 'U').charAt(0).toUpperCase())}</div>
             <div style="flex:1;min-width:0">
-              <div style="font-size:11px;font-weight:500;color:var(--texto)">${c.user_name}</div>
+              <div style="font-size:11px;font-weight:500;color:var(--texto)">${this._escapeHtml(c.user_name || 'U')}</div>
               <div style="font-size:12px;color:var(--suave);line-height:1.4">${this._escapeHtml(c.content)}</div>
             </div>
           </div>
@@ -410,6 +410,14 @@ const Community = {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  },
+
+  _hex(c, fallback = '#7B5EA7') {
+    return /^#[0-9a-fA-F]{3,8}$/.test(c || '') ? c : fallback;
+  },
+
+  _safeSlug(s) {
+    return String(s || '').replace(/[^a-zA-Z0-9_-]/g, '');
   },
 
   sharePost(postId) {

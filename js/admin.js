@@ -39,6 +39,18 @@ function adminT(key) {
   return (ADMIN_I18N[lang] && ADMIN_I18N[lang][key]) || ADMIN_I18N.es[key] || key;
 }
 
+// ---- XSS-safe rendering helpers (user/DB data must pass through these) ----
+function _esc(v) {
+  return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function _avatarC(c) {
+  return /^#[0-9a-fA-F]{3,8}$/.test(c || '') ? c : '#7B5EA7';
+}
+function _safeId(v) {
+  return String(v ?? '').replace(/[^a-zA-Z0-9_-]/g, '');
+}
+
 function isAdmin() {
   return currentUser && ADMIN_EMAILS.includes(currentUser.email);
 }
@@ -146,16 +158,16 @@ function adminRenderUsers(c) {
     const plan = sub?.plan || 'free';
     const planBadge = { semilla: 'background:var(--verde-l);color:var(--verde)', guerrera: 'background:var(--rosa-l);color:var(--rosa)', diamante: 'background:var(--oro-l);color:var(--oro)' }[plan] || 'background:#F0F0F0;color:#95A5A6';
     return `<tr style="border-bottom:0.5px solid var(--borde);${p.is_banned?'opacity:0.5':''}">
-      <td style="padding:10px 8px"><div style="width:30px;height:30px;border-radius:50%;background:${p.avatar_color||'#7B5EA7'};color:white;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">${name.substring(0,2).toUpperCase()}</div></td>
-      <td style="padding:10px 8px;font-size:13px">${name}</td>
-      <td style="padding:10px 8px;font-size:12px;color:var(--suave)">${email}</td>
+      <td style="padding:10px 8px"><div style="width:30px;height:30px;border-radius:50%;background:${_avatarC(p.avatar_color)};color:white;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">${_esc(name.substring(0,2).toUpperCase())}</div></td>
+      <td style="padding:10px 8px;font-size:13px">${_esc(name)}</td>
+      <td style="padding:10px 8px;font-size:12px;color:var(--suave)">${_esc(email)}</td>
       <td style="padding:10px 8px"><span style="font-size:10px;padding:3px 8px;border-radius:100px;${planBadge}">${plan}</span></td>
       <td style="padding:10px 8px;font-size:12px;color:var(--suave)">${new Date(p.created_at).toLocaleDateString('es-MX')}</td>
       <td style="padding:10px 8px">${p.is_banned?'<span style="font-size:10px;padding:3px 8px;border-radius:100px;background:#FDE8EA;color:#E74C3C">Baneado</span>':'<span style="font-size:10px;padding:3px 8px;border-radius:100px;background:var(--verde-l);color:var(--verde)">Activo</span>'}</td>
       <td style="padding:10px 8px" onclick="event.stopPropagation()">
         <div style="display:flex;gap:4px">
-          <button onclick="adminEditUser('${p.id}')" style="padding:4px 10px;border-radius:8px;border:none;font-size:11px;cursor:pointer;background:var(--lila-l);color:var(--lila-d)">Editar</button>
-          ${p.is_banned?`<button onclick="adminToggleBan('${p.id}',false)" style="padding:4px 10px;border-radius:8px;border:none;font-size:11px;cursor:pointer;background:var(--verde-l);color:var(--verde)">Desbanear</button>`:`<button onclick="adminToggleBan('${p.id}',true)" style="padding:4px 10px;border-radius:8px;border:none;font-size:11px;cursor:pointer;background:#FDE8EA;color:#E74C3C">Banear</button>`}
+          <button onclick="adminEditUser('${_safeId(p.id)}')" style="padding:4px 10px;border-radius:8px;border:none;font-size:11px;cursor:pointer;background:var(--lila-l);color:var(--lila-d)">Editar</button>
+          ${p.is_banned?`<button onclick="adminToggleBan('${_safeId(p.id)}',false)" style="padding:4px 10px;border-radius:8px;border:none;font-size:11px;cursor:pointer;background:var(--verde-l);color:var(--verde)">Desbanear</button>`:`<button onclick="adminToggleBan('${_safeId(p.id)}',true)" style="padding:4px 10px;border-radius:8px;border:none;font-size:11px;cursor:pointer;background:#FDE8EA;color:#E74C3C">Banear</button>`}
         </div>
       </td>
     </tr>`;
@@ -171,7 +183,7 @@ async function adminEditUser(id) {
   if (!p) return;
   const sub = _adminStats.subscriptions.find(s => s.user_id === id);
   const plan = sub?.plan || 'free';
-  const html = `<div style="margin-bottom:16px"><label style="font-size:12px;color:var(--suave);display:block;margin-bottom:6px">Nombre</label><input id="_adminEditName" value="${p.full_name||''}" style="width:100%;padding:10px;border:1.5px solid var(--borde);border-radius:12px;font-size:13px"></div>
+  const html = `<div style="margin-bottom:16px"><label style="font-size:12px;color:var(--suave);display:block;margin-bottom:6px">Nombre</label><input id="_adminEditName" value="${_esc(p.full_name||'')}" style="width:100%;padding:10px;border:1.5px solid var(--borde);border-radius:12px;font-size:13px"></div>
     <div style="margin-bottom:16px"><label style="font-size:12px;color:var(--suave);display:block;margin-bottom:6px">Plan</label><select id="_adminEditPlan" style="width:100%;padding:10px;border:1.5px solid var(--borde);border-radius:12px;font-size:13px">
       <option value="free" ${plan==='free'?'selected':''}>Free</option><option value="semilla" ${plan==='semilla'?'selected':''}>Semilla ($5)</option><option value="guerrera" ${plan==='guerrera'?'selected':''}>Guerrera ($10)</option><option value="diamante" ${plan==='diamante'?'selected':''}>Diamante ($18)</option></select></div>`;
   const btns = `<button onclick="document.getElementById('_adminModal').style.display='none'" style="padding:8px 16px;border-radius:10px;border:1px solid var(--borde);background:var(--bg);color:var(--suave);font-size:12px;cursor:pointer">${adminT('cancel')}</button>
@@ -205,14 +217,14 @@ function adminRenderSubs(c) {
   const { subscriptions, planCounts } = _adminStats;
   const rows = subscriptions.map(s => {
     const color = { semilla:'var(--verde)', guerrera:'var(--rosa)', diamante:'var(--oro)' }[s.plan] || 'var(--lila)';
-    return `<tr style="border-bottom:0.5px solid var(--borde)"><td style="padding:10px 8px"><span style="font-size:11px;padding:3px 10px;border-radius:100px;background:${color}22;color:${color}">${s.plan}</span></td><td style="padding:10px 8px">${{semilla:'$5',guerrera:'$10',diamante:'$18'}[s.plan]||'-'}/mes</td><td style="padding:10px 8px"><span style="font-size:10px;padding:3px 8px;border-radius:100px;background:var(--verde-l);color:var(--verde)">${s.status}</span></td><td style="padding:10px 8px;font-size:12px;color:var(--suave)">${new Date(s.created_at).toLocaleDateString('es-MX')}</td></tr>`;
+    return `<tr style="border-bottom:0.5px solid var(--borde)"><td style="padding:10px 8px"><span style="font-size:11px;padding:3px 10px;border-radius:100px;background:${color}22;color:${color}">${_esc(s.plan)}</span></td><td style="padding:10px 8px">${{semilla:'$5',guerrera:'$10',diamante:'$18'}[s.plan]||'-'}/mes</td><td style="padding:10px 8px"><span style="font-size:10px;padding:3px 8px;border-radius:100px;background:var(--verde-l);color:var(--verde)">${_esc(s.status)}</span></td></td><td style="padding:10px 8px;font-size:12px;color:var(--suave)">${new Date(s.created_at).toLocaleDateString('es-MX')}</td></tr>`;
   }).join('');
   c.innerHTML = `<div style="margin-bottom:12px;display:flex;justify-content:space-between"><span style="font-size:14px;font-weight:500">💳 ${subscriptions.length} activas</span><div style="font-size:12px"><span style="color:var(--verde)">Semilla:${planCounts.semilla||0}</span> <span style="color:var(--rosa)">Guerrera:${planCounts.guerrera||0}</span> <span style="color:var(--oro)">Diamante:${planCounts.diamante||0}</span></div></div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--borde);text-align:left"><th style="padding:8px;font-size:11px;color:var(--suave)">Plan</th><th style="padding:8px;font-size:11px;color:var(--suave)">Precio</th><th style="padding:8px;font-size:11px;color:var(--suave)">Estado</th><th style="padding:8px;font-size:11px;color:var(--suave)">Desde</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function adminRenderAff(c) {
   const { affiliates, activeAffiliates, totalAffiliatePayout } = _adminStats;
-  const rows = affiliates.map(a => `<tr style="border-bottom:0.5px solid var(--borde)"><td style="padding:10px 8px;font-family:monospace;color:var(--lila)">${a.ref_code}</td><td style="padding:10px 8px">${a.active_referrals||0}</td><td style="padding:10px 8px;color:var(--verde)">$${(parseFloat(a.total_earned)||0).toFixed(2)}</td><td style="padding:10px 8px;color:var(--oro)">$${(parseFloat(a.pending_payout)||0).toFixed(2)}</td><td style="padding:10px 8px"><span style="font-size:10px;padding:3px 8px;border-radius:100px;background:${a.status==='active'?'var(--verde-l)':'#FDE8EA'};color:${a.status==='active'?'var(--verde)':'#E74C3C'}">${a.status}</span></td></tr>`).join('');
+  const rows = affiliates.map(a => `<tr style="border-bottom:0.5px solid var(--borde)"><td style="padding:10px 8px;font-family:monospace;color:var(--lila)">${_esc(a.ref_code)}</td><td style="padding:10px 8px">${a.active_referrals||0}</td><td style="padding:10px 8px;color:var(--verde)">$${(parseFloat(a.total_earned)||0).toFixed(2)}</td><td style="padding:10px 8px;color:var(--oro)">$${(parseFloat(a.pending_payout)||0).toFixed(2)}</td><td style="padding:10px 8px"><span style="font-size:10px;padding:3px 8px;border-radius:100px;background:${a.status==='active'?'var(--verde-l)':'#FDE8EA'};color:${a.status==='active'?'var(--verde)':'#E74C3C'}">${_esc(a.status)}</span></td></tr>`).join('');
   c.innerHTML = `<div style="margin-bottom:12px;font-size:14px;font-weight:500">🤝 ${activeAffiliates} activas · Pago total: $${totalAffiliatePayout}</div><table style="width:100%;border-collapse:collapse"><thead><tr style="border-bottom:1px solid var(--borde);text-align:left"><th style="padding:8px;font-size:11px;color:var(--suave)">Código</th><th style="padding:8px;font-size:11px;color:var(--suave)">Referidos</th><th style="padding:8px;font-size:11px;color:var(--suave)">Ganado</th><th style="padding:8px;font-size:11px;color:var(--suave)">Pendiente</th><th style="padding:8px;font-size:11px;color:var(--suave)">Estado</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
@@ -279,9 +291,9 @@ async function adminLoadCourses() {
   const area = document.getElementById('_contentArea');
   if (!products || products.length === 0) { area.innerHTML = '<div style="text-align:center;padding:20px;color:var(--suave)">No hay cursos</div>'; return; }
   area.innerHTML = products.map(p => `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:0.5px solid var(--borde)">
-    <div><div style="font-weight:500">${p.icon||'📚'} ${p.name}</div><div style="font-size:12px;color:var(--suave)">${p.description||''} · ${p.price?'$'+p.price:'Gratis'}</div></div>
+    <div><div style="font-weight:500">${_esc(p.icon||'📚')} ${_esc(p.name)}</div><div style="font-size:12px;color:var(--suave)">${_esc(p.description||'')} · ${p.price?`$${_esc(p.price)}`:'Gratis'}</div></div>
     <div style="display:flex;gap:4px"><span style="font-size:10px;padding:3px 8px;border-radius:100px;background:${p.is_active?'var(--verde-l)':'#F0F0F0'};color:${p.is_active?'var(--verde)':'#95A5A6'}">${p.is_active?'Activo':'Inactivo'}</span>
-    <button onclick="adminToggleProduct('${p.id}',${!p.is_active})" style="padding:3px 8px;border-radius:6px;border:none;font-size:10px;cursor:pointer;background:var(--crema)">${p.is_active?'Desactivar':'Activar'}</button></div></div>`).join('');
+    <button onclick="adminToggleProduct('${_safeId(p.id)}',${!p.is_active})" style="padding:3px 8px;border-radius:6px;border:none;font-size:10px;cursor:pointer;background:var(--crema)">${p.is_active?'Desactivar':'Activar'}</button></div></div>`).join('');
 }
 
 async function adminToggleProduct(id, active) {
@@ -297,8 +309,8 @@ async function adminLoadBadges() {
   const grouped = {};
   badges.forEach(b => { grouped[b.badge_key] = { ...b, count: (grouped[b.badge_key]?.count||0)+1 }; });
   area.innerHTML = Object.values(grouped).map(b => `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:0.5px solid var(--borde)">
-    <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">${b.badge_icon||'🏆'}</span><div><div style="font-weight:500">${b.badge_name||b.badge_key}</div><div style="font-size:12px;color:var(--suave)">${b.badge_desc||''}</div></div></div>
-    <div style="text-align:right"><div style="font-size:12px;color:var(--lila);font-weight:600">${b.count} earned</div><div style="font-size:10px;padding:2px 6px;border-radius:6px;background:var(--crema)">${b.badge_tier||'common'}</div></div></div>`).join('');
+    <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">${_esc(b.badge_icon||'🏆')}</span><div><div style="font-weight:500">${_esc(b.badge_name||b.badge_key)}</div><div style="font-size:12px;color:var(--suave)">${_esc(b.badge_desc||'')}</div></div></div>
+    <div style="text-align:right"><div style="font-size:12px;color:var(--lila);font-weight:600">${b.count} earned</div><div style="font-size:10px;padding:2px 6px;border-radius:6px;background:var(--crema)">${_esc(b.badge_tier||'common')}</div></div></div>`).join('');
 }
 
 async function adminLoadChallenges() {
@@ -306,9 +318,9 @@ async function adminLoadChallenges() {
   const area = document.getElementById('_contentArea');
   if (!challenges || challenges.length === 0) { area.innerHTML = '<div style="text-align:center;padding:20px;color:var(--suave)">No hay challenges</div>'; return; }
   area.innerHTML = challenges.map(ch => `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:0.5px solid var(--borde)">
-    <div><div style="font-weight:500">${ch.title}</div><div style="font-size:12px;color:var(--suave)">${ch.description||''} · ${ch.difficulty||'-'} · ${ch.xp_reward||0} XP</div></div>
+    <div><div style="font-weight:500">${_esc(ch.title)}</div><div style="font-size:12px;color:var(--suave)">${_esc(ch.description||'')} · ${_esc(ch.difficulty||'-')} · ${ch.xp_reward||0} XP</div></div>
     <div style="display:flex;gap:4px"><span style="font-size:10px;padding:3px 8px;border-radius:100px;background:${ch.is_active?'var(--verde-l)':'#F0F0F0'};color:${ch.is_active?'var(--verde)':'#95A5A6'}">${ch.is_active?'Activo':'Inactivo'}</span>
-    <button onclick="adminToggleChallenge('${ch.id}',${!ch.is_active})" style="padding:3px 8px;border-radius:6px;border:none;font-size:10px;cursor:pointer;background:var(--crema)">${ch.is_active?'Desactivar':'Activar'}</button></div></div>`).join('');
+    <button onclick="adminToggleChallenge('${_safeId(ch.id)}',${!ch.is_active})" style="padding:3px 8px;border-radius:6px;border:none;font-size:10px;cursor:pointer;background:var(--crema)">${ch.is_active?'Desactivar':'Activar'}</button></div></div>`).join('');
 }
 
 async function adminToggleChallenge(id, active) {
