@@ -1,7 +1,9 @@
 // ============================================================
 // Yayika — AI Weekly Digest Edge Function
 // Sends personalized weekly email summary
-// Deploy: supabase functions deploy ai-weekly-digest --no-verify-jwt
+//   POST {user_id, user_email?, user_name?, lang?}  -> single user
+//   POST {} (cron weekly-email-yayika)              -> batch to everyone
+// Deploy: supabase functions deploy ai-weekly-digest
 // Env vars needed: RESEND_API_KEY
 // ============================================================
 
@@ -26,142 +28,81 @@ serve(async (req: Request) => {
       });
     }
 
-    const { user_id, user_email, user_name, lang } = await req.json();
-    const targetLang = lang || "es";
+    // tolerate empty body — the weekly cron posts nothing
+    const body = await req.json().catch(() => ({}));
 
-    // Initialize Supabase
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
     const supabase = createClient(supabaseUrl, supabaseKey);
+    const weekStart = currentWeekStart();
 
-    // Gather weekly data
-    const weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    const weekAgoStr = weekAgo.toISOString().split("T")[0];
-
-    // 1. Cycle logs this week
-    const { data: cycleLogs } = await supabase
-      .from("yayika_cycle_log")
-      .select("*")
-      .eq("user_id", user_id)
-      .gte("log_date", weekAgoStr)
-      .order("log_date", { ascending: false });
-
-    // 2. Daily moods this week
-    const { data: moodLogs } = await supabase
-      .from("yayika_daily_mood")
-      .select("*")
-      .eq("user_id", user_id)
-      .gte("check_date", weekAgoStr)
-      .order("check_date", { ascending: false });
-
-    // 3. Finance summary
-    const { data: transactions } = await supabase
-      .from("yayika_transactions")
-      .select("*")
-      .eq("user_id", user_id)
-      .gte("date", weekAgoStr);
-
-    // 4. XP and streak
-    const { data: progress } = await supabase
-      .from("yayika_progress")
-      .select("xp_total, streak_days")
-      .eq("user_id", user_id)
-      .maybeSingle();
-
-    // 5. Challenges completed
-    const { data: challenges } = await supabase
-      .from("yayika_weekly_challenges")
-      .select("challenges, completed, xp_earned")
-      .eq("user_id", user_id)
-      .gte("week_start", weekAgoStr)
-      .maybeSingle();
-
-    // Calculate stats
-    const daysChecked = moodLogs?.length || 0;
-    const daysCycleLogged = cycleLogs?.length || 0;
-    const totalIncome = transactions?.filter(t => t.type === "income").reduce((s, t) => s + (t.amount || 0), 0) || 0;
-    const totalExpenses = transactions?.filter(t => t.type === "expense").reduce((s, t) => s + (t.amount || 0), 0) || 0;
-    const challengesCompleted = challenges?.completed?.length || 0;
-    const challengesTotal = challenges?.challenges?.length || 4;
-    const xpEarned = challenges?.xp_earned || 0;
-
-    // Get dominant phase
-    const phases = moodLogs?.map(m => m.cycle_phase).filter(Boolean) || [];
-    const dominantPhase = phases.length > 0
-      ? phases.sort((a, b) => phases.filter(v => v === a).length - phases.filter(v => v === b).length).pop()
-      : null;
-
-    // Get average energy
-    const energies = moodLogs?.map(m => m.energy_level).filter(Boolean) || [];
-    const avgEnergy = energies.length > 0
-      ? (energies.reduce((s, e) => s + e, 0) / energies.length).toFixed(1)
-      : null;
-
-    // Build email HTML
-    const emailHTML = buildDigestEmail({
-      name: user_name || "Guerrera",
-      lang: targetLang,
-      daysChecked,
-      daysCycleLogged,
-      totalIncome,
-      totalExpenses,
-      challengesCompleted,
-      challengesTotal,
-      xpEarned,
-      xpTotal: progress?.xp_total || 0,
-      streakDays: progress?.streak_days || 0,
-      dominantPhase,
-      avgEnergy,
-      topSymptoms: getTopSymptoms(cycleLogs || []),
-    });
-
-    // Determine subject
-    const subjects: Record<string, string> = {
-      es: `💜 Tu resumen semanal de Yayika`,
-      en: `💜 Your Yayika weekly summary`,
-      pt: `💜 Seu resumo semanal do Yayika`,
-      fr: `💜 Ton récapitulatif hebdomadaire Yayika`,
-      de: `💜 Dein Yayika-Wochenzusammenfassung`
-    };
-
-    // Send email via Resend
-    const emailResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${resendKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Yayika <hola@yayika.com>",
-        to: user_email,
-        subject: subjects[targetLang] || subjects["es"],
-        html: emailHTML,
-      }),
-    });
-
-    if (!emailResponse.ok) {
-      const err = await emailResponse.text();
-      console.error("Resend error:", err);
-      return new Response(JSON.stringify({ error: "Email send failed", details: err }), {
-        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    // ---- single-user mode (contract: {user_id, user_email, user_name, lang}) ----
+    if (body.user_id) {
+      const result = await sendDigestToUser(supabase, resendKey, {
+        user_id: String(body.user_id),
+        user_email: body.user_email,
+        user_name: body.user_name,
+        lang: body.lang || "es",
+        weekStart,
+      });
+      if (result.error) {
+        return new Response(JSON.stringify({ error: result.error }), {
+          status: result.status || 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      return new Response(JSON.stringify({ success: true, sent_to: result.sent_to }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Store digest record
-    await supabase.from("yayika_weekly_digests").insert({
-      user_id,
-      digest_data: {
-        daysChecked, daysCycleLogged, totalIncome, totalExpenses,
-        challengesCompleted, xpEarned, dominantPhase, avgEnergy
-      },
-      sent_at: new Date().toISOString(),
-    });
+    // ---- BATCH mode: cron weekly-email-yayika -> POST {} ----
+    const { data: profiles } = await supabase
+      .from("yayika_profiles")
+      .select("id, email, full_name, is_banned")
+      .not("email", "is", null)
+      .eq("is_banned", false)
+      .limit(500);
 
-    return new Response(JSON.stringify({ success: true, sent_to: user_email }), {
+    // explicit opt-outs (digest_prefs.email_enabled = false)
+    const { data: prefs } = await supabase
+      .from("yayika_digest_prefs")
+      .select("user_id, email_enabled");
+    const optedOut = new Set(
+      (prefs || []).filter((p) => p.email_enabled === false).map((p) => p.user_id),
+    );
+
+    // already sent this week? (idempotent across retries/cron runs)
+    const { data: already } = await supabase
+      .from("yayika_weekly_digests")
+      .select("user_id")
+      .eq("week_start", weekStart);
+    const sentSet = new Set((already || []).map((d) => d.user_id));
+
+    let sent = 0, skipped = 0, failed = 0;
+    const errors: string[] = [];
+    for (const p of profiles || []) {
+      if (optedOut.has(p.id) || sentSet.has(p.id)) {
+        skipped++;
+        continue;
+      }
+      const r = await sendDigestToUser(supabase, resendKey, {
+        user_id: p.id,
+        user_email: p.email,
+        user_name: p.full_name || undefined,
+        lang: "es",
+        weekStart,
+      });
+      if (r.error) {
+        failed++;
+        if (errors.length < 5) errors.push(`${p.id}: ${r.error}`);
+      } else {
+        sent++;
+      }
+    }
+
+    return new Response(JSON.stringify({ success: true, sent, skipped, failed, errors }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-
   } catch (error) {
     console.error("Weekly Digest error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
@@ -169,6 +110,171 @@ serve(async (req: Request) => {
     });
   }
 });
+
+// Monday of the current week (UTC) — dedupe key for the batch
+function currentWeekStart(): string {
+  const now = new Date();
+  const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const dow = d.getUTCDay(); // 0=Sun
+  d.setUTCDate(d.getUTCDate() - ((dow + 6) % 7));
+  return d.toISOString().split("T")[0];
+}
+
+async function sendDigestToUser(
+  supabase: any,
+  resendKey: string,
+  opts: { user_id: string; user_email?: string; user_name?: string; lang?: string; weekStart: string },
+): Promise<{ sent_to?: string; error?: string; status?: number }> {
+  const { user_id, lang, weekStart } = opts;
+  let email = opts.user_email;
+  let name = opts.user_name;
+
+  if (!email || !name) {
+    const { data: prof } = await supabase
+      .from("yayika_profiles")
+      .select("email, full_name")
+      .eq("id", user_id)
+      .limit(1)
+      .maybeSingle();
+    email = email || prof?.email || undefined;
+    name = name || prof?.full_name || undefined;
+  }
+  if (!email) return { error: "No email for user", status: 400 };
+
+  const weekAgoIso = new Date(Date.now() - 7 * 86400000).toISOString();
+  const weekAgoDate = weekAgoIso.split("T")[0];
+
+  // 1. Cycle logs this week (FIXED: column is logged_at, not log_date)
+  const { data: cycleLogs } = await supabase
+    .from("yayika_cycle_log")
+    .select("*")
+    .eq("user_id", user_id)
+    .gte("logged_at", weekAgoIso)
+    .order("logged_at", { ascending: false });
+
+  // 2. Daily moods this week (FIXED: column is logged_date, not check_date)
+  const { data: moodLogs } = await supabase
+    .from("yayika_daily_mood")
+    .select("*")
+    .eq("user_id", user_id)
+    .gte("logged_date", weekAgoDate)
+    .order("logged_date", { ascending: false });
+
+  // 3. Finance summary
+  const { data: transactions } = await supabase
+    .from("yayika_transactions")
+    .select("*")
+    .eq("user_id", user_id)
+    .gte("date", weekAgoDate);
+
+  // 4. XP and streak
+  const { data: progress } = await supabase
+    .from("yayika_progress")
+    .select("xp_total, streak_days")
+    .eq("user_id", user_id)
+    .limit(1)
+    .maybeSingle();
+
+  // 5. Challenges this week (FIXED: per-user progress lives in
+  //    yayika_user_challenges; XP comes from yayika_xp_events)
+  const { count: completedCount } = await supabase
+    .from("yayika_user_challenges")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user_id)
+    .eq("status", "completed")
+    .gte("completed_at", weekAgoIso);
+  const { count: activeTotal } = await supabase
+    .from("yayika_weekly_challenges")
+    .select("id", { count: "exact", head: true })
+    .eq("is_active", true);
+  const { data: xpRows } = await supabase
+    .from("yayika_xp_events")
+    .select("xp_amount")
+    .eq("user_id", user_id)
+    .gte("created_at", weekAgoIso);
+
+  // Calculate stats
+  const daysChecked = moodLogs?.length || 0;
+  const daysCycleLogged = cycleLogs?.length || 0;
+  const totalIncome = transactions?.filter((t: any) => t.type === "income").reduce((s: number, t: any) => s + (Number(t.amount) || 0), 0) || 0;
+  const totalExpenses = transactions?.filter((t: any) => t.type === "expense").reduce((s: number, t: any) => s + (Number(t.amount) || 0), 0) || 0;
+  const challengesCompleted = completedCount || 0;
+  const challengesTotal = activeTotal || 4;
+  const xpEarned = (xpRows || []).reduce((s: number, r: any) => s + (r.xp_amount || 0), 0);
+
+  // Dominant phase (FIXED: phase lives on yayika_cycle_log, daily_mood has none)
+  const phases = cycleLogs?.map((m: any) => m.phase).filter(Boolean) || [];
+  const dominantPhase = phases.length > 0
+    ? phases.sort((a: string, b: string) => phases.filter((v: string) => v === a).length - phases.filter((v: string) => v === b).length).pop()
+    : null;
+
+  // Average energy (FIXED: column is energy, not energy_level)
+  const energies = moodLogs?.map((m: any) => m.energy).filter((e: any) => e !== null && e !== undefined) || [];
+  const avgEnergy = energies.length > 0
+    ? (energies.reduce((s: number, e: number) => s + e, 0) / energies.length).toFixed(1)
+    : null;
+
+  // Build email HTML
+  const emailHTML = buildDigestEmail({
+    name: name || "Guerrera",
+    lang: lang || "es",
+    daysChecked,
+    daysCycleLogged,
+    totalIncome,
+    totalExpenses,
+    challengesCompleted,
+    challengesTotal,
+    xpEarned,
+    xpTotal: progress?.xp_total || 0,
+    streakDays: progress?.streak_days || 0,
+    dominantPhase,
+    avgEnergy,
+    topSymptoms: getTopSymptoms(cycleLogs || []),
+  });
+
+  // Determine subject
+  const subjects: Record<string, string> = {
+    es: `💜 Tu resumen semanal de Yayika`,
+    en: `💜 Your Yayika weekly summary`,
+    pt: `💜 Seu resumo semanal do Yayika`,
+    fr: `💜 Ton récapitulatif hebdomadaire Yayika`,
+    de: `💜 Dein Yayika-Wochenzusammenfassung`,
+  };
+
+  // Send email via Resend
+  const emailResponse = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${resendKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Yayika <hola@yayika.com>",
+      to: email,
+      subject: subjects[lang || "es"] || subjects["es"],
+      html: emailHTML,
+    }),
+  });
+
+  if (!emailResponse.ok) {
+    const err = await emailResponse.text();
+    console.error("Resend error:", err);
+    return { error: `Email send failed: ${err.slice(0, 200)}`, status: 502 };
+  }
+
+  // Store digest record (FIXED: columns are week_start + summary)
+  await supabase.from("yayika_weekly_digests").insert({
+    user_id,
+    week_start: weekStart,
+    summary: {
+      daysChecked, daysCycleLogged, totalIncome, totalExpenses,
+      challengesCompleted, xpEarned, dominantPhase, avgEnergy,
+    },
+    sent_at: new Date().toISOString(),
+  });
+
+  return { sent_to: email };
+}
 
 // ============================================================
 // HELPER FUNCTIONS
@@ -194,12 +300,12 @@ function buildDigestEmail(data: {
   dominantPhase: string | null; avgEnergy: string | null; topSymptoms: string[];
 }): string {
   const { name, lang } = data;
-  
+
   const phaseNames: Record<string, Record<string, string>> = {
     es: { menstrual: "Menstrual", follicular: "Folicular", ovulatory: "Ovulatoria", luteal: "Lútea" },
     en: { menstrual: "Menstrual", follicular: "Follicular", ovulatory: "Ovulatory", luteal: "Luteal" },
   };
-  
+
   const labels: Record<string, Record<string, string>> = {
     es: {
       greeting: "Hola",
@@ -246,7 +352,7 @@ function buildDigestEmail(data: {
       phase: "Dominant phase",
       cta: "Open portal",
       footer: "We send this summary every Monday so you can track your cycle, finances, and wellness.",
-    }
+    },
   };
 
   const l = labels[lang] || labels["es"];
@@ -264,12 +370,12 @@ function buildDigestEmail(data: {
       <div style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:white">Yay<span style="color:#D4B8F5">ika</span></div>
       <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px">${l.subtitle}</div>
     </div>
-    
+
     <!-- Greeting -->
     <div style="padding:24px">
       <h1 style="font-family:Georgia,serif;font-size:24px;color:#2C2240;margin:0 0 4px">${l.greeting}, ${name} 💜</h1>
       <p style="font-size:14px;color:#7A6E85;margin:0 0 24px">${l.subtitle}</p>
-      
+
       <!-- Stats Grid -->
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">
         <tr>
@@ -326,7 +432,7 @@ function buildDigestEmail(data: {
 
       <!-- Challenges -->
       <div style="background:#E8F8F1;border-radius:12px;padding:16px;margin-bottom:16px;text-align:center">
-        <div style="font-size:13px;font-weight:600;color:#1F7A4E;margin-bottom:6px">${l.challengeTitle}</div>
+        <div style="font-size:13px;font-weight:600;color:#1F7A4E;margin-bottom:8px">${l.challengeTitle}</div>
         <div style="font-size:24px;font-weight:700;color:#3BAF7A">${data.challengesCompleted}/${data.challengesTotal}</div>
         <div style="font-size:11px;color:#7A6E85">${l.completed}</div>
       </div>
@@ -343,7 +449,7 @@ function buildDigestEmail(data: {
         <a href="https://yayika.com/Portales/" style="display:inline-block;background:#1A9E8F;color:white;padding:12px 32px;border-radius:100px;text-decoration:none;font-size:14px;font-weight:500">${l.cta}</a>
       </div>
     </div>
-    
+
     <!-- Footer -->
     <div style="padding:16px 24px;background:#F8F5FF;text-align:center">
       <div style="font-size:11px;color:#7A6E85;line-height:1.6">${l.footer}</div>
