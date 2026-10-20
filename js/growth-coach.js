@@ -20,7 +20,7 @@ const GrowthCoach = {
       // Check if user is an affiliate
       const { data: affiliate } = await supabase
         .from('yayika_affiliates')
-        .select('id, user_id, ref_code, level, active_referrals, total_earned')
+        .select('id, user_id, referral_code, level, active_referrals, total_earnings')
         .eq('user_id', currentUser.id)
         .single();
 
@@ -87,7 +87,7 @@ const GrowthCoach = {
       cycle_phase: 'competition',
       stats: {
         my_referrals: this._affiliate?.active_referrals || 0,
-        my_earnings: this._affiliate?.total_earned || 0,
+        my_earnings: this._affiliate?.total_earnings || 0,
         my_level: this._affiliate?.level || 'standard',
         my_rank: 0,
         avg_referrals: 0,
@@ -107,13 +107,13 @@ const GrowthCoach = {
         user_position: 0,
         total_affiliates: 0,
         user_referrals: this._affiliate?.active_referrals || 0,
-        user_earnings: this._affiliate?.total_earned || 0,
+        user_earnings: this._affiliate?.total_earnings || 0,
         top_3: []
       },
       message: '',
       feed: [],
       challenge: null,
-      ref_code: this._affiliate?.ref_code || ''
+      ref_code: this._affiliate?.referral_code || ''
     };
   },
 
@@ -240,7 +240,7 @@ const GrowthCoach = {
             ${t.share_code}
           </button>
           <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:8px">
-            ${t.your_code}: <strong style="color:#5ED4C5;letter-spacing:1px">${this._data?.ref_code || this._affiliate?.ref_code || '—'}</strong>
+            ${t.your_code}: <strong style="color:#5ED4C5;letter-spacing:1px">${this._data?.ref_code || this._affiliate?.referral_code || '—'}</strong>
           </div>
         </div>
         <div style="font-size:10px;color:rgba(255,255,255,0.3);text-align:center;margin-top:8px;position:relative;z-index:1">
@@ -315,7 +315,7 @@ const GrowthCoach = {
   // ============================================================
 
   shareCode() {
-    const code = this._data?.ref_code || this._affiliate?.ref_code;
+      const code = this._data?.ref_code || this._affiliate?.referral_code;
     const url = `https://yayika.com/Portales/?ref=${code}`;
     const lang = currentLang || 'es';
     const t = this._getTranslations(lang);

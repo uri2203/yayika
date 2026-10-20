@@ -109,7 +109,7 @@ async function loadAffiliateData() {
 
 function updateBalanceUI(aff) {
   document.getElementById('balanceAmount').textContent = formatWalletCurrency(parseFloat(aff.pending_payout || 0));
-  document.getElementById('totalEarned').textContent = formatWalletCurrency(parseFloat(aff.total_earned || 0));
+  document.getElementById('totalEarned').textContent = formatWalletCurrency(parseFloat(aff.total_earnings || 0));
   document.getElementById('totalPaidOut').textContent = formatWalletCurrency(parseFloat(aff.paid_out || 0));
   document.getElementById('totalPending').textContent = formatWalletCurrency(parseFloat(aff.pending_payout || 0));
 

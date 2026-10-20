@@ -29,11 +29,11 @@ async function registerAsAffiliate() {
   // Check if already registered
   const { data: existing } = await supabase
     .from('yayika_affiliates')
-    .select('id, ref_code')
-    .eq('user_id', currentUser.id)
-    .maybeSingle();
-  
-  if (existing) return { status: 'ALREADY_REGISTERED', ref_code: existing.ref_code };
+  .select('id, referral_code')
+  .eq('user_id', currentUser.id)
+  .maybeSingle();
+
+if (existing) return { status: 'ALREADY_REGISTERED', ref_code: existing.referral_code };
   
   // Generate referral code
   const { data: codeResult, error: codeError } = await supabase.rpc('yayika_generate_ref_code', {
@@ -44,15 +44,15 @@ async function registerAsAffiliate() {
     // Fallback: generate locally
     const code = 'YKI-' + Math.random().toString(36).substring(2, 8).toUpperCase();
     
-    const { error } = await supabase.from('yayika_affiliates').insert({
-      user_id: currentUser.id,
-      email: currentUser.email,
-      ref_code: code,
-      full_name: currentUser.user_metadata?.full_name || '',
-      level: 'standard',
-      commission_pct: 30.00,
-      status: 'active'
-    });
+  const { error } = await supabase.from('yayika_affiliates').insert({
+    user_id: currentUser.id,
+    email: currentUser.email,
+    referral_code: code,
+    full_name: currentUser.user_metadata?.full_name || '',
+    level: 'standard',
+    commission_pct: 30.00,
+    status: 'active'
+  });
     
     if (error) throw error;
     return { status: 'OK', ref_code: code };
@@ -61,7 +61,7 @@ async function registerAsAffiliate() {
   const { error } = await supabase.from('yayika_affiliates').insert({
     user_id: currentUser.id,
     email: currentUser.email,
-    ref_code: codeResult,
+    referral_code: codeResult,
     full_name: currentUser.user_metadata?.full_name || '',
     level: 'standard',
     commission_pct: 30.00,
@@ -152,10 +152,10 @@ async function trackClick(refCode) {
   const { data: affiliate } = await supabase
     .from('yayika_affiliates')
     .select('id')
-    .eq('ref_code', refCode)
-    .maybeSingle();
-  
-  if (!affiliate) return;
+  .eq('referral_code', refCode)
+  .maybeSingle();
+
+if (!affiliate) return;
   
   await supabase.from('yayika_link_clicks').insert({
     affiliate_id: affiliate.id,
@@ -243,11 +243,11 @@ async function cancelAffiliate() {
 
   const { data: affiliate, error } = await supabase
     .from('yayika_affiliates')
-    .select('id, ref_code, pending_payout, status')
-    .eq('user_id', currentUser.id)
-    .maybeSingle();
+  .select('id, referral_code, pending_payout, status')
+  .eq('user_id', currentUser.id)
+  .maybeSingle();
 
-  if (error || !affiliate) return 'NOT_AFFILIATE';
+if (error || !affiliate) return 'NOT_AFFILIATE';
   if (affiliate.status === 'cancelled') return 'ALREADY_CANCELLED';
 
   // Check if there's pending payout
@@ -271,7 +271,7 @@ async function cancelAffiliate() {
   await supabase.from('yayika_activity_log').insert({
     user_id: currentUser.id,
     action: 'affiliate_cancelled',
-    details: JSON.stringify({ ref_code: affiliate.ref_code }),
+    details: JSON.stringify({ ref_code: affiliate.referral_code }),
   });
 
   return 'OK';
@@ -312,7 +312,7 @@ function renderAffiliateDashboard(data) {
   
   const lang = currentLang || 'es';
   const affiliate = data.affiliate;
-  const link = getAffiliateLink(affiliate.ref_code);
+  const link = getAffiliateLink(affiliate.referral_code);
   
   const i18n = {
     title: { es: 'Mi Dashboard de Afiliada', en: 'My Affiliate Dashboard', pt: 'Meu Painel de Afiliada', fr: 'Mon Tableau d\'Affiliée', de: 'Mein Affiliate-Dashboard' },
@@ -346,7 +346,7 @@ function renderAffiliateDashboard(data) {
       <!-- Stats Grid -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
         <div style="text-align:center;padding:14px;background:var(--verde-l);border-radius:10px">
-          <div style="font-size:20px;font-weight:600;color:var(--verde-d)">$${parseFloat(affiliate.total_earned || 0).toFixed(2)}</div>
+          <div style="font-size:20px;font-weight:600;color:var(--verde-d)">$${parseFloat(affiliate.total_earnings || 0).toFixed(2)}</div>
           <div style="font-size:10px;color:var(--suave)">${t('total_earned')}</div>
         </div>
         <div style="text-align:center;padding:14px;background:var(--oro-l);border-radius:10px">

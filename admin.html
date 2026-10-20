@@ -376,15 +376,16 @@ function doLogout() {
   sessionStorage.removeItem('yayika_admin');
 })();
 
-// Fetch data from Supabase
+// Fetch data from Supabase (via admin-api proxy; HMAC session + service role)
 async function sbQuery(table, select, filters) {
-  let url = `${SB_URL}/rest/v1/${table}?select=${select}`;
-  if (filters) url += '&' + filters;
-  const res = await fetch(url, {
-    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-  });
-  if (!res.ok) return [];
-  return res.json();
+const token = sessionStorage.getItem('yayika_admin');
+const res = await fetch(`${SB_URL}/functions/v1/admin-api`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ token, action: 'query', table, select: select || '*', filters: filters || '' })
+});
+if (!res.ok) return [];
+return res.json();
 }
 
 // Load dashboard
@@ -393,7 +394,7 @@ async function loadDashboard() {
     const [profiles, subs, affiliates, allSubs] = await Promise.all([
       sbQuery('yayika_profiles', 'id, user_id, full_name, created_at, avatar_color, email, is_banned'),
       sbQuery('yayika_subscriptions', '*', "status=neq.cancelled"),
-      sbQuery('yayika_affiliates', 'id, user_id, ref_code, total_earned, pending_payout, active_referrals, status'),
+      sbQuery('yayika_affiliates', 'id, user_id, referral_code, total_earnings, pending_payout, active_referrals, status'),
       sbQuery('yayika_subscriptions', 'plan, status, created_at, current_period_end', 'order=created_at.desc')
     ]);
 
@@ -411,7 +412,7 @@ async function loadDashboard() {
     });
 
     const activeAff = affiliates.filter(a => a.status === 'active');
-    const totalPayout = affiliates.reduce((s, a) => s + (parseFloat(a.total_earned) || 0), 0);
+    const totalPayout = affiliates.reduce((s, a) => s + (parseFloat(a.total_earnings) || 0), 0);
 
     statsCache = { profiles, subs, affiliates, allSubs, planCounts, monthlyRev, totalRev, activeAff, totalPayout };
 
@@ -573,9 +574,9 @@ function viewUser(id) {
       <div class="detail-field"><div class="detail-label">Estado suscripción</div><div class="detail-value">${sub?.status || 'Sin suscripción'}</div></div>
       ${sub ? `<div class="detail-field"><div class="detail-label">Inicio</div><div class="detail-value">${new Date(sub.created_at).toLocaleDateString('es-MX')}</div></div>` : ''}
       ${sub ? `<div class="detail-field"><div class="detail-label">Próximo cobro</div><div class="detail-value">${sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString('es-MX') : 'N/A'}</div></div>` : ''}
-      ${aff ? `<div class="detail-field"><div class="detail-label">Código afiliada</div><div class="detail-value" style="font-family:monospace;color:var(--lila)">${aff.ref_code}</div></div>` : ''}
+      ${aff ? `<div class="detail-field"><div class="detail-label">Código afiliada</div><div class="detail-value" style="font-family:monospace;color:var(--lila)">${aff.referral_code}</div></div>` : ''}
       ${aff ? `<div class="detail-field"><div class="detail-label">Referidos</div><div class="detail-value">${aff.active_referrals || 0}</div></div>` : ''}
-      ${aff ? `<div class="detail-field"><div class="detail-label">Ganado total</div><div class="detail-value" style="color:var(--verde)">$${(parseFloat(aff.total_earned)||0).toFixed(2)}</div></div>` : ''}
+      ${aff ? `<div class="detail-field"><div class="detail-label">Ganado total</div><div class="detail-value" style="color:var(--verde)">$${(parseFloat(aff.total_earnings)||0).toFixed(2)}</div></div>` : ''}
       ${aff ? `<div class="detail-field"><div class="detail-label">Pendiente pago</div><div class="detail-value" style="color:var(--oro)">$${(parseFloat(aff.pending_payout)||0).toFixed(2)}</div></div>` : ''}
     </div>`;
   document.getElementById('modalFooter').innerHTML = `
@@ -642,9 +643,9 @@ async function saveUser(id) {
     } else if (plan !== 'free') {
       const planPrices = { semilla: 5, guerrera: 10, diamante: 18 };
       if (sub) {
-        await sbUpdate('yayika_subscriptions', { plan, price: planPrices[plan] }, `id=eq.${sub.id}`);
-      } else {
-        await sbInsert('yayika_subscriptions', { user_id: id, plan, price: planPrices[plan], status: 'active', created_at: new Date().toISOString() });
+await sbUpdate('yayika_subscriptions', { plan }, `id=eq.${sub.id}`);
+} else {
+await sbInsert('yayika_subscriptions', { user_id: id, plan, status: 'active', created_at: new Date().toISOString() });
       }
     }
 
@@ -669,31 +670,35 @@ async function toggleBan(id, ban) {
   }
 }
 
-// Supabase CRUD helpers
+// Supabase CRUD helpers (via admin-api proxy)
 async function sbUpdate(table, data, filter) {
-  const res = await fetch(`${SB_URL}/rest/v1/${table}?${filter}`, {
-    method: 'PATCH',
-    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-    body: JSON.stringify(data)
-  });
-  if (!res.ok) throw new Error(await res.text());
+const token = sessionStorage.getItem('yayika_admin');
+const res = await fetch(`${SB_URL}/functions/v1/admin-api`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ token, action: 'update', table, filters: filter, data })
+});
+if (!res.ok) throw new Error(await res.text());
 }
 
 async function sbInsert(table, data) {
-  const res = await fetch(`${SB_URL}/rest/v1/${table}`, {
-    method: 'POST',
-    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
-  if (!res.ok) throw new Error(await res.text());
+const token = sessionStorage.getItem('yayika_admin');
+const res = await fetch(`${SB_URL}/functions/v1/admin-api`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ token, action: 'insert', table, data })
+});
+if (!res.ok) throw new Error(await res.text());
 }
 
 async function sbDelete(table, filter) {
-  const res = await fetch(`${SB_URL}/rest/v1/${table}?${filter}`, {
-    method: 'DELETE',
-    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-  });
-  if (!res.ok) throw new Error(await res.text());
+const token = sessionStorage.getItem('yayika_admin');
+const res = await fetch(`${SB_URL}/functions/v1/admin-api`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ token, action: 'delete', table, filters: filter })
+});
+if (!res.ok) throw new Error(await res.text());
 }
 
 // Toast
@@ -748,9 +753,9 @@ function renderAff() {
   const rows = affiliates.map(a => {
     const sc = a.status === 'active' ? 'badge-green' : 'badge-red';
     return `<tr>
-      <td style="font-family:monospace;color:var(--lila)">${a.ref_code}</td>
+      <td style="font-family:monospace;color:var(--lila)">${a.referral_code}</td>
       <td>${a.active_referrals || 0}</td>
-      <td style="font-weight:500;color:var(--verde)">$${(parseFloat(a.total_earned) || 0).toFixed(2)}</td>
+      <td style="font-weight:500;color:var(--verde)">$${(parseFloat(a.total_earnings) || 0).toFixed(2)}</td>
       <td style="color:var(--oro)">$${(parseFloat(a.pending_payout) || 0).toFixed(2)}</td>
       <td><span class="badge ${sc}">${a.status}</span></td>
     </tr>`;
@@ -1606,12 +1611,9 @@ async function renderLogs() {
 
 async function clearLogs() {
   if (!confirm('¿Eliminar todos los logs de actividad?')) return;
-  try {
-    await fetch(`${SB_URL}/rest/v1/yayika_admin_logs?id=not.is.null`, {
-      method: 'DELETE',
-      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-    });
-    showToast('Logs eliminados', 'success');
+try {
+await sbDelete('yayika_admin_logs', 'id=not.is.null');
+showToast('Logs eliminados', 'success');
     renderLogs();
   } catch (e) {
     showToast('Error: ' + e.message, 'error');
