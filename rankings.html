@@ -67,11 +67,11 @@ async function loadRankings() {
 
     if (!profiles || profiles.length === 0) { renderDemoRankings(); return; }
 
-    // Try to get XP data
+    // Try to get XP data (public leaderboard read: yayika_progress)
     const { data: onboarding } = await rankSb
-      .from('yayika_onboarding_progress')
-      .select('user_id, total_xp_earned')
-      .order('total_xp_earned', { ascending: false })
+      .from('yayika_progress')
+      .select('user_id, xp_total, streak_days')
+      .order('xp_total', { ascending: false })
       .limit(20);
 
     // Try badges
@@ -82,15 +82,15 @@ async function loadRankings() {
 
     // Merge data
     rankingsData = profiles.map(p => {
-      const xp = onboarding?.find(o => o.user_id === p.id);
+      const prog = onboarding?.find(o => o.user_id === p.id);
       const userBadges = badges?.filter(b => b.user_id === p.id).length || 0;
       return {
         id: p.id,
         name: p.full_name || (p.email ? p.email.split('@')[0] : 'Guerrera'),
         avatar: p.avatar_url,
-        xp: xp?.total_xp_earned || 0,
+        xp: prog?.xp_total || 0,
         badges: userBadges,
-        streak: 0
+        streak: prog?.streak_days || 0
       };
     }).filter(p => p.xp > 0 || p.badges > 0);
 
