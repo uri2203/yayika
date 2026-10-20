@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    Yayika — i18n (Multi-language)
    Supported: ES, EN, PT, FR, DE
    ============================================================ */
@@ -143,7 +143,8 @@ const I18N = {
     footer_deslinde: 'Deslinde de Responsabilidades',
     footer_aviso_legal: 'Aviso Legal',
     footer_accesibilidad: 'Accesibilidad',
-    // Retention widget    common_copy: 'Copiar',
+    // Retention widget
+    common_copy: 'Copiar',
     common_download: 'Descargar',
     retention_loading_projection: 'Cargando tu proyección...',
     retention_already_spun: '¡Ya giraste hoy. ¡Vuelve mañana!',
@@ -1417,7 +1418,8 @@ const I18N = {
     footer_deslinde: 'Disclaimer',
     footer_aviso_legal: 'Legal Notice',
     footer_accesibilidad: 'Accessibility',
-    // Retention widget    common_copy: 'Copy',
+    // Retention widget
+    common_copy: 'Copy',
     common_download: 'Download',
     retention_loading_projection: 'Loading your projection...',
     retention_already_spun: 'You already spun today. Come back tomorrow!',
@@ -2644,6 +2646,9 @@ const I18N = {
     footer_deslinde: 'Isenção de Responsabilidade',
     footer_aviso_legal: 'Aviso Legal',
     footer_accesibilidad: 'Acessibilidade',
+    // Retention widget
+    common_copy: 'Copiar',
+    common_download: 'Baixar',
     footer_rights: '© 2026 Yayika · Todos os direitos reservados',
     footer_payments: 'Pagamentos via Stripe · yayika.com',
     install_title: 'Instale Yayika no celular',
@@ -3899,6 +3904,9 @@ const I18N = {
     footer_deslinde: 'Avertissement',
     footer_aviso_legal: 'Mentions Légales',
     footer_accesibilidad: 'Accessibilité',
+    // Retention widget
+    common_copy: 'Copier',
+    common_download: 'Télécharger',
     footer_rights: '© 2026 Yayika · Tous droits réservés',
     footer_payments: 'Paiements par Stripe · yayika.com',
     install_title: 'Installez Yayika sur votre téléphone',
@@ -5154,6 +5162,9 @@ const I18N = {
     footer_deslinde: 'Haftungsausschluss',
     footer_aviso_legal: 'Impressum',
     footer_accesibilidad: 'Barrierefreiheit',
+    // Retention widget
+    common_copy: 'Kopieren',
+    common_download: 'Herunterladen',
     footer_rights: '© 2026 Yayika · Alle Rechte vorbehalten',
     footer_payments: 'Zahlungen via Stripe · yayika.com',
     install_title: 'Installiere Yayika auf dem Handy',
@@ -6288,6 +6299,12 @@ let currentLang = localStorage.getItem('yayika_lang') || 'es';
 
 function t(key) {
   return (I18N[currentLang] && I18N[currentLang][key]) || I18N['es'][key] || key;
+}
+
+// Returns '' for unknown keys so callers can apply their own fallback text
+// (used by afiliadas.html and Portales/index.html auth forms)
+function getI18nText(key) {
+  return (I18N[currentLang] && I18N[currentLang][key]) || I18N['es'][key] || '';
 }
 
 function setLanguage(lang) {
