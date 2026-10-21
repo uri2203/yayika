@@ -20,6 +20,24 @@ serve(async (req: Request) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  // Internal cron-only function: only the service-role caller is allowed.
+  // The gateway (verify_jwt=true) already validated the JWT signature,
+  // so checking the role claim is safe. String-comparing against the env
+  // key proved unreliable in the edge runtime.
+  const bearer = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+  let isService = false;
+  if (bearer && bearer.split(".").length === 3) {
+    try {
+      const payload = JSON.parse(atob(bearer.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+      isService = payload.role === "service_role" && String(payload.iss || "").includes("supabase");
+    } catch { isService = false; }
+  }
+  if (!isService) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const resendKey = Deno.env.get("RESEND_API_KEY");
     if (!resendKey) {
@@ -99,6 +117,14 @@ serve(async (req: Request) => {
         sent++;
       }
     }
+
+    // heartbeat for cron-health-check (weekly job, 09:00 UTC Mondays)
+    await supabase.from("yayika_cron_heartbeat").upsert({
+      job: "ai-weekly-digest",
+      ran_at: new Date().toISOString(),
+      ok: failed === 0,
+      detail: `sent=${sent} skipped=${skipped} failed=${failed}`,
+    }, { onConflict: "job" });
 
     return new Response(JSON.stringify({ success: true, sent, skipped, failed, errors }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
