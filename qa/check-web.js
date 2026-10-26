@@ -91,7 +91,11 @@ console.log('== 2. Enlaces y assets ==');
       const [pathPart, frag] = ref.split('#');
       const clean = pathPart.split('?')[0];
       if (clean === '' || clean === '/') {
-        if (frag && !idsOf(f).has(frag)) warn('enlaces', `${rel}: ancla #${frag} no existe en la pagina`);
+        // '/' con ancla apunta al index del sitio; '' (solo #x) a la pagina actual
+        const page = clean === '/' ? path.join(ROOT, 'index.html') : f;
+        if (frag && !idsOf(page).has(frag)) {
+          warn('enlaces', `${rel}: ancla #${frag} no existe en ${clean === '/' ? 'index.html' : 'la pagina'}`);
+        }
         continue;
       }
       let target;
@@ -167,6 +171,18 @@ console.log('== 4. i18n (5 idiomas) ==');
       if (mm) set.add(mm[1]);
     }
     dict[langs[li]] = set;
+  }
+  // paridad es <-> resto: una key en es y no en otro idioma es un FAIL (drift)
+  {
+    let drift = 0;
+    for (const l of langs.filter((x) => x !== 'es')) {
+      for (const k of [...dict.es].sort()) {
+        if (!dict[l].has(k)) { fail('i18n', `drift: "${k}" existe en es pero falta en ${l}`); drift++; }
+      }
+      const extra = [...dict[l]].filter((k) => !dict.es.has(k)).sort();
+      if (extra.length) warn('i18n', `${l} tiene ${extra.length} keys ausentes en es (${extra.slice(0, 5).join(', ')}${extra.length > 5 ? ',…' : ''})`);
+    }
+    if (drift === 0) pass('i18n', 'paridad es<->otros idiomas completa');
   }
   // prefijos dinamicos t('xx_' + ...) -> no exigir la clave literal
   const prefixes = new Set();
