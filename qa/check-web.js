@@ -59,6 +59,7 @@ console.log('== 1. Integridad de paginas ==');
     else names.set(key, rel);
     const head = fs.readFileSync(f, 'utf8').slice(0, 300);
     if (!/<!doctype html|<html[\s>]/i.test(head)) fail('paginas', `${rel}: no parece HTML valido (falta <html>)`);
+    if (!/<html[^>]*\blang=/.test(head)) fail('paginas', `${rel}: falta <html lang="...">`);
   }
   if (fails === 0) pass('paginas', `${htmlFiles.length} paginas OK, sin duplicados`);
 }
@@ -296,6 +297,66 @@ console.log('== 8. Sitemap ==');
     }
   }
   if (bad === 0) pass('sitemap', 'todas las URLs del sitemap resuelven a archivos existentes');
+}
+
+/* ---------- 9. CSP, robots/noindex, cobertura del sitemap, sw ---------- */
+console.log('== 9. CSP / noindex / cobertura / sw ==');
+{
+  // paginas que NO deben indexarse ni aparecer en el sitemap
+  const NOINDEX_REQUIRED = new Set(['admin.html', 'offline.html', 'exito.html', '404.html']);
+  let bad = 0;
+
+  // 9a. toda pagina HTML con CSP
+  for (const f of htmlFiles) {
+    const rel = path.relative(ROOT, f);
+    if (!fs.readFileSync(f, 'utf8').includes('Content-Security-Policy')) {
+      fail('hardening', `${rel}: sin Content-Security-Policy`);
+      bad++;
+    }
+  }
+
+  // 9b. noindex obligatorio en paginas internas, y ausentes del sitemap
+  const smSrc = fs.existsSync(path.join(ROOT, 'sitemap.xml')) ? fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8') : '';
+  const smLocs = new Set([...smSrc.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim().replace(/^https?:\/\/(www\.)?yayika\.com/, '')));
+  for (const base of NOINDEX_REQUIRED) {
+    const f = path.join(ROOT, base);
+    if (!fs.existsSync(f)) continue;
+    const src = fs.readFileSync(f, 'utf8');
+    const m = src.match(/name="robots" content="([^"]+)"/);
+    if (!m || !/noindex/.test(m[1])) { fail('hardening', `${base}: debe tener <meta name="robots" content="noindex, nofollow">`); bad++; }
+    const relUrl = '/' + base;
+    if (smLocs.has(relUrl) || smLocs.has(relUrl.replace(/\.html$/, '/'))) { fail('hardening', `${base}: aparece en sitemap.html pese a noindex`); bad++; }
+  }
+
+  // 9c. cobertura: paginas publicas deben estar en sitemap.xml
+  for (const f of htmlFiles) {
+    const rel = path.relative(ROOT, f).replace(/\\/g, '/');
+    if (SEO_EXCEPTIONS.has(path.basename(f)) || NOINDEX_REQUIRED.has(path.basename(f))) continue;
+    const src = fs.readFileSync(f, 'utf8');
+    const rm = src.match(/name="robots" content="([^"]+)"/);
+    if (rm && /noindex/.test(rm[1])) continue;
+    const relUrl = '/' + rel;
+    const candidates = [relUrl, relUrl.replace(/\/index\.html$/, '/'), relUrl.replace(/\.html$/, '/'), relUrl === '/index.html' ? '/' : relUrl];
+    if (!candidates.some((c) => smLocs.has(c))) { fail('hardening', `${rel}: pagina publica ausente de sitemap.xml`); bad++; }
+  }
+
+  // 9d. sw.js: precache apunta a archivos existentes
+  const swPath = path.join(ROOT, 'sw.js');
+  if (fs.existsSync(swPath)) {
+    const sw = fs.readFileSync(swPath, 'utf8');
+    const m = sw.match(/PRECACHE_ASSETS\s*=\s*\[([\s\S]*?)\];/);
+    if (!m) fail('hardening', 'sw.js: no se encuentra PRECACHE_ASSETS');
+    else {
+      for (const e of [...m[1].matchAll(/['"]([^'"]+)['"]/g)].map((x) => x[1])) {
+        if (/^https?:/.test(e)) continue;
+        const clean = e.split('#')[0].split('?')[0];
+        if (clean === '/' || clean === '') continue;
+        if (!fs.existsSync(path.join(ROOT, clean.replace(/^\//, '')))) { fail('hardening', `sw.js precache roto: ${e}`); bad++; }
+      }
+    }
+  }
+
+  if (bad === 0) pass('hardening', 'CSP en 100% de paginas, noindex correcto, sitemap completo, sw precache OK');
 }
 
 /* ---------- Resultado ---------- */

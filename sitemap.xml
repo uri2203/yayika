@@ -936,4 +936,12 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://yayika.com/tienda.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://yayika.com/tienda.html"/>
   </url>
+  <url>
+    <loc>https://yayika.com/blog/index.html</loc>
+    <lastmod>2026-10-26</lastmod>
+  </url>
+  <url>
+    <loc>https://yayika.com/splash.html</loc>
+    <lastmod>2026-10-26</lastmod>
+  </url>
 </urlset>
