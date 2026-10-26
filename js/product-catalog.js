@@ -2,7 +2,7 @@
    Yayika — Product Catalog (Client)
    ============================================================ */
 (function(){
-  const API = `${window.location.origin}/functions/v1/ai-product-catalog`;
+  const API = 'https://odbhxiymteppgaqqdsoy.supabase.co/functions/v1/ai-product-catalog';
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
 

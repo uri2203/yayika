@@ -536,11 +536,22 @@
 
       const userId = session.user.id;
 
-      const { data: profile } = await sb.from('seller_profiles')
-        .select('*').eq('user_id', userId).single();
+      let { data: profile } = await sb.from('seller_profiles')
+        .select('*').eq('user_id', userId).maybeSingle();
+
+      if (!profile) {
+        const { data: created } = await sb.from('seller_profiles')
+          .insert({
+            user_id: userId,
+            store_name: session.user.user_metadata?.full_name || null
+          })
+          .select('*')
+          .maybeSingle();
+        profile = created || null;
+      }
 
       const { data: products } = await sb.from('seller_products')
-        .select('*').eq('seller_id', userId).order('created_at', { ascending: false });
+        .select('*').eq('user_id', userId).order('created_at', { ascending: false });
 
       const sellerData = {
         plan: profile?.plan || 'basica',
@@ -796,7 +807,32 @@
   function copyPaymentLink(){
     const link = currentSellerData?.payment_link || '';
     if (!link) {
-      alert(t('payment_link') + ': ' + (currentSellerData?.store_url || t('store_url')));
+      const entered = prompt(t('payment_link') + ' (' + (currentSellerData?.store_url || t('store_url')) + '):', '');
+      if (!entered) return;
+      const url = entered.trim();
+      if (!/^https?:\/\//i.test(url)) {
+        alert('https://...');
+        return;
+      }
+      (async () => {
+        try {
+          if(!window.supabase || !window.supabase.createClient) throw new Error('No Supabase');
+          const sb = window.supabase.createClient(SB_URL, SB_KEY);
+          const { data: { session } } = await sb.auth.getSession();
+          if(!session) throw new Error('No auth');
+          const { error } = await sb.from('seller_profiles').upsert({
+            user_id: session.user.id,
+            payment_link: url,
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'user_id' });
+          if(error) throw error;
+          if (currentSellerData) currentSellerData.payment_link = url;
+          if (navigator.clipboard) navigator.clipboard.writeText(url).catch(()=>{});
+          alert(t('link_copied'));
+        } catch(err) {
+          alert(t('error_loading') + ': ' + err.message);
+        }
+      })();
       return;
     }
     navigator.clipboard.writeText(link).then(()=>{
@@ -869,7 +905,7 @@
         if(!session) throw new Error('No auth');
 
         const productData = {
-          seller_id: session.user.id,
+          user_id: session.user.id,
           name: fd.get('name'),
           name_en: fd.get('name_en') || null,
           description: fd.get('description') || '',

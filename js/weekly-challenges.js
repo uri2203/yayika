@@ -2,7 +2,7 @@
    Yayika — Weekly Challenges Widget (Client)
    ============================================================ */
 (function(){
-  const API = `${window.location.origin}/functions/v1/ai-weekly-challenges`;
+  const API = 'https://odbhxiymteppgaqqdsoy.supabase.co/functions/v1/ai-weekly-challenges';
   const $ = s => document.querySelector(s);
 
   const L = {

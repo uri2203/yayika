@@ -2,7 +2,7 @@
    Yayika — Cycle Intelligence Dashboard (Client)
    ============================================================ */
 (function(){
-  const API = `${window.location.origin}/functions/v1/ai-cycle-intelligence`;
+  const API = 'https://odbhxiymteppgaqqdsoy.supabase.co/functions/v1/ai-cycle-intelligence';
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
 

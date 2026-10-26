@@ -1,9 +1,9 @@
 ﻿/* ============================================================
    Yayika — "Gana con Yayika" Client
-   Earnings dashboard, marketplace, mentoring, ROI
+   Earnings dashboard, community, mentoring, ROI
    ============================================================ */
 (function(){
-  const API = `${window.location.origin}/functions/v1/ai-gana-con-yayika`;
+  const API = 'https://odbhxiymteppgaqqdsoy.supabase.co/functions/v1/ai-gana-con-yayika';
   const $ = s => document.querySelector(s);
 
   const L = {
@@ -236,18 +236,12 @@
         </div>`;
 
         // --- Income Sources ---
-        html += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+        html += `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
           <div style="background:rgba(0,180,216,0.06);border-radius:10px;padding:12px;text-align:center">
             <div style="font-size:20px;margin-bottom:4px">🌱</div>
             <div style="font-size:14px;font-weight:700;color:var(--turquesa,#00B4D8)">${fmtCents(e.referrals || 0, r.currency)}</div>
             <div style="font-size:9px;color:var(--texto,#E8E8E8);opacity:0.5">${tr.referrals}</div>
             <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.referralsCount || 0} ${t('friends')}</div>
-          </div>
-          <div style="background:rgba(233,30,99,0.06);border-radius:10px;padding:12px;text-align:center">
-            <div style="font-size:20px;margin-bottom:4px">🛒</div>
-            <div style="font-size:14px;font-weight:700;color:var(--rosa,#E91E63)">${fmtCents(e.marketplace || 0, r.currency)}</div>
-            <div style="font-size:9px;color:var(--texto,#E8E8E8);opacity:0.5">${tr.marketplace}</div>
-            <div style="font-size:10px;color:var(--texto,#E8E8E8);opacity:0.4;margin-top:2px">${s.productsSold || 0} ${t('sales')}</div>
           </div>
           <div style="background:rgba(123,94,167,0.06);border-radius:10px;padding:12px;text-align:center">
             <div style="font-size:20px;margin-bottom:4px">👩‍🏫</div>

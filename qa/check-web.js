@@ -246,6 +246,32 @@ console.log('== 6. Codificacion ==');
   if (bad === 0) pass('codificacion', '0 caracteres U+FFFD en HTML/JS/CSS');
 }
 
+/* ---------- 6b. Anti texto corrupto (runs de interrogativos) ---------- */
+console.log('== 6b. Anti-corrupcion (runs "??" en texto) ==');
+{
+  let bad = 0;
+  // Portales usa "??" como placeholder original de iniciales (2 letras) - decision de diseno
+  const ALLOWED = new Set(['Portales/index.html']);
+  const OP_LEFT = /[\w$)\]}]\s*\?\?\s*/g; // operador ? ? legitimo: se evalua abajo
+  for (const f of [...htmlFiles, ...jsFiles, ...cssFiles]) {
+    const rel = path.relative(ROOT, f).replace(/\\/g, '/');
+    if (ALLOWED.has(rel)) continue;
+    const src = fs.readFileSync(f, 'utf8');
+    src.split(/\r?\n/).forEach((ln, i) => {
+      // eliminar operador ? ? legitimo (a ?? b / a ?? 'texto' / a ?? f(...))
+      let s = ln.replace(OP_LEFT, (m, off) => {
+        const right = ln.slice(off + m.length, off + m.length + 1);
+        return right === '' || /[=(\[{$'"`!~+\-\w/]/.test(right) ? 'OP' : m;
+      });
+      if (/\?{2,}/.test(s)) {
+        fail('codificacion', `${rel}:${i + 1}: run de interrogativos en texto -> ${ln.trim().slice(0, 100)}`);
+        bad++;
+      }
+    });
+  }
+  if (bad === 0) pass('codificacion', '0 runs de interrogativos corruptos en HTML/JS/CSS');
+}
+
 /* ---------- 7. SEO basico ---------- */
 console.log('== 7. SEO / meta ==');
 {

@@ -121,7 +121,42 @@ async function loadProducts() {
       .order('sort_order', { ascending: true });
 
     if (error) throw error;
-    allProducts = data || [];
+    let list = data || [];
+
+    // Community products: sold directly member-to-member.
+    // Yayika does not operate a marketplace and does not process these payments.
+    try {
+      const { data: comm } = await storeSupabase
+        .from('seller_products')
+        .select('id, user_id, name, name_en, description, description_en, price_cents, currency, category, rating_avg, rating_count, total_sales, created_at')
+        .eq('is_published', true)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+      if (comm && comm.length) {
+        list = list.concat(comm.map(sp => ({
+          id: sp.id,
+          name: sp.name,
+          name_en: sp.name_en || sp.name,
+          description: sp.description || '',
+          description_en: sp.description_en || sp.description || '',
+          category: sp.category || 'guide',
+          price_cents: sp.price_cents || 0,
+          currency: sp.currency || 'MXN',
+          image_url: null,
+          tags: '[]',
+          features: '[]',
+          rating_avg: sp.rating_avg || 0,
+          rating_count: sp.rating_count || 0,
+          total_sales: sp.total_sales || 0,
+          is_featured: false,
+          is_community: true,
+          seller_id: sp.user_id,
+          sort_order: 999
+        })));
+      }
+    } catch (e) { /* community catalog is optional */ }
+
+    allProducts = list;
     renderProducts(allProducts);
   } catch (e) {
     allProducts = getSeedProducts();
@@ -178,10 +213,12 @@ const PRODUCT_DESCS = {
 };
 function getProductName(p, lang) {
   if (lang !== 'es' && PRODUCT_NAMES[p.name] && PRODUCT_NAMES[p.name][lang]) return PRODUCT_NAMES[p.name][lang];
+  if (p.name_en && lang === 'en') return p.name_en;
   return p.name;
 }
 function getProductDesc(p, lang) {
   if (lang !== 'es' && PRODUCT_DESCS[p.description] && PRODUCT_DESCS[p.description][lang]) return PRODUCT_DESCS[p.description][lang];
+  if (p.description_en && lang === 'en') return p.description_en;
   return p.description;
 }
 
@@ -526,6 +563,100 @@ function showOrderConfirmation(product, order, isFree) {
   }
 
   document.body.appendChild(overlay);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+}
+
+// --- Seller contact modal (community purchase, paid directly to the seller) ---
+// Yayika does not process these payments: the buyer pays with the
+// seller's own Stripe link. No commission, no intermediation.
+async function showSellerContactModal(product) {
+  const lang = (typeof currentLang !== 'undefined' ? currentLang : 'es') || 'es';
+  const name = getProductName(product, lang);
+
+  const C = {
+    es: {
+      title: 'Compra directa entre nosotras',
+      intro: 'Este producto lo vende una miembra de la comunidad. Yayika no procesa este pago ni cobra comisión: pagas directamente con el enlace de pago de la vendedora.',
+      pay: 'Pagar a la vendedora',
+      noLink: 'La vendedora aún no ha configurado su enlace de pago. Inténtalo de nuevo más tarde o contáctala en la comunidad para coordinar.',
+      seller: 'Vendedora'
+    },
+    en: {
+      title: 'Direct purchase between members',
+      intro: 'This product is sold by a community member. Yayika does not process this payment or charge a fee: you pay the seller directly with her payment link.',
+      pay: 'Pay the seller',
+      noLink: 'The seller has not set up her payment link yet. Try again later or reach her in the community to coordinate.',
+      seller: 'Seller'
+    },
+    pt: {
+      title: 'Compra direta entre nós',
+      intro: 'Este produto é vendido por uma membro da comunidade. A Yayika não processa este pagamento nem cobra taxa: você paga diretamente com o link de pagamento da vendedora.',
+      pay: 'Pagar à vendedora',
+      noLink: 'A vendedora ainda não configurou o link de pagamento. Tente novamente mais tarde ou contate-a na comunidade para combinar.',
+      seller: 'Vendedora'
+    },
+    fr: {
+      title: 'Achat direct entre nous',
+      intro: 'Ce produit est vendu par un membre de la communauté. Yayika ne traite pas ce paiement et ne prend aucune commission : vous payez directement la vendeuse avec son lien de paiement.',
+      pay: 'Payer la vendeuse',
+      noLink: "La vendeuse n'a pas encore configuré son lien de paiement. Réessayez plus tard ou contactez-la dans la communauté.",
+      seller: 'Vendeuse'
+    },
+    de: {
+      title: 'Direkter Kauf zwischen uns',
+      intro: 'Dieses Produkt wird von einer Community-Mitgliedin verkauft. Yayika verarbeitet diese Zahlung nicht und erhebt keine Provision: Du zahlst die Verkäuferin direkt mit ihrem Zahlungslink.',
+      pay: 'Verkäuferin bezahlen',
+      noLink: 'Die Verkäuferin hat ihren Zahlungslink noch nicht eingerichtet. Versuche es später erneut oder kontaktiere sie in der Community.',
+      seller: 'Verkäuferin'
+    }
+  };
+  const c = C[lang] || C.es;
+
+  let paymentLink = null;
+  let storeName = '';
+  try {
+    if (!storeSupabase) initStoreSupabase();
+    if (storeSupabase && product.seller_id) {
+      const { data: prof } = await storeSupabase
+        .from('seller_profiles')
+        .select('store_name, payment_link')
+        .eq('user_id', product.seller_id)
+        .maybeSingle();
+      if (prof) {
+        paymentLink = prof.payment_link || null;
+        storeName = prof.store_name || '';
+      }
+    }
+  } catch (e) { /* profile optional */ }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'purchase-overlay';
+  overlay.innerHTML = `
+    <div class="purchase-modal">
+      <button class="purchase-close" onclick="this.closest('.purchase-overlay').remove()">&times;</button>
+      <div class="purchase-icon">🤝</div>
+      <h3>${escHtml(c.title)}</h3>
+      <p>${escHtml(c.intro)}</p>
+      ${storeName ? `<p><strong>${escHtml(c.seller)}:</strong> ${escHtml(storeName)}</p>` : ''}
+      ${paymentLink
+        ? `<div class="purchase-actions">
+             <button class="btn-purchase-confirm" id="sellerPayBtn">${escHtml(c.pay)}</button>
+             <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${st('btn_close')}</button>
+           </div>`
+        : `<p>${escHtml(c.noLink)}</p>
+           <div class="purchase-actions">
+             <button class="btn-purchase-cancel" onclick="this.closest('.purchase-overlay').remove()">${st('btn_close')}</button>
+           </div>`}
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  const payBtn = overlay.querySelector('#sellerPayBtn');
+  if (payBtn && paymentLink) {
+    payBtn.addEventListener('click', () => {
+      window.open(paymentLink, '_blank', 'noopener');
+    });
+  }
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
 }
 
