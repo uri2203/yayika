@@ -12,12 +12,37 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+async function enforceAiRateLimit(req: Request, action: string): Promise<Response | null> {
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    if (!supabaseUrl) return null;
+    const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || req.headers.get("x-real-ip") || "anon";
+    const rl = await fetch(`${supabaseUrl}/functions/v1/rate-limit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: "record", action, identifier: ip, type: "ai" }),
+    });
+    if (rl.status === 429) {
+      const j = await rl.json().catch(() => ({}));
+      return new Response(JSON.stringify({ error: "Rate limit exceeded", retryAfterMs: (j as any).retryAfterMs ?? 60000 }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    return null;
+  } catch {
+    return null; // fail open: el rate limiter nunca bloquea por su propio error
+  }
+}
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
+    const limited = await enforceAiRateLimit(req, "ai-financial-coach");
+    if (limited) return limited;
     const groqKey = Deno.env.get("GROQ_API_KEY");
     const openaiKey = Deno.env.get("OPENAI_API_KEY");
     const apiKey = groqKey || openaiKey;

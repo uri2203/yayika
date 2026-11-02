@@ -134,6 +134,7 @@
       actions_placeholder:'Acciones',
       change_plan_free:'Cambiado al plan Básico (Gratis)',
       change_plan_redirect:'Para cambiar al plan {name} ({price}), te redirigiremos a Stripe para completar el pago.',
+      change_plan_done:'Plan {name} actualizado correctamente',
       add_product_alert:'Función de agregar producto — Próximamente',
       edit_product_alert:'Función de editar producto — Próximamente',
       plan_name_basica:'Básica',plan_price_basica:'Gratis',
@@ -203,6 +204,7 @@
       actions_placeholder:'Actions',
       change_plan_free:'Switched to Basic plan (Free)',
       change_plan_redirect:'To switch to the {name} plan ({price}), we\'ll redirect you to Stripe to complete payment.',
+      change_plan_done:'{name} plan updated successfully',
       add_product_alert:'Add product — Coming soon',
       edit_product_alert:'Edit product — Coming soon',
       plan_name_basica:'Basic',plan_price_basica:'Free',
@@ -272,6 +274,7 @@
       actions_placeholder:'Ações',
       change_plan_free:'Plano Básico (Grátis) selecionado',
       change_plan_redirect:'Para mudar para o plano {name} ({price}), redirecionaremos você ao Stripe para concluir o pagamento.',
+      change_plan_done:'Plano {name} atualizado com sucesso',
       add_product_alert:'Adicionar produto — Em breve',
       edit_product_alert:'Editar produto — Em breve',
       plan_name_basica:'Básica',plan_price_basica:'Grátis',
@@ -341,6 +344,7 @@
       actions_placeholder:'Actions',
       change_plan_free:'Plan Basique (Gratuit) sélectionné',
       change_plan_redirect:'Pour passer au plan {name} ({price}), nous vous redirigerons vers Stripe pour finaliser le paiement.',
+      change_plan_done:'Forfait {name} mis à jour avec succès',
       add_product_alert:'Ajouter un produit — Bientôt disponible',
       edit_product_alert:'Modifier un produit — Bientôt disponible',
       plan_name_basica:'Basique',plan_price_basica:'Gratuit',
@@ -410,6 +414,7 @@
       actions_placeholder:'Aktionen',
       change_plan_free:'Basis-Plan (Kostenlos) ausgewählt',
       change_plan_redirect:'Um zum {name}-Plan ({price}) zu wechseln, leiten wir dich zu Stripe weiter, um die Zahlung abzuschließen.',
+      change_plan_done:'Plan {name} erfolgreich aktualisiert',
       add_product_alert:'Produkt hinzufügen — Demnächst',
       edit_product_alert:'Produkt bearbeiten — Demnächst',
       plan_name_basica:'Basis',plan_price_basica:'Kostenlos',
@@ -1023,13 +1028,21 @@
   function changePlan(planKey){
     const plan = getLocalizedPlans()[planKey];
     if(!plan) return;
-    
-    if(plan.price === 0){
-      alert(t('change_plan_free'));
-      return;
-    }
-    
-    alert(t('change_plan_redirect').replace('{name}', plan.name).replace('{price}', plan.priceFormatted));
+    (async () => {
+      try {
+        if(!window.supabase || !window.supabase.createClient) throw new Error('No Supabase');
+        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const { data: { session } } = await sb.auth.getSession();
+        if(!session) throw new Error('No session');
+        const { error } = await sb.from('seller_profiles')
+          .upsert({ user_id: session.user.id, plan: planKey }, { onConflict: 'user_id' });
+        if(error) throw error;
+        alert(t('change_plan_done').replace('{name}', plan.name));
+        loadSellerData();
+      } catch(err) {
+        alert(t('error_loading') + ': ' + err.message);
+      }
+    })();
   }
 
   function deleteProduct(id){

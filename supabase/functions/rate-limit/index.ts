@@ -26,6 +26,7 @@ const RATE_LIMITS: Record<string, { maxRequests: number; windowMs: number }> = {
   api: { maxRequests: 60, windowMs: 60 * 1000 },            // 60 per min
   checkout: { maxRequests: 10, windowMs: 60 * 1000 },       // 10 per min
   email: { maxRequests: 5, windowMs: 60 * 1000 },           // 5 per min
+  ai: { maxRequests: 20, windowMs: 60 * 1000 },             // 20 LLM calls per min (cost guard)
 };
 
 const SAFE_KEY = /^[a-zA-Z0-9._@:\-]{1,128}$/;
