@@ -89,7 +89,22 @@ serve(async (req: Request) => {
       console.warn("Failed to store notification:", e);
     }
 
-    return new Response(JSON.stringify(notification), {
+    // Keep the flat shape used by the web in-app banner and add the nested
+    // shape expected by the app's NotificationsContext.
+    const responseBody = {
+      ...notification,
+      notification: {
+        title: notification.title,
+        body: notification.body,
+        data: {
+          icon: notification.icon,
+          type: notification.type,
+          cycle_phase: cycle_phase ?? null,
+        },
+      },
+    };
+
+    return new Response(JSON.stringify(responseBody), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

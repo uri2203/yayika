@@ -1159,7 +1159,7 @@ async function doLogin() {
     });
     
     // Load profile
-    const { data: profile } = await supabase.from('yayika_profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    const { data: profile } = await supabase.from('yayika_profiles').select('id, full_name').eq('id', currentUser.id).maybeSingle();
     if (profile) currentUser.profile = profile;
     
     const name = currentUser.profile?.full_name || currentUser.email.split('@')[0];

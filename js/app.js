@@ -193,7 +193,7 @@ async function signIn(email, password) {
   // Load profile
   const { data: profile } = await supabase
     .from('yayika_profiles')
-    .select('*')
+    .select('id, full_name')
     .eq('id', currentUser.id)
     .maybeSingle();
   if (profile) currentUser.profile = profile;
@@ -215,7 +215,7 @@ async function getSession() {
     currentUser = session.user;
     const { data: profile } = await supabase
       .from('yayika_profiles')
-      .select('*')
+      .select('id, full_name')
       .eq('id', currentUser.id)
       .maybeSingle();
     if (profile) currentUser.profile = profile;
