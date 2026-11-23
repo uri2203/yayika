@@ -1,7 +1,7 @@
 // ============================================================
 // Yayika — AI Wellness Planner Edge Function
 // Meal + Exercise recommendations based on cycle phase
-// Deploy: supabase functions deploy ai-wellness-planner --no-verify-jwt
+// Deploy: supabase functions deploy ai-wellness-planner (JWT verification required)
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -10,6 +10,37 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// A real user session is required. The public anon key is a valid JWT but it
+// is not a login, so reject it explicitly before trusting anything in the body.
+async function requireUser(req: Request): Promise<{ id: string } | null> {
+  const header = req.headers.get("Authorization") || "";
+  if (!header.startsWith("Bearer ")) return null;
+  const token = header.slice(7).trim();
+  const parts = token.split(".");
+  if (parts.length !== 3) return null;
+  try {
+    let payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    while (payload.length % 4) payload += "=";
+    const claims = JSON.parse(atob(payload));
+    if (!claims.sub || claims.role === "anon") return null;
+  } catch {
+    return null;
+  }
+  const url = Deno.env.get("SUPABASE_URL");
+  const anon = Deno.env.get("SUPABASE_ANON_KEY");
+  if (!url || !anon) return null;
+  try {
+    const res = await fetch(`${url}/auth/v1/user`, {
+      headers: { Authorization: `Bearer ${token}`, apikey: anon },
+    });
+    if (!res.ok) return null;
+    const user = await res.json();
+    return user?.id ? { id: user.id } : null;
+  } catch {
+    return null;
+  }
+}
 
 async function enforceAiRateLimit(req: Request, action: string): Promise<Response | null> {
   try {
@@ -40,6 +71,13 @@ serve(async (req: Request) => {
   }
 
   try {
+    const user = await requireUser(req);
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Authentication required" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
     const limited = await enforceAiRateLimit(req, "ai-wellness-planner");
     if (limited) return limited;
     const groqKey = Deno.env.get("GROQ_API_KEY");

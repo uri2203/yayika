@@ -10,6 +10,21 @@ function track(event, props = {}) {
   }
 }
 
+// AI Edge Functions require a real user session. Return the session token when
+// available; the anon key is returned only so callers can keep their local
+// fallback when the server rejects the request with 401.
+async function yayikaUserToken() {
+  try {
+    if (typeof supabase === 'undefined' || !supabase?.auth?.getSession) {
+      return typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '';
+    }
+    const { data } = await supabase.auth.getSession();
+    return data?.session?.access_token || (typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '');
+  } catch (e) {
+    return typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '';
+  }
+}
+
 // --- Global Error Logging ---
 window.addEventListener('error', e => {
   track('JS Error', { message: e.message, file: e.filename || 'unknown' });

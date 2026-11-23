@@ -104,7 +104,7 @@ const DailyAffirmations = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${supabaseKey}`,
+        'Authorization': `Bearer ${(typeof yayikaUserToken === 'function' ? await yayikaUserToken() : supabaseKey)}`,
       },
       body: JSON.stringify(payload)
     });
