@@ -12,6 +12,47 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Category labels shown in the community UI. The catalog may only store a
+// Spanish name, so keep a 5-language fallback keyed by slug. These are used on
+// read actions whenever the caller supplies `lang`; no data/auth logic changes.
+const CATEGORY_LABELS: Record<string, Record<string, string>> = {
+  logros: { es: "Logros", en: "Achievements", pt: "Conquistas", fr: "Réussites", de: "Erfolge" },
+  dudas: { es: "Dudas", en: "Questions", pt: "Dúvidas", fr: "Questions", de: "Fragen" },
+  consejos: { es: "Consejos", en: "Tips", pt: "Dicas", fr: "Conseils", de: "Tipps" },
+  ciclo: { es: "Ciclo", en: "Cycle", pt: "Ciclo", fr: "Cycle", de: "Zyklus" },
+  finanzas: { es: "Finanzas", en: "Finance", pt: "Finanças", fr: "Finances", de: "Finanzen" },
+  bienestar: { es: "Bienestar", en: "Wellness", pt: "Bem-estar", fr: "Bien-être", de: "Wohlbefinden" },
+  general: { es: "General", en: "General", pt: "Geral", fr: "Général", de: "Allgemein" },
+};
+
+const UI_LANGS = ["es", "en", "pt", "fr", "de"];
+
+// Single translated label for the requested language, used by the feed.
+function translatedCategoryName(category: any, lang: string): string | null {
+  if (!category) return null;
+  const labels = CATEGORY_LABELS[category.slug];
+  if (labels && labels[lang]) return labels[lang];
+  if (category.name && typeof category.name === "object") {
+    return category.name[lang] || category.name.es || null;
+  }
+  return category.name || null;
+}
+
+// Multi-language name map for getCategories (the UI picks name[lang]).
+function localizedCategory(category: any, lang: string): any {
+  if (!category) return category;
+  const names: Record<string, string> = {};
+  if (category.name && typeof category.name === "object") Object.assign(names, category.name);
+  else if (category.name) names.es = String(category.name);
+  const labels = CATEGORY_LABELS[category.slug];
+  if (labels) {
+    for (const l of UI_LANGS) if (!names[l] && labels[l]) names[l] = labels[l];
+  }
+  const requested = translatedCategoryName(category, lang);
+  if (requested) names[lang] = requested;
+  return { ...category, name: names };
+}
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -109,7 +150,7 @@ serve(async (req: Request) => {
           id: p.id,
           content: p.content,
           user_name: authorMap[p.user_id]?.full_name || null,
-          category: catMap[p.category_id]?.name || null,
+          category: translatedCategoryName(catMap[p.category_id], lang),
           category_slug: catMap[p.category_id]?.slug || null,
           created_at: p.created_at,
           like_count: likeCounts[p.id] || 0,
@@ -282,7 +323,7 @@ serve(async (req: Request) => {
           .eq("is_active", true)
           .order("sort_order");
         if (error) throw error;
-        return json({ categories: data || [] });
+        return json({ categories: (data || []).map((category: any) => localizedCategory(category, lang)) });
       }
 
       case "getUserStats": {

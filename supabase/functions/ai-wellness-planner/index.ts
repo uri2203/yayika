@@ -85,6 +85,8 @@ serve(async (req: Request) => {
     const apiKey = groqKey || openaiKey;
 
     const { cycle_phase, energy_level, mood, symptoms, lang } = await req.json();
+    // Normalize locale variants (e.g. pt-BR -> pt) for consistent language lookups.
+    const requestedLang = (lang || "es").split("-")[0].toLowerCase();
 
     let plan = null;
 
@@ -97,7 +99,7 @@ serve(async (req: Request) => {
         const systemPrompt = `Eres Laura, la coach de bienestar de Yayika. Generas planes de alimentación y ejercicio personalizados según la fase del ciclo menstrual.
 
 REGLAS:
-1. Res SIEMPRE en ${langNames[lang] || "español"}
+1. Res SIEMPRE en ${langNames[requestedLang] || "español"}
 2. Sé práctica y específica — comidas reales, ejercicios concretos
 3. Máximo 3 comidas y 2 ejercicios por recomendación
 4. Adapta a la fase: menstrual (nutrición restaurativa, ejercicio suave), folicular (proteína, ejercicio intenso), ovulatoria (energía, ejercicio variado), luteal (magnesio, ejercicio moderado)
@@ -114,7 +116,9 @@ Responde en formato JSON:
     {"name": "nombre", "duration": "duración", "why": "por qué"}
   ],
   "tip": "consejo general breve"
-}`;
+}
+
+IMPORTANTE: Todo el contenido generado (nombres, descripciones, duraciones, why y tip) debe estar únicamente en ${langNames[requestedLang] || "español"}. Aunque estas instrucciones estén en español, tu salida debe ser 100% ${langNames[requestedLang] || "español"}; no mezcles español, inglés ni otros idiomas.`;
 
         const userMessage = `Genera mi plan de bienestar para hoy.
 
@@ -160,10 +164,10 @@ Síntomas: ${(symptoms || []).join(", ") || "ninguno"}`;
 
     // Fallback: rule-based plan
     if (!plan) {
-      plan = getFallbackPlan(cycle_phase, energy_level, symptoms, lang || "es");
+      plan = getFallbackPlan(cycle_phase, energy_level, symptoms, requestedLang);
     }
 
-    return new Response(JSON.stringify({ plan, lang: lang || "es" }), {
+    return new Response(JSON.stringify({ plan, lang: requestedLang }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -282,22 +286,182 @@ function getFallbackPlan(phase: string | null, energy: number | null, symptoms: 
         ],
         tip: "Look for magnesium-rich foods. Moderate exercise to balance hormones."
       }
+    },
+    pt: {
+      menstrual: {
+        meals: [
+          { name: "Aveia com frutas vermelhas", description: "Rica em ferro e antioxidantes para renovação", icon: "🥣" },
+          { name: "Salmão com espinafre", description: "Ômega-3 para reduzir inflamação", icon: "🐟" },
+          { name: "Chocolate amargo + castanhas", description: "Magnésio para aliviar cólicos", icon: "🍫" }
+        ],
+        exercise: [
+          { name: "Ioga suave", duration: "20 min", why: "Alonga sem forçar, acalma o corpo" },
+          { name: "Caminhada leve", duration: "15 min", why: "Ativa sem esgotar" }
+        ],
+        tip: "Seu corpo está se renovando. Priorize alimentação restaurativa e movimento suave."
+      },
+      follicular: {
+        meals: [
+          { name: "Ovos mexidos + abacate", description: "Proteína e gorduras boas para energia em alta", icon: "🥑" },
+          { name: "Salada de frango com quinoa", description: "Proteína completa para novos projetos", icon: "🥗" },
+          { name: "Shake de proteína + fruta", description: "Recarga rápida de energia", icon: "🥤" }
+        ],
+        exercise: [
+          { name: "HIIT ou corrida", duration: "25 min", why: "Sua energia está subindo, aproveite!" },
+          { name: "Pesas leves", duration: "20 min", why: "Construa força na sua melhor fase" }
+        ],
+        tip: "Sua energia está aumentando. É hora de treinar com intensidade e comer proteína."
+      },
+      ovulatory: {
+        meals: [
+          { name: "Bowl de arroz com vegetais", description: "Carboidratos complexos para energia máxima", icon: "🍚" },
+          { name: "Massa integral com frango", description: "Combustível para seu dia mais ativo", icon: "🍝" },
+          { name: "Fruta tropical + iogurte", description: "Vitaminas para brilhar", icon: "🥝" }
+        ],
+        exercise: [
+          { name: "Treino funcional", duration: "30 min", why: "Seu corpo está no auge" },
+          { name: "Dança", duration: "20 min", why: "Libera endorfinas e conecta com seu carisma" }
+        ],
+        tip: "Energia máxima. Coma carboidratos complexos e mova seu corpo com alegria."
+      },
+      luteal: {
+        meals: [
+          { name: "Banana com manteiga de amendoim", description: "Magnésio e potássio para TPM", icon: "🍌" },
+          { name: "Sopa de legumes caseira", description: "Alimentação leve e reconfortante", icon: "🍲" },
+          { name: "Sementes de abóbora", description: "Zinco e magnésio para equilibrar hormônios", icon: "🎃" }
+        ],
+        exercise: [
+          { name: "Pilates", duration: "25 min", why: "Fortalece sem impacto, organiza a mente" },
+          { name: "Caminhada ao ar livre", duration: "20 min", why: "Reduz inchaço e melhora o humor" }
+        ],
+        tip: "Busque alimentos ricos em magnésio. Exercício moderado para equilibrar hormônios."
+      }
+    },
+    fr: {
+      menstrual: {
+        meals: [
+          { name: "Flocons d'avoine aux fruits rouges", description: "Riche en fer et antioxydants pour le renouvellement", icon: "🥣" },
+          { name: "Saumon aux épinards", description: "Oméga-3 pour réduire l'inflammation", icon: "🐟" },
+          { name: "Chocolat noir + noix", description: "Magnésium pour apaiser les crampes", icon: "🍫" }
+        ],
+        exercise: [
+          { name: "Yoga doux", duration: "20 min", why: "Étire sans forcer, apaise le corps" },
+          { name: "Marche légère", duration: "15 min", why: "Active sans épuiser" }
+        ],
+        tip: "Votre corps se renouvelle. Privilégiez une alimentation réparatrice et un mouvement doux."
+      },
+      follicular: {
+        meals: [
+          { name: "Œufs brouillés + avocat", description: "Protéines et bonnes graisses pour l'énergie qui monte", icon: "🥑" },
+          { name: "Salade de poulet au quinoa", description: "Protéine complète pour de nouveaux projets", icon: "🥗" },
+          { name: "Shake protéiné + fruits", description: "Recharge d'énergie rapide", icon: "🥤" }
+        ],
+        exercise: [
+          { name: "HIIT ou course", duration: "25 min", why: "Votre énergie monte, profitez-en !" },
+          { name: "Poids légers", duration: "20 min", why: "Développez votre force dans votre meilleure phase" }
+        ],
+        tip: "Votre énergie monte. C'est le moment de vous entraîner sérieusement et de manger des protéines."
+      },
+      ovulatory: {
+        meals: [
+          { name: "Bol de riz aux légumes", description: "Glucides complexes pour une énergie maximale", icon: "🍚" },
+          { name: "Pâtes complètes au poulet", description: "Carburant pour votre journée la plus active", icon: "🍝" },
+          { name: "Fruits tropicaux + yaourt", description: "Vitamines pour rayonner", icon: "🥝" }
+        ],
+        exercise: [
+          { name: "Entraînement fonctionnel", duration: "30 min", why: "Votre corps est à son sommet" },
+          { name: "Danse", duration: "20 min", why: "Libère des endorphines et révèle votre charisme" }
+        ],
+        tip: "Énergie maximale. Mangez des glucides complexes et bougez avec joie."
+      },
+      luteal: {
+        meals: [
+          { name: "Banane au beurre de cacahuète", description: "Magnésium et potassium pour le SPM", icon: "🍌" },
+          { name: "Soupe de légumes maison", description: "Une alimentation légère et réconfortante", icon: "🍲" },
+          { name: "Graines de courge", description: "Zinc et magnésium pour équilibrer les hormones", icon: "🎃" }
+        ],
+        exercise: [
+          { name: "Pilates", duration: "25 min", why: "Renforce sans impact, met de l'ordre dans l'esprit" },
+          { name: "Marche en plein air", duration: "20 min", why: "Réduit les ballonnements et améliore l'humeur" }
+        ],
+        tip: "Privilégiez les aliments riches en magnésium. Un exercice modéré pour équilibrer les hormones."
+      }
+    },
+    de: {
+      menstrual: {
+        meals: [
+          { name: "Haferflocken mit Beeren", description: "Reich an Eisen und Antioxidantien zur Erneuerung", icon: "🥣" },
+          { name: "Lachs mit Spinat", description: "Omega-3 zur Entzündungsreduktion", icon: "🐟" },
+          { name: "Dunkle Schokolade + Nüsse", description: "Magnesium gegen Krämpfe", icon: "🍫" }
+        ],
+        exercise: [
+          { name: "Sanftes Yoga", duration: "20 min", why: "Dehnt ohne zu belasten, beruhigt den Körper" },
+          { name: "Leichter Spaziergang", duration: "15 min", why: "Regt an, ohne zu erschöpfen" }
+        ],
+        tip: "Dein Körper erneuert sich. Setze auf nährende Kost und sanfte Bewegung."
+      },
+      follicular: {
+        meals: [
+          { name: "Rührei + Avocado", description: "Protein und gute Fette für steigende Energie", icon: "🥑" },
+          { name: "Hähnchen-Quinoa-Salat", description: "Vollwertiges Protein für neue Projekte", icon: "🥗" },
+          { name: "Proteinshake + Obst", description: "Schnelle Energieaufladung", icon: "🥤" }
+        ],
+        exercise: [
+          { name: "HIIT oder Laufen", duration: "25 min", why: "Deine Energie steigt – nutze sie!" },
+          { name: "Leichte Gewichte", duration: "20 min", why: "Baue Kraft in deiner besten Phase auf" }
+        ],
+        tip: "Deine Energie steigt. Jetzt ist die Zeit für intensives Training und Protein."
+      },
+      ovulatory: {
+        meals: [
+          { name: "Reisbowl mit Gemüse", description: "Komplexe Kohlenhydrate für maximale Energie", icon: "🍚" },
+          { name: "Vollkornpasta mit Hähnchen", description: "Treibstoff für deinen aktivsten Tag", icon: "🍝" },
+          { name: "Tropische Früchte + Joghurt", description: "Vitamine zum Strahlen", icon: "🥝" }
+        ],
+        exercise: [
+          { name: "Funktionelles Training", duration: "30 min", why: "Dein Körper ist auf dem Höhepunkt" },
+          { name: "Tanz", duration: "20 min", why: "Setzt Endorphine frei und verbindet dich mit deinem Charisma" }
+        ],
+        tip: "Maximale Energie. Iss komplexe Kohlenhydrate und bewege dich mit Freude."
+      },
+      luteal: {
+        meals: [
+          { name: "Banane mit Erdnussbutter", description: "Magnesium und Kalium für PMS", icon: "🍌" },
+          { name: "Hausgemachte Gemüsesuppe", description: "Leichte und wohltuende Kost", icon: "🍲" },
+          { name: "Kürbiskerne", description: "Zink und Magnesium für den Hormonhaushalt", icon: "🎃" }
+        ],
+        exercise: [
+          { name: "Pilates", duration: "25 min", why: "Kräftigt gelenkschonend und ordnet den Geist" },
+          { name: "Spaziergang an der frischen Luft", duration: "20 min", why: "Reduziert Blähungen und hebt die Stimmung" }
+        ],
+        tip: "Setze auf magnesiumreiche Lebensmittel. Mäßige Bewegung für den Hormonausgleich."
+      }
     }
   };
 
   const langPlan = plans[lang] || plans['es'];
   const phasePlan = langPlan[phase || 'follicular'] || langPlan['follicular'];
 
-  // Symptom adjustments
+  // Symptom adjustments (es/en strings unchanged, pt/fr/de added)
+  const crampsTips: Record<string, string> = {
+    es: '\n\n🩺 Para cólicos: jengibre, cúrcuma y compresa caliente.',
+    en: '\n\n🩺 For cramps: ginger, turmeric, and heating pad.',
+    pt: '\n\n🩺 Para cólicos: gengibre, cúrcuma e compressa quente.',
+    fr: '\n\n🩺 Pour les crampes : gingembre, curcuma et bouillotte.',
+    de: '\n\n🩺 Bei Krämpfen: Ingwer, Kurkuma und eine Wärmflasche.'
+  };
+  const bloatingTips: Record<string, string> = {
+    es: '\n\n🩺 Para hinchazón: reduce sodio y bebe más agua.',
+    en: '\n\n🩺 For bloating: reduce sodium and drink more water.',
+    pt: '\n\n🩺 Para inchaço: reduza o sódio e beba mais água.',
+    fr: '\n\n🩺 Pour les ballonnements : réduisez le sodium et buvez plus d\'eau.',
+    de: '\n\n🩺 Bei Blähungen: weniger Salz und mehr Wasser trinken.'
+  };
   if (symptoms && symptoms.includes('Cólicos')) {
-    phasePlan.tip += lang === 'es'
-      ? '\n\n🩺 Para cólicos: jengibre, cúrcuma y compresa caliente.'
-      : '\n\n🩺 For cramps: ginger, turmeric, and heating pad.';
+    phasePlan.tip += crampsTips[lang] || crampsTips['es'];
   }
   if (symptoms && symptoms.includes('Hinchazón')) {
-    phasePlan.tip += lang === 'es'
-      ? '\n\n🩺 Para hinchazón: reduce sodio y bebe más agua.'
-      : '\n\n🩺 For bloating: reduce sodium and drink more water.';
+    phasePlan.tip += bloatingTips[lang] || bloatingTips['es'];
   }
 
   return phasePlan;

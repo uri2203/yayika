@@ -6,6 +6,14 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const PHASE_NAMES: Record<string, Record<string, string>> = {
+  es: { menstrual: "Menstrual", follicular: "Folicular", ovulatory: "Ovulatorio", luteal: "Lúteo" },
+  en: { menstrual: "Menstrual", follicular: "Follicular", ovulatory: "Ovulatory", luteal: "Luteal" },
+  pt: { menstrual: "Menstrual", follicular: "Folicular", ovulatory: "Ovulatória", luteal: "Lútea" },
+  fr: { menstrual: "Menstruel", follicular: "Folliculaire", ovulatory: "Ovulatoire", luteal: "Lutéale" },
+  de: { menstrual: "Menstruation", follicular: "Follikularphase", ovulatory: "Ovulationsphase", luteal: "Lutealphase" },
+};
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -48,16 +56,17 @@ serve(async (req: Request) => {
 
       // Cycle day
       let cycleDay = 1;
-      let phaseName = "Folicular";
+      let phaseName = PHASE_NAMES.es.follicular;
       try {
         const { data: cd } = await supabase.rpc("yayika_get_cycle_day", { p_user_id: user_id });
         cycleDay = cd || 1;
         // Simple phase detection
         const adj = ((cycleDay - 1) % 28) + 1;
-        if (adj <= 5) phaseName = userLang === "es" ? "Menstrual" : "Menstrual";
-        else if (adj <= 13) phaseName = userLang === "es" ? "Folicular" : "Follicular";
-        else if (adj <= 18) phaseName = userLang === "es" ? "Ovulatorio" : "Ovulatory";
-        else phaseName = userLang === "es" ? "Lúteo" : "Luteal";
+        const names = PHASE_NAMES[userLang] || PHASE_NAMES.es;
+        if (adj <= 5) phaseName = names.menstrual;
+        else if (adj <= 13) phaseName = names.follicular;
+        else if (adj <= 18) phaseName = names.ovulatory;
+        else phaseName = names.luteal;
       } catch (e) {}
 
       // Streak
@@ -113,6 +122,39 @@ serve(async (req: Request) => {
           tip: getTip(cycleDay, userLang),
           cta: "View my dashboard →",
           footer: "Yayika — Your cycle companion 💜",
+        },
+        pt: {
+          subject: `📊 Seu resumo semanal Yayika — ${phaseName}`,
+          greeting: `Olá ${profile.display_name || "Guerreira"} 👋`,
+          phase: `Você está na fase ${phaseName} (dia ${cycleDay})`,
+          streak: `🔥 Sequência: ${streak} dias`,
+          xp: `⭐ XP esta semana: +${weeklyXP}`,
+          challenges: `🎯 Desafios ativos: ${activeChallenges}`,
+          tip: getTip(cycleDay, userLang),
+          cta: "Ver meu painel →",
+          footer: "Yayika — Sua companheira de ciclo 💜",
+        },
+        fr: {
+          subject: `📊 Votre résumé hebdomadaire Yayika — ${phaseName}`,
+          greeting: `Bonjour ${profile.display_name || "Guerrière"} 👋`,
+          phase: `Vous êtes en phase ${phaseName} (jour ${cycleDay})`,
+          streak: `🔥 Série : ${streak} jours`,
+          xp: `⭐ XP cette semaine : +${weeklyXP}`,
+          challenges: `🎯 Défis actifs : ${activeChallenges}`,
+          tip: getTip(cycleDay, userLang),
+          cta: "Voir mon tableau de bord →",
+          footer: "Yayika — Votre compagne de cycle 💜",
+        },
+        de: {
+          subject: `📊 Dein Yayika-Wochenrückblick — ${phaseName}`,
+          greeting: `Hallo ${profile.display_name || "Kriegerin"} 👋`,
+          phase: `Du bist in der Phase ${phaseName} (Tag ${cycleDay})`,
+          streak: `🔥 Serie: ${streak} Tage`,
+          xp: `⭐ XP diese Woche: +${weeklyXP}`,
+          challenges: `🎯 Aktive Challenges: ${activeChallenges}`,
+          tip: getTip(cycleDay, userLang),
+          cta: "Mein Dashboard ansehen →",
+          footer: "Yayika — Deine Zyklus-Begleiterin 💜",
         }
       };
 
@@ -219,6 +261,24 @@ function getTip(cycleDay: number, lang: string): string {
       "Follicular: Energy rising! Great time to start new projects.",
       "Ovulatory: Your confidence is at its peak. Use it for networking and sharing ideas.",
       "Luteal: Slow down. Organize simple tasks and prepare to rest.",
+    ],
+    pt: [
+      "Menstrual: Priorize o descanso e o autocuidado. Seu corpo está se renovando.",
+      "Folicular: Energia em alta! Ótimo momento para começar projetos novos.",
+      "Ovulatória: Sua confiança está no máximo. Aproveite para socializar e apresentar ideias.",
+      "Lútea: Reduza o ritmo. Organize tarefas simples e prepare-se para descansar.",
+    ],
+    fr: [
+      "Menstruel: Privilégiez le repos et l'autosoin. Votre corps se renouvelle.",
+      "Folliculaire: L'énergie monte ! C'est le bon moment pour démarrer de nouveaux projets.",
+      "Ovulatoire: Votre confiance est à son comble. Profitez-en pour échanger et partager vos idées.",
+      "Lutéale: Ralentissez. Organisez des tâches simples et préparez-vous à vous reposer.",
+    ],
+    de: [
+      "Menstruation: Priorisiere Ruhe und Selbstfürsorge. Dein Körper erneuert sich.",
+      "Follikularphase: Die Energie steigt! Jetzt ist ein guter Zeitpunkt für neue Projekte.",
+      "Ovulationsphase: Dein Selbstbewusstsein ist auf dem Höhepunkt. Nutze es für Kontakte und Ideen.",
+      "Lutealphase: Geh langsamer an. Organisiere einfache Aufgaben und bereite dich auf Ruhe vor.",
     ],
   };
   const idx = adj <= 5 ? 0 : adj <= 13 ? 1 : adj <= 18 ? 2 : 3;

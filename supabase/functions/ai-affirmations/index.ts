@@ -87,6 +87,9 @@ serve(async (req: Request) => {
 
     const { cycle_phase, energy_level, mood, intention, lang, recent_affirmations } = await req.json();
     const user_id = user.id;
+    // Normalize locale variants (e.g. pt-BR -> pt) so every language-aware
+    // lookup (prompt, fallback pools and cache) resolves the same language.
+    const requestedLang = (lang || "es").split("-")[0].toLowerCase();
 
     // Get today's affirmation
     const today = new Date().toISOString().split("T")[0];
@@ -100,7 +103,7 @@ serve(async (req: Request) => {
         const supabase = createClient(supabaseUrl, supabaseKey);
         const { data } = await supabase
           .from("yayika_daily_affirmations")
-          .select("affirmation_text, affirmation_type")
+          .select("affirmation_text, affirmation_type, lang")
           .eq("user_id", user_id)
           .eq("affirmation_date", today)
           .maybeSingle();
@@ -110,13 +113,15 @@ serve(async (req: Request) => {
       console.warn("Cache read error:", e);
     }
 
-    // Return cached if exists
-    if (cachedAffirmation) {
+    // Return cached only when it was generated in the requested language.
+    // A cached row in another language (or with no language tag) is ignored so
+    // pt/fr/de requests never receive a Spanish cached affirmation.
+    if (cachedAffirmation && cachedAffirmation.lang === requestedLang) {
       return new Response(JSON.stringify({
         affirmation: cachedAffirmation.affirmation_text,
         type: cachedAffirmation.affirmation_type,
         phase: cycle_phase,
-        lang: lang || "es",
+        lang: requestedLang,
         cached: true,
       }), {
         status: 200,
@@ -133,7 +138,7 @@ serve(async (req: Request) => {
         const langNames: Record<string, string> = {
           es: "español", en: "English", pt: "português", fr: "français", de: "Deutsch"
         };
-        const targetLang = langNames[lang] || "español";
+        const targetLang = langNames[requestedLang] || "español";
 
         const avoidList = (recent_affirmations || []).slice(0, 5).map((a: string) => `- "${a}"`).join("\n");
 
@@ -155,7 +160,9 @@ TIPOS de afirmación:
 - "intention": basada en la intención del día
 - "mood": basada del mood
 
-Responde SOLO con la afirmación, sin comillas ni explicaciones.`;
+Responde SOLO con la afirmación, sin comillas ni explicaciones.
+
+IMPORTANTE: Escribe la afirmación únicamente en ${targetLang}. Aunque estas reglas estén en español, tu salida debe ser 100% ${targetLang}; no mezcles español, inglés ni otros idiomas.`;
 
         const userMessage = `Genera una afirmación diaria para hoy.
 Fase: ${cycle_phase || "desconocida"}
@@ -199,7 +206,7 @@ ${avoidList || "Ninguna"}`;
 
     // Fallback: rule-based affirmation
     if (!affirmation) {
-      affirmation = getFallbackAffirmation(cycle_phase, energy_level, mood, lang || "es");
+      affirmation = getFallbackAffirmation(cycle_phase, energy_level, mood, requestedLang);
       affirmationType = "phase";
     }
 
@@ -217,6 +224,7 @@ ${avoidList || "Ninguna"}`;
           energy_level: energy_level || null,
           mood: mood || null,
           affirmation_date: today,
+          lang: requestedLang,
         }, { onConflict: "user_id,affirmation_date" });
       }
     } catch (e) {
@@ -227,7 +235,7 @@ ${avoidList || "Ninguna"}`;
       affirmation,
       type: affirmationType,
       phase: cycle_phase,
-      lang: lang || "es",
+      lang: requestedLang,
       cached: false,
     }), {
       status: 200,
@@ -342,6 +350,147 @@ function getFallbackAffirmation(phase: string | null, energy: number | null, moo
         "💜 Today I create the life I want with every decision.",
         "💜 My potential is unlimited. Today I take one more step."
       ]
+    },
+    pt: {
+      menstrual: [
+        "🩸 Mereço descanso sem culpa. Meu corpo está se renovando e isso é poderoso.",
+        "🩸 Hoje escolho compaixão comigo mesma. Não preciso ser produtiva para ter valor.",
+        "🩸 Meu ciclo é sábio. Confio no ritmo do meu corpo.",
+        "🩸 Hoje me permito estar com pouca energia. Isso não me faz menos.",
+        "🩸 Mereço carinho. Hoje cuido do meu interior.",
+        "🩸 Meu descanso é tão produtivo quanto minha ação. Escolho-o sem culpa.",
+        "🩸 Hoje ouço meu corpo. Ele sabe do que precisa."
+      ],
+      follicular: [
+        "🌱 Minha energia está subindo e o mundo está cheio de possibilidades. Hoje eu crio!",
+        "🌱 Sou capaz de começar qualquer coisa. Minha criatividade está no auge.",
+        "🌱 Hoje escolho me expandir. Mereço crescer e aprender coisas novas.",
+        "🌱 Tenho tudo o que preciso para conquistar o que me proponho hoje.",
+        "🌱 Minha mente está clara e meu coração está aberto. Aproveite!",
+        "🌱 Hoje é o dia perfeito para aquele projeto que você vem adiando.",
+        "🌱 Mereço investir em mim e nos meus sonhos."
+      ],
+      ovulatory: [
+        "✨ Minha voz tem poder. Hoje me expresso com confiança e carisma.",
+        "✨ Sou uma líder natural. As pessoas me ouvem e me respeitam.",
+        "✨ Hoje brilho com luz própria. Ninguém pode apagar o que eu sou.",
+        "✨ Mereço ocupar espaço. Minha presença importa.",
+        "✨ Hoje negocio, apresento e me conecto com a minha melhor versão.",
+        "✨ Tenho o poder de criar mudanças positivas ao meu redor.",
+        "✨ Minha energia é contágio. Hoje inspiro outras pessoas."
+      ],
+      luteal: [
+        "🌙 Sou organizada e detalhista. Hoje concluo o que comecei com excelência.",
+        "🌙 Minha capacidade de análise é meu superpoder. Hoje a uso com sabedoria.",
+        "🌙 Hoje termino o que está pendente com satisfação. Mereço esse fechamento.",
+        "🌙 Minha intuição está aguçada. Confio no que sinto.",
+        "🌙 Sou disciplinada e constante. Cada pequeno passo conta.",
+        "🌙 Hoje simplifico minha vida. O que não serve, eu solto.",
+        "🌙 Mereço paz mental. Hoje organizo meu mundo interior."
+      ],
+      general: [
+        "💜 Sou uma mulher poderosa e merecedora de tudo de bom.",
+        "💜 Hoje escolho acreditar em mim mais do que nunca.",
+        "💜 Meu caminho é único e eu o percorro com confiança.",
+        "💜 Mereço amor, abundância e alegria. Hoje eu os recebo.",
+        "💜 Sou suficiente do jeito que sou. Isso nunca muda.",
+        "💜 Hoje crio a vida que quero com cada decisão.",
+        "💜 Meu potencial é ilimitado. Hoje dou mais um passo."
+      ]
+    },
+    fr: {
+      menstrual: [
+        "🩸 Je mérite du repos sans culpabilité. Mon corps se renouvelle et c'est puissant.",
+        "🩸 Aujourd'hui, je choisis la bienveillance envers moi-même. Je n'ai pas besoin d'être productive pour avoir de la valeur.",
+        "🩸 Mon cycle est sage. Je fais confiance au rythme de mon corps.",
+        "🩸 Aujourd'hui, je m'autorise une faible énergie. Cela ne me rend pas moindre.",
+        "🩸 Je mérite de la tendresse. Aujourd'hui, je prends soin de mon intérieur.",
+        "🩸 Mon repos est aussi productif que mon action. Je le choisis sans culpabilité.",
+        "🩸 Aujourd'hui, j'écoute mon corps. Il sait ce dont il a besoin."
+      ],
+      follicular: [
+        "🌱 Mon énergie monte et le monde est plein de possibilités. Aujourd'hui, je crée !",
+        "🌱 Je suis capable de commencer n'importe quoi. Ma créativité est à son comble.",
+        "🌱 Aujourd'hui, je choisis de m'épanouir. Je mérite de grandir et d'apprendre de nouvelles choses.",
+        "🌱 J'ai tout ce qu'il me faut pour réaliser ce que je décide aujourd'hui.",
+        "🌱 Mon esprit est clair et mon cœur est ouvert. Profites-en !",
+        "🌱 Aujourd'hui est le jour idéal pour ce projet que tu repousses.",
+        "🌱 Je mérite d'investir en moi et dans mes rêves."
+      ],
+      ovulatory: [
+        "✨ Ma voix a du pouvoir. Aujourd'hui, je m'exprime avec assurance et charisme.",
+        "✨ Je suis une leader naturelle. On m'écoute et on me respecte.",
+        "✨ Aujourd'hui, je rayonne de ma propre lumière. Personne ne peut éteindre ce que je suis.",
+        "✨ Je mérite de prendre ma place. Ma présence compte.",
+        "✨ Aujourd'hui, je négocie, je présente et je me connecte à ma meilleure version.",
+        "✨ J'ai le pouvoir de créer des changements positifs autour de moi.",
+        "✨ Mon énergie est contagieuse. Aujourd'hui, j'inspire les autres."
+      ],
+      luteal: [
+        "🌙 Je suis organisée et méticuleuse. Aujourd'hui, je termine ce que j'ai commencé avec excellence.",
+        "🌙 Ma capacité d'analyse est mon super-pouvoir. Aujourd'hui, je l'utilise avec sagesse.",
+        "🌙 Aujourd'hui, je règle les tâches en attente avec satisfaction. Je mérite cette clôture.",
+        "🌙 Mon intuition est affûtée. Je fais confiance à ce que je ressens.",
+        "🌙 Je suis disciplinée et constante. Chaque petit pas compte.",
+        "🌙 Aujourd'hui, je simplifie ma vie. Ce qui ne me sert plus, je le lâche.",
+        "🌙 Je mérite la paix intérieure. Aujourd'hui, j'organise mon monde intérieur."
+      ],
+      general: [
+        "💜 Je suis une femme puissante qui mérite tout ce qu'il y a de mieux.",
+        "💜 Aujourd'hui, je choisis de croire en moi plus que jamais.",
+        "💜 Mon chemin est unique et je le parcours avec assurance.",
+        "💜 Je mérite l'amour, l'abondance et la joie. Aujourd'hui, je les accueille.",
+        "💜 Je suis suffisante telle que je suis. Cela ne change jamais.",
+        "💜 Aujourd'hui, je crée la vie que je veux à chaque décision.",
+        "💜 Mon potentiel est illimité. Aujourd'hui, je fais un pas de plus."
+      ]
+    },
+    de: {
+      menstrual: [
+        "🩸 Ich verdiene Ruhe ohne Schuldgefühle. Mein Körper erneuert sich – das ist kraftvoll.",
+        "🩸 Heute wähle ich Mitgefühl mit mir selbst. Ich muss nicht produktiv sein, um wertvoll zu sein.",
+        "🩸 Mein Zyklus ist weise. Ich vertraue dem Rhythmus meines Körpers.",
+        "🩸 Heute erlaube ich mir weniger Energie. Das macht mich nicht weniger.",
+        "🩸 Ich verdiene Zärtlichkeit. Heute kümmere ich mich um mein Inneres.",
+        "🩸 Meine Ruhe ist genauso produktiv wie mein Handeln. Ich wähle sie ohne Schuldgefühle.",
+        "🩸 Heute höre ich auf meinen Körper. Er weiß, was er braucht."
+      ],
+      follicular: [
+        "🌱 Meine Energie steigt und die Welt ist voller Möglichkeiten. Heute gestalte ich!",
+        "🌱 Ich kann alles beginnen. Meine Kreativität ist auf ihrem Höhepunkt.",
+        "🌱 Heute wähle ich, mich auszudehnen. Ich verdiene es, zu wachsen und Neues zu lernen.",
+        "🌱 Ich habe alles, was ich brauche, um heute zu erreichen, was ich mir vornehme.",
+        "🌱 Mein Geist ist klar und mein Herz ist offen. Nutze es!",
+        "🌱 Heute ist der perfekte Tag für das Projekt, das du schon lange vor dir herschiebst.",
+        "🌱 Ich verdiene es, in mich und meine Träume zu investieren."
+      ],
+      ovulatory: [
+        "✨ Meine Stimme hat Kraft. Heute drücke ich mich selbstbewusst und charismatisch aus.",
+        "✨ Ich bin eine natürliche Führungskraft. Die Menschen hören mir zu und respektieren mich.",
+        "✨ Heute strahle ich aus eigener Kraft. Niemand kann auslöschen, was ich bin.",
+        "✨ Ich verdiene es, Raum einzunehmen. Meine Präsenz zählt.",
+        "✨ Heute verhandle ich, präsentiere ich und verbinde mich mit meiner besten Version.",
+        "✨ Ich habe die Kraft, positive Veränderungen um mich herum zu bewirken.",
+        "✨ Meine Energie steckt an. Heute inspiriere ich andere Menschen."
+      ],
+      luteal: [
+        "🌙 Ich bin organisiert und detailorientiert. Heute schließe ich, was ich begonnen habe, mit Sorgfalt ab.",
+        "🌙 Meine analytische Fähigkeit ist meine Superkraft. Heute nutze ich sie weise.",
+        "🌙 Heute beende ich offene Aufgaben mit Zufriedenheit. Ich verdiene diesen Abschluss.",
+        "🌙 Meine Intuition ist geschärft. Ich vertraue auf mein Gefühl.",
+        "🌙 Ich bin diszipliniert und beständig. Jeder kleine Schritt zählt.",
+        "🌙 Heute vereinfache ich mein Leben. Was mir nicht mehr dient, lasse ich los.",
+        "🌙 Ich verdiene innere Ruhe. Heute ordne ich meine innere Welt."
+      ],
+      general: [
+        "💜 Ich bin eine starke Frau, die alles Gute verdient.",
+        "💜 Heute wähle ich, mehr als je zuvor an mich zu glauben.",
+        "💜 Mein Weg ist einzigartig und ich gehe ihn mit Zuversicht.",
+        "💜 Ich verdiene Liebe, Fülle und Freude. Heute nehme ich sie an.",
+        "💜 Ich bin genau richtig, so wie ich bin. Das ändert sich nie.",
+        "💜 Heute gestalte ich das Leben, das ich will, mit jeder Entscheidung.",
+        "💜 Mein Potenzial ist grenzenlos. Heute gehe ich einen Schritt weiter."
+      ]
     }
   };
 
@@ -356,13 +505,19 @@ function getFallbackAffirmation(phase: string | null, energy: number | null, moo
   if (energy !== null && energy <= 2) {
     const lowEnergyAdditions: Record<string, string> = {
       es: " Tu cuerpo te pide descanso. Honralo.",
-      en: " Your body asks for rest. Honor it."
+      en: " Your body asks for rest. Honor it.",
+      pt: " Seu corpo pede descanso. Honre isso.",
+      fr: " Votre corps demande du repos. Honorez-le.",
+      de: " Dein Körper bittet um Ruhe. Ehre sie."
     };
     affirmation += lowEnergyAdditions[lang] || lowEnergyAdditions['es'];
   } else if (energy !== null && energy >= 5) {
     const highEnergyAdditions: Record<string, string> = {
       es: " ¡Tu energía es magnética hoy!",
-      en: " Your energy is magnetic today!"
+      en: " Your energy is magnetic today!",
+      pt: " Sua energia está magnética hoje!",
+      fr: " Votre énergie est magnétique aujourd'hui !",
+      de: " Deine Energie ist heute magnetisch!"
     };
     affirmation += highEnergyAdditions[lang] || highEnergyAdditions['es'];
   }

@@ -11,6 +11,57 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const LOCALES = ["es", "en", "pt", "fr", "de"];
+
+// Known share-card strings in all five supported languages. Existing es/en
+// values are always preserved verbatim; pt/fr/de are filled from here.
+const LOCALIZED_TEXT: Record<string, Record<string, string>> = (() => {
+  const groups: Record<string, string>[] = [
+    { es: "Mi primer check-in", en: "My first check-in", pt: "Meu primeiro check-in", fr: "Mon premier check-in", de: "Mein erster Check-in" },
+    { es: "7 días de racha", en: "7-day streak", pt: "7 dias de sequência", fr: "Série de 7 jours", de: "7-Tage-Serie" },
+    { es: "30 días de racha", en: "30-day streak", pt: "30 dias de sequência", fr: "Série de 30 jours", de: "30-Tage-Serie" },
+    { es: "Badge desbloqueado", en: "Badge unlocked", pt: "Distintivo desbloqueado", fr: "Badge débloqué", de: "Abzeichen freigeschaltet" },
+    { es: "Invita a una amiga", en: "Invite a friend", pt: "Convide uma amiga", fr: "Invite une amie", de: "Lade eine Freundin ein" },
+    { es: "Logro desbloqueado", en: "Achievement unlocked", pt: "Conquista desbloqueada", fr: "Réussite débloquée", de: "Erfolg freigeschaltet" },
+    { es: "Racha activa", en: "Active streak", pt: "Sequência ativa", fr: "Série active", de: "Aktive Serie" },
+    { es: "Nivel alcanzado", en: "Level reached", pt: "Nível alcançado", fr: "Niveau atteint", de: "Level erreicht" },
+    { es: "Reto completado", en: "Challenge completed", pt: "Desafio concluído", fr: "Défi relevé", de: "Herausforderung abgeschlossen" },
+    { es: "Maestra del ciclo", en: "Cycle Master", pt: "Mestra do ciclo", fr: "Maîtresse du cycle", de: "Zyklus-Meisterin" },
+    { es: "Mi primer post", en: "My first post", pt: "Meu primeiro post", fr: "Mon premier post", de: "Mein erster Beitrag" },
+    { es: "Primera comisión", en: "First commission", pt: "Primeira comissão", fr: "Première commission", de: "Erste Provision" },
+    { es: "Mi logro", en: "My achievement", pt: "Minha conquista", fr: "Ma réussite", de: "Mein Erfolg" },
+    { es: "En Yayika", en: "On Yayika", pt: "Na Yayika", fr: "Sur Yayika", de: "Auf Yayika" },
+    { es: "Nuevo logro", en: "New achievement", pt: "Nova conquista", fr: "Nouvelle réussite", de: "Neuer Erfolg" },
+    { es: "Sigue así", en: "Keep going", pt: "Continue assim", fr: "Continue comme ça", de: "Mach weiter so" },
+    { es: "Empecé mi camino en Yayika", en: "I started my journey on Yayika", pt: "Comecei minha jornada na Yayika", fr: "J'ai commencé mon parcours sur Yayika", de: "Ich habe meine Reise auf Yayika begonnen" },
+    { es: "7 días seguidos cuidándome", en: "7 days straight of self-care", pt: "7 dias seguidos cuidando de mim", fr: "7 jours d'affilée à prendre soin de moi", de: "7 Tage in Folge Selbstfürsorge" },
+    { es: "30 días — ¡Una leyenda!", en: "30 days — A legend!", pt: "30 dias — Uma lenda!", fr: "30 jours — Une légende !", de: "30 Tage — Eine Legende!" },
+    { es: "¡Ya gané dinero con Yayika!", en: "I earned money with Yayika!", pt: "Já ganhei dinheiro com a Yayika!", fr: "J'ai gagné de l'argent avec Yayika !", de: "Ich habe mit Yayika Geld verdient!" },
+    { es: "{count} amigas ya se unieron", en: "{count} friends have joined", pt: "{count} amigas já se juntaram", fr: "{count} amies ont rejoint", de: "{count} Freundinnen sind beigetreten" },
+  ];
+  const out: Record<string, Record<string, string>> = {};
+  for (const g of groups) {
+    out[g.es] = g;
+    out[g.en] = g;
+  }
+  return out;
+})();
+
+const EMPTY_LOCALIZED: Record<string, string> = { es: "", en: "", pt: "", fr: "", de: "" };
+
+/** Ensure a localized string object has es/en/pt/fr/de without altering existing values. */
+function fillLocales(value: any): Record<string, string> {
+  const src: Record<string, any> = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const known = LOCALIZED_TEXT[String(src.es || src.en || "")];
+  const generic = String(src.en ?? src.es ?? "");
+  const out: Record<string, string> = {};
+  for (const loc of LOCALES) {
+    const v = src[loc];
+    out[loc] = v !== undefined && v !== null ? String(v) : known?.[loc] ?? generic;
+  }
+  return out;
+}
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -89,8 +140,8 @@ serve(async (req: Request) => {
             template_key: d.template_key || t.name,
             name: t.name,
             card_type: d.type || d.card_type || "achievement",
-            title: d.title || { es: t.name, en: t.name },
-            subtitle_template: d.subtitle_template || { es: "", en: "" },
+            title: fillLocales(d.title || { es: t.name, en: t.name }),
+            subtitle_template: fillLocales(d.subtitle_template || EMPTY_LOCALIZED),
             icon: d.icon || "🌟",
             color: d.bg_color || d.color || "#7B5EA7",
             gradient: d.gradient || null,
@@ -117,8 +168,8 @@ serve(async (req: Request) => {
             user_id,
             card_type: card_type || "achievement",
             template_data: {
-              title: card_title || { es: "Mi logro", en: "My achievement" },
-              subtitle: card_subtitle || { es: "En Yayika", en: "On Yayika" },
+              title: fillLocales(card_title || LOCALIZED_TEXT["Mi logro"]),
+              subtitle: fillLocales(card_subtitle || LOCALIZED_TEXT["En Yayika"]),
               icon: card_icon || "🌟",
               color: card_color || "#7B5EA7",
               card_data,
@@ -159,7 +210,7 @@ serve(async (req: Request) => {
           .maybeSingle();
         const refCode = affiliate?.referral_code || "YKI-JOIN";
 
-        const subtitleTemplate = tdata.subtitle_template || { es: "", en: "" };
+        const subtitleTemplate = fillLocales(tdata.subtitle_template || EMPTY_LOCALIZED);
         const finalSubtitle: Record<string, string> = {};
         for (const [key, val] of Object.entries(subtitleTemplate)) {
           let s = String(val);
@@ -176,7 +227,7 @@ serve(async (req: Request) => {
             user_id,
             card_type: tdata.type || tdata.card_type || "achievement",
             template_data: {
-              title: tdata.title || { es: template.name, en: template.name },
+              title: fillLocales(tdata.title || { es: template.name, en: template.name }),
               subtitle: finalSubtitle,
               icon: tdata.icon || "🌟",
               color: tdata.bg_color || tdata.color || "#7B5EA7",
@@ -348,8 +399,8 @@ serve(async (req: Request) => {
             user_id,
             card_type: cardConfig.card_type,
             template_data: {
-              title: cardConfig.card_title,
-              subtitle: cardConfig.card_subtitle,
+              title: fillLocales(cardConfig.card_title),
+              subtitle: fillLocales(cardConfig.card_subtitle),
               icon: cardConfig.card_icon,
               color: cardConfig.card_color,
               card_data: achievement_data,

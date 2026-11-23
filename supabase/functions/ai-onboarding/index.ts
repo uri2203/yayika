@@ -11,6 +11,80 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// User-visible copy for the 7-day guided flow. Catalog rows may only carry
+// Spanish text, so keep a 5-language fallback keyed by day number / task_key.
+// The caller's `lang` decides which text is returned to the UI.
+const TASK_COPY: Record<string, Record<string, { title: string; description: string }>> = {
+  es: {
+    "1": { title: "Bienvenida a Yayika", description: "Explora la app y conoce las herramientas que te acompañarán en tu camino." },
+    "2": { title: "Registra tu ciclo", description: "Anota tu fase y cómo te sientes hoy para empezar a conocer tu ritmo." },
+    "3": { title: "Revisa tu energía", description: "Registra tu energía y tu ánimo para detectar patrones con el tiempo." },
+    "4": { title: "Conoce tus finanzas", description: "Registra un ingreso o gasto y observa cómo evoluciona tu balance." },
+    "5": { title: "Establece una meta", description: "Define un objetivo pequeño y alcanzable para esta semana." },
+    "6": { title: "Únete a la comunidad", description: "Comparte tu experiencia en el Círculo de Mujeres y conecta con otras." },
+    "7": { title: "Celebra tu primera semana", description: "Revisa tu progreso y celebra todo lo que has logrado." },
+  },
+  en: {
+    "1": { title: "Welcome to Yayika", description: "Explore the app and discover the tools that will support your journey." },
+    "2": { title: "Log your cycle", description: "Record your phase and how you feel today to start learning your rhythm." },
+    "3": { title: "Check your energy", description: "Log your energy and mood to spot patterns over time." },
+    "4": { title: "Get to know your finances", description: "Log an income or expense and watch your balance evolve." },
+    "5": { title: "Set a goal", description: "Define a small, achievable goal for this week." },
+    "6": { title: "Join the community", description: "Share your experience in the Women's Circle and connect with others." },
+    "7": { title: "Celebrate your first week", description: "Review your progress and celebrate everything you've achieved." },
+  },
+  pt: {
+    "1": { title: "Bem-vinda ao Yayika", description: "Explore o app e conheça as ferramentas que vão acompanhar sua jornada." },
+    "2": { title: "Registre seu ciclo", description: "Anote sua fase e como você se sente hoje para conhecer seu ritmo." },
+    "3": { title: "Acompanhe sua energia", description: "Registre sua energia e seu humor para identificar padrões ao longo do tempo." },
+    "4": { title: "Conheça suas finanças", description: "Registre uma receita ou despesa e acompanhe seu saldo." },
+    "5": { title: "Defina uma meta", description: "Defina uma meta pequena e alcançável para esta semana." },
+    "6": { title: "Entre na comunidade", description: "Compartilhe sua experiência no Círculo de Mulheres e conecte-se com outras." },
+    "7": { title: "Celebre sua primeira semana", description: "Revise seu progresso e celebre tudo o que conquistou." },
+  },
+  fr: {
+    "1": { title: "Bienvenue sur Yayika", description: "Explore l'application et découvrez les outils qui vous accompagneront." },
+    "2": { title: "Note ton cycle", description: "Indique ta phase et ton ressenti du jour pour découvrir ton rythme." },
+    "3": { title: "Note ton énergie", description: "Enregistre ton énergie et ton humeur pour repérer les tendances." },
+    "4": { title: "Découvre tes finances", description: "Note un revenu ou une dépense et suis ton solde." },
+    "5": { title: "Fixe un objectif", description: "Définis un objectif petit et réalisable pour cette semaine." },
+    "6": { title: "Rejoins la communauté", description: "Partage ton expérience dans le Cercle de Femmes et connecte-toi aux autres." },
+    "7": { title: "Célèbre ta première semaine", description: "Fais le point sur tes progrès et célèbre tes réussites." },
+  },
+  de: {
+    "1": { title: "Willkommen bei Yayika", description: "Entdecke die App und die Tools, die dich auf deinem Weg begleiten." },
+    "2": { title: "Zyklus erfassen", description: "Trage deine Phase und dein heutiges Gefühl ein, um deinen Rhythmus kennenzulernen." },
+    "3": { title: "Energie prüfen", description: "Trage Energie und Stimmung ein, um Muster zu erkennen." },
+    "4": { title: "Finanzen im Blick", description: "Erfasse Einnahme oder Ausgabe und verfolge deinen Saldo." },
+    "5": { title: "Ziel setzen", description: "Setze dir ein kleines, erreichbares Ziel für diese Woche." },
+    "6": { title: "Der Community beitreten", description: "Teile deine Erfahrung im Frauenkreis und vernetze dich mit anderen." },
+    "7": { title: "Feiere deine erste Woche", description: "Schau auf deinen Fortschritt zurück und feiere deine Erfolge." },
+  },
+};
+
+// Prefer a translation already present in the catalog; otherwise use the
+// 5-language table for the requested language, keeping Spanish DB text intact.
+function localizedTaskText(dbValue: any, lang: string, fallback: string): string {
+  if (dbValue && typeof dbValue === "object") {
+    return dbValue[lang] || dbValue.es || fallback;
+  }
+  if (typeof dbValue === "string" && dbValue.trim()) {
+    return lang === "es" ? dbValue : (fallback || dbValue);
+  }
+  return fallback || "";
+}
+
+function localizeTask(task: any, lang: string): any {
+  if (!task) return task;
+  const table = TASK_COPY[lang] || TASK_COPY.es;
+  const fallback = table[String(task.task_key || "")] || table[String(task.day_number || "")];
+  return {
+    ...task,
+    title: localizedTaskText(task.title, lang, fallback?.title || ""),
+    description: localizedTaskText(task.description, lang, fallback?.description || ""),
+  };
+}
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -131,7 +205,7 @@ serve(async (req: Request) => {
             completed_at: d.completed_at,
             xp_earned: d.xp_earned,
           })),
-          current_task: currentTask || {},
+          current_task: currentTask ? localizeTask(currentTask, lang) : {},
         } : null;
 
         // Check if user should see onboarding
@@ -230,7 +304,7 @@ serve(async (req: Request) => {
           .eq("is_active", true)
           .order("sort_order");
         if (error) throw error;
-        return json({ tasks: data || [] });
+        return json({ tasks: (data || []).map((task: any) => localizeTask(task, lang)) });
       }
 
       // ===== CHECK IF NEW USER =====

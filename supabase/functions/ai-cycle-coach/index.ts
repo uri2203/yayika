@@ -88,10 +88,12 @@ serve(async (req: Request) => {
 
     const { cycle_phase, cycle_day, energy_level, mood, symptoms, recent_logs, lang } = await req.json();
     const user_id = user.id;
+    // Normalize locale variants (e.g. pt-BR -> pt) for consistent language lookups.
+    const requestedLang = (lang || "es").split("-")[0].toLowerCase();
 
     // If no LLM key, return rule-based coaching (still useful!)
     if (!apiKey) {
-      const coaching = generateFallbackCoaching(cycle_phase, energy_level, mood, symptoms, lang || "es");
+      const coaching = generateFallbackCoaching(cycle_phase, energy_level, mood, symptoms, requestedLang);
       
       // Store in DB
       try {
@@ -118,7 +120,7 @@ serve(async (req: Request) => {
         coaching,
         phase: cycle_phase,
         day: cycle_day,
-        lang: lang || "es",
+        lang: requestedLang,
         source: "fallback",
       }), {
         status: 200,
@@ -152,7 +154,7 @@ serve(async (req: Request) => {
     const langNames: Record<string, string> = {
       es: "español", en: "English", pt: "português", fr: "français", de: "Deutsch"
     };
-    const targetLang = langNames[lang] || "español";
+    const targetLang = langNames[requestedLang] || "español";
 
     const systemPrompt = `Eres Laura, la coach personal de Yayika — una asistente experta en bienestar femenino, ciclos menstruales y productividad hormonal.
 
@@ -172,7 +174,9 @@ ESTRUCTURA de respuesta:
 - Observación personalizada (basada en sus datos)
 - Consejo específico para su fase/energía
 - 1-2 acciones concretas para hoy
-- Motivación breve`;
+- Motivación breve
+
+IMPORTANTE: Redacta toda tu respuesta únicamente en ${targetLang}. Aunque estas instrucciones estén en español, tu salida debe ser 100% ${targetLang}; no mezcles español, inglés ni otros idiomas.`;
 
     const userMessage = contextBlock
       ? `Dame mi coaching personalizado de hoy. Estos son mis datos:\n\n${contextBlock}`
@@ -237,7 +241,7 @@ ESTRUCTURA de respuesta:
       coaching,
       phase: cycle_phase,
       day: cycle_day,
-      lang: lang || "es",
+      lang: requestedLang,
     }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -269,6 +273,24 @@ function generateFallbackCoaching(phase: string | null, energy: number | null, m
       follicular: `🌱 **Follicular Phase** — Your energy is rising. Perfect time to start new things.\n\n💡 **Tip:** Ride this wave to launch projects you've been putting off.\n\n✅ **Today's actions:**\n1. Identify 1 project you want to start\n2. Plan your week with the most important tasks`,
       ovulatory: `✨ **Ovulatory Phase** — This is your peak energy and charisma moment! Your communication is shining.\n\n💡 **Tip:** Today is ideal for negotiating, presenting ideas, or having important conversations.\n\n✅ **Today's actions:**\n1. Have that conversation you've been postponing\n2. Share an idea or proposal with someone`,
       luteal: `🌙 **Luteal Phase** — Your energy gradually decreases. Time to organize and wrap up.\n\n💡 **Tip:** Your analytical brain is at its best. Use it for details and organization.\n\n✅ **Today's actions:**\n1. Organize your workspace\n2. Review and close pending tasks`
+    },
+    pt: {
+      menstrual: `🩸 **Fase Menstrual** — Seu corpo está se renovando. É normal ter menos energia hoje.\n\n💡 **Dica:** Priorize descanso e reflexão. Não é hora de forçar a produtividade.\n\n✅ **Ações de hoje:**\n1. Reserve 15 minutos para você sem telas\n2. Escreva 3 coisas pelas quais é grata`,
+      follicular: `🌱 **Fase Folicular** — Sua energia está subindo. É o momento perfeito para começar coisas novas.\n\n💡 **Dica:** Aproveite essa onda de energia para tirar projetos do papel.\n\n✅ **Ações de hoje:**\n1. Identifique 1 projeto que você quer começar\n2. Planeje sua semana com as tarefas mais importantes`,
+      ovulatory: `✨ **Fase Ovulatoria** — Este é seu momento de maior energia e carisma! Sua comunicação está brilhante.\n\n💡 **Dica:** Hoje é ideal para negociar, apresentar ideias ou ter conversas importantes.\n\n✅ **Ações de hoje:**\n1. Tenha aquela conversa que você vem adiando\n2. Compartilhe uma ideia ou proposta com alguém`,
+      luteal: `🌙 **Fase Lútea** — Sua energia diminui gradualmente. É hora de organizar e encerrar.\n\n💡 **Dica:** Seu cérebro analítico está no melhor momento. Aproveite para os detalhes e a organização.\n\n✅ **Ações de hoje:**\n1. Organize seu espaço de trabalho\n2. Revise e conclua tarefas pendentes`
+    },
+    fr: {
+      menstrual: `🩸 **Phase Menstruelle** — Votre corps se renouvelle. Il est normal d'avoir moins d'énergie aujourd'hui.\n\n💡 **Conseil :** Privilégiez le repos et la réflexion. Ce n'est pas le moment de forcer la productivité.\n\n✅ **Actions du jour :**\n1. Prenez 15 minutes pour vous, sans écrans\n2. Écrivez 3 choses pour lesquelles vous êtes reconnaissante`,
+      follicular: `🌱 **Phase Folliculaire** — Votre énergie monte. C'est le moment idéal pour commencer de nouvelles choses.\n\n💡 **Conseil :** Profitez de cette vague d'énergie pour lancer les projets que vous repoussez.\n\n✅ **Actions du jour :**\n1. Identifiez 1 projet que vous souhaitez démarrer\n2. Planifiez votre semaine avec les tâches les plus importantes`,
+      ovulatory: `✨ **Phase Ovulatoire** — C'est votre moment de pointe en énergie et en charisme ! Votre communication rayonne.\n\n💡 **Conseil :** Aujourd'hui est idéal pour négocier, présenter des idées ou avoir des conversations importantes.\n\n✅ **Actions du jour :**\n1. Ayez cette conversation que vous repoussez\n2. Partagez une idée ou une proposition avec quelqu'un`,
+      luteal: `🌙 **Phase Lutéale** — Votre énergie diminue progressivement. C'est le moment d'organiser et de conclure.\n\n💡 **Conseil :** Votre cerveau analytique est au meilleur de sa forme. Misez sur les détails et l'organisation.\n\n✅ **Actions du jour :**\n1. Rangez votre espace de travail\n2. Passez en revue et terminez les tâches en attente`
+    },
+    de: {
+      menstrual: `🩸 **Menstruationsphase** — Dein Körper erneuert sich. Es ist normal, heute weniger Energie zu haben.\n\n💡 **Tipp:** Setze auf Ruhe und Reflexion. Jetzt ist nicht die Zeit, Produktivität zu erzwingen.\n\n✅ **Heutige Maßnahmen:**\n1. Nimm dir 15 Minuten ohne Bildschirme für dich\n2. Schreibe 3 Dinge auf, für die du dankbar bist`,
+      follicular: `🌱 **Follikelphase** — Deine Energie steigt. Jetzt ist der perfekte Zeitpunkt, etwas Neues zu beginnen.\n\n💡 **Tipp:** Nutze diese Energiewelle, um Projekte zu starten, die du schon lange vor dir herschiebst.\n\n✅ **Heutige Maßnahmen:**\n1. Finde 1 Projekt, das du beginnen möchtest\n2. Plane deine Woche mit den wichtigsten Aufgaben`,
+      ovulatory: `✨ **Ovulationsphase** — Das ist dein Höhepunkt an Energie und Charisma! Deine Kommunikation strahlt.\n\n💡 **Tipp:** Heute ist ideal zum Verhandeln, Ideen präsentieren oder wichtige Gespräche zu führen.\n\n✅ **Heutige Maßnahmen:**\n1. Führe das Gespräch, das du schon lange aufschiebst\n2. Teile eine Idee oder einen Vorschlag mit jemandem`,
+      luteal: `🌙 **Lutealphase** — Deine Energie lässt allmählich nach. Es ist Zeit zu organisieren und abzuschließen.\n\n💡 **Tipp:** Dein analytisches Gehirn ist in Topform. Nutze es für Details und Ordnung.\n\n✅ **Heutige Maßnahmen:**\n1. Organisiere deinen Arbeitsplatz\n2. Prüfe und schließe offene Aufgaben ab`
     }
   };
 
@@ -291,25 +313,77 @@ function generateFallbackCoaching(phase: string | null, energy: number | null, m
         'Cansancio': 'Fatigue is your body asking for rest. Listen to it.',
         'Hinchazón': 'Reduce sodium and drink more water for bloating.',
         'Antojos': 'Cravings are normal in this phase. Allow yourself a small treat.'
+      },
+      pt: {
+        'Dolor de cabeza': 'Se você tem dor de cabeça, reduza a cafeína e beba mais água.',
+        'Dor de cabeça': 'Se você tem dor de cabeça, reduza a cafeína e beba mais água.',
+        'Cólicos': 'Para cólicos, um banho quente ou uma compressa morna podem ajudar.',
+        'Cansancio': 'O cansaço é seu corpo pedindo descanso. Ouça-o.',
+        'Cansaço': 'O cansaço é seu corpo pedindo descanso. Ouça-o.',
+        'Hinchazón': 'Reduza o sódio e beba mais água para o inchaço.',
+        'Inchaço': 'Reduza o sódio e beba mais água para o inchaço.',
+        'Antojos': 'Os desejos são normais nesta fase. Permita-se um pequeno agrado.',
+        'Desejos': 'Os desejos são normais nesta fase. Permita-se um pequeno agrado.'
+      },
+      fr: {
+        'Dolor de cabeza': 'Si vous avez mal à la tête, réduisez la caféine et buvez plus d\'eau.',
+        'Maux de tête': 'Si vous avez mal à la tête, réduisez la caféine et buvez plus d\'eau.',
+        'Cólicos': 'Pour les crampes, un bain chaud ou une bouillotte peuvent aider.',
+        'Crampes': 'Pour les crampes, un bain chaud ou une bouillotte peuvent aider.',
+        'Cansancio': 'La fatigue est votre corps qui demande du repos. Écoutez-le.',
+        'Fatigue': 'La fatigue est votre corps qui demande du repos. Écoutez-le.',
+        'Hinchazón': 'Pour les ballonnements, réduisez le sodium et buvez plus d\'eau.',
+        'Ballonnements': 'Pour les ballonnements, réduisez le sodium et buvez plus d\'eau.',
+        'Antojos': 'Les envies sont normales dans cette phase. Offrez-vous une petite gâterie.',
+        'Envies': 'Les envies sont normales dans cette phase. Offrez-vous une petite gâterie.'
+      },
+      de: {
+        'Dolor de cabeza': 'Bei Kopfschmerzen: weniger Koffein und mehr Wasser trinken.',
+        'Kopfschmerzen': 'Bei Kopfschmerzen: weniger Koffein und mehr Wasser trinken.',
+        'Cólicos': 'Bei Krämpfen können ein warmes Bad oder eine Wärmflasche helfen.',
+        'Krämpfe': 'Bei Krämpfen können ein warmes Bad oder eine Wärmflasche helfen.',
+        'Cansancio': 'Müdigkeit ist ein Zeichen deines Körpers, dass er Ruhe braucht. Höre auf ihn.',
+        'Müdigkeit': 'Müdigkeit ist ein Zeichen deines Körpers, dass er Ruhe braucht. Höre auf ihn.',
+        'Hinchazón': 'Bei Blähungen: weniger Salz und mehr Wasser trinken.',
+        'Blähungen': 'Bei Blähungen: weniger Salz und mehr Wasser trinken.',
+        'Antojos': 'Heißhunger ist in dieser Phase normal. Gönn dir eine kleine Leckerei.',
+        'Heißhunger': 'Heißhunger ist in dieser Phase normal. Gönn dir eine kleine Leckerei.'
       }
+    };
+    const symptomNoteLabels: Record<string, string> = {
+      es: '🩺 **Nota sobre síntomas:** ',
+      en: '🩺 **Nota sobre síntomas:** ',
+      pt: '🩺 **Nota sobre sintomas:** ',
+      fr: '🩺 **Note sur les symptômes :** ',
+      de: '🩺 **Hinweis zu Symptomen:** '
     };
     const tips = symptomTips[lang] || symptomTips['es'];
     const relevantSymptoms = symptoms.filter((s: string) => tips[s]);
     if (relevantSymptoms.length > 0) {
-      result += '\n\n🩺 **Nota sobre síntomas:** ' + relevantSymptoms.map((s: string) => tips[s]).join(' ');
+      result += '\n\n' + (symptomNoteLabels[lang] || symptomNoteLabels['es']) + relevantSymptoms.map((s: string) => tips[s]).join(' ');
     }
   }
 
-  // Add energy-based modification
+  // Add energy-based modification (es/en strings unchanged, pt/fr/de added)
+  const lowEnergyNotes: Record<string, string> = {
+    es: '\n\n⚡ **Energía baja detectada:** Permítete un día más ligero. No todo tiene que ser productivo.',
+    en: '\n\n⚡ **Low energy detected:** Allow yourself a lighter day. Not everything has to be productive.',
+    pt: '\n\n⚡ **Pouca energia detectada:** Permita-se um dia mais leve. Nem tudo precisa ser produtivo.',
+    fr: '\n\n⚡ **Faible énergie détectée :** Accordez-vous une journée plus légère. Tout ne doit pas être productif.',
+    de: '\n\n⚡ **Wenig Energie erkannt:** Gönn dir einen leichteren Tag. Nicht alles muss produktiv sein.'
+  };
+  const highEnergyNotes: Record<string, string> = {
+    es: '\n\n⚡ **Alta energía:** ¡Aprovecha para hacer lo que más te cuesta en otros días!',
+    en: '\n\n⚡ **High energy:** Take advantage to do what\'s hardest on other days!',
+    pt: '\n\n⚡ **Alta energia:** Aproveite para fazer o que mais custa em outros dias!',
+    fr: '\n\n⚡ **Haute énergie :** Profitez-en pour faire ce qui vous est le plus difficile les autres jours !',
+    de: '\n\n⚡ **Hohe Energie:** Nutze sie, um das zu tun, was dir an anderen Tagen am schwersten fällt!'
+  };
   if (energy !== null) {
     if (energy <= 2) {
-      result += lang === 'es' 
-        ? '\n\n⚡ **Energía baja detectada:** Permítete un día más ligero. No todo tiene que ser productivo.'
-        : '\n\n⚡ **Low energy detected:** Allow yourself a lighter day. Not everything has to be productive.';
+      result += lowEnergyNotes[lang] || lowEnergyNotes['es'];
     } else if (energy >= 4) {
-      result += lang === 'es'
-        ? '\n\n⚡ **Alta energía:** ¡Aprovecha para hacer lo que más te cuesta en otros días!'
-        : '\n\n⚡ **High energy:** Take advantage to do what\'s hardest on other days!';
+      result += highEnergyNotes[lang] || highEnergyNotes['es'];
     }
   }
 

@@ -30,6 +30,45 @@ serve(async (req: Request) => {
     const body = await req.json();
     const { action, challenge_id, enrollment_id, notes, lang = "es" } = body;
 
+    const T: Record<string, Record<string, string>> = {
+      es: {
+        title: "🎯 Retos Semanales", join: "Unirse", checkin: "Check-in",
+        daysLeft: "días restantes", completed: "Completado", xpEarned: "XP ganados",
+        noActive: "No tienes retos activos. ¡Únete a uno!", progress: "Progreso",
+        stats: "Tu estadísticas", activeCount: "Activos", completedCount: "Completados",
+        streak: "Racha",
+      },
+      en: {
+        title: "🎯 Weekly Challenges", join: "Join", checkin: "Check-in",
+        daysLeft: "days left", completed: "Completed", xpEarned: "XP earned",
+        noActive: "No active challenges. Join one!", progress: "Progress",
+        stats: "Your stats", activeCount: "Active", completedCount: "Completed",
+        streak: "Streak",
+      },
+      pt: {
+        title: "🎯 Desafios Semanais", join: "Participar", checkin: "Check-in",
+        daysLeft: "dias restantes", completed: "Concluído", xpEarned: "XP ganhos",
+        noActive: "Você não tem desafios ativos. Participe de um!", progress: "Progresso",
+        stats: "Suas estatísticas", activeCount: "Ativos", completedCount: "Concluídos",
+        streak: "Sequência",
+      },
+      fr: {
+        title: "🎯 Défis Hebdomadaires", join: "Rejoindre", checkin: "Check-in",
+        daysLeft: "jours restants", completed: "Terminé", xpEarned: "XP gagnés",
+        noActive: "Vous n'avez aucun défi actif. Rejoignez-en un !", progress: "Progression",
+        stats: "Vos statistiques", activeCount: "Actifs", completedCount: "Terminés",
+        streak: "Série",
+      },
+      de: {
+        title: "🎯 Wöchentliche Herausforderungen", join: "Beitreten", checkin: "Check-in",
+        daysLeft: "verbleibende Tage", completed: "Abgeschlossen", xpEarned: "XP verdient",
+        noActive: "Du hast keine aktiven Herausforderungen. Tritt einer bei!", progress: "Fortschritt",
+        stats: "Deine Statistik", activeCount: "Aktiv", completedCount: "Abgeschlossen",
+        streak: "Serie",
+      },
+    };
+    const t = (k: string) => (T[lang] || T.es)[k] || (T.es)[k] || k;
+
     if (action === "getWeeklyChallenges") {
       const { data, error } = await supabase.rpc("yayika_get_weekly_challenges", { p_user_id: user.id });
       if (error) throw error;
@@ -43,18 +82,10 @@ serve(async (req: Request) => {
         completed: result.completed || [],
         stats: result.stats || {},
         translations: {
-          title: lang === "es" ? "🎯 Retos Semanales" : "🎯 Weekly Challenges",
-          join: lang === "es" ? "Unirse" : "Join",
-          checkin: lang === "es" ? "Check-in" : "Check-in",
-          daysLeft: lang === "es" ? "días restantes" : "days left",
-          completed: lang === "es" ? "Completado" : "Completed",
-          xpEarned: lang === "es" ? "XP ganados" : "XP earned",
-          noActive: lang === "es" ? "No tienes retos activos. ¡Únete a uno!" : "No active challenges. Join one!",
-          progress: lang === "es" ? "Progreso" : "Progress",
-          stats: lang === "es" ? "Tu estadísticas" : "Your stats",
-          activeCount: lang === "es" ? "Activos" : "Active",
-          completedCount: lang === "es" ? "Completados" : "Completed",
-          streak: lang === "es" ? "Racha" : "Streak",
+          title: t("title"), join: t("join"), checkin: t("checkin"),
+          daysLeft: t("daysLeft"), completed: t("completed"), xpEarned: t("xpEarned"),
+          noActive: t("noActive"), progress: t("progress"), stats: t("stats"),
+          activeCount: t("activeCount"), completedCount: t("completedCount"), streak: t("streak"),
         }
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }

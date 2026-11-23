@@ -12,6 +12,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Callers may request any of Yayika's 5 UI languages. Map them to the language
+// name the model understands so we can force a single-language reply.
+const LANGUAGE_NAMES: Record<string, string> = {
+  es: "Spanish",
+  en: "English",
+  pt: "Portuguese",
+  fr: "French",
+  de: "German",
+};
+
 // A real user session is required. The public anon key is a valid JWT but it
 // is not a login, so reject it explicitly before trusting anything in the body.
 async function requireUser(req: Request): Promise<{ id: string } | null> {
@@ -111,6 +121,17 @@ serve(async (req: Request) => {
       content: typeof msg.content === "string" ? msg.content.slice(0, MAX_MESSAGE_CHARS) : "",
     }));
 
+    // Force the model to answer ONLY in the requested language. We keep the
+    // messages-array contract intact (an array of { role, content } objects)
+    // by prepending one system message instead of rewriting caller messages.
+    const langKey = typeof lang === "string" && LANGUAGE_NAMES[lang] ? lang : "es";
+    const languageName = LANGUAGE_NAMES[langKey];
+    const systemInstruction = {
+      role: "system",
+      content: `You are Yayika's assistant. Respond ONLY in ${languageName} (language code: ${langKey}). Never reply in any other language, even if the user writes in a different language. Do not mix languages and do not add translations of your answer.`,
+    };
+    const llmMessages = [systemInstruction, ...validatedMessages];
+
     // Use Groq if key available, else OpenAI
     const isGroq = !!groqKey;
     const baseUrl = isGroq ? "https://api.groq.com/openai" : "https://api.openai.com";
@@ -124,7 +145,7 @@ serve(async (req: Request) => {
       },
       body: JSON.stringify({
         model,
-        messages: validatedMessages,
+        messages: llmMessages,
         max_tokens: 500,
         temperature: 0.7,
       }),

@@ -48,6 +48,30 @@ serve(async (req: Request) => {
         noAccess: "Get access to unlock all content", included: "Included",
         beginner: "Beginner", intermediate: "Intermediate", advanced: "Advanced",
       },
+      pt: {
+        title: "📚 Catálogo de Produtos", courses: "Cursos", guides: "Guias", templates: "Modelos",
+        memberships: "Assinaturas", featured: "Destaques", free: "Grátis", lessons: "aulas",
+        hours: "horas", buy: "Começar", access: "Acessar", progress: "Progresso",
+        myProducts: "Meus Produtos", noProducts: "Você ainda não tem produtos. Explore o catálogo.",
+        noAccess: "Obtenha acesso para desbloquear todo o conteúdo", included: "Incluído",
+        beginner: "Iniciante", intermediate: "Intermediário", advanced: "Avançado",
+      },
+      fr: {
+        title: "📚 Catalogue de Produits", courses: "Cours", guides: "Guides", templates: "Modèles",
+        memberships: "Abonnements", featured: "En vedette", free: "Gratuit", lessons: "leçons",
+        hours: "heures", buy: "Commencer", access: "Accéder", progress: "Progression",
+        myProducts: "Mes Produits", noProducts: "Vous n'avez pas encore de produits. Explorez le catalogue.",
+        noAccess: "Obtenez un accès pour débloquer tout le contenu", included: "Inclus",
+        beginner: "Débutant", intermediate: "Intermédiaire", advanced: "Avancé",
+      },
+      de: {
+        title: "📚 Produktkatalog", courses: "Kurse", guides: "Anleitungen", templates: "Vorlagen",
+        memberships: "Mitgliedschaften", featured: "Empfohlen", free: "Kostenlos", lessons: "Lektionen",
+        hours: "Stunden", buy: "Starten", access: "Zugriff", progress: "Fortschritt",
+        myProducts: "Meine Produkte", noProducts: "Du hast noch keine Produkte. Entdecke den Katalog.",
+        noAccess: "Erhalte Zugriff, um alle Inhalte freizuschalten", included: "Enthalten",
+        beginner: "Anfänger", intermediate: "Mittelstufe", advanced: "Fortgeschritten",
+      },
     };
     const t = (k: string) => (T[lang] || T.es)[k] || (T.es)[k] || k;
 
