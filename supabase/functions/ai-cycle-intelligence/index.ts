@@ -200,6 +200,14 @@ serve(async (req: Request) => {
       const { data } = await supabase.rpc("yayika_get_cycle_dashboard", { p_user_id: user.id });
       const dashboard = data?.[0] || {};
 
+      // The RPCs are not guaranteed to be deployed in every environment; when
+      // they are missing the dashboard is empty. Always return the full shape
+      // expected by the app so screens don't read undefined fields.
+      const safeAnalytics = dashboard.analytics ?? { total_cycles: 0, avg_cycle_length: 0, regularity_score: 0 };
+      const safePatterns = dashboard.patterns ?? [];
+      const safeRecentCycles = dashboard.recent_cycles ?? [];
+      const safePredictions = dashboard.predictions ?? { period_start: "", ovulation: "", days_remaining: 0 };
+
       // Generate insights
       const insights: string[] = [];
       const analytics = dashboard.analytics || {};
@@ -251,6 +259,10 @@ serve(async (req: Request) => {
         success: true,
         dashboard: {
           ...dashboard,
+          analytics: safeAnalytics,
+          patterns: safePatterns,
+          recent_cycles: safeRecentCycles,
+          predictions: safePredictions,
           insights,
           translations: {
             title: t("title"),
