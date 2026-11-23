@@ -159,8 +159,23 @@ serve(async (req: Request) => {
       const subscriptionId = typeof session.subscription === "string" ? session.subscription : null;
       const amountPaid = (session.amount_total || 0) / 100;
 
-      // Resolve user: metadata.user_id first, then lookup by email
-      let userId: string | null = metadata.user_id || null;
+      // Resolve user: metadata.user_id first, then a verified
+      // client_reference_id from the Payment Link, then lookup by email.
+      const isUuid = (value: unknown): value is string =>
+        typeof value === "string" &&
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+
+      let userId: string | null = isUuid(metadata.user_id) ? metadata.user_id : null;
+
+      if (!userId && isUuid(session.client_reference_id)) {
+        const { data: profile } = await supabase
+          .from("yayika_profiles")
+          .select("id")
+          .eq("id", session.client_reference_id)
+          .maybeSingle();
+        userId = profile?.id ?? null;
+      }
+
       if (!userId && customerEmail) {
         const { data: profile } = await supabase
           .from("yayika_profiles")
@@ -309,10 +324,29 @@ serve(async (req: Request) => {
         }
       } else {
         // ---------------- ONE-TIME PURCHASE (course/product = usage) ----------------
+        const productRef = metadata.product ?? session.line_items?.data?.[0]?.description ?? null;
+        const candidateRef = (typeof metadata.product_id === "string" && metadata.product_id) || productRef;
+
+        // Resolve the catalog id when possible so the purchase-access mirror
+        // (migration 011, pending review) can grant lesson access. Unknown
+        // products stay null instead of granting access to the wrong product.
+        let productId: string | null = isUuid(candidateRef) ? candidateRef : null;
+        if (!productId && candidateRef) {
+          const { data: matched } = await supabase
+            .from("yayika_products")
+            .select("id")
+            .eq("name", candidateRef)
+            .limit(1)
+            .maybeSingle();
+          productId = matched?.id ?? null;
+        }
+
         const { error: purErr } = await supabase.from("yayika_purchases").insert({
           user_id: userId,
           user_email: customerEmail,
-          product: metadata.product ?? session.line_items?.data?.[0]?.description ?? "unknown",
+          product: productRef ?? "unknown",
+          product_id: productId,
+          status: "completed",
           amount_total: session.amount_total ?? 0,
           currency: session.currency ?? "mxn",
           stripe_session_id: session.id,
@@ -320,7 +354,23 @@ serve(async (req: Request) => {
           payment_intent_id: typeof session.payment_intent === "string" ? session.payment_intent : null,
           insurance_plan_id: metadata.insurance_plan_id ?? null,
         });
-        if (purErr) console.error("Error logging purchase:", purErr);
+        if (purErr) {
+          // The access-migration has not been applied yet: fall back to the
+          // legacy columns so purchases are never lost.
+          console.error("Error logging purchase with access columns:", purErr);
+          const { error: legacyErr } = await supabase.from("yayika_purchases").insert({
+            user_id: userId,
+            user_email: customerEmail,
+            product: productRef ?? "unknown",
+            amount_total: session.amount_total ?? 0,
+            currency: session.currency ?? "mxn",
+            stripe_session_id: session.id,
+            stripe_customer_id: customerId,
+            payment_intent_id: typeof session.payment_intent === "string" ? session.payment_intent : null,
+            insurance_plan_id: metadata.insurance_plan_id ?? null,
+          });
+          if (legacyErr) console.error("Error logging legacy purchase:", legacyErr);
+        }
 
         if (userId) {
           await supabase.from("yayika_activity_log").insert({

@@ -138,17 +138,21 @@ async function signUp(email, password, fullName) {
   });
   if (error) throw error;
   
-  // Send welcome email (non-blocking)
+  // Send welcome email (non-blocking). When email confirmation is enabled
+  // there is no session yet; the function validates user_id + email against
+  // the recently created account. With a session, it only sends to itself.
   if (data && data.user) {
+    const token = data.session?.access_token || SUPABASE_ANON_KEY;
     fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         type: 'welcome',
         to: email,
+        user_id: data.user.id,
         name: fullName || email.split('@')[0],
       }),
     }).catch(() => {});
@@ -386,6 +390,33 @@ async function getRanking() {
 // STRIPE CHECKOUT
 // ============================================================
 
+// Attach the Supabase user id to Stripe Payment Links. The webhook uses it to
+// associate the payment with the right account even if the Stripe email differs.
+function yayikaWithClientReference(link) {
+  try {
+    var userId = (typeof currentUser !== 'undefined' && currentUser && currentUser.id) || null;
+    if (!userId) {
+      for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (!key || key.indexOf('sb-') !== 0 || key.indexOf('-auth-token') === -1) continue;
+        try {
+          var session = JSON.parse(localStorage.getItem(key));
+          if (session && session.user && session.user.id) {
+            userId = session.user.id;
+            break;
+          }
+        } catch (e) {}
+      }
+    }
+    if (!userId) return link;
+    var url = new URL(link);
+    url.searchParams.set('client_reference_id', userId);
+    return url.toString();
+  } catch (e) {
+    return link;
+  }
+}
+
 const STRIPE_PLANS = {
   semilla: { priceId: 'price_1TcbvF7nIcYtQjcNrU0V34qU', name: 'Semilla', price: 5, link: 'https://buy.stripe.com/eVqdR34ix4Hw3VEaNN1oI02', taxCode: 'txcd_10103000' },
   guerrera: { priceId: 'price_1TcbzT7nIcYtQjcNNDitMOYD', name: 'Guerrera', price: 10, link: 'https://buy.stripe.com/28E28l02hfmadwe7BB1oI03', taxCode: 'txcd_10103000' },
@@ -404,7 +435,7 @@ async function createCheckoutSession(planKey) {
   const plan = STRIPE_PLANS[planKey];
   if (!plan) throw new Error(appT('error_plan_invalid'));
   
-  window.location.href = plan.link;
+  window.location.href = yayikaWithClientReference(plan.link);
 }
 
 async function getSubscription() {
@@ -417,6 +448,10 @@ async function getSubscription() {
     .limit(1)
     .single();
   if (error && error.code !== 'PGRST116') throw error;
+  if (data?.current_period_end) {
+    const periodEnd = new Date(data.current_period_end).getTime();
+    if (Number.isFinite(periodEnd) && periodEnd <= Date.now()) return null;
+  }
   return data;
 }
 
@@ -437,9 +472,17 @@ async function getSubscriptionStatus() {
 
   if (error || !sub) return { status: 'none' };
 
-  // Active subscription
+  const plan = sub.plan || sub.plan_id;
+
+  // Active subscription — require the paid period to still be valid.
   if (sub.status === 'active') {
-    return { status: 'active', plan: sub.plan, subscription: sub };
+    if (sub.current_period_end) {
+      const periodEnd = new Date(sub.current_period_end).getTime();
+      if (Number.isFinite(periodEnd) && periodEnd <= Date.now()) {
+        return { status: 'suspended', plan, subscription: sub };
+      }
+    }
+    return { status: 'active', plan, subscription: sub };
   }
 
   // Past due - check grace period
@@ -452,23 +495,23 @@ async function getSubscriptionStatus() {
       const daysLeft = Math.ceil((graceEnd - now) / (1000 * 60 * 60 * 24));
       return {
         status: 'grace_period',
-        plan: sub.plan,
+        plan,
         daysLeft: daysLeft,
         gracePeriodEnd: sub.grace_period_end,
         subscription: sub,
       };
     } else {
       // Grace period expired - suspended
-      return { status: 'suspended', plan: sub.plan, subscription: sub };
+      return { status: 'suspended', plan, subscription: sub };
     }
   }
 
   // Cancelled
   if (sub.status === 'cancelled') {
-    return { status: 'cancelled', plan: sub.plan, subscription: sub };
+    return { status: 'cancelled', plan, subscription: sub };
   }
 
-  return { status: sub.status, plan: sub.plan, subscription: sub };
+  return { status: sub.status, plan, subscription: sub };
 }
 
 function renderSuspensionNotice(statusData) {
@@ -1174,7 +1217,7 @@ function buyProduct(slug) {
   };
   var link = links[slug];
   if (link) {
-    window.location.href = link;
+    window.location.href = yayikaWithClientReference(link);
   } else {
     showToast(appT('error_product_unavailable'));
   }
@@ -1191,7 +1234,7 @@ function startCheckout(planKey) {
   };
   var link = plans[planKey];
   if (link) {
-    window.location.href = link;
+    window.location.href = yayikaWithClientReference(link);
   } else {
     showToast(appT('error_plan_unavailable'));
   }

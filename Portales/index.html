@@ -1570,10 +1570,11 @@ async function loadDashboard() {
   // Check subscription status
   try {
     const sub = await getSubscription();
-    if (sub) {
+    if (sub && sub.current_period_end) {
       const renewDate = new Date(sub.current_period_end);
       const daysLeft = Math.ceil((renewDate - new Date()) / (1000 * 60 * 60 * 24));
-      const planName = sub.plan_id === 'semilla' ? 'Semilla' : sub.plan_id === 'guerrera' ? 'Guerrera' : 'Diamante';
+      const planKey = sub.plan || sub.plan_id;
+      const planName = planKey === 'semilla' ? 'Semilla' : planKey === 'guerrera' ? 'Guerrera' : 'Diamante';
       const monthsI18n = {
         es: ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],
         en: ['January','February','March','April','May','June','July','August','September','October','November','December'],

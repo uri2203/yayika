@@ -55,16 +55,24 @@ serve(async (req: Request) => {
       const { data, error } = await supabase.rpc("yayika_get_catalog", { p_category: category || null });
       if (error) throw error;
 
+      // The catalog is public: never include paid product content. Delivery
+      // happens through getProductDetail after the access check.
+      const catalogProducts = (data || []).map((p: any) => {
+        const rest = { ...p };
+        delete rest.content;
+        return rest;
+      });
+
       // Group by category
       const grouped: Record<string, any[]> = {};
-      (data || []).forEach((p: any) => {
+      catalogProducts.forEach((p: any) => {
         if (!grouped[p.category]) grouped[p.category] = [];
         grouped[p.category].push(p);
       });
 
       return new Response(JSON.stringify({
         success: true,
-        products: data || [],
+        products: catalogProducts,
         grouped,
         translations: {
           title: t("title"), courses: t("courses"), guides: t("guides"),
@@ -98,26 +106,48 @@ serve(async (req: Request) => {
       if (!product_id) return new Response(JSON.stringify({ error: "product_id required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
       const { data: product } = await supabase.from("yayika_products").select("*").eq("id", product_id).single();
+      if (!product) {
+        return new Response(JSON.stringify({ error: "Product not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       const { data: lessons } = await supabase.from("yayika_product_lessons").select("*").eq("product_id", product_id).order("sort_order");
 
-      let hasAccess = false;
+      let hasAccess = product.price_cents === 0;
       let progressPct = 0;
-      if (user) {
-        const { data: purchase } = await supabase.from("yayika_user_purchases").select("id").eq("user_id", user.id).eq("product_id", product_id).eq("status", "active").single();
-        hasAccess = !!purchase || (product?.price_cents === 0);
 
-        if (hasAccess && lessons && lessons.length > 0) {
-          const { data: completed } = await supabase.from("yayika_user_lesson_progress").select("id").eq("user_id", user.id).eq("completed", true).in("lesson_id", lessons.map((l: any) => l.id));
-          progressPct = Math.round(((completed?.length || 0) / lessons.length) * 100);
-        }
-      } else if (product?.price_cents === 0) {
-        hasAccess = true;
+      if (user && !hasAccess) {
+        const { data: purchase } = await supabase
+          .from("yayika_user_purchases")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("product_id", product_id)
+          .in("status", ["active", "completed"])
+          .limit(1)
+          .maybeSingle();
+        hasAccess = !!purchase;
+      }
+
+      if (hasAccess && user && lessons && lessons.length > 0) {
+        const { data: completed } = await supabase.from("yayika_user_lesson_progress").select("id").eq("user_id", user.id).eq("completed", true).in("lesson_id", lessons.map((l: any) => l.id));
+        progressPct = Math.round(((completed?.length || 0) / lessons.length) * 100);
+      }
+
+      // Paid lesson content is only returned to users with access. Free products
+      // (price_cents = 0) remain fully available.
+      const visibleLessons = hasAccess ? (lessons || []) : [];
+      let visibleProduct = product;
+      if (!hasAccess && Object.prototype.hasOwnProperty.call(product, "content")) {
+        visibleProduct = { ...product };
+        delete visibleProduct.content;
       }
 
       return new Response(JSON.stringify({
         success: true,
-        product,
-        lessons: lessons || [],
+        product: visibleProduct,
+        lessons: visibleLessons,
         hasAccess,
         progressPct,
         translations: {

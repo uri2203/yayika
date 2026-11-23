@@ -6,6 +6,32 @@
 const STORE_SUPABASE_URL = 'https://odbhxiymteppgaqqdsoy.supabase.co';
 const STORE_SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kYmh4aXltdGVwcGdhcXFkc295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTc1NjUsImV4cCI6MjA5NTY3MzU2NX0.-AMG1zoszc05NJjAkXmm7kCZJuN3RA2OIzZRs221gkc';
 
+// Attach the Supabase user id so the Stripe webhook can identify the buyer.
+function yayikaWithClientReference(link) {
+  try {
+    let userId = (typeof currentUser !== 'undefined' && currentUser && currentUser.id) || null;
+    if (!userId) {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || key.indexOf('sb-') !== 0 || key.indexOf('-auth-token') === -1) continue;
+        try {
+          const session = JSON.parse(localStorage.getItem(key));
+          if (session && session.user && session.user.id) {
+            userId = session.user.id;
+            break;
+          }
+        } catch (e) {}
+      }
+    }
+    if (!userId) return link;
+    const url = new URL(link);
+    url.searchParams.set('client_reference_id', userId);
+    return url.toString();
+  } catch (e) {
+    return link;
+  }
+}
+
 const STRIPE_PAYMENT_LINKS = {
   // Product payment links (seller-configured)
   'ciclo-productiva': 'https://buy.stripe.com/eVq6oH8yWfsS248cX3gA80c',
@@ -385,7 +411,7 @@ async function cartCheckout() {
   if (fullProduct.category === 'membership') {
     const link = getMembershipLink(fullProduct);
     if (link) {
-      window.location.href = link;
+      window.location.href = yayikaWithClientReference(link);
       return;
     }
   }
@@ -396,7 +422,7 @@ async function cartCheckout() {
     cart = cart.filter(c => c.id !== fullProduct.id);
     localStorage.setItem('yayika_cart', JSON.stringify(cart));
     updateCartUI();
-    window.location.href = productLink;
+    window.location.href = yayikaWithClientReference(productLink);
     return;
   }
 
@@ -418,14 +444,14 @@ async function buyNow(productId) {
   if (product.category === 'membership') {
     const link = getMembershipLink(product);
     if (link) {
-      window.location.href = link;
+      window.location.href = yayikaWithClientReference(link);
       return;
     }
   }
 
   const productLink = STRIPE_PAYMENT_LINKS['product-' + product.id] || STRIPE_PAYMENT_LINKS[slugify(product.name)];
   if (productLink) {
-    window.location.href = productLink;
+    window.location.href = yayikaWithClientReference(productLink);
     return;
   }
 
@@ -452,7 +478,7 @@ function showPurchaseOptions(product) {
     plantillas: { icon: '📋', action: () => createOrder(product) },
     kits: { icon: '🎁', action: () => createOrder(product) },
     bienvenida: { icon: '✨', action: () => createOrder(product) },
-    membership: { icon: '⭐', action: () => { const link = getMembershipLink(product); if (link) window.location.href = link; else createOrder(product); } }
+    membership: { icon: '⭐', action: () => { const link = getMembershipLink(product); if (link) window.location.href = yayikaWithClientReference(link); else createOrder(product); } }
   };
 
   const cat = categoryActions[product.category] || categoryActions.cursos;

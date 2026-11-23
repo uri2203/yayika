@@ -8,6 +8,32 @@ var PRODUCT_LINKS = {
   'diamante': 'https://buy.stripe.com/cNi9ATdTgfsSbEI4qxgA80h'
 };
 
+// Attach the Supabase user id so the Stripe webhook can identify the buyer.
+function yayikaWithClientReference(link) {
+  try {
+    var userId = (typeof currentUser !== 'undefined' && currentUser && currentUser.id) || null;
+    if (!userId) {
+      for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (!key || key.indexOf('sb-') !== 0 || key.indexOf('-auth-token') === -1) continue;
+        try {
+          var session = JSON.parse(localStorage.getItem(key));
+          if (session && session.user && session.user.id) {
+            userId = session.user.id;
+            break;
+          }
+        } catch (e) {}
+      }
+    }
+    if (!userId) return link;
+    var url = new URL(link);
+    url.searchParams.set('client_reference_id', userId);
+    return url.toString();
+  } catch (e) {
+    return link;
+  }
+}
+
 function buyProduct(key) {
   console.log('[Yayika] buyProduct called:', key);
   try {
@@ -20,7 +46,7 @@ function buyProduct(key) {
     window.location.href = '#membresia';
     return;
   }
-  window.location.href = link;
+  window.location.href = yayikaWithClientReference(link);
 }
 
 function startCheckout(plan) {
@@ -36,7 +62,7 @@ function startCheckout(plan) {
     alert(msg);
     return;
   }
-  window.location.href = link;
+  window.location.href = yayikaWithClientReference(link);
 }
 
 function dismissInstallBanner() {

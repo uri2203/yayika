@@ -4,12 +4,20 @@
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const SUPPORT_INBOX = Deno.env.get("SUPPORT_INBOX") || "hola@yayika.com";
 const FROM_EMAIL = "Yayika <hola@yayika.com>";
 const DOMAIN = "https://yayika.com";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "content-type, authorization",
+};
 
 interface EmailPayload {
   type: "welcome" | "purchase" | "subscription" | "commission" | "withdrawal" | "payment_failed" | "payment_recovered" | "support" | "custom";
@@ -26,13 +34,39 @@ interface EmailPayload {
   subject?: string;
   message?: string;
   user_email?: string;
+  user_id?: string;
   customSubject?: string;
   customHtml?: string;
+}
+
+function escapeHtml(value: string): string {
+  return String(value).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string)
+  );
+}
+
+// Best-effort, per-isolate rate limit. It is not a replacement for a shared
+// store, but it stops trivial loops from a single client.
+const rateBuckets = new Map<string, { count: number; reset: number }>();
+function allowRequest(key: string, max: number, windowMs: number): boolean {
+  const now = Date.now();
+  for (const [k, bucket] of rateBuckets) {
+    if (bucket.reset <= now) rateBuckets.delete(k);
+  }
+  const bucket = rateBuckets.get(key);
+  if (!bucket || bucket.reset <= now) {
+    rateBuckets.set(key, { count: 1, reset: now + windowMs });
+    return true;
+  }
+  if (bucket.count >= max) return false;
+  bucket.count += 1;
+  return true;
 }
 
 // --- Email Templates ---
 
 function welcomeTemplate(name: string): string {
+  name = escapeHtml(name);
   return `
 <!DOCTYPE html>
 <html>
@@ -334,31 +368,100 @@ serve(async (req) => {
       throw new Error("RESEND_API_KEY not configured");
     }
 
-    // Auth validation:
-    // - Deployed WITH verify-jwt: gateway validates JWT signature before reaching us.
-    // - Function additionally accepts: project keys (new-style sb_publishable_/sb_secret_,
-    //   used by internal callers like stripe-webhook) or a legacy project-signed JWT
-    //   (browser callers send the legacy anon JWT).
-    const authHeader = req.headers.get("Authorization");
-    const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : "";
-    let allowed = !!bearer && (bearer === ANON_KEY || bearer === SERVICE_ROLE_KEY);
-    if (!allowed && bearer.split(".").length === 3) {
-      try {
-        const payload = JSON.parse(atob(bearer.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
-        allowed = ["anon", "authenticated", "service_role"].includes(payload.role) &&
-          String(payload.iss || "").includes("supabase");
-      } catch { allowed = false; }
-    }
-    if (!allowed) {
-      throw new Error("Unauthorized: invalid bearer token");
+    if (!SUPABASE_URL || !ANON_KEY || !SERVICE_ROLE_KEY) {
+      throw new Error("Supabase environment not configured");
     }
 
     const payload: EmailPayload = await req.json();
-    const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, method = "Banco", grace_period_days, next_retry, subject: supportSubject, message: supportMessage, user_email, customSubject, customHtml } = payload;
+    const { type, to, name = "Guerrera", product, amount, plan, commission, referralName, method = "Banco", grace_period_days, next_retry, subject: supportSubject, message: supportMessage, user_email, user_id, customSubject, customHtml } = payload;
+
+    const authHeader = req.headers.get("Authorization");
+    const bearer = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : "";
+
+    // Only the service_role key may send transactional email. Browser sessions
+    // and the public anon key are handled explicitly below.
+    const isInternal = !!bearer && bearer === SERVICE_ROLE_KEY;
+
+    let caller: any = null;
+    if (!isInternal && bearer) {
+      const userClient = createClient(SUPABASE_URL, ANON_KEY, {
+        global: { headers: { Authorization: `Bearer ${bearer}` } },
+        auth: { persistSession: false, autoRefreshToken: false },
+      });
+      const { data: { user } } = await userClient.auth.getUser();
+      caller = user;
+    }
+
+    const clientIp = (req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "unknown")
+      .split(",")[0]
+      .trim();
+    let recipient = to;
+
+    if (isInternal) {
+      // Internal callers (stripe-webhook, cron jobs) may send any transactional type.
+    } else if (type === "welcome") {
+      if (!allowRequest(`welcome:${clientIp}`, 5, 10 * 60 * 1000)) {
+        return new Response(JSON.stringify({ error: "Too many requests" }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      if (caller) {
+        if (user_id && user_id !== caller.id) {
+          return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        recipient = caller.email || "";
+      } else {
+        // Signup happens before a session exists when email confirmation is on.
+        // Accept only an existing user whose email matches and was created recently.
+        if (!user_id || !to) {
+          return new Response(JSON.stringify({ error: "Unauthorized" }), {
+            status: 401,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+          auth: { persistSession: false, autoRefreshToken: false },
+        });
+        const { data: { user }, error } = await admin.auth.admin.getUserById(user_id);
+        if (error || !user?.email || user.email.toLowerCase() !== to.toLowerCase()) {
+          return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const createdAt = new Date(user.created_at).getTime();
+        if (!Number.isFinite(createdAt) || Date.now() - createdAt > 15 * 60 * 1000) {
+          return new Response(JSON.stringify({ error: "Forbidden" }), {
+            status: 403,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        recipient = user.email;
+      }
+    } else if (type === "support") {
+      if (!allowRequest(`support:${clientIp}`, 5, 10 * 60 * 1000)) {
+        return new Response(JSON.stringify({ error: "Too many requests" }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      // Never let the public form choose the recipient.
+      recipient = SUPPORT_INBOX;
+    } else {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!to || !emailRegex.test(to)) {
+    if (!recipient || !emailRegex.test(recipient)) {
       throw new Error("Invalid email address");
     }
 
@@ -435,7 +538,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: FROM_EMAIL,
-        to: [to],
+        to: [recipient],
         subject,
         html,
       }),
@@ -448,7 +551,7 @@ serve(async (req) => {
       throw new Error(result.message || "Failed to send email");
     }
 
-    console.log(`Email sent: ${type} → ${to} (id: ${result.id})`);
+    console.log(`Email sent: ${type} → ${recipient} (id: ${result.id})`);
 
     return new Response(
       JSON.stringify({ success: true, id: result.id, type }),
