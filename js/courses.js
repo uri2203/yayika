@@ -18,10 +18,32 @@ function getLang(obj) {
 }
 
 const COURSE_JSON_MAP = {
-  'ciclo-productiva': '/courses/module1-lessons.json',
-  'dinero-sin-pena': '/courses/module2-lessons.json',
-  'mujer-que-negocia': '/courses/module3-lessons.json'
+  'ciclo-productiva': 'courses/module1-lessons.json',
+  'dinero-sin-pena': 'courses/module2-lessons.json',
+  'mujer-que-negocia': 'courses/module3-lessons.json'
 };
+
+// Course assets live in a private Storage bucket. Only an entitled, logged-in
+// user can obtain a short-lived signed URL through the course-content function.
+async function getPrivateAssetUrl(path) {
+  try {
+    var token = typeof yayikaUserToken === 'function' ? await yayikaUserToken() : '';
+    var res = await fetch(SUPABASE_URL + '/functions/v1/course-content', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ path: path })
+    });
+    if (!res.ok) return null;
+    var data = await res.json();
+    return data.signedUrl || data.url || null;
+  } catch (e) {
+    return null;
+  }
+}
 
 async function loadCourseTranslations(courseId) {
   var course = COURSES[courseId];
@@ -29,7 +51,9 @@ async function loadCourseTranslations(courseId) {
   var jsonPath = COURSE_JSON_MAP[courseId];
   if (!jsonPath) return;
   try {
-    var response = await fetch(jsonPath);
+    var signedUrl = await getPrivateAssetUrl(jsonPath);
+    if (!signedUrl) return;
+    var response = await fetch(signedUrl);
     if (!response.ok) return;
     var data = await response.json();
     if (data.title) {
