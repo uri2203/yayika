@@ -143,6 +143,25 @@ serve(async (req: Request) => {
     const eventType = event.type;
     const data = event.data?.object;
 
+    // Idempotency: claim the event before any writes. Migration 014 creates the
+    // table; until it is applied, the missing table is logged and the webhook
+    // continues with its previous behavior.
+    if (event.id) {
+      const { error: claimError } = await supabase
+        .from("yayika_processed_events")
+        .insert({ event_id: event.id, event_type: eventType });
+      if (claimError?.code === "23505") {
+        console.log(`Duplicate Stripe event ignored: ${event.id}`);
+        return new Response(JSON.stringify({ received: true, duplicate: true }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (claimError) {
+        console.warn("Processed-events claim unavailable:", claimError.message);
+      }
+    }
+
     console.log(`Stripe webhook: ${eventType}`);
 
     // ============================================================
@@ -189,9 +208,9 @@ serve(async (req: Request) => {
       if (session.mode === "subscription" || subscriptionId) {
         // ---------------- MEMBERSHIP (payment = usage) ----------------
         if (!userId) {
-          console.log(`checkout.session.completed: cannot resolve user for subscription (${customerEmail})`);
-          return new Response(JSON.stringify({ received: true, note: "User not found" }), {
-            status: 200,
+          console.error(`checkout.session.completed: cannot resolve user for subscription (${customerEmail})`);
+          return new Response(JSON.stringify({ error: "User not found for subscription" }), {
+            status: 500,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
@@ -369,7 +388,13 @@ serve(async (req: Request) => {
             payment_intent_id: typeof session.payment_intent === "string" ? session.payment_intent : null,
             insurance_plan_id: metadata.insurance_plan_id ?? null,
           });
-          if (legacyErr) console.error("Error logging legacy purchase:", legacyErr);
+          if (legacyErr) {
+            console.error("Error logging legacy purchase:", legacyErr);
+            return new Response(JSON.stringify({ error: "Could not log purchase" }), {
+              status: 500,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
         }
 
         if (userId) {

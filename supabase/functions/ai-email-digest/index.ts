@@ -20,8 +20,18 @@ serve(async (req: Request) => {
     const body = await req.json();
     const { action, user_id, lang = "es" } = body;
 
-    // Only service role can trigger digest
+    // Only the service role can trigger a digest. The service client below
+    // fetches the recipient's email, so an unauthenticated caller would turn
+    // this into an open relay (and a user-UUID enumeration oracle).
     if (action === "sendDigest") {
+      const authHeader = req.headers.get("Authorization") || "";
+      const expectedKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+      if (!expectedKey || authHeader !== `Bearer ${expectedKey}`) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       if (!user_id) return new Response(JSON.stringify({ error: "user_id required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
       // Get user profile
